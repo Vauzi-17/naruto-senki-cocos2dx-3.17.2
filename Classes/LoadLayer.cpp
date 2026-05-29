@@ -165,7 +165,7 @@ void LoadLayer::preloadIMG(){
 			CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("Element/Sanshouuo/Sanshouuo.plist");
 			CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("Element/Saso/Saso.plist");
 		}else if(strcmp(player->getCString(),"Chiyo")==0){
-			CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("Element/Parents/Parents.plist");	
+			CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("Element/Parents/Parents.plist");
 		}else if(strcmp(player->getCString(),"Kakuzu")==0){
 			CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("Element/MaskRaidon/MaskRaidon.plist");
 			CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("Element/MaskFudon/MaskFudon.plist");

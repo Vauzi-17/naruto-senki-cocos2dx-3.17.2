@@ -1,5 +1,6 @@
 #include "HudLayer.h"
 #include "MyUtils/CCShake.h"
+#include "MyUtils/KTools.h"
 
 using namespace CocosDenshion;
 
@@ -1210,19 +1211,19 @@ CCSprite* HudLayer::createSPCReport(const char* killNum,int num){
 		if(atoi(killNum)<10){
 			reportSPCSprite=CCSprite::createWithSpriteFrameName("DoubleKill_rpf.png");
 			if(isBrocast)
-			SimpleAudioEngine::sharedEngine()->playEffect("Audio/Menu/kill2_1.mp3");
+			KTools::playEffectOptimized("Audio/Menu/kill2_1.mp3", 20, 2);
 		}else if(atoi(killNum)<20){
 			reportSPCSprite=CCSprite::createWithSpriteFrameName("KillingSpree_rpf.png");
 			if(isBrocast)
-			SimpleAudioEngine::sharedEngine()->playEffect("Audio/Menu/kill2_2.mp3");
+			KTools::playEffectOptimized("Audio/Menu/kill2_2.mp3", 20, 2);
 		}else if(atoi(killNum)<30){
 			reportSPCSprite=CCSprite::createWithSpriteFrameName("Unstoppable_rpf.png");
 			if(isBrocast)
-			SimpleAudioEngine::sharedEngine()->playEffect("Audio/Menu/kill2_3.mp3");
+			KTools::playEffectOptimized("Audio/Menu/kill2_3.mp3", 20, 2);
 		}else if(atoi(killNum)>=30){
 			reportSPCSprite=CCSprite::createWithSpriteFrameName("Godlike_rpf.png");
 			if(isBrocast)
-			SimpleAudioEngine::sharedEngine()->playEffect("Audio/Menu/kill2_4.mp3");
+			KTools::playEffectOptimized("Audio/Menu/kill2_4.mp3", 20, 2);
 			
 		}
       
@@ -1231,27 +1232,27 @@ CCSprite* HudLayer::createSPCReport(const char* killNum,int num){
 		if(atoi(killNum)<10){
 			reportSPCSprite=CCSprite::createWithSpriteFrameName("TripeKill_rpf.png");
 			if(isBrocast)
-			SimpleAudioEngine::sharedEngine()->playEffect("Audio/Menu/kill3_1.mp3");
+			KTools::playEffectOptimized("Audio/Menu/kill3_1.mp3", 20, 2);
 			
 		}else if(atoi(killNum)<20){
 			reportSPCSprite=CCSprite::createWithSpriteFrameName("Domination_rpf.png");
 			if(isBrocast)
-			SimpleAudioEngine::sharedEngine()->playEffect("Audio/Menu/kill3_2.mp3");
+			KTools::playEffectOptimized("Audio/Menu/kill3_2.mp3", 20, 2);
 		}else if(atoi(killNum)<30){
 			reportSPCSprite=CCSprite::createWithSpriteFrameName("Rampage_rpf.png");
 			if(isBrocast)
-			SimpleAudioEngine::sharedEngine()->playEffect("Audio/Menu/kill3_3.mp3");
+			KTools::playEffectOptimized("Audio/Menu/kill3_3.mp3", 20, 2);
 		}else if(atoi(killNum)>=30){
 			reportSPCSprite=CCSprite::createWithSpriteFrameName("Holyshit_rpf.png");
 			if(isBrocast)
-			SimpleAudioEngine::sharedEngine()->playEffect("Audio/Menu/kill3_4.mp3");
+			KTools::playEffectOptimized("Audio/Menu/kill3_4.mp3", 20, 2);
 			
 		}
 
 	}else {
 		reportSPCSprite=CCSprite::createWithSpriteFrameName("MonsterKill_rpf.png");
 		if(isBrocast)
-		SimpleAudioEngine::sharedEngine()->playEffect("Audio/Menu/kill4.mp3");
+		KTools::playEffectOptimized("Audio/Menu/kill4.mp3", 20, 2);
 		
 	}
 	
@@ -1549,5 +1550,6 @@ void HudLayer::removeOugis(CCNode* sender){
 	_delegate->removeOugis();
 
 }
+
 
 

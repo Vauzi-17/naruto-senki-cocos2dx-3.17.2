@@ -2,6 +2,7 @@
 #include "Characters.h"
 #include "HudLayer.h"
 #include "MyUtils/CCShake.h"
+#include "MyUtils/KTools.h"
 
 using namespace NarutoSenki;
 using namespace CocosDenshion;
@@ -2338,7 +2339,7 @@ void NarutoSenki::ActionManager::setSound(CCNode* sender,void* date){
 				CCDictionary* file=(CCDictionary*) date;
 				CCString* str = (CCString*)(file->objectForKey(1));
 				//SimpleAudioEngine::sharedEngine()->preloadEffect(str->getCString());
-				SimpleAudioEngine::sharedEngine()->playEffect(str->getCString());
+				KTools::playEffectOptimized(str->getCString());
 		}
 	}
 };
@@ -2362,7 +2363,7 @@ void NarutoSenki::ActionManager::setDSound(CCNode* sender,void* date){
 			CCDictionary* file=(CCDictionary*) date;
 			CCString* str = (CCString*)(file->objectForKey(1));
 			//SimpleAudioEngine::sharedEngine()->preloadEffect(str->getCString());
-			SimpleAudioEngine::sharedEngine()->playEffect(str->getCString());
+			KTools::playEffectOptimized(str->getCString());
 		}
 	}
 };
@@ -8184,6 +8185,7 @@ void NarutoSenki::ActionManager::enableSkill2(float dt){
 void NarutoSenki::ActionManager::enableSkill3(float dt){
 	_isCanSkill3=true;
 }
+
 
 
 

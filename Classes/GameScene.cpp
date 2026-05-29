@@ -33,6 +33,11 @@ bool GameScene::init()
 			CCUserDefault::sharedUserDefault()->flush();
 		}
 
+		if(!CCUserDefault::sharedUserDefault()->getBoolForKey("isPreloadConfigured")){
+			CCUserDefault::sharedUserDefault()->setBoolForKey("isPreload", true);
+			CCUserDefault::sharedUserDefault()->setBoolForKey("isPreloadConfigured", true);
+			CCUserDefault::sharedUserDefault()->flush();
+		}
 
 		introLayer=CCLayer::create();
 
@@ -163,6 +168,9 @@ void GameScene::onPush(CCObject* sender){
 	
 	
 }
+
+
+
 
 
 

@@ -4,6 +4,7 @@
 #include "HudLayer.h"
 #include "StartMenu.h"
 #include "LoadLayer.h"
+#include "MyUtils/KTools.h"
 
 int CError=0;
 
@@ -1444,7 +1445,7 @@ void GameLayer::setOugis(CCNode* sender){
 		sender->setZOrder(2000);
 
 		if(CCUserDefault::sharedUserDefault()->getBoolForKey("isVoice")!=false){
-			SimpleAudioEngine::sharedEngine()->playEffect(CCString::createWithFormat("Audio/Ougis/%s_ougis.mp3",Sender->getCharacter()->getCString())->getCString());
+			KTools::playEffectOptimized(CCString::createWithFormat("Audio/Ougis/%s_ougis.mp3",Sender->getCharacter()->getCString())->getCString(), 15, 3);
 		}
 
 		_hudLayer->setOugis(Sender->getCharacter(),Sender->getGroup());
@@ -1472,6 +1473,7 @@ void GameLayer::removeOugis(){
 	blend->removeFromParent();
 	ougisChar=NULL;
 }
+
 
 
 

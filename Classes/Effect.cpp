@@ -1,4 +1,5 @@
 #include "Effect.h"
+#include "MyUtils/KTools.h"
 #include "ActionManager.h"
 using namespace CocosDenshion;
 
@@ -99,7 +100,7 @@ bool Effect::init(const char *szImage,CCObject* Attacker){
 			CCAction* effectAction=this->createEffectAnimation("smk_",5,10,false);
 			this->runAction(effectAction);
 			if(CCUserDefault::sharedUserDefault()->getBoolForKey("isVoice")!=false){
-				SimpleAudioEngine::sharedEngine()->playEffect("Audio/Effect/poof.mp3");
+				KTools::playEffectOptimized("Audio/Effect/poof.mp3");
 			}
 		}else if(strcmp(szImage,"tishen")==0){
 			this->initWithSpriteFrameName("tishen_01.png");
@@ -295,4 +296,5 @@ Effect*  Effect::create(const char *szImage,CCObject* Attacker){
 		return NULL;
 	}
 }
+
 

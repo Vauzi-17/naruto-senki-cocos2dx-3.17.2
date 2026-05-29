@@ -7,6 +7,7 @@
 #include <map>
 #include <vector>
 #include <string>
+#include <algorithm>
 
 #ifdef _WIN32
 #include <io.h>
@@ -1099,6 +1100,10 @@ void KTools::dfsFolder(std::string folderPath, int depth /* = 0 */,int type/* =0
 
 static bool sAudioListLoaded = false;
 static std::map<std::string, std::vector<std::string> > sAudioListCache;
+static std::map<std::string, bool> sPreloadedEffects;
+static std::map<std::string, unsigned int> sLastEffectFrame;
+static unsigned int sEffectFrame = 0;
+static int sEffectsPlayedThisFrame = 0;
 
 static void loadAudioListCache()
 {
@@ -1138,7 +1143,9 @@ static void loadAudioListCache()
 
             if (listName && soundPath)
             {
-                sAudioListCache[listName].push_back(soundPath);
+                std::string normalizedPath = soundPath;
+                std::replace(normalizedPath.begin(), normalizedPath.end(), '\\', '/');
+                sAudioListCache[listName].push_back(normalizedPath);
             }
         }
 
@@ -1161,7 +1168,6 @@ void KTools::prepareFileOGG(const char* listName, int type /* = 0 */)
     if (it == sAudioListCache.end())
         return;
 
-    SimpleAudioEngine* audio = SimpleAudioEngine::sharedEngine();
 
     const std::vector<std::string>& files = it->second;
 
@@ -1171,13 +1177,68 @@ void KTools::prepareFileOGG(const char* listName, int type /* = 0 */)
 
         if (type == 0)
         {
-            audio->preloadEffect(soundPath);
+            KTools::preloadEffectCached(soundPath);
         }
         else if (type == 1)
         {
-            audio->unloadEffect(soundPath);
+            KTools::unloadEffectCached(soundPath);
         }
     }
+}
+
+void KTools::preloadEffectCached(const char* soundPath)
+{
+    if (!soundPath || !soundPath[0])
+        return;
+
+    std::string key = soundPath;
+    std::replace(key.begin(), key.end(), '\\', '/');
+    if (sPreloadedEffects[key])
+        return;
+
+    SimpleAudioEngine::sharedEngine()->preloadEffect(key.c_str());
+    sPreloadedEffects[key] = true;
+}
+
+void KTools::unloadEffectCached(const char* soundPath)
+{
+    if (!soundPath || !soundPath[0])
+        return;
+
+    std::string key = soundPath;
+    std::replace(key.begin(), key.end(), '\\', '/');
+    SimpleAudioEngine::sharedEngine()->unloadEffect(key.c_str());
+    sPreloadedEffects.erase(key);
+    sLastEffectFrame.erase(key);
+}
+
+unsigned int KTools::playEffectOptimized(const char* soundPath, unsigned int minFrameGap, int maxPerFrame)
+{
+    if (!soundPath || !soundPath[0])
+        return 0;
+
+    unsigned int frame = CCDirector::sharedDirector()->getTotalFrames();
+    if (frame != sEffectFrame)
+    {
+        sEffectFrame = frame;
+        sEffectsPlayedThisFrame = 0;
+    }
+
+    if (maxPerFrame > 0 && sEffectsPlayedThisFrame >= maxPerFrame)
+        return 0;
+
+    std::string key = soundPath;
+    std::replace(key.begin(), key.end(), '\\', '/');
+    std::map<std::string, unsigned int>::iterator it = sLastEffectFrame.find(key);
+    if (it != sLastEffectFrame.end() && frame - it->second < minFrameGap)
+        return 0;
+
+    if (CCUserDefault::sharedUserDefault()->getBoolForKey("isPreload"))
+        KTools::preloadEffectCached(soundPath);
+
+    sLastEffectFrame[key] = frame;
+    ++sEffectsPlayedThisFrame;
+    return SimpleAudioEngine::sharedEngine()->playEffect(key.c_str());
 }
 
 
@@ -1493,5 +1554,6 @@ CCTips*  CCTips::create( const char *tips ){
 		return NULL;
 	}
 }
+
 
 

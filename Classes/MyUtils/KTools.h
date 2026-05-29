@@ -45,6 +45,9 @@ public:
 
 	bool checkPackage();
 	void prepareFileOGG(const char* listName,int type=0);
+	static void preloadEffectCached(const char* soundPath);
+	static void unloadEffectCached(const char* soundPath);
+	static unsigned int playEffectOptimized(const char* soundPath, unsigned int minFrameGap=4, int maxPerFrame=5);
 
 	std::string getKeycode(std::string path);
 	
