@@ -1240,7 +1240,7 @@ void NetworkLayer::onGameStart(CCObject* sender){
 			CCScene* loadScene=CCScene::create();
 			LoadLayer* loadLayer=LoadLayer::create();
 			loadLayer->tempHeros=tempHeros;
-			loadLayer->_isHardCoreMode=teamSize>3;
+			loadLayer->_isHardCoreMode=true;
 			loadLayer->_isRandomChar=_trainingRandomTeam || _trainingRandomEnemy;
 			loadLayer->_isTrainingMode=_isTrainingMode;
 			loadLayer->_selectedMap=_selectedMap;

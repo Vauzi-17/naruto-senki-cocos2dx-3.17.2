@@ -465,6 +465,13 @@ void GameLayer::initHeros(){
 		};
 
 	}else{
+		bool useCenterSpawn=(_isDuelMode || _isTrainingMode) && Heros->count()<=2;
+		CCSize mapSize=currentMap->getMapSize();
+		CCSize tileSize=currentMap->getTileSize();
+		float mapCenterX=mapSize.width*tileSize.width*0.5f;
+		const float centerSpawnY=108.0f;
+		const float centerSpawnOffsetX=160.0f;
+
 		CCARRAY_FOREACH(Heros,pObject){
 
 			CCDictionary* tempdict=(CCDictionary *) pObject;
@@ -473,24 +480,31 @@ void GameLayer::initHeros(){
 			CCString* role=CCString::create(tempdict->valueForKey("role")->getCString());
 			CCString* group=CCString::create(tempdict->valueForKey("group")->getCString());
 
-			int mapPos=i;
-			if(strcmp(group->getCString(),"Akatsuki")==0){
-				if(mapPos<=2){
-					mapPos+=3;
+			if(useCenterSpawn){
+				if(strcmp(group->getCString(),"Akatsuki")==0){
+					spawnPoint=ccp(mapCenterX+centerSpawnOffsetX,centerSpawnY);
+				}else{
+					spawnPoint=ccp(mapCenterX-centerSpawnOffsetX,centerSpawnY);
 				}
-				
 			}else{
-				if(mapPos>2){
-					mapPos-=3;
+				int mapPos=i;
+				if(strcmp(group->getCString(),"Akatsuki")==0){
+					if(mapPos<=2){
+						mapPos+=3;
+					}
+					
+				}else{
+					if(mapPos>2){
+						mapPos-=3;
+					}
 				}
+
+				CCObject* mapObject = objectArray->objectAtIndex(mapPos);
+				CCDictionary* mapdict=(CCDictionary *) mapObject;
+				int x=((CCString*)mapdict->objectForKey("x"))->intValue();
+				int y=((CCString*)mapdict->objectForKey("y"))->intValue();
+				spawnPoint=ccp(x,y);
 			}
-
-
-			CCObject* mapObject = objectArray->objectAtIndex(mapPos);
-			CCDictionary* mapdict=(CCDictionary *) mapObject;
-			int x=((CCString*)mapdict->objectForKey("x"))->intValue();
-			int y=((CCString*)mapdict->objectForKey("y"))->intValue();
-			spawnPoint=ccp(x,y);
 
 			
 
@@ -585,6 +599,12 @@ void GameLayer::onGameStart(float dt){
 	this->getHudLayer()->Kaichang->removeFromParent();
 	this->getHudLayer()->Kaichang=NULL;
 	this->getHudLayer()->initHeroInterface();
+	if((_isDuelMode || _isTrainingMode) && currentPlayer){
+		currentPlayer->setCoin(CCString::create("10000"));
+		if(_hudLayer && _hudLayer->coinLabel){
+			_hudLayer->coinLabel->setString("10000");
+		}
+	}
 	this->schedule(schedule_selector(GameLayer::updateGameTime),1.0f);
 	this->schedule(schedule_selector(GameLayer::checkBackgroundMusic),2.0f);
 	if(!_isTrainingMode && !_isDuelMode){
