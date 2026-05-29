@@ -1360,6 +1360,17 @@ bool HudLayer::getOugisEnable(bool isCKR2){
 
 };
 void HudLayer::costCKR(int value,bool isCKR2){
+	if(_delegate->_isUnlimitedCKR){
+		if(!isCKR2){
+			_delegate->fillCKRToMax(_delegate->currentPlayer);
+			this->setCKRLose(false);
+		}else{
+			_delegate->fillCKRToMax(_delegate->currentPlayer);
+			this->setCKRLose(true);
+		}
+		return;
+	}
+
 	if(!isCKR2){
 		float ckr=atof(_delegate->currentPlayer->getCKR()->getCString());
 

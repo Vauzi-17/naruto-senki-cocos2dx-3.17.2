@@ -38,6 +38,7 @@ GameLayer::GameLayer(void)
 	_isHardCoreGame=false;
 	_isRandomChar=false;
 	_isDuelMode=false;
+	_isUnlimitedCKR=false;
 	_isDuelFinished=false;
 	_isRematching=false;
 	_rematchHerosOverride=NULL;
@@ -599,6 +600,7 @@ void GameLayer::onGameStart(float dt){
 	this->getHudLayer()->Kaichang->removeFromParent();
 	this->getHudLayer()->Kaichang=NULL;
 	this->getHudLayer()->initHeroInterface();
+	this->applyDuelTrainStartSetup();
 	if((_isDuelMode || _isTrainingMode) && currentPlayer){
 		currentPlayer->setCoin(CCString::create("10000"));
 		if(_hudLayer && _hudLayer->coinLabel){
@@ -944,6 +946,60 @@ void GameLayer::removeOugisMark(int type){
 
 bool GameLayer::shouldUnlockAllOugis() const{
 	return _isDuelMode || _isTrainingMode;
+}
+
+void GameLayer::fillCKRToMax(NarutoSenki::ActionManager* hero){
+	if(!hero){
+		return;
+	}
+	hero->setCKR(CCString::create("45000"));
+	hero->setCKR2(CCString::create("50000"));
+	hero->_isCanOugis1=true;
+	hero->_isCanOugis2=true;
+}
+
+void GameLayer::applyDuelTrainStartSetup(){
+	if(!_isDuelMode && !_isTrainingMode){
+		_isUnlimitedCKR=false;
+		return;
+	}
+	_isUnlimitedCKR=_isTrainingMode;
+
+	if(!_CharacterArray){
+		return;
+	}
+
+	CCObject* pObject=NULL;
+	CCARRAY_FOREACH(_CharacterArray,pObject){
+		Hero* hero=(Hero*)pObject;
+		if(!hero){
+			continue;
+		}
+		if(strcmp(hero->getRole()->getCString(),"Player")!=0 &&
+			strcmp(hero->getRole()->getCString(),"Com")!=0){
+			continue;
+		}
+		hero->applyStartLevel6();
+		this->fillCKRToMax(hero);
+	}
+
+	if(currentPlayer && _hudLayer){
+		_hudLayer->setHPLose(currentPlayer->getHpPercent());
+		_hudLayer->setEXPLose(NULL);
+		_hudLayer->setCKRLose(false);
+		_hudLayer->setCKRLose(true);
+	}
+
+	if(_isDuelMode && _hudLayer && currentPlayer){
+		CCARRAY_FOREACH(_CharacterArray,pObject){
+			NarutoSenki::ActionManager* hero=(NarutoSenki::ActionManager*)pObject;
+			if(strcmp(hero->getGroup()->getCString(),currentPlayer->getGroup()->getCString())!=0 &&
+				(strcmp(hero->getRole()->getCString(),"Player")==0 || strcmp(hero->getRole()->getCString(),"Com")==0)){
+				_hudLayer->setEnemyHPLose(hero->getHpPercent());
+				break;
+			}
+		}
+	}
 }
 
 void GameLayer::refreshOugisSkillLocks(){

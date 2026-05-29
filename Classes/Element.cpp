@@ -507,6 +507,20 @@ void HeroElement::setHPbar(){
 	
 };
 
+void HeroElement::applyStartLevel6(){
+	static const float expThresholds[]={500.f,1000.f,1500.f,2000.f,2500.f};
+	_level=1;
+	_exp=0;
+	for(unsigned int i=0;i<sizeof(expThresholds)/sizeof(expThresholds[0]);i++){
+		_exp=expThresholds[i];
+		this->changeHPbar();
+	}
+	this->setHP(CCString::create(this->getMaxHP()->getCString()));
+	if(_hpBar){
+		_hpBar->loseHP(this->getHpPercent());
+	}
+}
+
 void HeroElement::changeHPbar(){
 		
 		if(_exp>=500 && _level==1){

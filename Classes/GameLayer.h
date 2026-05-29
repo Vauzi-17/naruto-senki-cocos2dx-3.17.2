@@ -117,6 +117,9 @@ public:
 	void removeOugisMark(int type);
 	bool shouldUnlockAllOugis() const;
 	void refreshOugisSkillLocks();
+	void applyDuelTrainStartSetup();
+	void fillCKRToMax(NarutoSenki::ActionManager* hero);
+	bool _isUnlimitedCKR;
 	void setOugis(CCNode* sender);
 	void removeOugis();
 	CCNode* ougisChar;

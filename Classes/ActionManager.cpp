@@ -2614,6 +2614,13 @@ void NarutoSenki::ActionManager::setCommand(CCNode* sender,void* date){
 
 
 		}
+		if(_delegate && _delegate->_isUnlimitedCKR){
+			_delegate->fillCKRToMax(this);
+			if(strcmp(_role->getCString(),"Player")==0){
+				_delegate->setCKRLose(false);
+				_delegate->setCKRLose(true);
+			}
+		}
 	}else if(strcmp(commandType->getCString(),"reInvincible")==0){
 		this->_isWudi=false;
 	}else if(strcmp(commandType->getCString(),"setInvisible")==0){
@@ -6678,11 +6685,16 @@ void NarutoSenki::ActionManager::attack(abType type){
 
 	case OUGIS1:
 		if(strcmp(_role->getCString(),"Player")!=0 || this->_isAI){
-			float newValue=atof(this->getCKR()->getCString())-15000;;
-			this->setCKR(CCString::createWithFormat("%f",newValue));
-			if(atof(this->getCKR()->getCString()) <15000){
-				_isCanOugis1=false;
-			}	
+			if(!(_delegate && _delegate->_isUnlimitedCKR)){
+				float newValue=atof(this->getCKR()->getCString())-15000;;
+				this->setCKR(CCString::createWithFormat("%f",newValue));
+				if(atof(this->getCKR()->getCString()) <15000){
+					_isCanOugis1=false;
+				}
+			}
+		}
+		if(_delegate && _delegate->_isUnlimitedCKR){
+			_delegate->fillCKRToMax(this);
 		}
 
 		_attackValue=atoi(_sattackValue4->getCString());
@@ -6695,11 +6707,16 @@ void NarutoSenki::ActionManager::attack(abType type){
 	case OUGIS2:
 
 		if(strcmp(_role->getCString(),"Player")!=0 || this->_isAI){
-			float newValue=atof(this->getCKR2()->getCString())-25000;
-			this->setCKR2(CCString::createWithFormat("%f",newValue));
-			if(atof(this->getCKR2()->getCString()) <25000){
-				_isCanOugis2=false;
-			}	
+			if(!(_delegate && _delegate->_isUnlimitedCKR)){
+				float newValue=atof(this->getCKR2()->getCString())-25000;
+				this->setCKR2(CCString::createWithFormat("%f",newValue));
+				if(atof(this->getCKR2()->getCString()) <25000){
+					_isCanOugis2=false;
+				}
+			}
+		}
+		if(_delegate && _delegate->_isUnlimitedCKR){
+			_delegate->fillCKRToMax(this);
 		}
 
 		_attackValue=atoi(_sattackValue5->getCString());

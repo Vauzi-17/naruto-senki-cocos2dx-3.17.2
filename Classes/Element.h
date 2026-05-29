@@ -17,6 +17,7 @@ public:
 	void	setHPbar();
 	void	setShadows();
 	void    changeHPbar();
+	void	applyStartLevel6();
 	void	neicun(float dt);
 	void	setID(CCString* character,CCString* role,CCString* group);
 	virtual void setAI(float dt);
