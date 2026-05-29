@@ -4,6 +4,9 @@
 /*#if (CC_TARGET_PLATFORM==CC_PLATFORM_ANDROID)
 #include "platform/android/jni/JniHelper.h"
 #endif  */
+#include <map>
+#include <vector>
+#include <string>
 
 #ifdef _WIN32
 #include <io.h>
@@ -1094,47 +1097,87 @@ void KTools::dfsFolder(std::string folderPath, int depth /* = 0 */,int type/* =0
 
 }
 
-void KTools::prepareFileOGG(const char* listName,int type/* =0 */){
+static bool sAudioListLoaded = false;
+static std::map<std::string, std::vector<std::string> > sAudioListCache;
 
-	if(CCUserDefault::sharedUserDefault()->getBoolForKey("isPreload")){
-		
-	}else{
-		return;
-	}
+static void loadAudioListCache()
+{
+    if (sAudioListLoaded)
+        return;
 
-	//MD5 
+    sAudioListLoaded = true;
 
-	std::string md5Path =  "Audio/list.xml";
+    std::string md5Path = "Audio/list.xml";
 
-	bool isExisted=CCFileUtils::sharedFileUtils()->isFileExist(md5Path);
+    if (!CCFileUtils::sharedFileUtils()->isFileExist(md5Path))
+        return;
 
-	if(!isExisted){
-	return;
-	}
+    ssize_t nSize = 0;
+    unsigned char* pXmlBuffer = CCFileUtils::sharedFileUtils()->getFileData(md5Path.c_str(), "r", &nSize);
 
-	tinyxml2::XMLDocument* doc = new tinyxml2::XMLDocument();  
-	ssize_t nSize;
-	const char *pXmlBuffer = (const char*)CCFileUtils::sharedFileUtils()->getFileData(md5Path.c_str(), "r", &nSize);
-	doc->Parse(pXmlBuffer);
+    if (!pXmlBuffer || nSize <= 0)
+        return;
 
-	XMLElement *rootEle=doc->RootElement();
-	XMLElement *fileEle=rootEle->FirstChildElement();
+    tinyxml2::XMLDocument doc;
+    doc.Parse(reinterpret_cast<const char*>(pXmlBuffer), nSize);
 
-	while (fileEle){
-	const char* pathSrc=fileEle->FirstAttribute()->Value();
-	std::string soundPath= fileEle->GetText();	 
-	if(strcmp(pathSrc,listName)==0){
-	if(type==0){
-	SimpleAudioEngine::sharedEngine()->preloadEffect(soundPath.c_str());
-	}else if(type==1){
-	SimpleAudioEngine::sharedEngine()->unloadEffect(soundPath.c_str());
-	}
-	}
+    CC_SAFE_DELETE_ARRAY(pXmlBuffer);
 
-	fileEle=fileEle->NextSiblingElement();	
-	}
-	return;
+    XMLElement* rootEle = doc.RootElement();
+    if (!rootEle)
+        return;
 
+    XMLElement* fileEle = rootEle->FirstChildElement();
+
+    while (fileEle)
+    {
+        if (fileEle->FirstAttribute() && fileEle->GetText())
+        {
+            const char* listName = fileEle->FirstAttribute()->Value();
+            const char* soundPath = fileEle->GetText();
+
+            if (listName && soundPath)
+            {
+                sAudioListCache[listName].push_back(soundPath);
+            }
+        }
+
+        fileEle = fileEle->NextSiblingElement();
+    }
+}
+
+void KTools::prepareFileOGG(const char* listName, int type /* = 0 */)
+{
+    if (!CCUserDefault::sharedUserDefault()->getBoolForKey("isPreload"))
+        return;
+
+    if (!listName || !listName[0])
+        return;
+
+    loadAudioListCache();
+
+    std::map<std::string, std::vector<std::string> >::iterator it = sAudioListCache.find(listName);
+
+    if (it == sAudioListCache.end())
+        return;
+
+    SimpleAudioEngine* audio = SimpleAudioEngine::sharedEngine();
+
+    const std::vector<std::string>& files = it->second;
+
+    for (size_t i = 0; i < files.size(); ++i)
+    {
+        const char* soundPath = files[i].c_str();
+
+        if (type == 0)
+        {
+            audio->preloadEffect(soundPath);
+        }
+        else if (type == 1)
+        {
+            audio->unloadEffect(soundPath);
+        }
+    }
 }
 
 
