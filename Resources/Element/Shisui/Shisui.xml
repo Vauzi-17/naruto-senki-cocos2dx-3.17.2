@@ -1,0 +1,326 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animation>
+
+  <action value="Idle">
+    <date>
+      <dateName type="attackType">Shisui</dateName>
+      <dateName type="attackValue">5000</dateName>
+      <dateName type="attackRangeX">63</dateName>
+      <dateName type="attackRangeY">78</dateName>
+      <coldName type="coldDown">224</coldName>
+    </date>
+    <frame>
+      <frameName>Shisui_Idle_01.png</frameName>
+    </frame>
+  </action>
+
+  <action value="Walk">
+    <frame>
+      <frameName>Shisui_Walk_01.png</frameName>
+      <frameName>Shisui_Walk_02.png</frameName>
+      <frameName>Shisui_Walk_03.png</frameName>
+      <frameName>Shisui_Walk_04.png</frameName>
+      <frameName>Shisui_Walk_05.png</frameName>
+      <frameName>Shisui_Walk_06.png</frameName>
+    </frame>
+  </action>
+
+  <action value="Hurt">
+    <frame>
+      <eventName type="setMove">32</eventName>
+      <frameName>Shisui_Hurt_01.png</frameName>
+      <frameName>Shisui_Hurt_02.png</frameName>
+      <eventName type="setSound">Audio/Shisui/Shisui_hurt.mp3</eventName>
+    </frame>
+  </action>
+
+  <action value="AirHurt">
+    <frame>
+      <frameName>Shisui_AirHurt_001.png</frameName>
+    </frame>
+  </action>
+
+  <action value="KnockDown">
+    <frame>
+      <frameName>Shisui_KnockDown_001.png</frameName>
+      <eventName type="setDelay">10</eventName>
+      <frameName>Shisui_KnockDown_002.png</frameName>
+      <eventName type="setDelay">60</eventName>
+      <frameName>Shisui_KnockDown_003.png</frameName>
+      <frameName>Shisui_KnockDown_004.png</frameName>
+      <frameName>Shisui_KnockDown_005.png</frameName>
+    </frame>
+  </action>
+
+  <action value="Float">
+    <frame>
+      <frameName>Shisui_Float_001.png</frameName>
+      <eventName type="setDelay">10</eventName>
+      <frameName>Shisui_Float_002.png</frameName>
+      <eventName type="setDelay">10</eventName>
+      <frameName>Shisui_Float_003.png</frameName>
+    </frame>
+  </action>
+
+  <action value="Dead">
+    <frame>
+      <frameName>Shisui_KnockDown_001.png</frameName>
+      <frameName>Shisui_KnockDown_002.png</frameName>
+      <eventName type="setSound">Audio/Shisui/Shisui_dead.mp3</eventName>
+    </frame>
+  </action>
+
+  <action value="nAttack">
+    <date>
+      <dateName type="attackType">nAttack</dateName>
+      <dateName type="attackValue">60</dateName>
+      <dateName type="attackRangeX">16</dateName>
+      <dateName type="attackRangeY">48</dateName>
+      <coldName type="coldDown">0</coldName>
+    </date>
+    <frame>
+      <frameName>Shisui_NAttack_001.png</frameName>
+      <frameName>Shisui_NAttack_002.png</frameName>
+      <frameName>Shisui_NAttack_003.png</frameName>
+      <eventName type="setAttackBox">n_hit</eventName>
+      <eventName type="setSound">Audio/Effect/combo1.mp3</eventName>
+      <frameName>Shisui_NAttack_004.png</frameName>
+      <frameName>Shisui_NAttack_005.png</frameName>
+      <frameName>Shisui_NAttack_006.png</frameName>
+      <frameName>Shisui_NAttack_007.png</frameName>
+      <eventName type="setAttackBox">n_hit</eventName>
+      <eventName type="setDelay">10</eventName>
+      <frameName>Shisui_NAttack_008.png</frameName>
+      <frameName>Shisui_NAttack_009.png</frameName>
+      <eventName type="setSound">Audio/Effect/combo2.mp3</eventName>
+      <frameName>Shisui_NAttack_010.png</frameName>
+      <eventName type="setSound">Audio/Shisui/Shisui_combo.mp3</eventName>
+      <eventName type="setMove">16</eventName>
+      <frameName>Shisui_NAttack_011.png</frameName>
+      <frameName>Shisui_NAttack_012.png</frameName>
+      <eventName type="setAttackBox">l_hit</eventName>
+      <eventName type="setSound">Audio/Effect/combo3.mp3</eventName>
+      <eventName type="setDelay">10</eventName>
+    </frame>
+  </action>
+
+  <action value="skill01">
+    <date>
+      <dateName type="attackType">cAttack</dateName>
+      <dateName type="attackValue">420</dateName>
+      <dateName type="attackRangeX">10</dateName>
+      <dateName type="attackRangeY">6</dateName>
+      <coldName type="coldDown">1</coldName>
+      <dateName type="combatPoint">0</dateName>
+    </date>
+    <frame>
+      <eventName type="setSound">Element/Shisui/sound/1.wav</eventName>
+      <eventName type="setDelay">-3</eventName>
+      <frameName>Shisui_Skill01_01.png</frameName>
+      <eventName type="setSound">Element/Shisui/sound/dsh.wav</eventName>
+      <eventName type="setDelay">-3</eventName>
+      <frameName>Shisui_Skill01_02.png</frameName>
+      <eventName type="setDelay">-3</eventName>
+      <eventName type="setChargeB">220</eventName>
+      <eventName type="setAttackBox">c_hit</eventName>
+      <frameName>Shisui_Skill01_03.png</frameName>
+      <eventName type="setDelay">-3</eventName>
+      <frameName>Shisui_Skill01_04.png</frameName>
+      <eventName type="setDelay">-3</eventName>
+      <eventName type="setCommand">findTarget</eventName>
+      <eventName type="setCommand">setTransport</eventName>
+      <frameName>Shisui_Skill01_05.png</frameName>
+      <eventName type="setDelay">-3</eventName>
+      <eventName type="setChargeB">80</eventName>
+      <eventName type="setAttackBox">c_hit</eventName>
+      <frameName>Shisui_Skill01_06.png</frameName>
+      <eventName type="setDelay">-3</eventName>
+      <eventName type="setChargeB">-60</eventName>
+      <eventName type="setAttackBox">c_hit</eventName>
+      <eventName type="setSound">Element/Shisui/sound/2-2.wav</eventName>
+      <frameName>Shisui_Skill01_07.png</frameName>
+      <eventName type="setDelay">-3</eventName>
+      <eventName type="setAttackBox">c_hit</eventName>
+      <frameName>Shisui_Skill01_08.png</frameName>
+      <eventName type="setDelay">-3</eventName>
+      <eventName type="setAttackBox">c_hit</eventName>
+      <frameName>Shisui_Skill01_09.png</frameName>
+      <eventName type="setDelay">-3</eventName>
+      <eventName type="setAttackBox">c_hit</eventName>
+      <frameName>Shisui_Skill01_010.png</frameName>
+      <eventName type="setDelay">-3</eventName>
+      <frameName>Shisui_Skill01_011.png</frameName>
+      <eventName type="setDelay">-3</eventName>
+      <frameName>Shisui_Skill01_012.png</frameName>
+      <eventName type="setDelay">-3</eventName>
+      <frameName>Shisui_Skill01_013.png</frameName>
+      <eventName type="setDelay">-3</eventName>
+      <frameName>Shisui_Skill01_014.png</frameName>
+      <eventName type="setDelay">-3</eventName>
+      <frameName>Shisui_Skill01_015.png</frameName>
+      <eventName type="setDelay">-3</eventName>
+      <frameName>Shisui_Skill01_016.png</frameName>
+      <eventName type="setDelay">-3</eventName>
+      <frameName>Shisui_Skill01_017.png</frameName>
+    </frame>
+  </action>
+  <action value="skill02">
+    <date>
+      <dateName type="attackType">Summon</dateName>
+      <dateName type="attackValue">0</dateName>
+      <dateName type="attackRangeX">0</dateName>
+      <dateName type="attackRangeY">0</dateName>
+      <coldName type="coldDown">1</coldName>
+      <dateName type="combatPoint">1520</dateName>
+    </date>
+    <frame>
+      <eventName type="setSound">Element/Shisui/sound/2.wav</eventName>
+      <frameName>Shisui_Skill02_01.png</frameName>
+      <eventName type="setMon">Shisui-M1</eventName>
+      <frameName>Shisui_Skill02_01.png</frameName>
+      <eventName type="setMon">Shisui-M3</eventName>
+      <frameName>Shisui_Skill02_01.png</frameName>
+      <eventName type="setMon">Shisui-M2</eventName>
+      <frameName>Shisui_Skill02_01.png</frameName>
+    </frame>
+  </action>
+  <action value="skill03">
+    <date>
+      <dateName type="attackType">aAttack</dateName>
+      <dateName type="attackValue">300</dateName>
+      <dateName type="attackRangeX">10</dateName>
+      <dateName type="attackRangeY">5</dateName>
+      <coldName type="coldDown">1</coldName>
+      <dateName type="combatPoint">1840</dateName>
+    </date>
+    <frame>
+      <frameName>Shisui_M4_03.png</frameName>
+      <eventName type="setDelay">-3</eventName>
+      <eventName type="setAttackBox">c_hit</eventName>
+      <eventName type="setSound">Element/Shisui/sound/sls.wav</eventName>
+      <frameName>Shisui_M4_04.png</frameName>
+      <eventName type="setDelay">-3</eventName>
+      <eventName type="setAttackBox">c_hit</eventName>
+      <frameName>Shisui_M4_05.png</frameName>
+      <eventName type="setDelay">-3</eventName>
+      <eventName type="setAttackBox">c_hit</eventName>
+      <frameName>Shisui_M4_06.png</frameName>
+      <eventName type="setDelay">-3</eventName>
+      <eventName type="setAttackBox">c_hit</eventName>
+      <frameName>Shisui_M4_07.png</frameName>
+      <eventName type="setDelay">-3</eventName>
+      <eventName type="setAttackBox">c_hit</eventName>
+      <frameName>Shisui_M4_08.png</frameName>
+      <eventName type="setDelay">-3</eventName>
+      <eventName type="setAttackBox">c_hit</eventName>
+      <frameName>Shisui_M4_09.png</frameName>
+      <eventName type="setDelay">-3</eventName>
+      <frameName>Shisui_M4_010.png</frameName>
+      <eventName type="setDelay">-3</eventName>
+      <frameName>Shisui_M4_011.png</frameName>
+      <eventName type="setDelay">-3</eventName>
+      <frameName>Shisui_M4_012.png</frameName>
+      <eventName type="setSound">Element/Shisui/sound/1.wav</eventName>
+      <eventName type="setDelay">-3</eventName>
+      <frameName>Shisui_Skill01_01.png</frameName>
+      <eventName type="setSound">Element/Shisui/sound/dsh.wav</eventName>
+      <eventName type="setDelay">-3</eventName>
+      <frameName>Shisui_Skill01_02.png</frameName>
+      <eventName type="setDelay">-3</eventName>
+      <eventName type="setChargeB">300</eventName>
+      <eventName type="setAttackBox">c_hit</eventName>
+      <frameName>Shisui_Skill01_03.png</frameName>
+      <eventName type="setDelay">-3</eventName>
+      <frameName>Shisui_Skill01_04.png</frameName>
+      <eventName type="setDelay">-3</eventName>
+      <frameName>Shisui_Skill01_05.png</frameName>
+      <eventName type="setDelay">-3</eventName>
+      <eventName type="setFlipped">10</eventName>
+      <eventName type="setAttackBox">c_hit</eventName>
+      <frameName>Shisui_Skill01_06.png</frameName>
+      <eventName type="setDelay">-3</eventName>
+      <eventName type="setChargeB">-60</eventName>
+      <eventName type="setAttackBox">c_hit</eventName>
+      <eventName type="setSound">Element/Shisui/sound/2-2.wav</eventName>
+      <frameName>Shisui_Skill01_07.png</frameName>
+      <eventName type="setDelay">-3</eventName>
+      <eventName type="setAttackBox">c_hit</eventName>
+      <frameName>Shisui_Skill01_08.png</frameName>
+      <eventName type="setDelay">-3</eventName>
+      <eventName type="setAttackBox">c_hit</eventName>
+      <frameName>Shisui_Skill01_09.png</frameName>
+      <eventName type="setDelay">-3</eventName>
+      <eventName type="setAttackBox">c_hit</eventName>
+      <frameName>Shisui_Skill01_010.png</frameName>
+      <eventName type="setDelay">-3</eventName>
+      <frameName>Shisui_Skill01_011.png</frameName>
+      <eventName type="setDelay">-3</eventName>
+      <frameName>Shisui_Skill01_012.png</frameName>
+      <eventName type="setDelay">-3</eventName>
+      <frameName>Shisui_Skill01_013.png</frameName>
+      <eventName type="setDelay">-3</eventName>
+      <frameName>Shisui_Skill01_014.png</frameName>
+      <eventName type="setDelay">-3</eventName>
+      <frameName>Shisui_Skill01_015.png</frameName>
+      <eventName type="setDelay">-3</eventName>
+      <frameName>Shisui_Skill01_016.png</frameName>
+      <eventName type="setDelay">-3</eventName>
+      <frameName>Shisui_Skill01_017.png</frameName>
+    </frame>
+  </action>
+  <action value="skill04">
+    <date>
+      <dateName type="attackType">aAttack</dateName>
+      <dateName type="attackValue">760</dateName>
+      <dateName type="attackRangeX">0</dateName>
+      <dateName type="attackRangeY">48</dateName>
+      <coldName type="coldDown">1</coldName>
+      <dateName type="combatPoint">3040</dateName>
+    </date>
+    <frame>
+      <eventName type="setSound">Audio/Effect/ougis.mp3</eventName>
+      <frameName>Shisui_Skill05_001.png</frameName>
+      <eventName type="setSound">Audio/Shisui/Shisui_skill4.mp3</eventName>
+      <frameName>Shisui_Skill05_002.png</frameName>
+      <frameName>Shisui_Skill05_003.png</frameName>
+      <eventName type="setAttackBox">s_hit</eventName>
+      <eventName type="setDSound">Audio/Effect/damage_l.mp3</eventName>
+      <frameName>Shisui_Skill05_004.png</frameName>
+      <frameName>Shisui_Skill05_005.png</frameName>
+      <eventName type="setAttackBox">s_hit</eventName>
+      <eventName type="setDSound">Audio/Effect/damage_l.mp3</eventName>
+      <frameName>Shisui_Skill05_006.png</frameName>
+      <frameName>Shisui_Skill05_007.png</frameName>
+      <eventName type="setAttackBox">s_hit</eventName>
+      <eventName type="setDSound">Audio/Effect/damage_l.mp3</eventName>
+      <frameName>Shisui_Skill05_008.png</frameName>
+      <frameName>Shisui_Skill05_009.png</frameName>
+      <eventName type="setAttackBox">f_hit</eventName>
+      <eventName type="setDSound">Audio/Effect/damage_h.mp3</eventName>
+      <frameName>Shisui_Skill05_010.png</frameName>
+      <frameName>Shisui_Skill05_011.png</frameName>
+      <frameName>Shisui_Skill05_012.png</frameName>
+      <eventName type="setDelay">20</eventName>
+    </frame>
+  </action>
+  <action value="skill05">
+    <date>
+      <dateName type="attackType">aAttack</dateName>
+      <dateName type="attackValue">0</dateName>
+      <dateName type="attackRangeX">0</dateName>
+      <dateName type="attackRangeY">0</dateName>
+      <coldName type="coldDown">1</coldName>
+      <dateName type="combatPoint">8600</dateName>
+    </date>
+    <frame>
+      <eventName type="setCommand">setInvincible</eventName>
+      <frameName>Shisui_Skill04_001.png</frameName>
+      <eventName type="setOugis">10</eventName>
+      <frameName>Shisui_Skill04_002.png</frameName>
+      <eventName type="setMon">BugTomado</eventName>
+      <eventName type="setSound">Audio/Shisui/Shisui_skill5.mp3</eventName>
+      <eventName type="setDelay">20</eventName>
+      <eventName type="setCommand">reInvincible</eventName>
+    </frame>
+  </action>
+</animation>
