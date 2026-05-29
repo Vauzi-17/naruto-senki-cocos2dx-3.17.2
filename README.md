@@ -1,60 +1,79 @@
-\# NarutoSenki317 Build Notes
+# NarutoSenki317
 
+A fan-made Naruto strategy game project, migrated from **cocos2d-x 2.2.6** to **cocos2d-x 3.17.2** and built for Android.
 
+---
 
-\## Engine
+## Requirements
 
-\- cocos2d-x 3.17.2
+| Tool | Version |
+|------|---------|
+| cocos2d-x | 3.17.2 |
+| Android Studio | Latest stable |
+| NDK | 24.0.8215888 |
+| CMake | 3.22.1 |
+| Target ABI | armeabi-v7a |
 
-\- Project migrated from cocos2d-x 2.2.6
+---
 
+## Getting Started
 
+### 1. Clone the Repository
 
-\## Tested Environment
+```bash
+git clone https://github.com/your-username/NarutoSenki317.git
+cd NarutoSenki317
+```
 
-\- Windows
+### 2. Open the Project in Android Studio
 
-\- Android Studio
+Open the following folder (not the root):
 
-\- NDK: 24.0.8215888
-
-\- CMake: 3.22.1
-
-\- ABI tested: armeabi-v7a
-
-
-
-\## Open Project
-
-Open this folder in Android Studio:
-
-
-
+```
 proj.android
+```
 
+### 3. Configure local.properties
 
+This file is not committed to the repository. Create it manually in the `proj.android` directory:
 
-\## Important
+```properties
+sdk.dir=D\:\\sdk
+```
 
-`local.properties` is not committed.
+Adjust the path to match your local Android SDK installation. Android Studio can also generate this file automatically on first open.
 
-Create it automatically from Android Studio or manually:
+### 4. Build and Run
 
+Select your target device or emulator in Android Studio and click **Run**.
 
+---
 
-sdk.dir=D\\:\\\\sdk
+## Migration Notes (cocos2d-x 2.2.6 to 3.17.2)
 
+The following changes were made to resolve build errors after the engine upgrade:
 
+- **Removed** Enhance Game Service dependency from `Cocos2dxHelper.java`
+- **Added** Android platform macro in root `CMakeLists.txt`
+- **Guarded** desktop `GLView` include in `AppDelegate.cpp` to prevent cross-platform compile errors
+- **Updated** JNI include path from the old cocos2dx path to:
+  ```
+  platform/android/jni/JniHelper.h
+  ```
 
-\## Known Migration Fixes
+---
 
-\- Removed Enhance Game Service dependency from Cocos2dxHelper.java
+## Platform Support
 
-\- Added Android macro in root CMakeLists.txt
+| Platform | Status |
+|----------|--------|
+| Android | Tested |
+| Windows | Tested |
+| iOS | Not tested |
 
-\- Guarded desktop GLView include in AppDelegate.cpp
+---
 
-\- Replaced old cocos2dx JNI include path with:
+## Notes
 
-&#x20; platform/android/jni/JniHelper.h
-
+- Only `armeabi-v7a` has been verified. Other ABIs (arm64-v8a, x86) are untested.
+- This is a fan project. All Naruto-related assets and characters are property of their respective owners.
