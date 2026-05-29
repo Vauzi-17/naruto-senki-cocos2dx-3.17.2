@@ -385,6 +385,8 @@ void GameLayer::initHeros(){
 
 	if(Heros->count()>6 || Cheats>10){
 
+		const int konohaSpawnMap[]={0,1,2,6,7};
+		const int akatsukiSpawnMap[]={3,5,4,8,9};
 		int konohaSpawnIndex=0;
 		int akatsukiSpawnIndex=0;
 
@@ -396,28 +398,33 @@ void GameLayer::initHeros(){
 			CCString* role=CCString::create(tempdict->valueForKey("role")->getCString());
 			CCString* group=CCString::create(tempdict->valueForKey("group")->getCString());
 
-			int konohaX[]={352,304,304,256,256};
-			int konohaY[]={176,128,224,96,256};
-			int akatsukiX[]={2688,2736,2736,2784,2784};
-			int akatsukiY[]={176,128,224,96,256};
+			int mapPos;
 			if(strcmp(group->getCString(),"Akatsuki")==0){
 				int spawnIndex=akatsukiSpawnIndex++;
 				if(spawnIndex>4){
 					spawnIndex=4;
 				}
-				spawnPoint=ccp(akatsukiX[spawnIndex],akatsukiY[spawnIndex]);
+				mapPos=akatsukiSpawnMap[spawnIndex];
 			}else{
 				int spawnIndex=konohaSpawnIndex++;
 				if(spawnIndex>4){
 					spawnIndex=4;
 				}
-				spawnPoint=ccp(konohaX[spawnIndex],konohaY[spawnIndex]);
+				mapPos=konohaSpawnMap[spawnIndex];
 			}
+
+			CCObject* mapObject = objectArray->objectAtIndex(mapPos);
+			CCDictionary* mapdict=(CCDictionary *) mapObject;
+			int x=((CCString*)mapdict->objectForKey("x"))->intValue();
+			int y=((CCString*)mapdict->objectForKey("y"))->intValue();
+			spawnPoint=ccp(x,y);
 
 			if(i==0){			
 
-			
-			
+				if(strcmp(group->getCString(),"Akatsuki")==0){
+					zhenying=0;
+				}
+
 				currentPlayer=Hero::create();
 				currentPlayer->setDelegate(this);
 				currentPlayer->setID(player,role,group);
@@ -427,6 +434,10 @@ void GameLayer::initHeros(){
 				currentPlayer->setHPbar();
 				currentPlayer->setShadows();
 				currentPlayer->idle();
+				if(zhenying<=0){
+					currentPlayer->_isFlipped=true;
+					currentPlayer->setFlipX(true);
+				}
 				currentPlayer->setCharNO(i+1);
 				currentPlayer->schedule(schedule_selector(NarutoSenki::ActionManager::setRestore2),1.0f);
 				_CharacterArray->addObject(currentPlayer);
@@ -442,6 +453,10 @@ void GameLayer::initHeros(){
 				Com->setHPbar();
 				Com->setShadows();
 				Com->idle();
+				if(strcmp(Com->getGroup()->getCString(),"Akatsuki")==0){
+					Com->_isFlipped=true;
+					Com->setFlipX(true);
+				}
 				Com->setCharNO(i+1);
 				Com->schedule(schedule_selector(NarutoSenki::ActionManager::setRestore2),1.0f);
 				_CharacterArray->addObject(Com);
