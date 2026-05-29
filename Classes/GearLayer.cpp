@@ -49,11 +49,30 @@ void GearButton::onExit(){
 
 CCRect GearButton::getRect(){
 	CCSize size=this->getContentSize();
-	return CCRect(0,0, size.width, size.height);
+	if(size.width<1.0f || size.height<1.0f){
+		float maxW=0.0f;
+		float maxH=0.0f;
+		const auto& children=this->getChildren();
+		for(auto childObj : children){
+			CCNode* child=dynamic_cast<CCNode*>(childObj);
+			if(!child){
+				continue;
+			}
+			CCSize childSize=child->getContentSize();
+			maxW=MAX(maxW,childSize.width);
+			maxH=MAX(maxH,childSize.height);
+		}
+		if(maxW>0.0f && maxH>0.0f){
+			return CCRect(0,0,maxW,maxH);
+		}
+	}
+	return CCRect(0,0,size.width,size.height);
 
 }
 bool GearButton::containsTouchLocation(CCTouch *touch){
-
+	if(!this->isVisible()){
+		return false;
+	}
 	return getRect().containsPoint(convertTouchToNodeSpace(touch));
 }
 
@@ -93,15 +112,10 @@ gearType	GearButton::getBtnType(){
 }
 
 bool GearButton::ccTouchBegan(CCTouch* touch,CCEvent* event){
-	// touch area 
-	if (!this->containsTouchLocation(touch) ||  soIcon){
-
+	if (!this->containsTouchLocation(touch) || soIcon){
 		return false;
-	}else{
-		return true;
 	}
-
-
+	return true;
 }
 
 void GearButton::ccTouchMoved(CCTouch* touch,CCEvent* event){
@@ -188,11 +202,21 @@ void ScrewLayer::onExit(){
 	cocos2d::cocos2dx2_compat::removeDelegate(this);
 };
 
+bool ScrewLayer::isTouchInScrollArea(CCTouch* touch){
+	CCPoint local=this->convertToNodeSpace(touch->getLocation());
+	int rows=gearNum>0 ? (gearNum+2)/3 : totalRow;
+	if(rows<1){
+		rows=1;
+	}
+	float minY=-(rows-1)*60.0f-12.0f;
+	float maxY=44.0f;
+	CCRect area(-8,minY,3*46.0f+24.0f,maxY-minY);
+	return area.containsPoint(local);
+}
+
 bool ScrewLayer::onTouchBegan(CCTouch* touch,CCEvent* event){
-
 	prePosY=NULL;
-	return true;
-
+	return isTouchInScrollArea(touch);
 };
 
 void ScrewLayer::onTouchMoved(CCTouch* touch,CCEvent* event){
@@ -255,6 +279,7 @@ GearLayer::GearLayer(void)
 {
 	currentGear_layer=NULL;
 	currentGear=None;
+	_buyBtn=NULL;
 }
 
 
@@ -281,7 +306,7 @@ bool GearLayer::init(CCRenderTexture* snapshoot){
 		this->addChild(blend,1);
 
 		
-		//ÈÌ¾ß½çÃæ
+		//??
 
 
 		
@@ -325,25 +350,17 @@ bool GearLayer::init(CCRenderTexture* snapshoot){
 		gearDetail->setPosition(ccp(gears_bg->getPositionX()+gears_bg->getContentSize().width/2-54,210));
 		this->addChild(gearDetail,600);
 
-	
-
-
-		CCMenuItem* buy_btn=CCMenuItemSprite::create(CCSprite::createWithSpriteFrameName("gearBuy_btn.png"),
-			CCSprite::createWithSpriteFrameName("gearBuy_btn2.png"),this,menu_selector(GearLayer::onGearBuy));
-		CCMenu* gearMenu=CCMenu::create(buy_btn,NULL);
-		gearMenu->setPosition(ccp(gears_bg->getPositionX()+78,65));
-		this->addChild(gearMenu,600);
 		clipper->setPosition(ccp(gears_bg->getPositionX()-gears_bg->getContentSize().width/2+4,85));
 		clipper->addChild(_screwLayer);
 		this->addChild(clipper,600);
 
-
+		this->setupBuyButton(gears_bg);
 
 		CCMenuItem* btm_btn=CCMenuItemSprite::create(CCSprite::createWithSpriteFrameName("close_btn1.png"),
 			CCSprite::createWithSpriteFrameName("close_btn2.png"),this,menu_selector(GearLayer::onResume));
 		CCMenu* overMenu=CCMenu::create(btm_btn,NULL);
 		overMenu->setPosition(ccp(winSize.width/2+gears_bg->getContentSize().width/2-12,winSize.height/2+gears_bg->getContentSize().height/2-20));
-		this->addChild(overMenu,600);
+		this->addChild(overMenu,800);
 
 
 		
@@ -357,6 +374,47 @@ bool GearLayer::init(CCRenderTexture* snapshoot){
 }
 
 
+
+void GearLayer::setupBuyButton(CCSprite* gearsBg){
+	_buyBtn=CCSprite::createWithSpriteFrameName("gearBuy_btn.png");
+	_buyBtn->setAnchorPoint(ccp(0.5f,0.5f));
+	_buyBtn->setPosition(ccp(gearsBg->getPositionX()+78,gearsBg->getPositionY()-gearsBg->getContentSize().height/2+35));
+	this->addChild(_buyBtn,750);
+
+	auto listener=EventListenerTouchOneByOne::create();
+	listener->setSwallowTouches(true);
+	listener->onTouchBegan=[this](Touch* touch,Event* event)->bool{
+		if(!_buyBtn || !_buyBtn->isVisible()){
+			return false;
+		}
+		Vec2 local=_buyBtn->convertToNodeSpace(touch->getLocation());
+		Rect rect(0,0,_buyBtn->getContentSize().width,_buyBtn->getContentSize().height);
+		if(!rect.containsPoint(local)){
+			return false;
+		}
+		CCSpriteFrame* pressed=CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName("gearBuy_btn2.png");
+		if(pressed){
+			_buyBtn->setSpriteFrame(pressed);
+		}
+		return true;
+	};
+	listener->onTouchEnded=[this](Touch* touch,Event* event){
+		if(!_buyBtn){
+			return;
+		}
+		Vec2 local=_buyBtn->convertToNodeSpace(touch->getLocation());
+		Rect rect(0,0,_buyBtn->getContentSize().width,_buyBtn->getContentSize().height);
+		if(rect.containsPoint(local)){
+			this->onGearBuy(NULL);
+		}
+		CCSpriteFrame* normal=CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName("gearBuy_btn.png");
+		if(normal){
+			_buyBtn->setSpriteFrame(normal);
+		}
+	};
+	listener->onTouchCancelled=listener->onTouchEnded;
+	Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener,_buyBtn);
+}
 
 void GearLayer::onResume(CCObject* sender){
 	
@@ -400,7 +458,7 @@ void GearLayer::updatePlayerGear(){
 			i++;
 		}
 		currentGear_layer->setPosition(ccp(gears_bg->getPositionX()-gears_bg->getContentSize().width/2+8,64));
-		this->addChild(currentGear_layer,800);
+		this->addChild(currentGear_layer,650);
 	}
 
 	

@@ -36,8 +36,10 @@ public:
 	void	updateGearList();
 
 	ScrewLayer* _screwLayer;
+	CCSprite* _buyBtn;
 
 private:
+	void	setupBuyButton(CCSprite* gearsBg);
 	void	onResume(CCObject* sender);
 	void	onGearBuy(CCObject* sender);
 	
@@ -73,6 +75,8 @@ public:
 
 	CCSprite* soIcon;
 
+	bool			containsTouchLocation(CCTouch* touch);
+
 protected:
 
 	virtual void	onEnter();
@@ -80,8 +84,6 @@ protected:
 	virtual bool	ccTouchBegan(CCTouch* touch,CCEvent* event);
 	virtual void    ccTouchMoved(CCTouch* touch, CCEvent* event);
 	virtual void	ccTouchEnded(CCTouch* touch,CCEvent* event);
-
-	bool			containsTouchLocation(CCTouch* touch);
 
 
 
@@ -112,7 +114,7 @@ protected:
 	virtual bool onTouchBegan(CCTouch* touch, CCEvent* event);
 	virtual void onTouchMoved(CCTouch* touch, CCEvent* event);
 	virtual void onTouchEnded(CCTouch* touch, CCEvent* event);
-
+	bool isTouchInScrollArea(CCTouch* touch);
 
 	void onEnter();
 	void onExit();

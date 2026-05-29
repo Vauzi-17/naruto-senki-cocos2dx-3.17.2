@@ -517,7 +517,6 @@ void HeroElement::changeHPbar(){
 			if(strcmp(this->getRole()->getCString(),"Player")==0){
 				
 				this->getDelegate()->setCKRLose(false);
-				this->getDelegate()->removeOugisMark(1);
 
 				if(strcmp(this->getCharacter()->getCString(),"Kakuzu")==0 && this->hearts<1){
 					if(_delegate->getHudLayer()->skill4Button){
@@ -554,7 +553,6 @@ void HeroElement::changeHPbar(){
 			if(strcmp(this->getRole()->getCString(),"Player")==0){
 				
 				this->getDelegate()->setCKRLose(true);
-				this->getDelegate()->removeOugisMark(2);
 
 				if(strcmp(this->getCharacter()->getCString(),"Kakuzu")==0){
 					if(_delegate->getHudLayer()->skill5Button){
@@ -596,7 +594,10 @@ void HeroElement::changeHPbar(){
 			CCSpriteFrame* frame = CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName(CCString::createWithFormat("hp_bottom%d.png",int(_level))->getCString());  
 			_hpBar->getHPBottom()->setDisplayFrame(frame);
 		}
-	
+
+	if(_delegate){
+		_delegate->refreshOugisSkillLocks();
+	}
 
 }
 void HeroElement::setAI(float dt){

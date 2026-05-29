@@ -154,13 +154,13 @@ bool ActionButton::isCanClick(){
 			 }
 			 //ougis click solution
 			 else if(this->_abType==OUGIS1){
-				 if(_delegate->getSkillFinish() /*&& _delegate->getOugisEnable(false)  && !_isLock*/  && !_delegate->ougisLayer ){
+				 if(_delegate->getSkillFinish() && _delegate->getOugisEnable(false) && !_isLock && !_delegate->ougisLayer ){
 					 _delegate->costCKR(15000,false);	
 					 return true;
 				 }
 			 }else if(this->_abType==OUGIS2){
 
-				 if(_delegate->getSkillFinish() /*&&_delegate->getOugisEnable(true)   && !_isLock  */&& !_delegate->ougisLayer){
+				 if(_delegate->getSkillFinish() && _delegate->getOugisEnable(true) && !_isLock && !_delegate->ougisLayer){
 					 _delegate->costCKR(25000,true);	
 					 return true;
 				 }
@@ -290,6 +290,7 @@ void ActionButton::setOugisMark(){
 	lockLabel1->setPosition(ccp(this->getPositionX()+this->getContentSize().width/2,
 		this->getPositionY()+this->getContentSize().height/2));
 	this->_delegate->addChild(lockLabel1,200);
+	_isLock=true;
 }
 
 void ActionButton::setProgressMark(){

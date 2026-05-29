@@ -115,6 +115,8 @@ public:
 	void resetStatusBar();
 	void setCoin(const char* value);
 	void removeOugisMark(int type);
+	bool shouldUnlockAllOugis() const;
+	void refreshOugisSkillLocks();
 	void setOugis(CCNode* sender);
 	void removeOugis();
 	CCNode* ougisChar;

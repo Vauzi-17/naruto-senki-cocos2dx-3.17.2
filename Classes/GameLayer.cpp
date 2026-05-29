@@ -605,6 +605,7 @@ void GameLayer::onGameStart(float dt){
 			_hudLayer->coinLabel->setString("10000");
 		}
 	}
+	this->refreshOugisSkillLocks();
 	this->schedule(schedule_selector(GameLayer::updateGameTime),1.0f);
 	this->schedule(schedule_selector(GameLayer::checkBackgroundMusic),2.0f);
 	if(!_isTrainingMode && !_isDuelMode){
@@ -937,6 +938,65 @@ void GameLayer::removeOugisMark(int type){
 				this->_hudLayer->skill5Button->lockLabel1->removeFromParent();
 				this->_hudLayer->skill5Button->lockLabel1=NULL;
 			}
+		}
+	}
+}
+
+bool GameLayer::shouldUnlockAllOugis() const{
+	return _isDuelMode || _isTrainingMode;
+}
+
+void GameLayer::refreshOugisSkillLocks(){
+	if(!_hudLayer || !_CharacterArray){
+		return;
+	}
+
+	if(shouldUnlockAllOugis()){
+		this->removeOugisMark(1);
+		this->removeOugisMark(2);
+		if(_hudLayer->skill4Button){
+			if(_hudLayer->skill4Button->ougismarkSprite){
+				_hudLayer->skill4Button->ougismarkSprite->setVisible(false);
+			}
+			_hudLayer->skill4Button->unLock();
+			if(!_hudLayer->skill4Button->clipper){
+				_hudLayer->skill4Button->setProgressMark();
+			}
+		}
+		if(_hudLayer->skill5Button){
+			if(_hudLayer->skill5Button->ougismarkSprite){
+				_hudLayer->skill5Button->ougismarkSprite->setVisible(false);
+			}
+			_hudLayer->skill5Button->unLock();
+			if(!_hudLayer->skill5Button->clipper){
+				_hudLayer->skill5Button->setProgressMark();
+			}
+		}
+		return;
+	}
+
+	unsigned int maxLevel=1;
+	CCObject* pObject=NULL;
+	CCARRAY_FOREACH(_CharacterArray,pObject){
+		NarutoSenki::ActionManager* hero=(NarutoSenki::ActionManager*)pObject;
+		if(strcmp(hero->getRole()->getCString(),"Player")==0 ||
+			strcmp(hero->getRole()->getCString(),"Com")==0){
+			if(hero->getLV()>maxLevel){
+				maxLevel=hero->getLV();
+			}
+		}
+	}
+
+	if(maxLevel>=2){
+		this->removeOugisMark(1);
+		if(_hudLayer->skill4Button){
+			_hudLayer->skill4Button->unLock();
+		}
+	}
+	if(maxLevel>=4){
+		this->removeOugisMark(2);
+		if(_hudLayer->skill5Button){
+			_hudLayer->skill5Button->unLock();
 		}
 	}
 }

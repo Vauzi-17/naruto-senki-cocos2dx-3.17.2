@@ -506,32 +506,17 @@ void HudLayer::initHeroInterface(){
 	skill4Button = ActionButton::create(CCString::createWithFormat("%s_skill4.png",_delegate->currentPlayer->getCharacter()->getCString())->getCString());
 	skill4Button->setPosition(ccp(skill1Button->getPositionX()-skill4Button->getContentSize().width-8,2));
 	skill4Button->setDelegate(this);
-	skill4Button->setABType(OUGIS1);	
-	skill4Button->setOugisMark();
+	skill4Button->setABType(OUGIS1);
 	uiBatch->addChild(skill4Button);
-
-		
-
 
 	skill5Button = ActionButton::create(CCString::createWithFormat("%s_skill5.png",_delegate->currentPlayer->getCharacter()->getCString())->getCString());
 	skill5Button->setPosition(ccp(skill4Button->getPositionX()-skill5Button->getContentSize().width-8,2));
 	skill5Button->setDelegate(this);
 	skill5Button->setABType(OUGIS2);
-	skill5Button->setOugisMark();	
 	uiBatch->addChild(skill5Button);
 
-	if(_delegate->_isDuelMode){
-		_delegate->removeOugisMark(1);
-		_delegate->removeOugisMark(2);
-		if(skill4Button->ougismarkSprite){
-			skill4Button->ougismarkSprite->setVisible(false);
-		}
-		if(skill5Button->ougismarkSprite){
-			skill5Button->ougismarkSprite->setVisible(false);
-		}
-		skill4Button->setProgressMark();
-		skill5Button->setProgressMark();
-	}
+	skill4Button->setOugisMark();
+	skill5Button->setOugisMark();
 
 
 
