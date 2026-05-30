@@ -1114,22 +1114,25 @@ void NetworkLayer::unselectHero(const char* heroName){
 		_com1Select=NULL;
 	}else if(_com2Select && strcmp(_com2Select,heroName)==0){
 		_com2Select=NULL;
-	}else if(_isTrainingSelect && _trainingTeamPicks){
-		CCObject* pObject=NULL;
-		CCARRAY_FOREACH(_trainingTeamPicks,pObject){
-			CCString* value=(CCString*)pObject;
-			if(strcmp(value->getCString(),heroName)==0){
-				_trainingTeamPicks->removeObject(value);
-				break;
+	}else if(_isTrainingSelect){
+		if(_trainingTeamPicks){
+			CCObject* pObject=NULL;
+			CCARRAY_FOREACH(_trainingTeamPicks,pObject){
+				CCString* value=(CCString*)pObject;
+				if(strcmp(value->getCString(),heroName)==0){
+					_trainingTeamPicks->removeObject(value);
+					break;
+				}
 			}
 		}
-	}else if(_isTrainingSelect && _trainingEnemyPicks){
-		CCObject* pObject=NULL;
-		CCARRAY_FOREACH(_trainingEnemyPicks,pObject){
-			CCString* value=(CCString*)pObject;
-			if(strcmp(value->getCString(),heroName)==0){
-				_trainingEnemyPicks->removeObject(value);
-				break;
+		if(_trainingEnemyPicks){
+			CCObject* pObject=NULL;
+			CCARRAY_FOREACH(_trainingEnemyPicks,pObject){
+				CCString* value=(CCString*)pObject;
+				if(strcmp(value->getCString(),heroName)==0){
+					_trainingEnemyPicks->removeObject(value);
+					break;
+				}
 			}
 		}
 	}
@@ -1248,6 +1251,10 @@ void NetworkLayer::setSelected(CCObject* sender){
 			this->addChild(_heroName,5);
 		}
 
+		if(isHeroConfirmedSelected(_selectHero)){
+			return;
+		}
+
 		if(btn->_clickTime<2){
 			return;
 		}
@@ -1299,6 +1306,24 @@ void NetworkLayer::setSelected(CCObject* sender){
 
 		CCActionInterval*  fd=CCFadeOut::create(1.0f);
 		CCAction* seq=CCRepeatForever::create(cocos2d::cocos2dx2_compat::createSequence(fd,fd->reverse(),NULL));
+
+		if(isHeroConfirmedSelected(_selectHero)){
+			_heroHalf->removeFromParent();
+			const char* charName=btn->getCharName()->getCString();
+			const char* path=CCString::createWithFormat("%s_half.png", charName)->getCString();
+			_heroHalf=CCSprite::createWithSpriteFrameName(path);
+			_heroHalf->setAnchorPoint(ccp(0,0));
+			_heroHalf->setPosition(ccp(10,10));
+			this->addChild(_heroHalf,1);
+
+			_heroName->removeFromParent();
+			const char* namePath=CCString::createWithFormat("%s_font.png",charName)->getCString();
+			_heroName=CCSprite::createWithSpriteFrameName(namePath);
+			_heroName->setAnchorPoint(ccp(0.5f,0));
+			_heroName->setPosition(ccp(100,20));
+			this->addChild(_heroName,5);
+			return;
+		}
 
 		if(!_playerSelect){
 			

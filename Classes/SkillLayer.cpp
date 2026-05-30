@@ -97,7 +97,7 @@ void SelectButton::click(){
 						selectBtn->_clickTime=0;
 					}
 				}
-				if(this->_clickTime==2){
+				if(this->_clickTime!=20){
 					SimpleAudioEngine::sharedEngine()->playEffect(SELECT_SOUND);
 					this->_clickTime=20;
 					_delegate2->setSelected(this);
