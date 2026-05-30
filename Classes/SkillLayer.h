@@ -94,6 +94,7 @@ public:
 	CC_SYNTHESIZE(SkillLayer*,_delegate3,Delegate3);
 
 	void    spriteToGrey();
+	void    spriteResetGrey();
 protected:
 
 	virtual void	onEnter();

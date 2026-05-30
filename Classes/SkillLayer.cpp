@@ -87,7 +87,29 @@ void SelectButton::click(){
 			if(strcmp(_charName->getCString(),"None2")==0 ){
 				CCTips *tip=CCTips::create("LimitedChar");
 				this->_delegate2->addChild(tip,5000);
-			}else if( strcmp(_charName->getCString(),"None")!=0 && _isAviable){
+			}else if( strcmp(_charName->getCString(),"None")!=0){
+			if(!_isAviable && _delegate2 && _delegate2->isHeroConfirmedSelected(_charName->getCString())){
+				SimpleAudioEngine::sharedEngine()->stopAllEffects();
+				CCObject* pObject;
+				CCARRAY_FOREACH(_delegate2->selectArray,pObject){
+					SelectButton* selectBtn=(SelectButton*) pObject;
+					if(strcmp(selectBtn->getCharName()->getCString(),this->getCharName()->getCString())!=0){
+						selectBtn->_clickTime=0;
+					}
+				}
+				if(this->_clickTime==2){
+					SimpleAudioEngine::sharedEngine()->playEffect(SELECT_SOUND);
+					this->_clickTime=20;
+					_delegate2->setSelected(this);
+				}else if(this->_clickTime==20){
+					SimpleAudioEngine::sharedEngine()->playEffect("Audio/Menu/cancel.ogg");
+					_delegate2->unselectHero(_charName->getCString());
+				}
+				return;
+			}
+			if(!_isAviable){
+				return;
+			}
 			SimpleAudioEngine::sharedEngine()->stopAllEffects();
 
 			if(_delegate2){
@@ -99,7 +121,9 @@ void SelectButton::click(){
 					bool teamFull=_delegate2->_trainingRandomTeam || (_delegate2->_trainingTeamPicks && (int)_delegate2->_trainingTeamPicks->count()>=teamNeed);
 					bool enemyFull=_delegate2->_trainingRandomEnemy || (_delegate2->_trainingEnemyPicks && (int)_delegate2->_trainingEnemyPicks->count()>=_delegate2->_trainingTeamSize);
 					if(_delegate2->_playerSelect && teamFull && enemyFull){
-						return;
+						if(!_delegate2->isHeroConfirmedSelected(this->getCharName()->getCString())){
+							return;
+						}
 					}
 
 					CCObject* pObject;
@@ -127,10 +151,11 @@ void SelectButton::click(){
 					return;
 				}
 				if(_delegate2->_playerSelect && adResult!=1){
-
-					return;
+					if(!_delegate2->isHeroConfirmedSelected(this->getCharName()->getCString())){
+						return;
+					}
 				}
-				if(!_delegate2->_com2Select){
+				if(!_delegate2->_com2Select || _delegate2->isHeroConfirmedSelected(this->getCharName()->getCString())){
 
 					CCObject* pObject;
 					CCARRAY_FOREACH(_delegate2->selectArray,pObject){
@@ -190,7 +215,6 @@ void SelectButton::spriteToGrey(){
 	black->setAnchorPoint(ccp(0.5,0.5));
 	black->setPosition(ccp(17,32));
 	this->addChild(black);
-	//GLchar* pszFragSource =
 	//	"#ifdef GL_ES \n \
 	//	precision mediump float; \n \
 	//	#endif \n \
@@ -220,6 +244,12 @@ void SelectButton::spriteToGrey(){
 	//this->getShaderProgram()->updateUniforms();
 	//CHECK_GL_ERROR_DEBUG();
 
+}
+
+void SelectButton::spriteResetGrey(){
+	this->removeAllChildren();
+	_isAviable=true;
+	_clickTime=0;
 }
 
 SelectButton* SelectButton::create( const char *szImage ){
@@ -594,7 +624,7 @@ void SkillLayer::initInterface(){
 
 
 
-		//更新技能表
+		//????????
 		this->updateSkillGroup();
 	
 	/*else if(_delegate2){
@@ -640,7 +670,7 @@ void SkillLayer::onSkillRequestCompleted(CCNode *sender ,void *data){
 
 
 	isPosting=false;
-	//刷新按钮
+	//??????
 	if(refreshBtn){
 		refreshBtn->stopAllActions();
 		refreshBtn->removeFromParent();
@@ -787,7 +817,7 @@ void SkillLayer::onChangeBtn(CCObject* sender){
 
 
 
-	//觉醒必备
+	//??????
 	if(strcmp(selectHero,"Naruto")==0){
 		selectHero="SageNaruto";
 	}else if(strcmp(selectHero,"SageNaruto")==0){
@@ -802,7 +832,7 @@ void SkillLayer::onChangeBtn(CCObject* sender){
 	_heroFull->setDisplayFrame(frame);
 
 
-	//更新技能表
+	//????????
 	this->updateSkillGroup();
 
 	if(strcmp(selectHero,"SageNaruto")==0 ){

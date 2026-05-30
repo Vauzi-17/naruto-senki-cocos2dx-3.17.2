@@ -17,6 +17,13 @@ public:
 	static NetworkLayer*	create();
 	static NetworkLayer*	createTraining(int teamSize, bool randomTeam, bool randomEnemy, bool trainingMode, int killLimit);
 	void    setSelected(CCObject* sender);
+	bool    isHeroConfirmedSelected(const char* heroName);
+	void    unselectHero(const char* heroName);
+	void    unselectAll();
+	void    refreshTeamSelectorUI();
+	void    refreshTrainingTeamSlots();
+	void    refreshTrainingEnemySlots();
+	SelectButton* findSelectButton(const char* heroName);
 
 	const char* _selectHero;
 	const char* _playerSelect;
@@ -84,6 +91,7 @@ public:
 	void onBackKeyClicked();
 
 private:
+	void	onUnselectAllBtn(CCObject* sender);
 	void	onRankingBtn(CCObject* sender);
 	void	onQuestBtn(CCObject* sender);
 	void	onGameStart(CCObject* sender);

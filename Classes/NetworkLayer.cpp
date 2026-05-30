@@ -536,6 +536,12 @@ bool NetworkLayer::init(){
 			menu2->setPosition(winSize.width-35,96);
 			this->addChild(menu2,80);
 
+			CCMenuItem* unselect_all_bt=CCMenuItemSprite::create(CCSprite::createWithSpriteFrameName("change_btn.png"),NULL,NULL,this,menu_selector(NetworkLayer::onUnselectAllBtn));
+			CCMenu* unselectMenu=CCMenu::create(unselect_all_bt,NULL);
+			unselectMenu->setAnchorPoint(ccp(0,0));
+			unselectMenu->setPosition(38,156);
+			this->addChild(unselectMenu,80);
+
 
 
 
@@ -812,6 +818,12 @@ void NetworkLayer::onListRequestCompleted(CCNode *sender ,void *data){
 		menu2->setAnchorPoint(ccp(0,0));
 		menu2->setPosition(winSize.width-35,96);
 		this->addChild(menu2,80);
+
+		CCMenuItem* unselect_all_bt=CCMenuItemSprite::create(CCSprite::createWithSpriteFrameName("change_btn.png"),NULL,NULL,this,menu_selector(NetworkLayer::onUnselectAllBtn));
+		CCMenu* unselectMenu=CCMenu::create(unselect_all_bt,NULL);
+		unselectMenu->setAnchorPoint(ccp(0,0));
+		unselectMenu->setPosition(38,156);
+		this->addChild(unselectMenu,80);
 	}else{
 		CCTips *tip=CCTips::create(buf.c_str());
 		this->addChild(tip,5000);
@@ -931,6 +943,260 @@ void NetworkLayer::updateMapPreview(){
 }
 
 
+SelectButton* NetworkLayer::findSelectButton(const char* heroName){
+	if(!heroName || !selectArray){
+		return NULL;
+	}
+	CCObject* pObject=NULL;
+	CCARRAY_FOREACH(selectArray,pObject){
+		SelectButton* btn=(SelectButton*)pObject;
+		if(strcmp(btn->getCharName()->getCString(),heroName)==0){
+			return btn;
+		}
+	}
+	return NULL;
+}
+
+bool NetworkLayer::isHeroConfirmedSelected(const char* heroName){
+	if(!heroName || strcmp(heroName,"None")==0){
+		return false;
+	}
+	if(_playerSelect && strcmp(_playerSelect,heroName)==0){
+		return true;
+	}
+	if(_com1Select && strcmp(_com1Select,heroName)==0){
+		return true;
+	}
+	if(_com2Select && strcmp(_com2Select,heroName)==0){
+		return true;
+	}
+	if(_isTrainingSelect){
+		if(networkArrayHasHero(_trainingTeamPicks,heroName)){
+			return true;
+		}
+		if(networkArrayHasHero(_trainingEnemyPicks,heroName)){
+			return true;
+		}
+	}
+	return false;
+}
+
+void NetworkLayer::refreshTeamSelectorUI(){
+	CCSpriteFrame* emptyFrame=CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName("unknow_select.png");
+	CCSpriteFrame* labelFrame=CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName("com_label.png");
+	CCActionInterval* fd=CCFadeOut::create(1.0f);
+	CCAction* seq=CCRepeatForever::create(cocos2d::cocos2dx2_compat::createSequence(fd,fd->reverse(),NULL));
+
+	if(_comSelector1 && emptyFrame){
+		_comSelector1->setDisplayFrame(emptyFrame);
+	}
+	if(_comSelector2 && emptyFrame){
+		_comSelector2->setDisplayFrame(emptyFrame);
+	}
+	if(_comLabel1 && labelFrame){
+		_comLabel1->stopAllActions();
+		_comLabel1->setOpacity(255);
+		_comLabel1->setDisplayFrame(labelFrame);
+	}
+	if(_comLabel2 && labelFrame){
+		_comLabel2->stopAllActions();
+		_comLabel2->setOpacity(255);
+		_comLabel2->setDisplayFrame(labelFrame);
+	}
+
+	if(_playerSelect && !_com1Select && _comLabel1){
+		_comLabel1->runAction(seq);
+	}
+
+	if(_com1Select){
+		CCSpriteFrame* com1Frame=CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName(CCString::createWithFormat("%s_small.png",_com1Select)->getCString());
+		if(com1Frame && _comSelector1){
+			_comSelector1->setDisplayFrame(com1Frame);
+		}
+		if(_comLabel1){
+			CCSpriteFrame* confirmedLabel=CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName("com_label2.png");
+			if(confirmedLabel){
+				_comLabel1->stopAllActions();
+				_comLabel1->setOpacity(255);
+				_comLabel1->setDisplayFrame(confirmedLabel);
+			}
+		}
+		if(!_com2Select && _comLabel2){
+			_comLabel2->runAction(seq);
+		}
+	}
+
+	if(_com2Select){
+		CCSpriteFrame* com2Frame=CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName(CCString::createWithFormat("%s_small.png",_com2Select)->getCString());
+		if(com2Frame && _comSelector2){
+			_comSelector2->setDisplayFrame(com2Frame);
+		}
+		if(_comLabel2){
+			CCSpriteFrame* confirmedLabel=CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName("com_label2.png");
+			if(confirmedLabel){
+				_comLabel2->stopAllActions();
+				_comLabel2->setOpacity(255);
+				_comLabel2->setDisplayFrame(confirmedLabel);
+			}
+		}
+	}
+}
+
+void NetworkLayer::refreshTrainingTeamSlots(){
+	CCSpriteFrame* emptyFrame=CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName("unknow_select.png");
+	for(int i=0;i<_trainingTeamSize && i<5;i++){
+		if(!_trainingTeamSlots[i]){
+			continue;
+		}
+		if(i==0){
+			if(_playerSelect){
+				CCSpriteFrame* frame=CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName(CCString::createWithFormat("%s_small.png",_playerSelect)->getCString());
+				if(frame){
+					_trainingTeamSlots[i]->setDisplayFrame(frame);
+				}
+			}else if(emptyFrame){
+				_trainingTeamSlots[i]->setDisplayFrame(emptyFrame);
+			}
+		}else if(_trainingTeamPicks && (int)_trainingTeamPicks->count()>=i){
+			CCString* picked=(CCString*)_trainingTeamPicks->objectAtIndex(i-1);
+			CCSpriteFrame* frame=CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName(CCString::createWithFormat("%s_small.png",picked->getCString())->getCString());
+			if(frame){
+				_trainingTeamSlots[i]->setDisplayFrame(frame);
+			}
+		}else if(emptyFrame){
+			_trainingTeamSlots[i]->setDisplayFrame(emptyFrame);
+		}
+	}
+}
+
+void NetworkLayer::refreshTrainingEnemySlots(){
+	CCSpriteFrame* emptyFrame=CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName("unknow_select.png");
+	for(int i=0;i<_trainingTeamSize && i<5;i++){
+		if(!_trainingEnemySlots[i]){
+			continue;
+		}
+		if(_trainingEnemyPicks && (int)_trainingEnemyPicks->count()>i){
+			CCString* picked=(CCString*)_trainingEnemyPicks->objectAtIndex(i);
+			CCSpriteFrame* frame=CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName(CCString::createWithFormat("%s_small.png",picked->getCString())->getCString());
+			if(frame){
+				_trainingEnemySlots[i]->setDisplayFrame(frame);
+			}
+		}else if(emptyFrame){
+			_trainingEnemySlots[i]->setDisplayFrame(emptyFrame);
+		}
+	}
+}
+
+void NetworkLayer::unselectHero(const char* heroName){
+	if(!heroName || !isHeroConfirmedSelected(heroName)){
+		return;
+	}
+
+	SelectButton* btn=findSelectButton(heroName);
+	if(btn){
+		btn->spriteResetGrey();
+	}
+
+	if(_playerSelect && strcmp(_playerSelect,heroName)==0){
+		_playerSelect=NULL;
+		CC_SAFE_RELEASE(_trainingPlayerPick);
+		_trainingPlayerPick=NULL;
+		if(!_selectImg && selectArray && selectArray->count()>0){
+			SelectButton* firstBtn=(SelectButton*)selectArray->objectAtIndex(0);
+			_selectImg=CCSprite::createWithSpriteFrameName("1p.png");
+			_selectImg->setAnchorPoint(ccp(0,0));
+			_selectImg->setPosition(ccp(firstBtn->getPositionX()-2,firstBtn->getPositionY()-2));
+			this->addChild(_selectImg,500);
+			CCActionInterval* blink=CCBlink::create(0.6f,1);
+			_selectImg->runAction(CCRepeatForever::create(blink));
+		}
+	}else if(_com1Select && strcmp(_com1Select,heroName)==0){
+		_com1Select=NULL;
+	}else if(_com2Select && strcmp(_com2Select,heroName)==0){
+		_com2Select=NULL;
+	}else if(_isTrainingSelect && _trainingTeamPicks){
+		CCObject* pObject=NULL;
+		CCARRAY_FOREACH(_trainingTeamPicks,pObject){
+			CCString* value=(CCString*)pObject;
+			if(strcmp(value->getCString(),heroName)==0){
+				_trainingTeamPicks->removeObject(value);
+				break;
+			}
+		}
+	}else if(_isTrainingSelect && _trainingEnemyPicks){
+		CCObject* pObject=NULL;
+		CCARRAY_FOREACH(_trainingEnemyPicks,pObject){
+			CCString* value=(CCString*)pObject;
+			if(strcmp(value->getCString(),heroName)==0){
+				_trainingEnemyPicks->removeObject(value);
+				break;
+			}
+		}
+	}
+
+	if(_isTrainingSelect){
+		refreshTrainingTeamSlots();
+		refreshTrainingEnemySlots();
+	}else if(adResult==1){
+		refreshTeamSelectorUI();
+	}
+
+	isStart=false;
+}
+
+void NetworkLayer::unselectAll(){
+	if(!_playerSelect && !_com1Select && !_com2Select
+		&& (!_trainingPlayerPick)
+		&& (!_trainingTeamPicks || _trainingTeamPicks->count()==0)
+		&& (!_trainingEnemyPicks || _trainingEnemyPicks->count()==0)){
+		return;
+	}
+
+	if(selectArray){
+		CCObject* pObject=NULL;
+		CCARRAY_FOREACH(selectArray,pObject){
+			SelectButton* btn=(SelectButton*)pObject;
+			btn->spriteResetGrey();
+		}
+	}
+
+	_playerSelect=NULL;
+	_com1Select=NULL;
+	_com2Select=NULL;
+	CC_SAFE_RELEASE(_trainingPlayerPick);
+	_trainingPlayerPick=NULL;
+	if(_trainingTeamPicks){
+		_trainingTeamPicks->removeAllObjects();
+	}
+	if(_trainingEnemyPicks){
+		_trainingEnemyPicks->removeAllObjects();
+	}
+
+	if(_isTrainingSelect){
+		refreshTrainingTeamSlots();
+		refreshTrainingEnemySlots();
+	}else if(adResult==1){
+		refreshTeamSelectorUI();
+	}
+
+	if(!_selectImg && selectArray && selectArray->count()>0){
+		SelectButton* firstBtn=(SelectButton*)selectArray->objectAtIndex(0);
+		_selectImg=CCSprite::createWithSpriteFrameName("1p.png");
+		_selectImg->setAnchorPoint(ccp(0,0));
+		_selectImg->setPosition(ccp(firstBtn->getPositionX()-2,firstBtn->getPositionY()-2));
+		this->addChild(_selectImg,500);
+		CCActionInterval* blink=CCBlink::create(0.6f,1);
+		_selectImg->runAction(CCRepeatForever::create(blink));
+	}
+
+	isStart=false;
+}
+
+void NetworkLayer::onUnselectAllBtn(CCObject* sender){
+	SimpleAudioEngine::sharedEngine()->playEffect("Audio/Menu/cancel.ogg");
+	unselectAll();
+}
+
 void NetworkLayer::setSelected(CCObject* sender){
 	 
 	 SelectButton* btn=(SelectButton*) sender;
@@ -938,7 +1204,7 @@ void NetworkLayer::setSelected(CCObject* sender){
 		_selectImg->setPosition(ccp(btn->getPositionX()-2,btn->getPositionY()-2));
 	 }
 	
-	if(adResult!=1 && !_isTrainingSelect && _playerSelect){
+	if(adResult!=1 && !_isTrainingSelect && _playerSelect && !isHeroConfirmedSelected(btn->getCharName()->getCString())){
 		return;
 	}
 	 
@@ -956,7 +1222,7 @@ void NetworkLayer::setSelected(CCObject* sender){
 		}
 		bool selectedTeamFull=_trainingRandomTeam || (_trainingTeamPicks && (int)_trainingTeamPicks->count()>=selectedTeamNeed);
 		bool selectedEnemyFull=_trainingRandomEnemy || (_trainingEnemyPicks && (int)_trainingEnemyPicks->count()>=_trainingTeamSize);
-		if(_playerSelect && selectedTeamFull && selectedEnemyFull){
+		if(_playerSelect && selectedTeamFull && selectedEnemyFull && !isHeroConfirmedSelected(_selectHero)){
 			return;
 		}
 
