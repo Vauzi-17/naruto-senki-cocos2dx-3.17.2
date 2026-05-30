@@ -8,51 +8,52 @@ USING_NS_CC;
 int adResult=0;
 
 
-GameScene::GameScene(void)
+GameScene::GameScene()
 {
-	_menuLayer=NULL;
-	pushMenu=NULL;
+	_menuLayer=nullptr;
+	pushMenu=nullptr;
 }
-GameScene::~GameScene(void)
+GameScene::~GameScene()
 {
 }
 
 // on "init" you need to initialize your instance
 bool GameScene::init()
 {
+    auto visibleSize = Director::getInstance()->getVisibleSize();
 	bool bRet = false;
 	do{
-		CC_BREAK_IF(!CCScene::init()); //¶Ô¸¸Àà³õÊ¼»¯
+		CC_BREAK_IF(!Scene::init()); //ï¿½Ô¸ï¿½ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½
 
-		if(!CCUserDefault::sharedUserDefault()->getBoolForKey("isHavingSave")){
+		if(!UserDefault::getInstance()->getBoolForKey("isHavingSave")){
 
-			CCUserDefault::sharedUserDefault()->setBoolForKey("isHavingSave", true);
-			CCUserDefault::sharedUserDefault()->setBoolForKey("isBGM", true);
-			CCUserDefault::sharedUserDefault()->setBoolForKey("isVoice", true);
+			UserDefault::getInstance()->setBoolForKey("isHavingSave", true);
+			UserDefault::getInstance()->setBoolForKey("isBGM", true);
+			UserDefault::getInstance()->setBoolForKey("isVoice", true);
 
-			CCUserDefault::sharedUserDefault()->flush();
+			UserDefault::getInstance()->flush();
 		}
 
-		if(!CCUserDefault::sharedUserDefault()->getBoolForKey("isPreloadConfigured")){
-			CCUserDefault::sharedUserDefault()->setBoolForKey("isPreload", true);
-			CCUserDefault::sharedUserDefault()->setBoolForKey("isPreloadConfigured", true);
-			CCUserDefault::sharedUserDefault()->flush();
+		if(!UserDefault::getInstance()->getBoolForKey("isPreloadConfigured")){
+			UserDefault::getInstance()->setBoolForKey("isPreload", true);
+			UserDefault::getInstance()->setBoolForKey("isPreloadConfigured", true);
+			UserDefault::getInstance()->flush();
 		}
 
-		introLayer=CCLayer::create();
+		introLayer=Layer::create();
 
-		CCSprite* zakume=CCSprite::create("zakume.png");
-		zakume->setPosition(ccp(winSize.width/2,winSize.height/2));
-		CCActionInterval* fadein=CCFadeIn::create(1.5f);
-		CCActionInterval* fadeout=CCFadeOut::create(1.5f);
-		CCFiniteTimeAction *call=CCCallFunc::create(this,callfunc_selector(GameScene::onLogo));
-		CCAction* seq=cocos2d::cocos2dx2_compat::createSequence(fadein,fadeout,call,NULL);
+		Sprite* zakume=Sprite::create("zakume.png");
+		zakume->setPosition(Vec2(visibleSize.width/2,visibleSize.height/2));
+		ActionInterval* fadein=FadeIn::create(1.5f);
+		ActionInterval* fadeout=FadeOut::create(1.5f);
+        FiniteTimeAction* call = CallFunc::create(CC_CALLBACK_0(GameScene::onLogo, this));
+        auto seq = Sequence::create(fadein, fadeout, call, nullptr);
 		introLayer->addChild(zakume);
 		zakume->runAction(seq);
 		this->addChild(introLayer);
 
 
-		//ÄÚ²¿²âÊÔ¡ý
+		//ï¿½Ú²ï¿½ï¿½ï¿½ï¿½Ô¡ï¿½
 
 
 		/*KTools* tool= KTools::create();
@@ -62,7 +63,7 @@ bool GameScene::init()
 		tool->initColumeInDB();
 
 
-		CCLayer* menuLayer=StartMenu::create();
+		Layer* menuLayer=StartMenu::create();
 		this->addChild(menuLayer);*/
 
 	
@@ -76,72 +77,78 @@ bool GameScene::init()
 }
 
 void GameScene::onLogo(){
+
+    auto visibleSize = Director::getInstance()->getVisibleSize();
+	MenuItem* logo_btn=MenuItemSprite::create(Sprite::create("logo.png"), nullptr,
+                                              CC_CALLBACK_1(GameScene::onLogoClick, this));
+	logo_btn->setAnchorPoint(Vec2(0.5f,0.5f));
 	
-	CCMenuItem* logo_btn=CCMenuItemSprite::create(CCSprite::create("logo.png"),NULL,NULL,this,menu_selector(GameScene::onLogoClick));
-	logo_btn->setAnchorPoint(ccp(0.5f,0.5f));
-	
-	logoMenu =CCMenu::create(logo_btn,NULL);
-	logoMenu->setPosition(ccp(winSize.width/2,winSize.height-logo_btn->getContentSize().height/2));
+	logoMenu =Menu::create(logo_btn,nullptr);
+	logoMenu->setPosition(Vec2(visibleSize.width/2,visibleSize.height-logo_btn->getContentSize().height/2));
 	introLayer->addChild(logoMenu,3);
 
 
-	SimpleAudioEngine::sharedEngine()->playEffect("Audio/Menu/intro.ogg");
+	SimpleAudioEngine::getInstance()->playEffect("Audio/Menu/intro.ogg");
 
-	CCActionInterval* fade=CCFadeIn::create(1.5f);
-	CCFiniteTimeAction *call1=CCCallFunc::create(this,callfunc_selector(GameScene::onPlayEffect2));
-	CCFiniteTimeAction *call2=CCCallFunc::create(this,callfunc_selector(GameScene::onFinish));
+    ActionInterval* fade = FadeIn::create(1.5f);
+    FiniteTimeAction* call1 = CallFunc::create(CC_CALLBACK_0(GameScene::onPlayEffect2, this));
+    FiniteTimeAction* call2 = CallFunc::create(CC_CALLBACK_0(GameScene::onFinish, this));
 
-	CCAction* seq=cocos2d::cocos2dx2_compat::createSequence(fade,
-		call1,
-		CCDelayTime::create(2.0f),
-		call2,
-		NULL
-		);
+    auto seq = Sequence::create(
+            fade,
+            call1,
+            DelayTime::create(2.0f),
+            call2,
+            nullptr
+    );
     logo_btn->runAction(seq);
 
 }
 
-void GameScene::onLogoClick(CCObject* sender){
+void GameScene::onLogoClick(Ref* /*sender*/){
+    auto visibleSize = Director::getInstance()->getVisibleSize();
 	Cheats+=1;
 	if (Cheats==10){
-		SimpleAudioEngine::sharedEngine()->stopAllEffects();
+		SimpleAudioEngine::getInstance()->stopAllEffects();
 		logoMenu->removeFromParent();
 
-		CCMenuItem* logo_btn=CCMenuItemSprite::create(CCSprite::create("logo2.png"),NULL,NULL,this,menu_selector(GameScene::onLogoClick));
-		logo_btn->setAnchorPoint(ccp(0.5f,0.5f));
+		MenuItem* logo_btn=MenuItemSprite::create(Sprite::create("logo2.png"), nullptr,
+                                                  CC_CALLBACK_1(GameScene::onLogoClick, this));
+		logo_btn->setAnchorPoint(Vec2(0.5f,0.5f));
 		
-		logoMenu =CCMenu::create(logo_btn,NULL);
-		logoMenu->setPosition(ccp(winSize.width/2,winSize.height-logo_btn->getContentSize().height/2));
+		logoMenu =Menu::create(logo_btn,nullptr);
+		logoMenu->setPosition(Vec2(visibleSize.width/2,visibleSize.height-logo_btn->getContentSize().height/2));
 		introLayer->addChild(logoMenu,3);
 
 	}else if (Cheats>10){
-		SimpleAudioEngine::sharedEngine()->stopAllEffects();
-		SimpleAudioEngine::sharedEngine()->stopBackgroundMusic();
-		SimpleAudioEngine::sharedEngine()->playEffect("Audio/Menu/chang_btn.ogg");
+		SimpleAudioEngine::getInstance()->stopAllEffects();
+		SimpleAudioEngine::getInstance()->stopBackgroundMusic();
+		SimpleAudioEngine::getInstance()->playEffect("Audio/Menu/chang_btn.ogg");
 		this->onFinish();
 	}
 }
 
 void GameScene::onPlayEffect2(){
 
-	SimpleAudioEngine::sharedEngine()->playEffect("Audio/Menu/intro2.ogg");
+	SimpleAudioEngine::getInstance()->playEffect("Audio/Menu/intro2.ogg");
 }
 
 
 void GameScene::onFinish(){
-
+    auto visibleSize = Director::getInstance()->getVisibleSize();
 
 	if(!pushMenu){
-		SimpleAudioEngine::sharedEngine()->playBackgroundMusic("Audio/Music/intro_music.mp3",true);
-		CCMenuItem* btm_btn=CCMenuItemSprite::create(CCSprite::create("push_start.png"),NULL,NULL,this,menu_selector(GameScene::onPush));
-		pushMenu=CCMenu::create(btm_btn,NULL);
+		SimpleAudioEngine::getInstance()->playBackgroundMusic("Audio/Music/intro_music.mp3",true);
+		MenuItem* btm_btn=MenuItemSprite::create(Sprite::create("push_start.png"), nullptr,
+                                                 CC_CALLBACK_1(GameScene::onPush, this));
+		pushMenu=Menu::create(btm_btn,nullptr);
 
 
-		pushMenu->setPosition(ccp(winSize.width/2,winSize.height/2-100));
+		pushMenu->setPosition(Vec2(visibleSize.width/2,visibleSize.height/2-100));
 		introLayer->addChild(pushMenu);
-		CCActionInterval* fade=CCFadeOut::create(0.5f);
-		CCActionInterval* seq=cocos2d::cocos2dx2_compat::createSequence(fade,fade->reverse(),NULL);
-		btm_btn->runAction(CCRepeatForever::create(seq)) ;
+		ActionInterval* fade=FadeOut::create(0.5f);
+        auto seq = Sequence::create(fade, fade->reverse(), nullptr);
+		btm_btn->runAction(RepeatForever::create(seq)) ;
 	}
 	
 
@@ -150,8 +157,8 @@ void GameScene::onFinish(){
 
 }
 
-void GameScene::onPush(CCObject* sender){
-	SimpleAudioEngine::sharedEngine()->playEffect("Audio/Menu/confirm.ogg");
+void GameScene::onPush(Ref* /*sender*/){
+	SimpleAudioEngine::getInstance()->playEffect("Audio/Menu/confirm.ogg");
 	
 	KTools* tool= KTools::create();
 	
@@ -159,12 +166,12 @@ void GameScene::onPush(CCObject* sender){
 
 	tool->initColumeInDB();
 
-	SimpleAudioEngine::sharedEngine()->stopBackgroundMusic();
+	SimpleAudioEngine::getInstance()->stopBackgroundMusic();
 
-	CCScene* menuScene =CCScene::create();
-	CCLayer* menuLayer=StartMenu::create();
+	Scene* menuScene =Scene::create();
+	Layer* menuLayer=StartMenu::create();
 	menuScene->addChild(menuLayer);
-	CCDirector::sharedDirector()->replaceScene(CCTransitionFade::create(1.0f,menuScene));
+	Director::getInstance()->replaceScene(TransitionFade::create(1.0f,menuScene));
 	
 	
 }
