@@ -1505,7 +1505,7 @@ bool CCTips::init(const char *tips){
 		CCDictionary *strings = CCDictionary::createWithContentsOfFile("Element/strings.xml");  
 		const char *reply = ((CCString*)strings->objectForKey(tips))->getCString();  
 
-		CCLabelTTF* tipLabel=CCLabelTTF::create(reply,FONT_TYPE,12);
+		Label* tipLabel=Label::createWithSystemFont(reply,FONT_TYPE,12);
 		this->addChild(tipLabel,5000);
 		this->setPosition(Vec2(winSize.width/2,50));
 		FiniteTimeAction *call=CallFunc::create(CC_CALLBACK_0(CCTips::onDestroy, this));

@@ -1,7 +1,6 @@
 #pragma once
 #include "tinyxml2/tinyxml2.h"
 #include "cocos2d.h"
-#include "platform/CCFileUtils.h"
 #include "MyUtils/CMD5Checksum.h"
 #include "MyUtils/sqlite3.h"
 #include "SimpleAudioEngine.h"
@@ -12,7 +11,7 @@ USING_NS_CC;
 class CMD5Checksum;
 class SelectLayer;
 class NetworkLayer;
-class KTools : public CCObject{
+class KTools : public Ref{
 public:
 	KTools(void);
 	~KTools(void);
