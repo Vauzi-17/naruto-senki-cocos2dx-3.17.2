@@ -9,26 +9,26 @@ init GearButton ;
 ----------------------*/
 GearButton::GearButton(void)
 {
-	soIcon=NULL;
+	soIcon=nullptr;
 	_isBuyed=false;
 }
 
 
 GearButton::~GearButton(void)
 {
-	
+
 }
 
 
 bool GearButton::init(const char *szImage){
 	bool bRet = false;
 	do{
-		CC_BREAK_IF(!CCSprite::init());
+		CC_BREAK_IF(!Sprite::init());
 		if(strcmp(szImage,"")!=0)
 		this->initWithSpriteFrameName(szImage);
 
 
-		this->setAnchorPoint(ccp(0,0));
+		this->setAnchorPoint(Vec2(0,0));
 
 		bRet=true;
 
@@ -39,37 +39,42 @@ bool GearButton::init(const char *szImage){
 }
 
 void GearButton::onEnter(){
-	CCSprite::onEnter();
-	cocos2d::cocos2dx2_compat::addTargetedDelegate(this,-1,true);
+	Sprite::onEnter();
+	auto listener = EventListenerTouchOneByOne::create();
+	listener->setSwallowTouches(true);
+	listener->onTouchBegan = CC_CALLBACK_2(GearButton::ccTouchBegan, this);
+	listener->onTouchMoved = CC_CALLBACK_2(GearButton::ccTouchMoved, this);
+	listener->onTouchEnded = CC_CALLBACK_2(GearButton::ccTouchEnded, this);
+	_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 }
 void GearButton::onExit(){
-	CCSprite::onExit();
-	cocos2d::cocos2dx2_compat::removeDelegate(this);
+	Sprite::onExit();
+	_eventDispatcher->removeEventListenersForTarget(this);
 }
 
-CCRect GearButton::getRect(){
-	CCSize size=this->getContentSize();
+Rect GearButton::getRect(){
+	Size size=this->getContentSize();
 	if(size.width<1.0f || size.height<1.0f){
 		float maxW=0.0f;
 		float maxH=0.0f;
 		const auto& children=this->getChildren();
 		for(auto childObj : children){
-			CCNode* child=dynamic_cast<CCNode*>(childObj);
+			Node* child=dynamic_cast<Node*>(childObj);
 			if(!child){
 				continue;
 			}
-			CCSize childSize=child->getContentSize();
+			Size childSize=child->getContentSize();
 			maxW=MAX(maxW,childSize.width);
 			maxH=MAX(maxH,childSize.height);
 		}
 		if(maxW>0.0f && maxH>0.0f){
-			return CCRect(0,0,maxW,maxH);
+			return Rect(0,0,maxW,maxH);
 		}
 	}
-	return CCRect(0,0,size.width,size.height);
+	return Rect(0,0,size.width,size.height);
 
 }
-bool GearButton::containsTouchLocation(CCTouch *touch){
+bool GearButton::containsTouchLocation(Touch *touch){
 	if(!this->isVisible()){
 		return false;
 	}
@@ -78,63 +83,63 @@ bool GearButton::containsTouchLocation(CCTouch *touch){
 
 
 void GearButton::setBtnType(gearType type,gearbtnType type2,bool isBuyed){
-	
+
 	_gearType=type;
 	_btnType=type2;
 
 	if(_btnType==0){
-		CCSprite* gearIcon=CCSprite::createWithSpriteFrameName(CCString::createWithFormat("gear_%02d.png",gearType(_gearType))->getCString());
-		gearIcon->setAnchorPoint(ccp(0.5f,0.5f));
-		gearIcon->setPosition(ccp(20,30));
+		Sprite* gearIcon=Sprite::createWithSpriteFrameName(CCString::createWithFormat("gear_%02d.png",gearType(_gearType))->getCString());
+		gearIcon->setAnchorPoint(Vec2(0.5f,0.5f));
+		gearIcon->setPosition(Vec2(20,30));
 		this->addChild(gearIcon);
 
 	}else{
-		CCSprite* gearIcon=CCSprite::createWithSpriteFrameName(CCString::createWithFormat("gear_%02d.png",gearType(_gearType))->getCString());
-		gearIcon->setAnchorPoint(ccp(0.5f,0.5f));
+		Sprite* gearIcon=Sprite::createWithSpriteFrameName(CCString::createWithFormat("gear_%02d.png",gearType(_gearType))->getCString());
+		gearIcon->setAnchorPoint(Vec2(0.5f,0.5f));
 		gearIcon->setScale(0.75f);
 		this->addChild(gearIcon);
 	}
 
 	if(isBuyed){
 		_isBuyed=true;
-		soIcon=CCSprite::createWithSpriteFrameName("gear_so.png");
-		soIcon->setAnchorPoint(ccp(0.5f,0.5f));
-		soIcon->setPosition(ccp(this->getContentSize().width/2,this->getContentSize().height/2));
+		soIcon=Sprite::createWithSpriteFrameName("gear_so.png");
+		soIcon->setAnchorPoint(Vec2(0.5f,0.5f));
+		soIcon->setPosition(Vec2(this->getContentSize().width/2,this->getContentSize().height/2));
 		this->addChild(soIcon);
 
 	}
 
-	
+
 }
 
 gearType	GearButton::getBtnType(){
 	return _gearType;
 }
 
-bool GearButton::ccTouchBegan(CCTouch* touch,CCEvent* event){
+bool GearButton::ccTouchBegan(Touch* touch,Event* event){
 	if (!this->containsTouchLocation(touch) || soIcon){
 		return false;
 	}
 	return true;
 }
 
-void GearButton::ccTouchMoved(CCTouch* touch,CCEvent* event){
-	// touch area 
+void GearButton::ccTouchMoved(Touch* touch,Event* event){
+	// touch area
 
 
 }
 
-void GearButton::ccTouchEnded(CCTouch* touch,CCEvent* event){
-	if(CCUserDefault::sharedUserDefault()->getBoolForKey("isVoice")!=false){
-	SimpleAudioEngine::sharedEngine()->playEffect("Audio/Menu/select.mp3");
+void GearButton::ccTouchEnded(Touch* touch,Event* event){
+	if(UserDefault::getInstance()->getBoolForKey("isVoice")!=false){
+	SimpleAudioEngine::getInstance()->playEffect("Audio/Menu/select.mp3");
 	}
 	if(!_isBuyed){
 		_delegate->currentGear=this->_gearType;
 	}
-	
 
-	CCSpriteFrame *frame=CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName(CCString::createWithFormat("gearDetail_%02d.png",gearType(_gearType))->getCString()); 
-	_delegate->gearDetail->setDisplayFrame(frame);
+
+	SpriteFrame *frame=SpriteFrameCache::getInstance()->spriteFrameByName(CCString::createWithFormat("gearDetail_%02d.png",gearType(_gearType))->getCString());
+	_delegate->gearDetail->setSpriteFrame(frame);
 };
 
 
@@ -154,7 +159,7 @@ GearButton* GearButton::create( const char *szImage ){
 	else
 	{
 		delete mb;
-		return NULL;
+		return nullptr;
 	}
 }
 
@@ -163,8 +168,8 @@ GearButton* GearButton::create( const char *szImage ){
 
 ScrewLayer::ScrewLayer(void)
 {
-	_delegate=NULL;
-	_gearArray=NULL;
+	_delegate=nullptr;
+	_gearArray=nullptr;
 
 }
 
@@ -177,7 +182,7 @@ ScrewLayer::~ScrewLayer(void)
 bool ScrewLayer::init(){
 	bool bRet = false;
 	do{
-		CC_BREAK_IF(!CCLayer::init());
+		CC_BREAK_IF(!Layer::init());
 
 		bRet=true;
 
@@ -188,7 +193,7 @@ bool ScrewLayer::init(){
 }
 
 void ScrewLayer::onEnter(){
-	CCLayer::onEnter();
+	Layer::onEnter();
 	auto listener = EventListenerTouchOneByOne::create();
 	listener->setSwallowTouches(true);
 	listener->onTouchBegan = CC_CALLBACK_2(ScrewLayer::onTouchBegan, this);
@@ -198,31 +203,31 @@ void ScrewLayer::onEnter(){
 };
 
 void ScrewLayer::onExit(){
-	CCLayer::onExit();
-	cocos2d::cocos2dx2_compat::removeDelegate(this);
+	Layer::onExit();
+	_eventDispatcher->removeEventListenersForTarget(this);
 };
 
-bool ScrewLayer::isTouchInScrollArea(CCTouch* touch){
-	CCPoint local=this->convertToNodeSpace(touch->getLocation());
+bool ScrewLayer::isTouchInScrollArea(Touch* touch){
+	Vec2 local=this->convertToNodeSpace(touch->getLocation());
 	int rows=gearNum>0 ? (gearNum+2)/3 : totalRow;
 	if(rows<1){
 		rows=1;
 	}
 	float minY=-(rows-1)*60.0f-12.0f;
 	float maxY=44.0f;
-	CCRect area(-8,minY,3*46.0f+24.0f,maxY-minY);
+	Rect area(-8,minY,3*46.0f+24.0f,maxY-minY);
 	return area.containsPoint(local);
 }
 
-bool ScrewLayer::onTouchBegan(CCTouch* touch,CCEvent* event){
-	prePosY=NULL;
+bool ScrewLayer::onTouchBegan(Touch* touch,Event* event){
+	prePosY=0.0f;
 	return isTouchInScrollArea(touch);
 };
 
-void ScrewLayer::onTouchMoved(CCTouch* touch,CCEvent* event){
-	// touch area 
-	CCPoint curPoint = touch->getLocation();
-	if(prePosY==NULL){
+void ScrewLayer::onTouchMoved(Touch* touch,Event* event){
+	// touch area
+	Vec2 curPoint = touch->getLocation();
+	if(prePosY==0.0f){
 		prePosY=curPoint.y;
 	}else{
 		float distanceY=curPoint.y-prePosY;
@@ -250,8 +255,8 @@ void ScrewLayer::onTouchMoved(CCTouch* touch,CCEvent* event){
 };
 
 
-void ScrewLayer::onTouchEnded(CCTouch* touch,CCEvent* event){
-	prePosY=NULL;
+void ScrewLayer::onTouchEnded(Touch* touch,Event* event){
+	prePosY=0.0f;
 	//CCLOG("%f",this->getPositionY());
 	//CCLOG("Height:%f",this->getContentSize().height);
 
@@ -277,9 +282,9 @@ void ScrewLayer::onTouchEnded(CCTouch* touch,CCEvent* event){
 
 GearLayer::GearLayer(void)
 {
-	currentGear_layer=NULL;
+	currentGear_layer=nullptr;
 	currentGear=None;
-	_buyBtn=NULL;
+	_buyBtn=nullptr;
 }
 
 
@@ -287,83 +292,83 @@ GearLayer::~GearLayer(void)
 {
 }
 
-bool GearLayer::init(CCRenderTexture* snapshoot){
+bool GearLayer::init(RenderTexture* snapshoot){
 
 	bool bRet=false;
 	do{
-		CC_BREAK_IF(!CCLayer::init());
+		CC_BREAK_IF(!Layer::init());
 
-		SimpleAudioEngine::sharedEngine()->stopAllEffects();
-		
+		SimpleAudioEngine::getInstance()->stopAllEffects();
 
-		CCTexture2D* bgTexture=snapshoot->getSprite()->getTexture();
-		CCSprite* bg=CCSprite::createWithTexture(bgTexture);
-		bg->setAnchorPoint(ccp(0,0));
+
+		Texture2D* bgTexture=snapshoot->getSprite()->getTexture();
+		Sprite* bg=Sprite::createWithTexture(bgTexture);
+		bg->setAnchorPoint(Vec2(0,0));
 		bg->setFlipY(true);
 		this->addChild(bg,0);
 
-		CCLayer* blend=CCLayerColor::create(ccc4(0, 0, 0, 150),winSize.width,winSize.height);
+		Layer* blend=LayerColor::create(Color4B(0, 0, 0, 150),winSize.width,winSize.height);
 		this->addChild(blend,1);
 
-		
+
 		//??
 
 
-		
 
-		CCLayer* gears_layer=CCLayer::create();
 
-		gears_bg=CCSprite::createWithSpriteFrameName("gears_bg.png");
-		gears_bg->setAnchorPoint(ccp(0.5f,0.5f));
-		gears_bg->setPosition(ccp(winSize.width/2,winSize.height/2-12));
+		Layer* gears_layer=Layer::create();
+
+		gears_bg=Sprite::createWithSpriteFrameName("gears_bg.png");
+		gears_bg->setAnchorPoint(Vec2(0.5f,0.5f));
+		gears_bg->setPosition(Vec2(winSize.width/2,winSize.height/2-12));
 		gears_layer->addChild(gears_bg,1);
 
-		coinLabel=CCLabelBMFont::create("0","Fonts/arial.fnt");
-		coinLabel->setAnchorPoint(ccp(0,0));
-		coinLabel->setPosition(ccp(gears_bg->getPositionX()+2,58));
+		coinLabel=LabelBMFont::create("0","Fonts/arial.fnt");
+		coinLabel->setAnchorPoint(Vec2(0,0));
+		coinLabel->setPosition(Vec2(gears_bg->getPositionX()+2,58));
 		gears_layer->addChild(coinLabel,2);
 
-		
+
 		this->addChild(gears_layer,10);
 
 
 
-		CCClippingNode* clipper = CCClippingNode::create();
-		CCNode *stencil = CCSprite::createWithSpriteFrameName("screwMask.png");
-		stencil->setAnchorPoint(ccp(0,0));
+		ClippingNode* clipper = ClippingNode::create();
+		Node *stencil = Sprite::createWithSpriteFrameName("screwMask.png");
+		stencil->setAnchorPoint(Vec2(0,0));
 		clipper->setStencil(stencil);
 
 		_screwLayer=ScrewLayer::create();
-		_screwLayer->setAnchorPoint(ccp(0,0));
+		_screwLayer->setAnchorPoint(Vec2(0,0));
 		_screwLayer->setPositionY(76);
 		_screwLayer->gearNum=9;
 
 
-		_screwLayer->screwBar=CCSprite::createWithSpriteFrameName("screwBar.png");
-		_screwLayer->screwBar->setAnchorPoint(ccp(0.5f,0));
-		_screwLayer->screwBar->setPosition(ccp(gears_bg->getPositionX()+25,126));
+		_screwLayer->screwBar=Sprite::createWithSpriteFrameName("screwBar.png");
+		_screwLayer->screwBar->setAnchorPoint(Vec2(0.5f,0));
+		_screwLayer->screwBar->setPosition(Vec2(gears_bg->getPositionX()+25,126));
 		this->addChild(_screwLayer->screwBar,600);
 
 
-		gearDetail=CCSprite::createWithSpriteFrameName("gearDetail_00.png");
-		gearDetail->setAnchorPoint(ccp(0.5f,1));
-		gearDetail->setPosition(ccp(gears_bg->getPositionX()+gears_bg->getContentSize().width/2-54,210));
+		gearDetail=Sprite::createWithSpriteFrameName("gearDetail_00.png");
+		gearDetail->setAnchorPoint(Vec2(0.5f,1));
+		gearDetail->setPosition(Vec2(gears_bg->getPositionX()+gears_bg->getContentSize().width/2-54,210));
 		this->addChild(gearDetail,600);
 
-		clipper->setPosition(ccp(gears_bg->getPositionX()-gears_bg->getContentSize().width/2+4,85));
+		clipper->setPosition(Vec2(gears_bg->getPositionX()-gears_bg->getContentSize().width/2+4,85));
 		clipper->addChild(_screwLayer);
 		this->addChild(clipper,600);
 
 		this->setupBuyButton(gears_bg);
 
-		CCMenuItem* btm_btn=CCMenuItemSprite::create(CCSprite::createWithSpriteFrameName("close_btn1.png"),
-			CCSprite::createWithSpriteFrameName("close_btn2.png"),this,menu_selector(GearLayer::onResume));
-		CCMenu* overMenu=CCMenu::create(btm_btn,NULL);
-		overMenu->setPosition(ccp(winSize.width/2+gears_bg->getContentSize().width/2-12,winSize.height/2+gears_bg->getContentSize().height/2-20));
+		MenuItem* btm_btn=MenuItemSprite::create(Sprite::createWithSpriteFrameName("close_btn1.png"),
+			Sprite::createWithSpriteFrameName("close_btn2.png"),CC_CALLBACK_1(GearLayer::onResume, this));
+		Menu* overMenu=Menu::create(btm_btn,nullptr);
+		overMenu->setPosition(Vec2(winSize.width/2+gears_bg->getContentSize().width/2-12,winSize.height/2+gears_bg->getContentSize().height/2-20));
 		this->addChild(overMenu,800);
 
 
-		
+
 
 
 		bRet=true;
@@ -375,10 +380,10 @@ bool GearLayer::init(CCRenderTexture* snapshoot){
 
 
 
-void GearLayer::setupBuyButton(CCSprite* gearsBg){
-	_buyBtn=CCSprite::createWithSpriteFrameName("gearBuy_btn.png");
-	_buyBtn->setAnchorPoint(ccp(0.5f,0.5f));
-	_buyBtn->setPosition(ccp(gearsBg->getPositionX()+78,gearsBg->getPositionY()-gearsBg->getContentSize().height/2+35));
+void GearLayer::setupBuyButton(Sprite* gearsBg){
+	_buyBtn=Sprite::createWithSpriteFrameName("gearBuy_btn.png");
+	_buyBtn->setAnchorPoint(Vec2(0.5f,0.5f));
+	_buyBtn->setPosition(Vec2(gearsBg->getPositionX()+78,gearsBg->getPositionY()-gearsBg->getContentSize().height/2+35));
 	this->addChild(_buyBtn,750);
 
 	auto listener=EventListenerTouchOneByOne::create();
@@ -392,7 +397,7 @@ void GearLayer::setupBuyButton(CCSprite* gearsBg){
 		if(!rect.containsPoint(local)){
 			return false;
 		}
-		CCSpriteFrame* pressed=CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName("gearBuy_btn2.png");
+		SpriteFrame* pressed=SpriteFrameCache::getInstance()->spriteFrameByName("gearBuy_btn2.png");
 		if(pressed){
 			_buyBtn->setSpriteFrame(pressed);
 		}
@@ -405,9 +410,9 @@ void GearLayer::setupBuyButton(CCSprite* gearsBg){
 		Vec2 local=_buyBtn->convertToNodeSpace(touch->getLocation());
 		Rect rect(0,0,_buyBtn->getContentSize().width,_buyBtn->getContentSize().height);
 		if(rect.containsPoint(local)){
-			this->onGearBuy(NULL);
+			this->onGearBuy(nullptr);
 		}
-		CCSpriteFrame* normal=CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName("gearBuy_btn.png");
+		SpriteFrame* normal=SpriteFrameCache::getInstance()->spriteFrameByName("gearBuy_btn.png");
 		if(normal){
 			_buyBtn->setSpriteFrame(normal);
 		}
@@ -416,24 +421,24 @@ void GearLayer::setupBuyButton(CCSprite* gearsBg){
 	Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener,_buyBtn);
 }
 
-void GearLayer::onResume(CCObject* sender){
-	
+void GearLayer::onResume(Ref* sender){
+
 	this->getDelegate()->getHudLayer()->updateGears();
-	CCDirector::sharedDirector()->popScene();
-	
+	Director::getInstance()->popScene();
+
 };
 
 
-void GearLayer::onGearBuy(CCObject* sender){
+void GearLayer::onGearBuy(Ref* sender){
 
-	if(CCUserDefault::sharedUserDefault()->getBoolForKey("isVoice")!=false){
-		SimpleAudioEngine::sharedEngine()->playEffect("Audio/Menu/confirm.ogg");
+	if(UserDefault::getInstance()->getBoolForKey("isVoice")!=false){
+		SimpleAudioEngine::getInstance()->playEffect("Audio/Menu/confirm.ogg");
 	}
 
 	if( _delegate->currentPlayer->setGear(currentGear)){
 		this->updatePlayerGear();
 	}
-	
+
 };
 
 void GearLayer::updatePlayerGear(){
@@ -441,12 +446,12 @@ void GearLayer::updatePlayerGear(){
 
 	if(_delegate->currentPlayer->getGearArray() && _delegate->currentPlayer->getGearArray()->count()>0){
 
-		if(currentGear_layer!=NULL){
+		if(currentGear_layer!=nullptr){
 			currentGear_layer->removeFromParentAndCleanup(true);
 		}
-		currentGear_layer=CCLayer::create();
-		currentGear_layer->setAnchorPoint(ccp(0,0));
-		CCObject* pObject;
+		currentGear_layer=Layer::create();
+		currentGear_layer->setAnchorPoint(Vec2(0,0));
+		Ref* pObject;
 		int i=0;
 		CCARRAY_FOREACH(_delegate->currentPlayer->getGearArray(),pObject){
 			CCString* tmpGear=(CCString*) pObject;
@@ -457,11 +462,11 @@ void GearLayer::updatePlayerGear(){
 			currentGear_layer->addChild(btn);
 			i++;
 		}
-		currentGear_layer->setPosition(ccp(gears_bg->getPositionX()-gears_bg->getContentSize().width/2+8,64));
+		currentGear_layer->setPosition(Vec2(gears_bg->getPositionX()-gears_bg->getContentSize().width/2+8,64));
 		this->addChild(currentGear_layer,650);
 	}
 
-	
+
 	coinLabel->setString(CCString::createWithFormat("%d",atoi(_delegate->currentPlayer->getCoin()->getCString()))->getCString());
 	this->updateGearList();
 
@@ -473,7 +478,7 @@ void GearLayer::updateGearList(){
 			_screwLayer->setGearArray(CCArray::create());
 		}else{
 
-			CCObject* pObject;
+			Ref* pObject;
 			CCARRAY_FOREACH(_screwLayer->getGearArray(),pObject){
 				GearButton* btn=(GearButton*) pObject;
 				btn->removeFromParentAndCleanup(true);
@@ -484,7 +489,7 @@ void GearLayer::updateGearList(){
 		for(int i=0;i<_screwLayer->gearNum;i++){
 			int row=int(floor(float(i)/3));
 			int column=abs(3*row-i);
-		 
+
 			GearButton* btn;
 			if(column>=1){
 				btn=GearButton::create("value_1000.png");
@@ -493,7 +498,7 @@ void GearLayer::updateGearList(){
 			}
 			bool isBuyed=false;
 			if(_delegate->currentPlayer->getGearArray() && _delegate->currentPlayer->getGearArray()->count()>0){
-				CCObject* pObject;
+				Ref* pObject;
 				CCARRAY_FOREACH(_delegate->currentPlayer->getGearArray(),pObject){
 					CCString* tmpGear=(CCString*) pObject;
 					if (atoi(tmpGear->getCString())== i){
@@ -504,24 +509,24 @@ void GearLayer::updateGearList(){
 
 			if(currentGear==None && !isBuyed){
 				currentGear=gearType(i);
-				CCSpriteFrame *frame=CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName(CCString::createWithFormat("gearDetail_%02d.png",i)->getCString()); 
-				gearDetail->setDisplayFrame(frame);
+				SpriteFrame *frame=SpriteFrameCache::getInstance()->spriteFrameByName(CCString::createWithFormat("gearDetail_%02d.png",i)->getCString());
+				gearDetail->setSpriteFrame(frame);
 			}
 
-			btn->setPosition(ccp(6+column*46,-row*60));
-			btn->setAnchorPoint(ccp(0,0));
+			btn->setPosition(Vec2(6+column*46,-row*60));
+			btn->setAnchorPoint(Vec2(0,0));
 			btn->setBtnType(gearType(i),gearbtnType(0),isBuyed);
 			btn->setDelegate(this);
 			_screwLayer->getGearArray()->addObject(btn);
 			_screwLayer->addChild(btn);
 
 		}
-		
-	
+
+
 }
 
 
-GearLayer*  GearLayer::create(CCRenderTexture* snapshoot){
+GearLayer*  GearLayer::create(RenderTexture* snapshoot){
 	GearLayer* grl=new  GearLayer();
 	if (grl && grl->init(snapshoot))
 	{
@@ -531,7 +536,7 @@ GearLayer*  GearLayer::create(CCRenderTexture* snapshoot){
 	else
 	{
 		delete grl;
-		return NULL;
+		return nullptr;
 	}
 }
 

@@ -15,33 +15,33 @@ enum gearbtnType{
 	sellType
 };
 
-class GearLayer : public CCLayer{
+class GearLayer : public Layer{
 
 public:
 	GearLayer(void);
 	~GearLayer(void);
 
-	bool	init(CCRenderTexture* snapshoot);
-	static GearLayer*	create(CCRenderTexture* snapshoot);
+	bool	init(RenderTexture* snapshoot);
+	static GearLayer*	create(RenderTexture* snapshoot);
 	
-	CCLayer* gears_layer;
-	CCLayer* currentGear_layer;
-	CCLabelBMFont* coinLabel;
+	Layer* gears_layer;
+	Layer* currentGear_layer;
+	LabelBMFont* coinLabel;
 
-	CCSprite* gearDetail;
-	CCSprite* gears_bg;
+	Sprite* gearDetail;
+	Sprite* gears_bg;
 
 	gearType currentGear;
 	void	updatePlayerGear();
 	void	updateGearList();
 
 	ScrewLayer* _screwLayer;
-	CCSprite* _buyBtn;
+	Sprite* _buyBtn;
 
 private:
-	void	setupBuyButton(CCSprite* gearsBg);
-	void	onResume(CCObject* sender);
-	void	onGearBuy(CCObject* sender);
+	void	setupBuyButton(Sprite* gearsBg);
+	void	onResume(Ref* sender);
+	void	onGearBuy(Ref* sender);
 	
 	CC_SYNTHESIZE(GameLayer*,_delegate,Delegate);
 	
@@ -52,7 +52,7 @@ private:
 
 
 
-class GearButton : public CCSprite, public CCTouchDelegate{
+class GearButton : public Sprite{
 
 public:
 	GearButton(void);
@@ -64,7 +64,7 @@ public:
 	virtual bool		init(const char *szImage);
 	static GearButton*	create(const char *szImage);
 
-	CCRect				getRect();
+	Rect				getRect();
 	void				setBtnType(gearType type,gearbtnType type2,bool isBuyed);
 	gearType 			getBtnType();
 	void				playSound();
@@ -73,17 +73,17 @@ public:
 
 	CC_SYNTHESIZE(GearLayer*,_delegate,Delegate);
 
-	CCSprite* soIcon;
+	Sprite* soIcon;
 
-	bool			containsTouchLocation(CCTouch* touch);
+	bool			containsTouchLocation(Touch* touch);
 
 protected:
 
 	virtual void	onEnter();
 	virtual void	onExit();
-	virtual bool	ccTouchBegan(CCTouch* touch,CCEvent* event);
-	virtual void    ccTouchMoved(CCTouch* touch, CCEvent* event);
-	virtual void	ccTouchEnded(CCTouch* touch,CCEvent* event);
+	virtual bool	ccTouchBegan(Touch* touch,Event* event);
+	virtual void    ccTouchMoved(Touch* touch, Event* event);
+	virtual void	ccTouchEnded(Touch* touch,Event* event);
 
 
 
@@ -91,7 +91,7 @@ protected:
 
 
 
-class ScrewLayer : public CCLayer{
+class ScrewLayer : public Layer{
 
 public:
 	ScrewLayer(void);
@@ -103,7 +103,7 @@ public:
 
 	CC_SYNTHESIZE(GearLayer*,_delegate,Delegate);
 
-	CCSprite* screwBar;
+	Sprite* screwBar;
 
 	int totalRow;
 	int gearNum;
@@ -111,10 +111,10 @@ public:
 
 protected:
 
-	virtual bool onTouchBegan(CCTouch* touch, CCEvent* event);
-	virtual void onTouchMoved(CCTouch* touch, CCEvent* event);
-	virtual void onTouchEnded(CCTouch* touch, CCEvent* event);
-	bool isTouchInScrollArea(CCTouch* touch);
+	virtual bool onTouchBegan(Touch* touch, Event* event);
+	virtual void onTouchMoved(Touch* touch, Event* event);
+	virtual void onTouchEnded(Touch* touch, Event* event);
+	bool isTouchInScrollArea(Touch* touch);
 
 	void onEnter();
 	void onExit();
