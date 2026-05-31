@@ -22,20 +22,20 @@ public:
 
 	CREATE_FUNC(RakingLayer);
 
-	CCMenuItem* day_btn;
-	CCMenuItem* week_btn;
-	CCMenuItem* month_btn;
+	MenuItem* day_btn;
+	MenuItem* week_btn;
+	MenuItem* month_btn;
 
 
-	CCMenuItem* battlePoint_btn;
-	CCMenuItem* JifenPoint_btn;
+	MenuItem* battlePoint_btn;
+	MenuItem* JifenPoint_btn;
 
-	CCMenuItem* side0_btn;
-	CCMenuItem* side1_btn;
-	CCMenuItem* side2_btn;
-	CCMenuItem* side3_btn;
+	MenuItem* side0_btn;
+	MenuItem* side1_btn;
+	MenuItem* side2_btn;
+	MenuItem* side3_btn;
 
-	CCMenu* order_menu;
+	Menu* order_menu;
 	CCSprite* ranking_title;
 	CCLabelTTF* rankingDetail;
 
@@ -66,19 +66,19 @@ private:
 	
 	void produceRanking(int type);
 
-	void				onDayBtn(CCObject* sender);
-	void				onWeekBtn(CCObject* sender);
-	void				onMonthBtn(CCObject* sender);
+	void				onDayBtn(Ref* sender);
+	void				onWeekBtn(Ref* sender);
+	void				onMonthBtn(Ref* sender);
 
-	void				onBattleBtn(CCObject* sender);
-	void				onJifenBtn(CCObject* sender);
-	void				onSelectGroupBtn(CCObject* sender);
+	void				onBattleBtn(Ref* sender);
+	void				onJifenBtn(Ref* sender);
+	void				onSelectGroupBtn(Ref* sender);
 
-	void				onSideBar1(CCObject* sender);
-	void				onSideBar2(CCObject* sender);
-	void				onSideBar3(CCObject* sender);
-	void				onSideBar0(CCObject* sender);
-	void				onCancel(CCObject* sender);
+	void				onSideBar1(Ref* sender);
+	void				onSideBar2(Ref* sender);
+	void				onSideBar3(Ref* sender);
+	void				onSideBar0(Ref* sender);
+	void				onCancel(Ref* sender);
 
 	
 	void				makeCharList();

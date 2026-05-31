@@ -231,8 +231,8 @@ bool RakingLayer::init(){
 
 
 
-		CCMenuItem* start_bt=CCMenuItemSprite::create(CCSprite::createWithSpriteFrameName("return_btn.png"),NULL,NULL,this,menu_selector(RakingLayer::onCancel));
-		CCMenu* menu =CCMenu::create(start_bt,NULL);
+		MenuItem* start_bt=MenuItemSprite::create(Sprite::createWithSpriteFrameName("return_btn.png"),NULL,CC_CALLBACK_1(RakingLayer::onCancel, this));
+		Menu* menu =Menu::create(start_bt,NULL);
 		menu->setPosition(winSize.width-38,86);
 		//menu->setPosition(winSize.width/2+skillSprite->getContentSize().width/2-10,winSize.height/2+skillSprite->getContentSize().height/2-12);
 		this->addChild(menu,5);
@@ -282,46 +282,11 @@ bool RakingLayer::init(){
 		
 
 
-		//??
-		//CCMenu* side_menu0 ;
-		//if(GroupID){
-		//	side0_btn=CCMenuItemSprite::create(CCSprite::createWithSpriteFrameName("sidebar0_off.png"),CCSprite::createWithSpriteFrameName("sidebar0_on.png"),this,menu_selector(RakingLayer::onSideBar0));
-		//	side0_btn->setAnchorPoint(ccp(0,0));
-		// side_menu0 = CCMenu::create(side0_btn,NULL);
-		//	side_menu0->setPosition(ccp(ranking_bg->getPositionX()-ranking_bg->getContentSize().width/2-40,ranking_bg->getPositionY()+ranking_bg->getContentSize().height/2-35));
-		//	ranking_layer->addChild(side_menu0,6);
-		//	side0_btn->selected();
-		//}
-
-
-		//side1_btn=CCMenuItemSprite::create(CCSprite::createWithSpriteFrameName("sidebar1_off.png"),CCSprite::createWithSpriteFrameName("sidebar1_on.png"),this,menu_selector(RakingLayer::onSideBar1));
-		//side1_btn->setAnchorPoint(ccp(0,0));
-		//CCMenu* side_menu1 = CCMenu::create(side1_btn,NULL);
-		//if(side0_btn){
-		//	side_menu1->setPosition(ccp(ranking_bg->getPositionX()-ranking_bg->getContentSize().width/2-40,side_menu0->getPositionY()-35));
-		//	
-		//}else{
-		//	side_menu1->setPosition(ccp(ranking_bg->getPositionX()-ranking_bg->getContentSize().width/2-40,ranking_bg->getPositionY()+ranking_bg->getContentSize().height/2-35));
-		//	side1_btn->selected();
-		//}
-		//
-		//ranking_layer->addChild(side_menu1,6);
-		
-
-		side2_btn=CCMenuItemSprite::create(CCSprite::createWithSpriteFrameName("sidebar2_off.png"),CCSprite::createWithSpriteFrameName("sidebar2_on.png"),this,menu_selector(RakingLayer::onSideBar2));
+		side2_btn=MenuItemSprite::create(Sprite::createWithSpriteFrameName("sidebar2_off.png"),Sprite::createWithSpriteFrameName("sidebar2_on.png"),CC_CALLBACK_1(RakingLayer::onSideBar2, this));
 		side2_btn->setAnchorPoint(ccp(0,0));
-		CCMenu* side_menu2 = CCMenu::create(side2_btn,NULL);
+		Menu* side_menu2 = Menu::create(side2_btn,NULL);
 		side_menu2->setPosition(ccp(ranking_bg->getPositionX()-ranking_bg->getContentSize().width/2-40,ranking_bg->getPositionY()+ranking_bg->getContentSize().height/2-35));
 		ranking_layer->addChild(side_menu2,5);
-
-
-		/*side3_btn=CCMenuItemSprite::create(CCSprite::createWithSpriteFrameName("sidebar3_off.png"),CCSprite::createWithSpriteFrameName("sidebar3_on.png"),this,menu_selector(RakingLayer::onSideBar3));
-		side3_btn->setAnchorPoint(ccp(0,0));
-		CCMenu* side_menu3 = CCMenu::create(side3_btn,NULL);
-		side_menu3->setPosition(ccp(ranking_bg->getPositionX()-ranking_bg->getContentSize().width/2-40,side_menu2->getPositionY()-35));
-		ranking_layer->addChild(side_menu3,4);
-*/
-
 
 		this->addChild(ranking_layer,100);
 		if(GroupID){
@@ -339,16 +304,16 @@ bool RakingLayer::init(){
 	return bRet;
 
 }
-void RakingLayer::onSideBar0(CCObject* sender){
+void RakingLayer::onSideBar0(Ref* sender){
 	this->produceRanking(0);
 }
-void RakingLayer::onSideBar1(CCObject* sender){
+void RakingLayer::onSideBar1(Ref* sender){
 	this->produceRanking(1);
 }
-void RakingLayer::onSideBar2(CCObject* sender){
+void RakingLayer::onSideBar2(Ref* sender){
 	this->produceRanking(2);
 }
-void RakingLayer::onSideBar3(CCObject* sender){
+void RakingLayer::onSideBar3(Ref* sender){
 	this->produceRanking(3);
 }
 
@@ -395,10 +360,10 @@ void RakingLayer::produceRanking(int type){
 		isMemberSelect=true;
 		isGroupSelect=false;
 
-		day_btn=CCMenuItemSprite::create(CCSprite::createWithSpriteFrameName("order_day_off.png"),CCSprite::createWithSpriteFrameName("order_day_on.png"),this,menu_selector(RakingLayer::onDayBtn));
-		week_btn=CCMenuItemSprite::create(CCSprite::createWithSpriteFrameName("order_week_off.png"),CCSprite::createWithSpriteFrameName("order_week_on.png"),this,menu_selector(RakingLayer::onWeekBtn));
-		month_btn=CCMenuItemSprite::create(CCSprite::createWithSpriteFrameName("order_month_off.png"),CCSprite::createWithSpriteFrameName("order_month_on.png"),this,menu_selector(RakingLayer::onMonthBtn));
-		order_menu = CCMenu::create(day_btn,week_btn,month_btn,NULL);
+		day_btn=MenuItemSprite::create(Sprite::createWithSpriteFrameName("order_day_off.png"),Sprite::createWithSpriteFrameName("order_day_on.png"),CC_CALLBACK_1(RakingLayer::onDayBtn, this));
+		week_btn=MenuItemSprite::create(Sprite::createWithSpriteFrameName("order_week_off.png"),Sprite::createWithSpriteFrameName("order_week_on.png"),CC_CALLBACK_1(RakingLayer::onWeekBtn, this));
+		month_btn=MenuItemSprite::create(Sprite::createWithSpriteFrameName("order_month_off.png"),Sprite::createWithSpriteFrameName("order_month_on.png"),CC_CALLBACK_1(RakingLayer::onMonthBtn, this));
+		order_menu = Menu::create(day_btn,week_btn,month_btn,NULL);
 		order_menu->alignItemsHorizontallyWithPadding(20);
 		order_menu->setPosition(ccp(ranking_bg->getPositionX()+100,ranking_bg->getPositionY()-ranking_bg->getContentSize().height/2+14));
 		ranking_layer->addChild(order_menu,10);
@@ -423,10 +388,10 @@ void RakingLayer::produceRanking(int type){
 		isMemberSelect=false;
 		isGroupSelect=false;
 
-		day_btn=CCMenuItemSprite::create(CCSprite::createWithSpriteFrameName("order_day_off.png"),CCSprite::createWithSpriteFrameName("order_day_on.png"),this,menu_selector(RakingLayer::onDayBtn));
-		week_btn=CCMenuItemSprite::create(CCSprite::createWithSpriteFrameName("order_week_off.png"),CCSprite::createWithSpriteFrameName("order_week_on.png"),this,menu_selector(RakingLayer::onWeekBtn));
-		month_btn=CCMenuItemSprite::create(CCSprite::createWithSpriteFrameName("order_month_off.png"),CCSprite::createWithSpriteFrameName("order_month_on.png"),this,menu_selector(RakingLayer::onMonthBtn));
-		order_menu = CCMenu::create(day_btn,week_btn,month_btn,NULL);
+		day_btn=MenuItemSprite::create(Sprite::createWithSpriteFrameName("order_day_off.png"),Sprite::createWithSpriteFrameName("order_day_on.png"),CC_CALLBACK_1(RakingLayer::onDayBtn, this));
+		week_btn=MenuItemSprite::create(Sprite::createWithSpriteFrameName("order_week_off.png"),Sprite::createWithSpriteFrameName("order_week_on.png"),CC_CALLBACK_1(RakingLayer::onWeekBtn, this));
+		month_btn=MenuItemSprite::create(Sprite::createWithSpriteFrameName("order_month_off.png"),Sprite::createWithSpriteFrameName("order_month_on.png"),CC_CALLBACK_1(RakingLayer::onMonthBtn, this));
+		order_menu = Menu::create(day_btn,week_btn,month_btn,NULL);
 		order_menu->alignItemsHorizontallyWithPadding(20);
 		order_menu->setPosition(ccp(ranking_bg->getPositionX()+100,ranking_bg->getPositionY()-ranking_bg->getContentSize().height/2+14));
 		ranking_layer->addChild(order_menu,10);
@@ -454,9 +419,9 @@ void RakingLayer::produceRanking(int type){
 		isMemberSelect=false;
 		isGroupSelect=false;
 
-		JifenPoint_btn=CCMenuItemSprite::create(CCSprite::createWithSpriteFrameName("order_jifen_off.png"),CCSprite::createWithSpriteFrameName("order_jifen_on.png"),this,menu_selector(RakingLayer::onJifenBtn));
-		battlePoint_btn=CCMenuItemSprite::create(CCSprite::createWithSpriteFrameName("order_battle_off.png"),CCSprite::createWithSpriteFrameName("order_battle_on.png"),this,menu_selector(RakingLayer::onBattleBtn));
-		order_menu = CCMenu::create(JifenPoint_btn,battlePoint_btn,NULL);
+		JifenPoint_btn=MenuItemSprite::create(Sprite::createWithSpriteFrameName("order_jifen_off.png"),Sprite::createWithSpriteFrameName("order_jifen_on.png"),CC_CALLBACK_1(RakingLayer::onJifenBtn, this));
+		battlePoint_btn=MenuItemSprite::create(Sprite::createWithSpriteFrameName("order_battle_off.png"),Sprite::createWithSpriteFrameName("order_battle_on.png"),CC_CALLBACK_1(RakingLayer::onBattleBtn, this));
+		order_menu = Menu::create(JifenPoint_btn,battlePoint_btn,NULL);
 		order_menu->alignItemsHorizontallyWithPadding(20);
 		order_menu->setPosition(ccp(ranking_bg->getPositionX()+100,ranking_bg->getPositionY()-ranking_bg->getContentSize().height/2+14));
 		ranking_layer->addChild(order_menu,10);
@@ -481,9 +446,9 @@ void RakingLayer::produceRanking(int type){
 		isMemberSelect=false;
 		isGroupSelect=true;
 
-		JifenPoint_btn=CCMenuItemSprite::create(CCSprite::createWithSpriteFrameName("order_jifen_off.png"),CCSprite::createWithSpriteFrameName("order_jifen_on.png"),this,menu_selector(RakingLayer::onJifenBtn));
-		battlePoint_btn=CCMenuItemSprite::create(CCSprite::createWithSpriteFrameName("order_battle_off.png"),CCSprite::createWithSpriteFrameName("order_battle_on.png"),this,menu_selector(RakingLayer::onBattleBtn));
-		order_menu = CCMenu::create(JifenPoint_btn,battlePoint_btn,NULL);
+		JifenPoint_btn=MenuItemSprite::create(Sprite::createWithSpriteFrameName("order_jifen_off.png"),Sprite::createWithSpriteFrameName("order_jifen_on.png"),CC_CALLBACK_1(RakingLayer::onJifenBtn, this));
+		battlePoint_btn=MenuItemSprite::create(Sprite::createWithSpriteFrameName("order_battle_off.png"),Sprite::createWithSpriteFrameName("order_battle_on.png"),CC_CALLBACK_1(RakingLayer::onBattleBtn, this));
+		order_menu = Menu::create(JifenPoint_btn,battlePoint_btn,NULL);
 		order_menu->alignItemsHorizontallyWithPadding(20);
 		order_menu->setPosition(ccp(ranking_bg->getPositionX()+100,ranking_bg->getPositionY()-ranking_bg->getContentSize().height/2+14));
 		ranking_layer->addChild(order_menu,10);
@@ -766,9 +731,9 @@ void RakingLayer::postRequest(int code,CCString* useChar/* =NULL */){
 				if(groupID!=0){
 					CCLabelTTF* group_Name=CCLabelTTF::create(CCString::createWithFormat("%s",groupName.c_str())->getCString(),FONT_TYPE,12);
 
-					CCMenuItemLabel* item=CCMenuItemLabel::create(group_Name, this, menu_selector(RakingLayer::onSelectGroupBtn));
+					MenuItemLabel* item=MenuItemLabel::create(group_Name, CC_CALLBACK_1(RakingLayer::onSelectGroupBtn, this));
 
-					CCMenu* pMenu = CCMenu::create(item, NULL);
+					Menu* pMenu = Menu::create(item, NULL);
 					pMenu ->setPosition(ccp(304,5));
 					item ->setAnchorPoint(ccp(0.5f,0));
 					item->setTag(groupID);
@@ -803,7 +768,7 @@ void RakingLayer::postRequest(int code,CCString* useChar/* =NULL */){
 
 
 
-void RakingLayer::onCancel(CCObject* sender){
+void RakingLayer::onCancel(Ref* sender){
 
 	this->removeFromParent();
 	SimpleAudioEngine::getInstance()->playEffect("Audio/Menu/cancel.ogg");
@@ -811,7 +776,7 @@ void RakingLayer::onCancel(CCObject* sender){
 	Director::getInstance()->popScene();
 }
 
-void  RakingLayer::onDayBtn(CCObject* sender){
+void  RakingLayer::onDayBtn(Ref* sender){
 
 	if(_screwLayer1){
 		_screwLayer1->removeAllChildren();
@@ -831,7 +796,7 @@ void  RakingLayer::onDayBtn(CCObject* sender){
 	month_btn->unselected();
 }
 
-void  RakingLayer::onWeekBtn(CCObject* sender){
+void  RakingLayer::onWeekBtn(Ref* sender){
 	if(_screwLayer1){
 		_screwLayer1->removeAllChildren();
 	}
@@ -850,7 +815,7 @@ void  RakingLayer::onWeekBtn(CCObject* sender){
 
 
 
-void  RakingLayer::onMonthBtn(CCObject* sender){
+void  RakingLayer::onMonthBtn(Ref* sender){
 
 	if(_screwLayer1){
 		_screwLayer1->removeAllChildren();
@@ -868,7 +833,7 @@ void  RakingLayer::onMonthBtn(CCObject* sender){
 	month_btn->selected();
 }
 
-void  RakingLayer::onJifenBtn(CCObject* sender){
+void  RakingLayer::onJifenBtn(Ref* sender){
 
 	if(_screwLayer1){
 		_screwLayer1->removeAllChildren();
@@ -891,7 +856,7 @@ void  RakingLayer::onJifenBtn(CCObject* sender){
 	JifenPoint_btn->selected();
 
 }
-void  RakingLayer::onBattleBtn(CCObject* sender){
+void  RakingLayer::onBattleBtn(Ref* sender){
 
 	if(_screwLayer1){
 		_screwLayer1->removeAllChildren();
@@ -1588,9 +1553,9 @@ void RakingLayer::onHttpRequestCompleted2(CCNode *sender ,void *data) {
 				if(groupID!=0){
 					CCLabelTTF* group_Name=CCLabelTTF::create(CCString::createWithFormat("%s",groupName.c_str())->getCString(),FONT_TYPE,12);
 
-					CCMenuItemLabel* item=CCMenuItemLabel::create(group_Name, this, menu_selector(RakingLayer::onSelectGroupBtn));
-					
-					CCMenu* pMenu = CCMenu::create(item, NULL);
+					MenuItemLabel* item=MenuItemLabel::create(group_Name, CC_CALLBACK_1(RakingLayer::onSelectGroupBtn, this));
+
+					Menu* pMenu = Menu::create(item, NULL);
 					pMenu ->setPosition(ccp(304,5));
 					item ->setAnchorPoint(ccp(0.5f,0));
 					item->setTag(groupID);
@@ -1762,10 +1727,10 @@ void RakingLayer::onHttpRequestCompleted3(CCNode *sender ,void *data) {
 						group_name->setColor(ccc3(236,162,8));
 					}
 				}
-				CCMenuItemLabel* item=CCMenuItemLabel::create(group_name, this, menu_selector(RakingLayer::onSelectGroupBtn));
+				MenuItemLabel* item=MenuItemLabel::create(group_name, CC_CALLBACK_1(RakingLayer::onSelectGroupBtn, this));
 				item->setTag(groupID); 
 
-				CCMenu* pMenu = CCMenu::create(item, NULL);
+				Menu* pMenu = Menu::create(item, NULL);
 				
 				pMenu ->setPosition(ccp(108,5));
 				item ->setAnchorPoint(ccp(0.5f,0));
@@ -1798,7 +1763,7 @@ void RakingLayer::onHttpRequestCompleted3(CCNode *sender ,void *data) {
 
 }  
 
-void RakingLayer::onSelectGroupBtn(CCObject* sender){
+void RakingLayer::onSelectGroupBtn(Ref* sender){
 	if(_screwLayer1){
 		_screwLayer1->setPositionY(154);
 	}
