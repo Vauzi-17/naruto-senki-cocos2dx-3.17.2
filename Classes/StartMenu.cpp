@@ -420,7 +420,7 @@ bool StartMenu::init()
 		this->addChild(cloud_left,1);
 
 		ActionInterval* cmv1=MoveBy::create(1,Vec2(-15,0));
-		Action* cseq1=RepeatForever::create(cocos2d::cocos2dx2_compat::createSequence(cmv1,cmv1->reverse(),NULL));
+		Action* cseq1=RepeatForever::create(Sequence::create(cmv1,cmv1->reverse(),nullptr));
 		cloud_left->runAction(cseq1);
 
 		Sprite* cloud_right=Sprite::createWithSpriteFrameName("cloud.png");
@@ -430,7 +430,7 @@ bool StartMenu::init()
 		this->addChild(cloud_right,1);
 
 		ActionInterval* cmv2=MoveBy::create(1,Vec2(15,0));
-		Action* cseq2=RepeatForever::create(cocos2d::cocos2dx2_compat::createSequence(cmv2,cmv2->reverse(),NULL));
+		Action* cseq2=RepeatForever::create(Sequence::create(cmv2,cmv2->reverse(),nullptr));
 		cloud_right->runAction(cseq2);
 
 
@@ -542,7 +542,7 @@ bool StartMenu::init()
 		menuText->setAnchorPoint(Vec2(0,0));
 		menuText->setPosition(Vec2(12,2));
 		this->addChild(menuText,5);
-		menuText->runAction(RepeatForever::create(cocos2d::cocos2dx2_compat::createSequence(ScaleTo::create(0.9f,1.04f),ScaleTo::create(0.9f,1.0f),NULL)));
+		menuText->runAction(RepeatForever::create(Sequence::create(ScaleTo::create(0.9f,1.04f),ScaleTo::create(0.9f,1.0f),nullptr)));
 
 		float menuPosX=winSize.width*0.22f;
 		if(menuPosX<105){
@@ -560,7 +560,7 @@ bool StartMenu::init()
 			menu->setPositionX(menuPosX-36);
 			menu->setOpacity(0);
 			this->addChild(menu,2);
-			menu->runAction(cocos2d::cocos2dx2_compat::createSequence(DelayTime::create(0.08f*menuIntroIndex),Spawn::create(MoveTo::create(0.35f,Vec2(menuPosX,finalY)),FadeIn::create(0.35f),NULL),NULL));
+			menu->runAction(Sequence::create(DelayTime::create(0.08f*menuIntroIndex),Spawn::create(MoveTo::create(0.35f,Vec2(menuPosX,finalY)),FadeIn::create(0.35f),nullptr),nullptr));
 			menuIntroIndex++;
 		};
 
@@ -578,30 +578,30 @@ bool StartMenu::init()
 		this->addChild(avator,1);
 
 
-		CCArray* tempArray= CCArray::create();
+		Vector<SpriteFrame*> tempArray;
+		Vector<FiniteTimeAction*> list;
 
 		int i=1;
 
-		CCArray* list=CCArray::create();
 		while (i<5)
 		{
 			CCString* path=CCString::createWithFormat("avator%d.png",i);
 			SpriteFrame* frame = SpriteFrameCache::getInstance()->spriteFrameByName(path->getCString());
-			tempArray->addObject(frame);
-			Animation* tempAnimation= cocos2d::cocos2dx2_compat::createAnimationWithSpriteFrames(tempArray, 0.1f);
-			Action* tempAction=Animate::create(tempAnimation);
-			list->addObject(tempAction);
+			tempArray.pushBack(frame);
+			Animation* tempAnimation= Animation::createWithSpriteFrames(tempArray, 0.1f);
+			FiniteTimeAction* tempAction=Animate::create(tempAnimation);
+			list.pushBack(tempAction);
 			ActionInterval* fadeIn=FadeIn::create(0.8f);
 			DelayTime* delay=DelayTime::create(1.0f);
 			ActionInterval* fadeOut=FadeOut::create(0.5f);
-			list->addObject(fadeIn);
-			list->addObject(delay);
-			list->addObject(fadeOut);
+			list.pushBack(fadeIn);
+			list.pushBack(delay);
+			list.pushBack(fadeOut);
 			i+=1;
 		}
 
 
-		avator->runAction(RepeatForever::create(cocos2d::cocos2dx2_compat::createSequence(list)));
+		avator->runAction(RepeatForever::create(Sequence::create(list)));
 
 		//���水ť
 		MenuItem* news_btn=MenuItemSprite::create(Sprite::createWithSpriteFrameName("news_btn.png"),NULL,NULL,CC_CALLBACK_1(StartMenu::onNewsBtn, this));
@@ -4079,7 +4079,7 @@ void StartMenu::scrollMenu(int posY){
 					menu->runAction(seq);
 
 				}else if(menu->getPositionY()==_pos03){
-					Action* spn=Spawn::create(
+					FiniteTimeAction* spn=Spawn::create(
 						MoveTo::create(0.5,Vec2(menu->getPositionX(),_pos02)),
 						ScaleTo::create(0.5,1),
 						NULL
@@ -4092,10 +4092,7 @@ void StartMenu::scrollMenu(int posY){
 					}*/
 
 					FiniteTimeAction *call = CallFunc::create(CC_CALLBACK_0(MenuButton::playSound, menu));
-					CCArray* seqArray=CCArray::create();
-					seqArray->addObject(spn);
-					seqArray->addObject(call);
-					ActionInterval* seq=cocos2d::cocos2dx2_compat::createSequence(seqArray);
+					ActionInterval* seq=Sequence::create(spn,call,nullptr);
 					menu->runAction(seq);
 
 				}else if(menu->getPositionY()==_pos02 && menu->_isBottom){
@@ -4125,7 +4122,7 @@ void StartMenu::scrollMenu(int posY){
 			CCARRAY_FOREACH(_menu_array,pObject){
 				MenuButton* menu=(MenuButton *)pObject;
 				if(menu->getPositionY()==_pos01){
-					Action* spn=Spawn::create(
+					FiniteTimeAction* spn=Spawn::create(
 						MoveTo::create(0.5,Vec2(menu->getPositionX(),_pos02)),
 						ScaleTo::create(0.5,1),
 						NULL
@@ -4137,10 +4134,7 @@ void StartMenu::scrollMenu(int posY){
 					}*/
 
 					FiniteTimeAction *call = CallFunc::create(CC_CALLBACK_0(MenuButton::playSound, menu));
-					CCArray* seqArray=CCArray::create();
-					seqArray->addObject(spn);
-					seqArray->addObject(call);
-					ActionInterval* seq=cocos2d::cocos2dx2_compat::createSequence(seqArray);
+					ActionInterval* seq=Sequence::create(spn,call,nullptr);
 					menu->runAction(seq);
 				}else if(menu->getPositionY()==_pos03){
 					ActionInterval* spn=MoveTo::create(0.5,Vec2(menu->getPositionX(),_pos02));
