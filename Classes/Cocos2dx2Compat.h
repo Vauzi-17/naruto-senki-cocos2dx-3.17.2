@@ -3,8 +3,6 @@
 
 #include "cocos2d.h"
 #include "deprecated/CCDeprecated.h"
-#include "base/CCEventDispatcher.h"
-#include "base/CCEventListenerTouch.h"
 #include "network/HttpClient.h"
 #include "network/HttpRequest.h"
 #include "network/HttpResponse.h"
@@ -17,16 +15,6 @@
 #include <string>
 
 NS_CC_BEGIN
-
-class CCTouchDelegate
-{
-public:
-    virtual ~CCTouchDelegate() {}
-    virtual bool ccTouchBegan(CCTouch* touch, CCEvent* event) { CC_UNUSED_PARAM(touch); CC_UNUSED_PARAM(event); return false; }
-    virtual void ccTouchMoved(CCTouch* touch, CCEvent* event) { CC_UNUSED_PARAM(touch); CC_UNUSED_PARAM(event); }
-    virtual void ccTouchEnded(CCTouch* touch, CCEvent* event) { CC_UNUSED_PARAM(touch); CC_UNUSED_PARAM(event); }
-    virtual void ccTouchCancelled(CCTouch* touch, CCEvent* event) { CC_UNUSED_PARAM(touch); CC_UNUSED_PARAM(event); }
-};
 
 struct cc_timeval
 {
@@ -161,42 +149,6 @@ namespace cocos2dx2_compat
         }
     }
 
-    template <typename T>
-    inline void addTargetedDelegate(T* delegate, int priority, bool swallowTouches)
-    {
-        auto target = dynamic_cast<Node*>(delegate);
-        if (!target)
-        {
-            return;
-        }
-
-        auto listener = EventListenerTouchOneByOne::create();
-        listener->setSwallowTouches(swallowTouches);
-        auto touchDelegate = static_cast<CCTouchDelegate*>(delegate);
-        listener->onTouchBegan = [touchDelegate](Touch* touch, Event* event) {
-            return touchDelegate->ccTouchBegan(touch, event);
-        };
-        listener->onTouchMoved = [touchDelegate](Touch* touch, Event* event) {
-            touchDelegate->ccTouchMoved(touch, event);
-        };
-        listener->onTouchEnded = [touchDelegate](Touch* touch, Event* event) {
-            touchDelegate->ccTouchEnded(touch, event);
-        };
-        listener->onTouchCancelled = [touchDelegate](Touch* touch, Event* event) {
-            touchDelegate->ccTouchCancelled(touch, event);
-        };
-
-        CC_UNUSED_PARAM(priority);
-        Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, target);
-    }
-
-    inline void removeDelegate(Node* target)
-    {
-        if (target)
-        {
-            Director::getInstance()->getEventDispatcher()->removeEventListenersForTarget(target);
-        }
-    }
 }
 
 NS_CC_END
