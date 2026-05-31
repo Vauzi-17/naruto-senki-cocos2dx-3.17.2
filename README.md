@@ -22,7 +22,7 @@ masih memakai API 2.x seperti `CCLayer`, `CCSprite`, `CCMenu`, `CCPoint`,
 
 ## Estimasi Progress Migrasi
 
-Estimasi progress menuju kode full cocos2d-x 3.17.2: **sekitar 64%**.
+Estimasi progress menuju kode full cocos2d-x 3.17.2: **sekitar 67%**.
 
 Alasan estimasi:
 
@@ -33,6 +33,9 @@ Alasan estimasi:
   tanpa mengubah kontrak data lama secara paksa.
 - Masih ada sisa API 2.x yang cukup banyak di `ActionManager`, `Element`,
   `RankingLayer`, beberapa utility UI, app delegate, dan compatibility bridge.
+- Untuk mencapai 100%, sisa terbesar bukan sekadar rename API, tetapi migrasi
+  kontrak data lama seperti `CCArray`, `CCDictionary`, dan `CCString` yang masih
+  dipakai lintas scene, ranking, loader, XML, dan gameplay core.
 
 Angka ini bukan hitungan matematis murni dari jumlah file, karena sebagian file
 sisa jauh lebih besar dan lebih berisiko daripada scene kecil. Secara jalur main
@@ -138,6 +141,18 @@ Catatan khusus:
   `ActionManager`, `Element`, dan `Characters` lebih stabil, agar tidak perlu
   membuat adapter bolak-balik antara scene awal dan gameplay.
 
+Roadmap menuju 100%:
+
+- Sekitar 70-75%: selesaikan tahap 4 untuk helper, app entry, ranking UI, dan
+  pengurangan compatibility shim yang tidak menyentuh kontrak data besar.
+- Sekitar 75-88%: migrasi sisa node/action/vector/frame di `RankingLayer`,
+  `ActionManager`, `Element`, dan helper yang masih memakai API 2.x langsung.
+- Sekitar 88-97%: migrasi container/data lama (`CCArray`, `CCDictionary`,
+  `CCString`) per batas modul, dimulai dari area paling lokal lalu baru kontrak
+  antar-scene seperti loader, XML parser, dan gameplay core.
+- Sekitar 97-100%: hapus alias/helper yang sudah tidak dipakai dari
+  `Cocos2dx2Compat.h`, lalu lakukan build Android dan Windows final.
+
 ## Tahap Berikutnya
 
 ### Tahap 3: Gameplay Core
@@ -240,6 +255,7 @@ Target migrasi:
 Commit awal tahap 4:
 
 - `2305287 refactor: migrate utility touch and action helpers`
+- `31ea26c refactor: migrate utility singleton helpers`
 
 Catatan progress terbaru:
 
@@ -249,6 +265,10 @@ Catatan progress terbaru:
 - `CCShake` mulai memakai `ActionInterval`, `Node`, dan `Vec2`.
 - `CCTips` di `KTools` mulai memakai base `Sprite` dan action callback 3.x.
 - `HelloWorldScene` sample lama dibersihkan ke API scene/menu/sprite/label 3.x.
+- `AppDelegate`, `AppMacros`, `KTools`, dan `CCStrokeLabel` dibersihkan dari
+  beberapa singleton/type lama seperti `sharedEngine`, `sharedDirector`,
+  `sharedUserDefault`, `sharedFileUtils`, `CCSize`, `CCNode`, `CCSprite`,
+  `CCRenderTexture`, dan `CCTexture2D`.
 - Area ini belum dibuild ulang oleh Codex sesuai aturan kerja; perlu uji Android
   pengguna sebelum tahap final.
 
