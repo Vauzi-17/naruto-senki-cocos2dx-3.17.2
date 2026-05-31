@@ -22,7 +22,7 @@ masih memakai API 2.x seperti `CCLayer`, `CCSprite`, `CCMenu`, `CCPoint`,
 
 ## Estimasi Progress Migrasi
 
-Estimasi progress menuju kode full cocos2d-x 3.17.2: **sekitar 55%**.
+Estimasi progress menuju kode full cocos2d-x 3.17.2: **sekitar 56%**.
 
 Alasan estimasi:
 
@@ -176,6 +176,17 @@ Commit awal tahap 3:
 - `3f7fa89 refactor: migrate action manager frame api`
 - `0229d2d refactor: migrate action manager scheduler selectors`
 - `56981ee refactor: migrate character scheduler selectors`
+- `79e334c refactor: migrate element action callbacks`
+
+Catatan progress terbaru:
+
+- `Element.cpp` mulai dibersihkan dari callback action lama di alur
+  `Monster` dan `Bullet`: `CCCallFunc`/`callfunc_selector` diganti ke
+  `CallFunc` + `CC_CALLBACK_0`, dan tipe action lokal di fungsi gerak/dealloc
+  tersebut diganti ke nama API 3.x seperti `Action`, `ActionInterval`,
+  `FiniteTimeAction`, `MoveTo`, `MoveBy`, `EaseIn`, `DelayTime`, dan
+  `RepeatForever`.
+- Potongan ini belum build-tested oleh pengguna.
 
 ### Tahap 4: Cleanup dan Compatibility Reduction
 
