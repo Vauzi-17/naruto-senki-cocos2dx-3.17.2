@@ -9,7 +9,7 @@ bool Hero::init(){
 		CC_BREAK_IF(!HeroElement::init());
 		this->setAnchorPoint(ccp(0.5,0));		
 		
-		//this->schedule(schedule_selector(Hero::neicun),0.5f);
+		//this->schedule(CC_SCHEDULE_SELECTOR(Hero::neicun),0.5f);
 		bRet=true;
 	}while(0);
 
@@ -329,13 +329,13 @@ void Hero::AI_DevaPath(){
 					if(_isCanSkill1 && !isHaveKuilei1){
 
 						this->attack(SKILL1);
-						this->scheduleOnce(schedule_selector(Hero::enableSkill1),_sattackcoldDown1);
+						this->scheduleOnce(CC_SCHEDULE_SELECTOR(Hero::enableSkill1),_sattackcoldDown1);
 
 					}else if(_isCanSkill2 && !isHaveKuilei2){
 
 						this->changeSide(sp);
 						this->attack(SKILL2);
-						this->scheduleOnce(schedule_selector(Hero::enableSkill2),_sattackcoldDown2);
+						this->scheduleOnce(CC_SCHEDULE_SELECTOR(Hero::enableSkill2),_sattackcoldDown2);
 
 					}else{
 
@@ -418,7 +418,7 @@ void Hero::AI_AsuraPath(){
 						this->changeSide(sp);
 					
 						this->attack(SKILL1);
-						this->scheduleOnce(schedule_selector(Hero::enableSkill1),_sattackcoldDown1);
+						this->scheduleOnce(CC_SCHEDULE_SELECTOR(Hero::enableSkill1),_sattackcoldDown1);
 
 					}else{
 
@@ -467,7 +467,7 @@ void Hero::AI_AnimalPath(){
 							if(_isCanSkill1 && strcmp(_mainTarget->getRole()->getCString(),"Tower")!=0 ){
 							
 								this->attack(SKILL1);
-								this->scheduleOnce(schedule_selector(Hero::enableSkill1),_sattackcoldDown1);
+								this->scheduleOnce(CC_SCHEDULE_SELECTOR(Hero::enableSkill1),_sattackcoldDown1);
 
 							}else{
 								this->changeSide(sp);
@@ -497,7 +497,7 @@ void Hero::AI_AnimalPath(){
 					if(_isCanSkill1){
 					
 						this->attack(SKILL1);
-						this->scheduleOnce(schedule_selector(Hero::enableSkill1),10.0f);
+						this->scheduleOnce(CC_SCHEDULE_SELECTOR(Hero::enableSkill1),10.0f);
 
 					}else{
 
@@ -817,7 +817,7 @@ void Hero::AI_Saso(){
 						this->changeSide(sp);
 					
 						this->attack(SKILL1);
-						this->scheduleOnce(schedule_selector(Hero::enableSkill1),this->_sattackcoldDown1);
+						this->scheduleOnce(CC_SCHEDULE_SELECTOR(Hero::enableSkill1),this->_sattackcoldDown1);
 
 					}else{
 
@@ -1027,7 +1027,7 @@ void Hero::AI_Sanshouuo(){
 						this->changeSide(sp);
 					
 						this->attack(SKILL1);
-						this->scheduleOnce(schedule_selector(Hero::enableSkill1),_sattackcoldDown1);
+						this->scheduleOnce(CC_SCHEDULE_SELECTOR(Hero::enableSkill1),_sattackcoldDown1);
 					}else{
 						this->changeSide(sp);
 						this->attack(NAttack);
@@ -1405,12 +1405,12 @@ void Hero::AI_Slug(){
 							if(_isCanSkill1){
 							
 								this->attack(SKILL1);
-								this->scheduleOnce(schedule_selector(Hero::enableSkill1),_sattackcoldDown1);
+								this->scheduleOnce(CC_SCHEDULE_SELECTOR(Hero::enableSkill1),_sattackcoldDown1);
 
 							}else if(_isCanSkill2){
 								
 								this->attack(SKILL2);
-								this->scheduleOnce(schedule_selector(Hero::enableSkill2),_sattackcoldDown2);
+								this->scheduleOnce(CC_SCHEDULE_SELECTOR(Hero::enableSkill2),_sattackcoldDown2);
 
 							}else{
 								this->changeSide(sp);
@@ -3407,11 +3407,11 @@ void Hero::AI_Guardian(){
 			if(_isCanSkill1 && !_skillChangeBuffValue && (this->getHpPercent()<0.5f || isTurn)){
 				this->changeSide(sp);
 				this->attack(SKILL1);
-				this->scheduleOnce(schedule_selector(Hero::enableSkill1),_sattackcoldDown1);
+				this->scheduleOnce(CC_SCHEDULE_SELECTOR(Hero::enableSkill1),_sattackcoldDown1);
 			}else if(_isCanSkill2 && _skillChangeBuffValue){
 				this->changeSide(sp);
 				this->attack(SKILL2);
-				this->scheduleOnce(schedule_selector(Hero::enableSkill2),_sattackcoldDown2);
+				this->scheduleOnce(CC_SCHEDULE_SELECTOR(Hero::enableSkill2),_sattackcoldDown2);
 			}else{
 				this->changeSide(sp);
 				this->attack(NAttack);
