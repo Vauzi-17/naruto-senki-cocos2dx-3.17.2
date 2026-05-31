@@ -8,7 +8,7 @@ USING_NS_CC;
 
 
 
-class SelectLayer : public CCLayer{
+class SelectLayer : public Layer{
 
 public:
 	SelectLayer(void);
@@ -16,12 +16,12 @@ public:
 
 	virtual bool		init();
 	static SelectLayer*	create();
-	void    setSelected(CCObject* sender);
+	void    setSelected(Ref* sender);
 
 	const char* _selectHero;
 	const char* _playerSelect;
-	
-	
+
+
 	CCArray* selectArray;
 
 	bool isStart;
@@ -32,21 +32,20 @@ public:
 	bool _trainingRandomTeam;
 	bool _trainingRandomEnemy;
 	int num2;
-	CC_SYNTHESIZE_RETAIN(CCSprite*,_heroHalf,HeroHalf);
-	CC_SYNTHESIZE_RETAIN(CCSprite*,_heroName,HeroName);
-	CC_SYNTHESIZE_RETAIN(CCSprite*,_selectImg,SelectImg);
+	CC_SYNTHESIZE_RETAIN(Sprite*,_heroHalf,HeroHalf);
+	CC_SYNTHESIZE_RETAIN(Sprite*,_heroName,HeroName);
+	CC_SYNTHESIZE_RETAIN(Sprite*,_selectImg,SelectImg);
 
 	virtual void onKeyReleased(EventKeyboard::KeyCode keyCode, Event* event);
 	void onBackKeyClicked();
 
+protected:
+	void onEnter();
+	void onExit();
+
 private:
-	void	onGameStart(CCObject* sender);
-	void    onSkillMenu(CCObject* sender);
-	void	onError(CCObject* sender);
-	void	onBackToMenu(CCObject* sender);
+	void	onGameStart(Ref* sender);
+	void    onSkillMenu(Ref* sender);
+	void	onError(Ref* sender);
+	void	onBackToMenu(Ref* sender);
 };
-
-
-
-
-
