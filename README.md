@@ -187,9 +187,14 @@ Commit awal tahap 3:
 - `79e334c refactor: migrate element action callbacks`
 - `0cd115b refactor: migrate action manager direct callbacks`
 - `3bac504 refactor: stabilize monster cleanup pointers`
+- `13b92ef refactor: reload report frames for rematch`
 
 Catatan progress terbaru:
 
+- Fix runtime setelah uji Android pengguna: frame report kill feed seperti
+  `*_rpf.png` dan `slain.png` hilang pada match kedua setelah CHANGE/REMATCH.
+  Alur rematch di `GameLayer::onLeft()` sekarang me-load ulang `Report.plist`
+  bersama plist global lain sebelum masuk `LoadLayer`.
 - Fix runtime setelah build Android pengguna: crash saat mengeluarkan monster
   ditelusuri ke cleanup `Monster::~Monster()` yang bisa me-release pointer
   belum terinisialisasi. `ActionManager` sekarang menginisialisasi pointer
