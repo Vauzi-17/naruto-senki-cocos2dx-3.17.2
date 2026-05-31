@@ -34,9 +34,9 @@ ActionButton::~ActionButton(void)
 bool ActionButton::init(const char *szImage){
 	bool bRet = false;
 	do{
-		CC_BREAK_IF(!CCSprite::init());
+		CC_BREAK_IF(!Sprite::init());
 		this->initWithSpriteFrameName(szImage);
-		this->setAnchorPoint(ccp(0,0));
+		this->setAnchorPoint(Vec2(0,0));
 
 		bRet=true;
 
@@ -47,24 +47,28 @@ bool ActionButton::init(const char *szImage){
 }
 
 void ActionButton::onEnter(){
-	CCSprite::onEnter();
-	cocos2d::cocos2dx2_compat::addTargetedDelegate(this,-50,true);
+	Sprite::onEnter();
+	auto listener = EventListenerTouchOneByOne::create();
+	listener->setSwallowTouches(true);
+	listener->onTouchBegan = CC_CALLBACK_2(ActionButton::ccTouchBegan, this);
+	listener->onTouchEnded = CC_CALLBACK_2(ActionButton::ccTouchEnded, this);
+	_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 }
 void ActionButton::onExit(){
-	CCSprite::onExit();
-	cocos2d::cocos2dx2_compat::removeDelegate(this);
+	Sprite::onExit();
+	_eventDispatcher->removeEventListenersForTarget(this);
 }
 
-CCRect ActionButton::getRect(){
-	CCSize size=this->getContentSize();
-	return CCRect(0,0, size.width, size.height);
+Rect ActionButton::getRect(){
+	Size size=this->getContentSize();
+	return Rect(0,0, size.width, size.height);
 
 }
-bool ActionButton::containsTouchLocation(CCTouch *touch){
+bool ActionButton::containsTouchLocation(Touch *touch){
 	return getRect().containsPoint(convertTouchToNodeSpace(touch));
 }
 
-bool  ActionButton::ccTouchBegan(CCTouch* touch,CCEvent* event){
+bool  ActionButton::ccTouchBegan(Touch* touch,Event* event){
 	
 	// touch area 
 	if (!this->containsTouchLocation(touch) || _delegate->_isAllButtonLocked){
@@ -75,7 +79,7 @@ bool  ActionButton::ccTouchBegan(CCTouch* touch,CCEvent* event){
 	return true;
 
 }
-void ActionButton::ccTouchEnded(CCTouch* touch,CCEvent* event){
+void ActionButton::ccTouchEnded(Touch* touch,Event* event){
 	if(_abType==NAttack)
 	_delegate->attackButtonRelease();
 }
@@ -196,18 +200,18 @@ void ActionButton::beganAnimation(bool isLock){
 		this->setTimeCout(this->getCD());
 		if(cdLabel){
 			cdLabel->removeFromParent();
-			this->unschedule(schedule_selector(ActionButton::updateCDLabel));
+			this->unschedule(CC_SCHEDULE_SELECTOR(ActionButton::updateCDLabel));
 		}
 		if(this->getABType()!=Item1){
 			
-			cdLabel=CCLabelBMFont::create(CCString::createWithFormat("%d",int(this->getCD()->intValue())/1000)->getCString(),"Fonts/1.fnt");
+			cdLabel=LabelBMFont::create(CCString::createWithFormat("%d",int(this->getCD()->intValue())/1000)->getCString(),"Fonts/1.fnt");
 			cdLabel->setScale(0.4f);
-			cdLabel->setPosition(ccp(this->getPositionX()+this->getContentSize().width/2,
+			cdLabel->setPosition(Vec2(this->getPositionX()+this->getContentSize().width/2,
 				this->getPositionY()+this->getContentSize().height/2));
 			this->_delegate->addChild(cdLabel,200);
 			
 		}
-		this->schedule(schedule_selector(ActionButton::updateCDLabel),1.0f);
+		this->schedule(CC_SCHEDULE_SELECTOR(ActionButton::updateCDLabel),1.0f);
 
 		markSprite->stopAllActions();
 
@@ -220,10 +224,10 @@ void ActionButton::beganAnimation(bool isLock){
 
 void ActionButton::setGearType(int tmpGearType){
 
-	CCSprite* gearIcon=CCSprite::createWithSpriteFrameName(CCString::createWithFormat("gear_%02d.png",gearType(tmpGearType))->getCString());
-	gearIcon->setAnchorPoint(ccp(0.5f,0.5f));
+	Sprite* gearIcon=Sprite::createWithSpriteFrameName(CCString::createWithFormat("gear_%02d.png",gearType(tmpGearType))->getCString());
+	gearIcon->setAnchorPoint(Vec2(0.5f,0.5f));
 	gearIcon->setScale(0.85f);
-	gearIcon->setPosition(ccp(18,18));
+	gearIcon->setPosition(Vec2(18,18));
 	this->addChild(gearIcon);
 	this->_gearType=gearType(tmpGearType);
 	
@@ -245,7 +249,7 @@ void ActionButton::updateCDLabel(float dt){
 			}
 			
 		}else{
-			this->unschedule(schedule_selector(ActionButton::updateCDLabel));
+			this->unschedule(CC_SCHEDULE_SELECTOR(ActionButton::updateCDLabel));
 			this->setTimeCout(NULL);
 			if(cdLabel){
 			cdLabel->removeFromParent();
@@ -256,19 +260,19 @@ void ActionButton::updateCDLabel(float dt){
 };
 
 void ActionButton::setMarkSprite(const char* mark){
-	CCSprite* tmpSprite =CCSprite::createWithSpriteFrameName(mark);
-	markSprite=CCProgressTimer::create(tmpSprite);
-	markSprite->setType(kCCProgressTimerTypeRadial);
+	Sprite* tmpSprite =Sprite::createWithSpriteFrameName(mark);
+	markSprite=ProgressTimer::create(tmpSprite);
+	markSprite->setType(ProgressTimer::Type::RADIAL);
 	
 	markSprite->setReverseDirection(true);
 	markSprite->setPosition(this->getPosition());
-	markSprite->setAnchorPoint(ccp(0,0));
+	markSprite->setAnchorPoint(Vec2(0,0));
 	this->_delegate->addChild(markSprite,500);
 
 	if(this->getABType()==GearBtn){
 		if(_delegate->_delegate->_isHardCoreGame){
-			gearSign =CCSprite::createWithSpriteFrameName("gearsign.png");
-			gearSign->setPosition(ccp(this->getPositionX()+17,this->getPositionY()+17));
+			gearSign =Sprite::createWithSpriteFrameName("gearsign.png");
+			gearSign->setPosition(Vec2(this->getPositionX()+17,this->getPositionY()+17));
 			this->_delegate->addChild(gearSign,500);
 		}
 		
@@ -277,17 +281,17 @@ void ActionButton::setMarkSprite(const char* mark){
 };
 
 void ActionButton::setOugisMark(){
-	ougismarkSprite =CCSprite::createWithSpriteFrameName("skill_freeze.png");
+	ougismarkSprite =Sprite::createWithSpriteFrameName("skill_freeze.png");
 	ougismarkSprite->setPosition(this->getPosition());
-	ougismarkSprite->setAnchorPoint(ccp(0,0));
+	ougismarkSprite->setAnchorPoint(Vec2(0,0));
 	this->_delegate->addChild(ougismarkSprite,500);
 	if (this->getABType()== OUGIS1){
-	lockLabel1=CCLabelBMFont::create("LV2","Fonts/1.fnt");
+	lockLabel1=LabelBMFont::create("LV2","Fonts/1.fnt");
 	}else{
-	lockLabel1=CCLabelBMFont::create("LV4","Fonts/1.fnt");
+	lockLabel1=LabelBMFont::create("LV4","Fonts/1.fnt");
 	}
 	lockLabel1->setScale(0.4f);
-	lockLabel1->setPosition(ccp(this->getPositionX()+this->getContentSize().width/2,
+	lockLabel1->setPosition(Vec2(this->getPositionX()+this->getContentSize().width/2,
 		this->getPositionY()+this->getContentSize().height/2));
 	this->_delegate->addChild(lockLabel1,200);
 	_isLock=true;
@@ -295,55 +299,55 @@ void ActionButton::setOugisMark(){
 
 void ActionButton::setProgressMark(){
 
-	clipper = CCClippingNode::create();
-	CCNode *stencil = CCSprite::createWithSpriteFrameName("icon_bg1.png");
-	stencil->setAnchorPoint(ccp(0,0));
+	clipper = ClippingNode::create();
+	Node *stencil = Sprite::createWithSpriteFrameName("icon_bg1.png");
+	stencil->setAnchorPoint(Vec2(0,0));
 	clipper->setStencil(stencil);
 
-	proressmarkSprite=CCSprite::createWithSpriteFrameName("icon_bg2.png");
+	proressmarkSprite=Sprite::createWithSpriteFrameName("icon_bg2.png");
 
 	clipper->setPosition(this->getPosition());
 	clipper->addChild(proressmarkSprite);
 
-	proressmarkSprite->setAnchorPoint(ccp(0.5f,0.5f));
-	proressmarkSprite->setPosition(ccp(proressmarkSprite->getContentSize().width/2,proressmarkSprite->getContentSize().height/2));
+	proressmarkSprite->setAnchorPoint(Vec2(0.5f,0.5f));
+	proressmarkSprite->setPosition(Vec2(proressmarkSprite->getContentSize().width/2,proressmarkSprite->getContentSize().height/2));
 	//50,120,180
 	
 	this->_delegate->addChild(clipper,-50);
 	
 
-	proressblinkSprite =CCSprite::createWithSpriteFrameName("icon_bg3.png");
+	proressblinkSprite =Sprite::createWithSpriteFrameName("icon_bg3.png");
 	proressblinkSprite->setPosition(this->getPosition());
-	proressblinkSprite->setAnchorPoint(ccp(0.5f,0.5f));
-	proressblinkSprite->setPosition(ccp(proressmarkSprite->getContentSize().width/2,proressmarkSprite->getContentSize().height/2));
+	proressblinkSprite->setAnchorPoint(Vec2(0.5f,0.5f));
+	proressblinkSprite->setPosition(Vec2(proressmarkSprite->getContentSize().width/2,proressmarkSprite->getContentSize().height/2));
 	
 
-	CCFadeOut* fd=CCFadeOut::create(0.2f);
-	proressblinkSprite->runAction(CCRepeatForever::create(fd));
+	FadeOut* fd=FadeOut::create(0.2f);
+	proressblinkSprite->runAction(RepeatForever::create(fd));
 	clipper->addChild(proressblinkSprite,50);
 	
 
 	if (this->getABType()== OUGIS1){
-	progressPointSprite=CCSprite::createWithSpriteFrameName("icon_bg4.png");
+	progressPointSprite=Sprite::createWithSpriteFrameName("icon_bg4.png");
 	proressmarkSprite->setRotation(-50);
 	proressblinkSprite->setRotation(-50);
 	progressPointSprite->setPosition(this->getPosition());
 	}else{
-	progressPointSprite=CCSprite::createWithSpriteFrameName("icon_bg5.png");
+	progressPointSprite=Sprite::createWithSpriteFrameName("icon_bg5.png");
 	proressmarkSprite->setRotation(-85);
 	proressblinkSprite->setRotation(-85);
-	progressPointSprite->setPosition(ccp(this->getPositionX()+1,this->getPositionY()));
+	progressPointSprite->setPosition(Vec2(this->getPositionX()+1,this->getPositionY()));
 	}
 
 	
-	progressPointSprite->setAnchorPoint(ccp(0,0));
+	progressPointSprite->setAnchorPoint(Vec2(0,0));
 	this->_delegate->addChild(progressPointSprite,-25);
 
-	CCFadeOut* fd2=CCFadeOut::create(0.5f);
-	proressblinkMask=CCSprite::createWithSpriteFrameName("icon_bg6.png");
+	FadeOut* fd2=FadeOut::create(0.5f);
+	proressblinkMask=Sprite::createWithSpriteFrameName("icon_bg6.png");
 	proressblinkMask->setPosition(this->getPosition());
-	proressblinkMask->setAnchorPoint(ccp(0,0));
-	proressblinkMask->runAction(CCRepeatForever::create(fd2));
+	proressblinkMask->setAnchorPoint(Vec2(0,0));
+	proressblinkMask->runAction(RepeatForever::create(fd2));
 
 
 	this->_delegate->addChild(proressblinkMask,200);
@@ -353,8 +357,8 @@ void ActionButton::setProgressMark(){
 		if(_delegate->skill4Button){
 			if(_delegate->skill4Button->proressblinkMask && !_delegate->skill4Button->_isLock){
 				_delegate->skill4Button->proressblinkMask->stopAllActions();
-				CCFadeOut* fd2=CCFadeOut::create(0.5f);
-				_delegate->skill4Button->proressblinkMask->runAction(CCRepeatForever::create(fd2));
+				FadeOut* fd2=FadeOut::create(0.5f);
+				_delegate->skill4Button->proressblinkMask->runAction(RepeatForever::create(fd2));
 			}
 
 		}
@@ -388,14 +392,14 @@ void ActionButton::updateProgressMark(){
 			
 				proressblinkMask->setVisible(true);
 				proressblinkMask->stopAllActions();
-				CCFadeOut* fd2=CCFadeOut::create(0.5f);
-				proressblinkMask->runAction(CCRepeatForever::create(fd2));
+				FadeOut* fd2=FadeOut::create(0.5f);
+				proressblinkMask->runAction(RepeatForever::create(fd2));
 
 				if(_delegate->skill5Button){
 					if(_delegate->skill5Button->proressblinkMask && !_delegate->skill5Button->_isLock){
 						_delegate->skill5Button->proressblinkMask->stopAllActions();
-						CCFadeOut* fd2=CCFadeOut::create(0.5f);
-						_delegate->skill5Button->proressblinkMask->runAction(CCRepeatForever::create(fd2));
+						FadeOut* fd2=FadeOut::create(0.5f);
+						_delegate->skill5Button->proressblinkMask->runAction(RepeatForever::create(fd2));
 					}
 
 				}
@@ -444,14 +448,14 @@ void ActionButton::updateProgressMark(){
 				
 				proressblinkMask->setVisible(true);
 				proressblinkMask->stopAllActions();
-				CCFadeOut* fd2=CCFadeOut::create(0.5f);
-				proressblinkMask->runAction(CCRepeatForever::create(fd2));
+				FadeOut* fd2=FadeOut::create(0.5f);
+				proressblinkMask->runAction(RepeatForever::create(fd2));
 
 				if(_delegate->skill4Button){
 					if(_delegate->skill4Button->proressblinkMask && !_delegate->skill4Button->_isLock){
 						_delegate->skill4Button->proressblinkMask->stopAllActions();
-						CCFadeOut* fd2=CCFadeOut::create(0.5f);
-						_delegate->skill4Button->proressblinkMask->runAction(CCRepeatForever::create(fd2));
+						FadeOut* fd2=FadeOut::create(0.5f);
+						_delegate->skill4Button->proressblinkMask->runAction(RepeatForever::create(fd2));
 					}
 
 				}
@@ -516,19 +520,19 @@ void ActionButton::unLock(){
 
 void ActionButton::createFreezeAnimation(){
 
-	CCFiniteTimeAction *to = CCProgressTo::create(0, 99.999f);
+	FiniteTimeAction *to = ProgressTo::create(0, 99.999f);
 	
 	
 	int delay=_coldDown->intValue()/1000;
 	
-	CCFiniteTimeAction *to1 = CCProgressTo::create(delay, 0);
+	FiniteTimeAction *to1 = ProgressTo::create(delay, 0);
 
-	CCAction* freezeAction;
+	Action* freezeAction;
 	if(_isDoubleSkill){
-		CCFiniteTimeAction *callback = CCCallFunc::create(this, callfunc_selector(ActionButton::clearClick));
-		freezeAction= cocos2d::cocos2dx2_compat::createSequence(to, to1, callback,NULL);
+		FiniteTimeAction *callback = CallFunc::create(CC_CALLBACK_0(ActionButton::clearClick, this));
+		freezeAction= Sequence::create(to, to1, callback, nullptr);
 	} else{
-		freezeAction= cocos2d::cocos2dx2_compat::createSequence(to, to1, NULL);
+		freezeAction= Sequence::create(to, to1, nullptr);
 	}
 	
 	this->setFreezeAction(freezeAction);
