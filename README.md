@@ -336,7 +336,8 @@ Catatan progress terbaru:
 
 Status: **berjalan; commit `ActionManager`, `Effect`, `HudLayer`, dekoratif UI,
 scene/loading, dan `StartMenu` sudah build-tested oleh pengguna di Android,
-commit `Element` terbaru belum build-tested**.
+commit `Element` terbaru sudah build-tested oleh pengguna di Android, commit
+`ActionManager` lokal terbaru belum build-tested**.
 
 Prioritas:
 
@@ -364,6 +365,7 @@ Commit awal tahap 5:
 - `8c16cf1 refactor: migrate scene animation helpers`
 - `859af1f refactor: migrate start menu sequence helpers`
 - `5eb669c refactor: migrate element local sequence helpers`
+- `bb4b45d refactor: migrate action manager local sequences`
 
 Catatan progress terbaru:
 
@@ -409,9 +411,14 @@ Catatan progress terbaru:
   diganti ke `Sequence::create`. `getDeadAction()` tetap diperlakukan hati-hati
   lewat `dynamic_cast<FiniteTimeAction*>` dengan fallback callback, meniru
   perilaku helper compat lama yang hanya memasukkan finite action.
-- Setelah commit `Element` ini lulus build Android, langkah berikutnya adalah
-  lanjut kecil di `ActionManager` atau area `Element` lain yang masih lokal,
-  bukan migrasi container besar sekaligus.
+- Commit `Element` sudah dibuild pengguna di Android dan berjalan aman.
+- `ActionManager.cpp` dibersihkan lagi secara lokal dari helper sequence di
+  alur feedback hit, coin/damage display, hurt/hardHurt/absorb, float-up, dan
+  death/checkActionFinish. Action lama yang masih bertipe umum tetap dicek
+  sebagai `FiniteTimeAction` sebelum dimasukkan ke `Sequence::create`.
+- Setelah commit `ActionManager` lokal ini lulus build Android, langkah
+  berikutnya adalah lanjut kecil di sisa `ActionManager` yang masih lokal atau
+  mulai audit batas container sebelum masuk migrasi data besar.
 - Alias HTTP/EditBox/Scale9/Scroll di `Cocos2dx2Compat.h` belum dihapus karena
   masih punya pemakai aktif.
 
