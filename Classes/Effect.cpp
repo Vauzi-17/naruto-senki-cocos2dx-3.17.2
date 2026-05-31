@@ -86,12 +86,9 @@ bool Effect::init(const char *szImage,Ref* Attacker){
 			strcmp(szImage,"speedUp")==0
 			){
 			this->initWithSpriteFrameName(CCString::createWithFormat("%s_01.png",szImage)->getCString());
-			Action* effectAction=this->createEffectAnimation(CCString::createWithFormat("%s_",szImage)->getCString(),5,5,false);
+			FiniteTimeAction* effectAction=static_cast<FiniteTimeAction*>(this->createEffectAnimation(CCString::createWithFormat("%s_",szImage)->getCString(),5,5,false));
 			FiniteTimeAction* call=CallFunc::create(CC_CALLBACK_0(NarutoSenki::ActionManager::disableEffect, at));
-			CCArray* seqArray=CCArray::create();
-			seqArray->addObject(effectAction);
-			seqArray->addObject(call);
-			Action* seq=cocos2d::cocos2dx2_compat::createSequence(seqArray);
+			Action* seq=Sequence::create(effectAction,call,nullptr);
 			this->runAction(seq);
 		}else if(strcmp(szImage,"smk")==0){
 			this->initWithSpriteFrameName("smk_01.png");
@@ -127,7 +124,7 @@ bool Effect::init(const char *szImage,Ref* Attacker){
 
 			DelayTime* delay=DelayTime::create(2.8f);
 			FiniteTimeAction* call=CallFunc::create(CC_CALLBACK_0(Effect::removeEffect, this));
-			Action* seq=cocos2d::cocos2dx2_compat::createSequence(delay,call,nullptr);
+			Action* seq=Sequence::create(delay,call,nullptr);
 			this->runAction(seq);
 
 		}
@@ -144,7 +141,7 @@ bool Effect::init(const char *szImage,Ref* Attacker){
 			this->setPosition(Vec2(at->getPositionX(),at->getPositionY()-this->getContentSize().height/2));
 			DelayTime* delay=DelayTime::create(0.3f);
 			FiniteTimeAction* call=CallFunc::create(CC_CALLBACK_0(Effect::removeEffect, this));
-			Action* seq=cocos2d::cocos2dx2_compat::createSequence(delay,call,nullptr);
+			Action* seq=Sequence::create(delay,call,nullptr);
 			this->runAction(seq);
 
 		}else if(strcmp(szImage,"kazi")==0){
@@ -154,7 +151,7 @@ bool Effect::init(const char *szImage,Ref* Attacker){
 				at->getPositionY()+at->getContentSize().height/2));
 			ActionInterval* su=ScaleBy::create(0.1f,1.2f);
 			FiniteTimeAction* call=CallFunc::create(CC_CALLBACK_0(Effect::removeEffect, this));
-			Action* seq=cocos2d::cocos2dx2_compat::createSequence(su,su->reverse(),call,nullptr);
+			Action* seq=Sequence::create(su,su->reverse(),call,nullptr);
 			this->runAction(seq);
 		}else if(strcmp(szImage,"sharingan")==0 ||
 			strcmp(szImage,"sharingan2")==0 ||
@@ -167,7 +164,7 @@ bool Effect::init(const char *szImage,Ref* Attacker){
 			ActionInterval* rt=RotateBy::create(0.3f,180,180);
 			ActionInterval* su=ScaleBy::create(0.2f,1.6f);
 			FiniteTimeAction* call=CallFunc::create(CC_CALLBACK_0(Effect::removeEffect, this));
-			Action* seq=cocos2d::cocos2dx2_compat::createSequence(rt,su,call,nullptr);
+			Action* seq=Sequence::create(rt,su,call,nullptr);
 			this->runAction(seq);
 		}else if(strcmp(szImage,"Hiraishin")==0||
 			strcmp(szImage,"Hiraishin2")==0){
@@ -232,26 +229,24 @@ bool Effect::init(const char *szImage,Ref* Attacker){
 }
 
 Action* Effect::createEffectAnimation(const char* file,int frameCount,float fps,bool isRepeat){
-	CCArray* animeFrames = CCArray::create();
+	Vector<SpriteFrame*> animeFrames;
 	CCString* str;
 
 	for(int i = 1; i < frameCount; i++){
 		str=CCString::createWithFormat("%s%02d.png",file,i);
 		SpriteFrame *frame =  SpriteFrameCache::getInstance()->spriteFrameByName(str->getCString());
-		animeFrames->addObject(frame);
+		animeFrames.pushBack(frame);
 	}
 
-	Animation* tempAnimation=cocos2d::cocos2dx2_compat::createAnimationWithSpriteFrames(animeFrames, float(1.0 / fps));
-	Action* tempAction=Animate::create(tempAnimation);
-	CCArray* seqArray=CCArray::createWithObject(tempAction);
+	Animation* tempAnimation=Animation::createWithSpriteFrames(animeFrames, float(1.0 / fps));
+	FiniteTimeAction* tempAction=Animate::create(tempAnimation);
 	Action* seq;
 	if(isRepeat){
-		seq=RepeatForever::create(cocos2d::cocos2dx2_compat::createSequence(seqArray));
+		seq=RepeatForever::create(Sequence::create(tempAction,nullptr));
 	}else{
 
 		FiniteTimeAction* call=CallFunc::create(CC_CALLBACK_0(Effect::removeEffect, this));
-		seqArray->addObject(call);
-		seq=cocos2d::cocos2dx2_compat::createSequence(seqArray);
+		seq=Sequence::create(tempAction,call,nullptr);
 
 	}
 
@@ -263,7 +258,7 @@ Action* Effect::createFontAnimation(){
 
 	DelayTime* delay=DelayTime::create(0.3f);
 	FiniteTimeAction* call=CallFunc::create(CC_CALLBACK_0(Effect::removeFontEffect, this));
-	Action* seq=cocos2d::cocos2dx2_compat::createSequence(delay,call,nullptr);
+	Action* seq=Sequence::create(delay,call,nullptr);
 
 	return seq;
 }
