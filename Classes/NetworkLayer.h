@@ -7,7 +7,7 @@
 #include "RankingLayer.h"
 USING_NS_CC;
 
-class NetworkLayer : public CCLayer{
+class NetworkLayer : public Layer{
 
 public:
 	NetworkLayer(void);
@@ -16,7 +16,7 @@ public:
 	virtual bool		init();
 	static NetworkLayer*	create();
 	static NetworkLayer*	createTraining(int teamSize, bool randomTeam, bool randomEnemy, bool trainingMode, int killLimit);
-	void    setSelected(CCObject* sender);
+	void    setSelected(Ref* sender);
 	bool    isHeroConfirmedSelected(const char* heroName);
 	void    unselectHero(const char* heroName);
 	void    unselectAll();
@@ -32,41 +32,41 @@ public:
 	CCString* _trainingPlayerPick;
 	CCArray* _trainingTeamPicks;
 	CCArray* _trainingEnemyPicks;
-	CCSprite* _trainingTeamSlots[5];
-	CCSprite* _trainingEnemySlots[5];
+	Sprite* _trainingTeamSlots[5];
+	Sprite* _trainingEnemySlots[5];
 
 	bool isPosting;
-	CCSprite* refreshBtn;
-	
-	
-	CCLayer* _teamSelector;
-	
-	CC_SYNTHESIZE_RETAIN(CCSprite*,_comSelector1,ComSelector1);
-	CC_SYNTHESIZE_RETAIN(CCSprite*,_comLabel1,ComLabel1);
-	
+	Sprite* refreshBtn;
 
-	CC_SYNTHESIZE_RETAIN(CCSprite*,_comSelector2,ComSelector2);
-	CC_SYNTHESIZE_RETAIN(CCSprite*,_comLabel2,ComLabel2);
+
+	Layer* _teamSelector;
+
+	CC_SYNTHESIZE_RETAIN(Sprite*,_comSelector1,ComSelector1);
+	CC_SYNTHESIZE_RETAIN(Sprite*,_comLabel1,ComLabel1);
+
+
+	CC_SYNTHESIZE_RETAIN(Sprite*,_comSelector2,ComSelector2);
+	CC_SYNTHESIZE_RETAIN(Sprite*,_comLabel2,ComLabel2);
 
 	CCArray* selectArray;
 
-	CC_SYNTHESIZE_RETAIN(CCLayer*,_pageLayer1,Page1);
-	CC_SYNTHESIZE_RETAIN(CCLayer*,_pageLayer2,Page2);
-	CC_SYNTHESIZE_RETAIN(CCLayer*,_pageLayer3,Page3);
+	CC_SYNTHESIZE_RETAIN(Layer*,_pageLayer1,Page1);
+	CC_SYNTHESIZE_RETAIN(Layer*,_pageLayer2,Page2);
+	CC_SYNTHESIZE_RETAIN(Layer*,_pageLayer3,Page3);
 
 
-	CCMenuItemSprite* page1_btn;
-	CCMenuItemSprite* page2_btn;
-	CCMenuItemSprite* page3_btn;
+	MenuItemSprite* page1_btn;
+	MenuItemSprite* page2_btn;
+	MenuItemSprite* page3_btn;
 
-	void  onPage1Btn(CCObject* sender);
-	void  onPage2Btn(CCObject* sender);
-	void  onPage3Btn(CCObject* sender);
-	void  onMapBtn(CCObject* sender);
+	void  onPage1Btn(Ref* sender);
+	void  onPage2Btn(Ref* sender);
+	void  onPage3Btn(Ref* sender);
+	void  onMapBtn(Ref* sender);
 	void  updateMapPreview();
 
 	CC_SYNTHESIZE_RETAIN(CCArray*,_selectList,SelectList);
-	CCMenu*  page_menu;
+	Menu*  page_menu;
 
 	bool isStart;
 	bool SaveError;
@@ -79,28 +79,29 @@ public:
 	bool _trainingRandomEnemy;
 	int _trainingKillLimit;
 	int _selectedMap;
-	CCSprite* _mapPreview;
-	CCLabelBMFont* _mapLabel;
-	
+	Sprite* _mapPreview;
+	LabelBMFont* _mapLabel;
 
-	CC_SYNTHESIZE_RETAIN(CCSprite*,_heroHalf,HeroHalf);
-	CC_SYNTHESIZE_RETAIN(CCSprite*,_heroName,HeroName);
-	CC_SYNTHESIZE_RETAIN(CCSprite*,_selectImg,SelectImg);
+
+	CC_SYNTHESIZE_RETAIN(Sprite*,_heroHalf,HeroHalf);
+	CC_SYNTHESIZE_RETAIN(Sprite*,_heroName,HeroName);
+	CC_SYNTHESIZE_RETAIN(Sprite*,_selectImg,SelectImg);
 
 	virtual void onKeyReleased(EventKeyboard::KeyCode keyCode, Event* event);
 	void onBackKeyClicked();
 
+protected:
+	void onEnter();
+	void onExit();
+
 private:
-	void	onUnselectAllBtn(CCObject* sender);
-	void	onRankingBtn(CCObject* sender);
-	void	onQuestBtn(CCObject* sender);
-	void	onGameStart(CCObject* sender);
-	void    onSkillMenu(CCObject* sender);
-	void	onError(CCObject* sender);
-	void	onBackToMenu(CCObject* sender);
-	void	onListRequestCompleted(CCNode *sender ,void *data);
-	
+	void	onUnselectAllBtn(Ref* sender);
+	void	onRankingBtn(Ref* sender);
+	void	onQuestBtn(Ref* sender);
+	void	onGameStart(Ref* sender);
+	void    onSkillMenu(Ref* sender);
+	void	onError(Ref* sender);
+	void	onBackToMenu(Ref* sender);
+	void	onListRequestCompleted(Node *sender ,void *data);
+
 };
-
-
-
