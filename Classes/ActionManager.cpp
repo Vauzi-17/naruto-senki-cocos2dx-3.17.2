@@ -448,8 +448,8 @@ void NarutoSenki::ActionManager::acceptAttack(CCObject* object){
 					
 				if(!this->_isHitOne){
 					this->_isHitOne=true;
-					CCFiniteTimeAction* call=CCCallFunc::create(this,callfunc_selector(NarutoSenki::ActionManager::disableShack));
-					CCDelayTime* delay=CCDelayTime::create(0.5f);
+					FiniteTimeAction* call = CallFunc::create(CC_CALLBACK_0(NarutoSenki::ActionManager::disableShack, this));
+					DelayTime* delay=DelayTime::create(0.5f);
 					CCArray* list=CCArray::create();
 					list->addObject(CCShake::createWithStrength(0.1f,2,0));
 					list->addObject(delay);
@@ -1208,7 +1208,7 @@ Action* NarutoSenki::ActionManager::createAnimation(CCArray* ationArray,float fp
 					seqArray->addObject(call);
 
 				}else if(strcmp(key,"setDetonation")==0){
-					CCFiniteTimeAction *call = CCCallFunc::create(this,callfunc_selector(NarutoSenki::ActionManager::dealloc));
+					FiniteTimeAction* call = CallFunc::create(CC_CALLBACK_0(NarutoSenki::ActionManager::dealloc, this));
 					seqArray->addObject(call);
 
 				}else if(strcmp(key,"setBullet")==0){
@@ -1273,7 +1273,7 @@ Action* NarutoSenki::ActionManager::createAnimation(CCArray* ationArray,float fp
 
 	}else{
 		if(isReturn){
-			CCFiniteTimeAction *call = CCCallFunc::create(this,callfunc_selector(NarutoSenki::ActionManager::idle));
+			FiniteTimeAction* call = CallFunc::create(CC_CALLBACK_0(NarutoSenki::ActionManager::idle, this));
 			seqArray->addObject(call);
 		}
 	
@@ -2411,8 +2411,8 @@ void NarutoSenki::ActionManager::setAttackBox(CCNode* sender,void* date){
 		if((_actionState==ACTION_STATE_OATTACK|| _actionState==ACTION_STATE_O2ATTACK ) && this->_isHitOne==true && !_delegate->_isShacking){
 			_delegate->_isShacking=true;
 			CCScene* f = CCDirector::sharedDirector()->getRunningScene();
-			CCFiniteTimeAction* call=CCCallFunc::create(this,callfunc_selector(NarutoSenki::ActionManager::disableShack));	
-			f->runAction(CCSequence::createWithTwoActions(CCShake::create(0.05f,12),call));
+			FiniteTimeAction* call = CallFunc::create(CC_CALLBACK_0(NarutoSenki::ActionManager::disableShack, this));
+			f->runAction(Sequence::createWithTwoActions(CCShake::create(0.05f,12),call));
 		}
 		if(_delegate->_isAttackButtonRelease && _actionState==ACTION_STATE_ATTACK && !_isOnlySkillLocked && !_isAI){
 			this->idle();
@@ -2505,9 +2505,9 @@ void NarutoSenki::ActionManager::setJump(CCNode* sender,void* date){
 			_originY=posY;
 			
 			if(!jumpDirection){
-				_jumpUPAction=CCJumpTo::create(0.8f, ccp(posX+(_isFlipped?64:-64),posY),64,1);
+				_jumpUPAction=JumpTo::create(0.8f, Vec2(posX+(_isFlipped?64:-64),posY),64,1);
 			}else{
-				_jumpUPAction=CCJumpTo::create(0.8f, ccp(posX+(_isFlipped?-64:64),posY),64,1);
+				_jumpUPAction=JumpTo::create(0.8f, Vec2(posX+(_isFlipped?-64:64),posY),64,1);
 			}
 			
 			this->runAction(_jumpUPAction);
@@ -7029,9 +7029,9 @@ bool NarutoSenki::ActionManager::hurt(){
 
 			CCArray* list=CCArray::create();
 			list->addObject(_hurtAction);
-			CCFiniteTimeAction *call = CCCallFunc::create(this,callfunc_selector(NarutoSenki::ActionManager::idle));
+			FiniteTimeAction* call = CallFunc::create(CC_CALLBACK_0(NarutoSenki::ActionManager::idle, this));
 			list->addObject(call);
-			CCAction* seq=cocos2d::cocos2dx2_compat::createSequence(list);
+			Action* seq=cocos2d::cocos2dx2_compat::createSequence(list);
 			this->runAction(seq);
 
 		}
@@ -7145,15 +7145,15 @@ bool NarutoSenki::ActionManager::hardHurt(int delayTime,bool isHurtAction,bool i
 
 			}
 
-			CCAction* delay=CCDelayTime::create(delayTime/1000);
+			Action* delay=DelayTime::create(delayTime/1000);
 			list->addObject(delay);
 
 
 
-			CCFiniteTimeAction *call = CCCallFunc::create(this,callfunc_selector(NarutoSenki::ActionManager::idle));
+			FiniteTimeAction* call = CallFunc::create(CC_CALLBACK_0(NarutoSenki::ActionManager::idle, this));
 			list->addObject(call);
 
-			CCAction* seq=cocos2d::cocos2dx2_compat::createSequence(list);
+			Action* seq=cocos2d::cocos2dx2_compat::createSequence(list);
 			this->runAction(seq);
 
 		return true;	
@@ -7204,12 +7204,12 @@ void NarutoSenki::ActionManager::absorb(Vec2 position,bool isImmediate){
 		}
 		_actionState=ACTION_STATE_HURT;
 		
-		CCActionInterval* mv;
+		ActionInterval* mv;
 	
 		CCArray* list=CCArray::create();
 		if(isImmediate){
 			this->stopAllActions();
-			mv=CCMoveTo::create(0.2f,position) ;
+			mv=MoveTo::create(0.2f,position) ;
 			list->addObject(_hurtAction);
 			this->runAction(mv);
 
@@ -7217,13 +7217,13 @@ void NarutoSenki::ActionManager::absorb(Vec2 position,bool isImmediate){
 			CCPoint direction=ccpSub(this->getPosition(),position);
 			position.x=direction.x>0?this->getPositionX()-16:this->getPositionX()+16;
 			position.y=direction.y>0?this->getPositionY()-8:this->getPositionY()+8;
-			mv=CCMoveTo::create(0.2f,position) ;
+			mv=MoveTo::create(0.2f,position) ;
 			list->addObject(mv);
 		}
 
-		CCFiniteTimeAction *call = CCCallFunc::create(this,callfunc_selector(NarutoSenki::ActionManager::idle));
+		FiniteTimeAction* call = CallFunc::create(CC_CALLBACK_0(NarutoSenki::ActionManager::idle, this));
 		list->addObject(call);
-		CCAction* seq=cocos2d::cocos2dx2_compat::createSequence(list);
+		Action* seq=cocos2d::cocos2dx2_compat::createSequence(list);
 		this->runAction(seq);
 	
 	}
@@ -7289,18 +7289,18 @@ void NarutoSenki::ActionManager::floatUP(float floatHeight, bool isCancelSkill){
 		float posX=this->getPositionX();
 		float posY=this->getPositionY();
 		_originY=posY;
-		CCActionInterval* _floatAwayAction;
+		ActionInterval* _floatAwayAction;
 
 		if(floatHeight==64){
-			_floatAwayAction=CCJumpTo::create(0.8f, ccp(posX+(_isFlipped?64:-64),posY),64,1);
+			_floatAwayAction=JumpTo::create(0.8f, Vec2(posX+(_isFlipped?64:-64),posY),64,1);
 		}else if(floatHeight==128){
-			_floatAwayAction=CCJumpTo::create(1.0f, ccp(posX+(_isFlipped?128:-128),posY),64,1);
+			_floatAwayAction=JumpTo::create(1.0f, Vec2(posX+(_isFlipped?128:-128),posY),64,1);
 		}else {
-			_floatAwayAction=CCJumpTo::create(0.3f, ccp(posX+(_isFlipped?8:-8),posY),16,1);
+			_floatAwayAction=JumpTo::create(0.3f, Vec2(posX+(_isFlipped?8:-8),posY),16,1);
 		}
 
 		
-		CCFiniteTimeAction* call=CCCallFunc::create(this,callfunc_selector(NarutoSenki::ActionManager::knockDown));
+		FiniteTimeAction* call = CallFunc::create(CC_CALLBACK_0(NarutoSenki::ActionManager::knockDown, this));
 		_floatUPAction=cocos2d::cocos2dx2_compat::createSequence(_floatAwayAction,call,NULL);
 
 		this->runAction(_floatUPAction);
@@ -7538,8 +7538,8 @@ void NarutoSenki::ActionManager::dead(){
 	if(strcmp(_role->getCString(),"Clone")!=0 &&  
 		strcmp(_role->getCString(),"Summon")!=0){
 
-		CCActionInterval* fadeOut=CCFadeOut::create(0.5);
-		CCFiniteTimeAction *call=CCCallFunc::create(this,callfunc_selector(NarutoSenki::ActionManager::dealloc));
+		ActionInterval* fadeOut=FadeOut::create(0.5);
+		FiniteTimeAction* call = CallFunc::create(CC_CALLBACK_0(NarutoSenki::ActionManager::dealloc, this));
 		CCArray* seqArray=CCArray::create();
 		seqArray->addObject(_deadAction);
 
@@ -7547,7 +7547,7 @@ void NarutoSenki::ActionManager::dead(){
 			seqArray->addObject(fadeOut);
 		}
 		seqArray->addObject(call);
-		CCAction* seq=cocos2d::cocos2dx2_compat::createSequence(seqArray);
+		Action* seq=cocos2d::cocos2dx2_compat::createSequence(seqArray);
 		this->runAction(seq);
 	
 	}else{
@@ -7566,8 +7566,8 @@ void NarutoSenki::ActionManager::checkActionFinish(float dt){
 	if(this->getActionManager()->numberOfRunningActionsInTarget(this)==0){
 		this->unschedule(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::checkActionFinish));
 		this->stopAllActions();
-		CCActionInterval* fadeOut=CCFadeOut::create(0.5);
-		CCFiniteTimeAction *call=CCCallFunc::create(this,callfunc_selector(NarutoSenki::ActionManager::dealloc));
+		ActionInterval* fadeOut=FadeOut::create(0.5);
+		FiniteTimeAction* call = CallFunc::create(CC_CALLBACK_0(NarutoSenki::ActionManager::dealloc, this));
 		CCArray* seqArray=CCArray::create();
 		if(_deadAction){
 			seqArray->addObject(_deadAction);
@@ -7576,7 +7576,7 @@ void NarutoSenki::ActionManager::checkActionFinish(float dt){
 			seqArray->addObject(fadeOut);
 		}
 		seqArray->addObject(call);
-		CCAction* seq=cocos2d::cocos2dx2_compat::createSequence(seqArray);
+		Action* seq=cocos2d::cocos2dx2_compat::createSequence(seqArray);
 		this->runAction(seq);
 	};
 
