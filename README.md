@@ -135,6 +135,8 @@ stabil.
 
 ### Tahap 3: Gameplay Core
 
+Status: **mulai berjalan, belum build-tested oleh pengguna**.
+
 Prioritas:
 
 - `ActionManager.h`
@@ -166,6 +168,14 @@ Catatan risiko:
   - movement/vector migration
   - notification/scheduler migration
   - HUD skill icon/frame migration
+
+Commit awal tahap 3:
+
+- `ecce01b refactor: migrate action core header types`
+- `821871f refactor: migrate element frame api`
+- `3f7fa89 refactor: migrate action manager frame api`
+- `0229d2d refactor: migrate action manager scheduler selectors`
+- `56981ee refactor: migrate character scheduler selectors`
 
 ### Tahap 4: Cleanup dan Compatibility Reduction
 
