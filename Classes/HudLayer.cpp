@@ -194,7 +194,7 @@ void HudLayer::initGearButton(){
 		gearMenu->removeFromParentAndCleanup(true);
 	}
 
-	MenuItem* gear_button=MenuItemSprite::create(Sprite::createWithSpriteFrameName(CCString::createWithFormat("%s_avator.png",_delegate->currentPlayer->getCharacter()->getCString())->getCString()),nullptr,nullptr,CC_CALLBACK_1(static_cast<void (HudLayer::*)(Ref*)>(&HudLayer::gearButtonClick), this));
+	MenuItem* gear_button=MenuItemSprite::create(Sprite::createWithSpriteFrameName(CCString::createWithFormat("%s_avator.png",_delegate->currentPlayer->getCharacter()->getCString())->getCString()),nullptr,nullptr,[this](Ref* sender){ this->gearButtonClick(sender); });
 	gear_button->setAnchorPoint(Vec2(0,0));
 	gearMenu=Menu::create(gear_button,nullptr);
 	gearMenu->setPosition(Vec2(0,winSize.height-gear_button->getContentSize().height));
