@@ -18,7 +18,7 @@ CCScrewLayer::~CCScrewLayer(void)
 bool CCScrewLayer::init(){
 	bool bRet = false;
 	do{
-		CC_BREAK_IF(!CCLayer::init());
+		CC_BREAK_IF(!Layer::init());
 
 		bRet=true;
 
@@ -29,7 +29,7 @@ bool CCScrewLayer::init(){
 }
 
 void CCScrewLayer::onEnter(){
-	CCLayer::onEnter();
+	Layer::onEnter();
 	auto listener = EventListenerTouchOneByOne::create();
 	listener->setSwallowTouches(true);
 	listener->onTouchBegan = CC_CALLBACK_2(CCScrewLayer::onTouchBegan, this);
@@ -39,20 +39,20 @@ void CCScrewLayer::onEnter(){
 };
 
 void CCScrewLayer::onExit(){
-	CCLayer::onExit();
-	cocos2d::cocos2dx2_compat::removeDelegate(this);
+	Director::getInstance()->getEventDispatcher()->removeEventListenersForTarget(this);
+	Layer::onExit();
 };
 
-bool CCScrewLayer::onTouchBegan(CCTouch* touch,CCEvent* event){
+bool CCScrewLayer::onTouchBegan(Touch* touch, Event* event){
 
 	prePosY=NULL;
 	return true;
 
 };
 
-void CCScrewLayer::onTouchMoved(CCTouch* touch,CCEvent* event){
+void CCScrewLayer::onTouchMoved(Touch* touch, Event* event){
 	// touch area 
-	CCPoint curPoint = touch->getLocation();
+	Vec2 curPoint = touch->getLocation();
 	if(prePosY==NULL){
 		prePosY=curPoint.y;
 	}else{
@@ -69,7 +69,7 @@ void CCScrewLayer::onTouchMoved(CCTouch* touch,CCEvent* event){
 };
 
 
-void CCScrewLayer::onTouchEnded(CCTouch* touch,CCEvent* event){
+void CCScrewLayer::onTouchEnded(Touch* touch, Event* event){
 	prePosY=NULL;
 
 	//CCLOG("y:%f",this->getPositionY());
@@ -103,7 +103,7 @@ CCScrewItem::~CCScrewItem(void)
 bool CCScrewItem::init(){
 	bool bRet = false;
 	do{
-		CC_BREAK_IF(!CCSprite::init());
+		CC_BREAK_IF(!Sprite::init());
 		
 		
 		bRet=true;
@@ -115,26 +115,30 @@ bool CCScrewItem::init(){
 }
 
 void CCScrewItem::onEnter(){
-	CCSprite::onEnter();
-	cocos2d::cocos2dx2_compat::addTargetedDelegate(this,0,true);
+	Sprite::onEnter();
+	auto listener = EventListenerTouchOneByOne::create();
+	listener->setSwallowTouches(true);
+	listener->onTouchBegan = CC_CALLBACK_2(CCScrewItem::onTouchBegan, this);
+	listener->onTouchEnded = CC_CALLBACK_2(CCScrewItem::onTouchEnded, this);
+	Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, this);
 }
 void CCScrewItem::onExit(){
-	CCSprite::onExit();
-	cocos2d::cocos2dx2_compat::removeDelegate(this);
+	Director::getInstance()->getEventDispatcher()->removeEventListenersForTarget(this);
+	Sprite::onExit();
 }
 
-CCRect CCScrewItem::getRect2(){
-	CCSize size=this->getContentSize();
-	return CCRect(0,0, size.width, size.height);
+Rect CCScrewItem::getRect2(){
+	Size size=this->getContentSize();
+	return Rect(0,0, size.width, size.height);
 
 }
 
-bool CCScrewItem::containsTouchLocation(CCTouch *touch){
+bool CCScrewItem::containsTouchLocation(Touch *touch){
 
 	return getRect2().containsPoint(convertTouchToNodeSpace(touch));
 }
 
-bool CCScrewItem::ccTouchBegan(CCTouch* touch,CCEvent* event){
+bool CCScrewItem::onTouchBegan(Touch* touch, Event* event){
 	// touch area 
 	if (!this->containsTouchLocation(touch))
 		return false;
@@ -143,8 +147,11 @@ bool CCScrewItem::ccTouchBegan(CCTouch* touch,CCEvent* event){
 	return true;
 
 }
-void CCScrewItem::ccTouchEnded(CCTouch* touch,CCEvent* event){
-	linemenu->setVisible(true);
+void CCScrewItem::onTouchEnded(Touch* touch, Event* event){
+	if (linemenu)
+	{
+		linemenu->setVisible(true);
+	}
 };
 
 

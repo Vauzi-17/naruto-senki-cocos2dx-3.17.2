@@ -36,7 +36,7 @@ CCShake* CCShake::createWithStrength(float duration, float strength_x, float str
 
 bool CCShake::initWithDuration(float duration, float strength_x, float strength_y)  
 {  
-	if (CCActionInterval::initWithDuration(duration))  
+	if (ActionInterval::initWithDuration(duration))
 	{  
 		m_strength_x = strength_x;  
 		m_strength_y = strength_y;  
@@ -60,12 +60,12 @@ void CCShake::update(float dt)
 	float randy = fgRangeRand( -m_strength_y, m_strength_y )*dt;  
 
 	// move the target to a shaked position  
-	this->getTarget()->setPosition( ccpAdd(ccp(m_initial_x, m_initial_y),ccp( randx, randy)));  
+	this->getTarget()->setPosition(Vec2(m_initial_x, m_initial_y) + Vec2(randx, randy));
 }  
 
-void CCShake::startWithTarget(CCNode *pTarget)  
+void CCShake::startWithTarget(Node *pTarget)
 {  
-	CCActionInterval::startWithTarget( pTarget );  
+	ActionInterval::startWithTarget( pTarget );
 
 	// save the initial position  
 	m_initial_x = pTarget->getPosition().x;  
@@ -75,9 +75,9 @@ void CCShake::startWithTarget(CCNode *pTarget)
 void CCShake::stop(void)  
 {  
 	// Action is done, reset clip position  
-	this->getTarget()->setPosition( ccp( m_initial_x, m_initial_y ) );  
+	this->getTarget()->setPosition(Vec2(m_initial_x, m_initial_y));
 
-	CCActionInterval::stop();  
+	ActionInterval::stop();
 }  
 
 

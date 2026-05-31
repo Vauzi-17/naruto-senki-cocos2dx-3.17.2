@@ -1500,28 +1500,21 @@ CCTips::~CCTips(void)
 bool CCTips::init(const char *tips){
 	bool bRet = false;
 	do{
-		CC_BREAK_IF(!CCSprite::init());
-		this->setAnchorPoint(ccp(0.5,0.5));
+		CC_BREAK_IF(!Sprite::init());
+		this->setAnchorPoint(Vec2(0.5f,0.5f));
 		CCDictionary *strings = CCDictionary::createWithContentsOfFile("Element/strings.xml");  
 		const char *reply = ((CCString*)strings->objectForKey(tips))->getCString();  
 
 		CCLabelTTF* tipLabel=CCLabelTTF::create(reply,FONT_TYPE,12);
 		this->addChild(tipLabel,5000);
-		this->setPosition(ccp(winSize.width/2,50));
-		CCFiniteTimeAction *call=CCCallFunc::create(this,callfunc_selector(CCTips::onDestroy));
+		this->setPosition(Vec2(winSize.width/2,50));
+		FiniteTimeAction *call=CallFunc::create(CC_CALLBACK_0(CCTips::onDestroy, this));
 
-		CCActionInterval*  mv=CCMoveBy::create(0.2f,ccp(0,12));
-		CCActionInterval* fadeOut=CCFadeOut::create(0.2f);
-		CCDelayTime* delay=CCDelayTime::create(2.0f);
-		CCActionInterval* sp=CCSpawn::create(fadeOut,mv,NULL);
-
-		CCArray* seqArray=CCArray::create();
-		seqArray->addObject(sp);
-		seqArray->addObject(delay);
-		seqArray->addObject(call);
-
-
-		CCAction* seq=cocos2d::cocos2dx2_compat::createSequence(seqArray);
+		ActionInterval*  mv=MoveBy::create(0.2f,Vec2(0,12));
+		ActionInterval* fadeOut=FadeOut::create(0.2f);
+		DelayTime* delay=DelayTime::create(2.0f);
+		ActionInterval* sp=Spawn::create(fadeOut,mv,NULL);
+		Action* seq=Sequence::create(sp, delay, call, NULL);
 
 		this->runAction(seq);
 

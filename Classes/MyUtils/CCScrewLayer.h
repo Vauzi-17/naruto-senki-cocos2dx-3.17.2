@@ -2,7 +2,7 @@
 #include "cocos2d.h"
 USING_NS_CC;  
 
-class CCScrewLayer : public CCLayer{
+class CCScrewLayer : public Layer{
 
 public:
 	CCScrewLayer(void);
@@ -18,9 +18,9 @@ public:
 
 protected:
 
-	virtual bool onTouchBegan(CCTouch* touch, CCEvent* event);
-	virtual void onTouchMoved(CCTouch* touch, CCEvent* event);
-	virtual void onTouchEnded(CCTouch* touch, CCEvent* event);
+	virtual bool onTouchBegan(Touch* touch, Event* event);
+	virtual void onTouchMoved(Touch* touch, Event* event);
+	virtual void onTouchEnded(Touch* touch, Event* event);
 
 
 	void onEnter();
@@ -29,7 +29,7 @@ protected:
 };
 
 
-class CCScrewItem : public CCSprite, public CCTouchDelegate{
+class CCScrewItem : public Sprite{
 
 public:
 	CCScrewItem(void);
@@ -37,19 +37,19 @@ public:
 	virtual	bool	init();
 
 	CREATE_FUNC(CCScrewItem);
-	CCRect			getRect2();
-	CCMenu*      linemenu;
+	Rect			getRect2();
+	Menu*      linemenu;
 	CC_SYNTHESIZE(CCScrewLayer*,_delegate,Delegate);
-	CCSprite*	lockItem;
+	Sprite*	lockItem;
 protected:
 
 	virtual void	onEnter();
 	virtual void	onExit();
-	virtual bool	ccTouchBegan(CCTouch* touch,CCEvent* event);
-	virtual void	ccTouchEnded(CCTouch* touch,CCEvent* event);
+	virtual bool	onTouchBegan(Touch* touch, Event* event);
+	virtual void	onTouchEnded(Touch* touch, Event* event);
 
 
-	bool			containsTouchLocation(CCTouch* touch);
+	bool			containsTouchLocation(Touch* touch);
 
 
 

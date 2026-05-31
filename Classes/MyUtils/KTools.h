@@ -63,7 +63,7 @@ public:
 	std::string encodeData(std::string data);
 };
 
-class CCTips : public CCSprite{
+class CCTips : public Sprite{
 public:
 	CCTips(void);
 	~CCTips(void);
