@@ -36,20 +36,20 @@ public:
 	MenuItem* side3_btn;
 
 	Menu* order_menu;
-	CCSprite* ranking_title;
+	Sprite* ranking_title;
 	CCLabelTTF* rankingDetail;
 
-	CCLayer* ranking_layer;
-	CCSprite* ranking_bg;
+	Layer* ranking_layer;
+	Sprite* ranking_bg;
 	CCScrewLayer* _screwLayer1;
 
 
-	CCSpriteBatchNode* rankingBatch;
+	SpriteBatchNode* rankingBatch;
 
 	bool isPosting;
 	
 
-	CCSprite* refreshBtn;
+	Sprite* refreshBtn;
 	CC_SYNTHESIZE(NetworkLayer*,_delegate,Delegate);
 
 	void postRequest(int code,CCString* useChar=NULL);
@@ -59,9 +59,9 @@ public:
 	int postingCode;
 
 private:
-	void onHttpRequestCompleted(CCNode *sender ,void *data);
-	void onHttpRequestCompleted2(CCNode *sender ,void *data);
-	void onHttpRequestCompleted3(CCNode *sender ,void *data);
+	void onHttpRequestCompleted(Node *sender ,void *data);
+	void onHttpRequestCompleted2(Node *sender ,void *data);
+	void onHttpRequestCompleted3(Node *sender ,void *data);
 
 	
 	void produceRanking(int type);

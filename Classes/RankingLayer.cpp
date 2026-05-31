@@ -15,7 +15,7 @@ RankCharButton::RankCharButton(void)
 
 RankCharButton::~RankCharButton(void)
 {
-	
+
 }
 
 
@@ -25,7 +25,7 @@ bool RankCharButton::init(const char *szImage){
 		CC_BREAK_IF(!Sprite::init());
 		if(strcmp(szImage,"")!=0)
 			this->initWithSpriteFrameName(szImage);
-			
+
 
 		this->setAnchorPoint(Vec2(0,0));
 
@@ -67,12 +67,12 @@ void RankCharButton::setBtnType(CCString* buttonChar){
 	_btnType->retain();
 }
 
-	
-	
+
+
 
 
 bool RankCharButton::onTouchBegan(Touch* touch, Event* event){
-	// touch area 
+	// touch area
 	if (!this->containsTouchLocation(touch)){
 		return false;
 	}else{
@@ -83,7 +83,7 @@ bool RankCharButton::onTouchBegan(Touch* touch, Event* event){
 }
 
 void RankCharButton::onTouchMoved(Touch* touch, Event* event){
-	// touch area 
+	// touch area
 
 }
 
@@ -101,7 +101,7 @@ void RankCharButton::onTouchEnded(Touch* touch, Event* event){
 	if(_delegate->month_btn){
 		_delegate->month_btn->selected();
 	}
-	
+
 
 	_delegate->postRequest(300,_btnType);
 };
@@ -159,47 +159,47 @@ bool RakingLayer::init(){
 	bool bRet=false;
 	do{
 		CC_BREAK_IF(!Layer::init());
-	
+
 		//?????
 		SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Ranking.plist");
 
-		CCSprite* gold_left=CCSprite::createWithSpriteFrameName("gold_left.png");
-		gold_left->setAnchorPoint(ccp(0,0));
-		gold_left->setPosition(ccp(0,20));
+		Sprite* gold_left=Sprite::createWithSpriteFrameName("gold_left.png");
+		gold_left->setAnchorPoint(Vec2(0,0));
+		gold_left->setPosition(Vec2(0,20));
 		this->addChild(gold_left,1);
 
 
-		CCSprite* gold_right=CCSprite::createWithSpriteFrameName("gold_right.png");
-		gold_right->setAnchorPoint(ccp(0,1));
-		gold_right->setPosition(ccp(winSize.width-gold_right->getContentSize().width-20,winSize.height-20));
+		Sprite* gold_right=Sprite::createWithSpriteFrameName("gold_right.png");
+		gold_right->setAnchorPoint(Vec2(0,1));
+		gold_right->setPosition(Vec2(winSize.width-gold_right->getContentSize().width-20,winSize.height-20));
 		this->addChild(gold_right,1);
 
 
 		//produce the cloud
-		CCSprite* cloud_left=CCSprite::createWithSpriteFrameName("cloud.png");	
-		cloud_left->setPosition(ccp(0,15));
+		Sprite* cloud_left=Sprite::createWithSpriteFrameName("cloud.png");
+		cloud_left->setPosition(Vec2(0,15));
 		cloud_left->setFlipX(true);
 		cloud_left->setFlipY(true);
-		cloud_left->setAnchorPoint(ccp(0,0));
+		cloud_left->setAnchorPoint(Vec2(0,0));
 		this->addChild(cloud_left,2);
 
-		CCActionInterval* cmv1=CCMoveBy::create(1,ccp(-15,0));
-		CCAction* cseq1=CCRepeatForever::create(cocos2d::cocos2dx2_compat::createSequence(cmv1,cmv1->reverse(),NULL));
+		ActionInterval* cmv1=MoveBy::create(1,Vec2(-15,0));
+		Action* cseq1=RepeatForever::create(cocos2d::cocos2dx2_compat::createSequence(cmv1,cmv1->reverse(),NULL));
 		cloud_left->runAction(cseq1);
 
-		CCSprite* cloud_right=CCSprite::createWithSpriteFrameName("cloud.png");	
-		cloud_right->setPosition(ccp(winSize.width-cloud_right->getContentSize().width,15));
+		Sprite* cloud_right=Sprite::createWithSpriteFrameName("cloud.png");
+		cloud_right->setPosition(Vec2(winSize.width-cloud_right->getContentSize().width,15));
 		cloud_right->setFlipY(true);
-		cloud_right->setAnchorPoint(ccp(0,0));
+		cloud_right->setAnchorPoint(Vec2(0,0));
 		this->addChild(cloud_right,2);
 
-		CCActionInterval* cmv2=CCMoveBy::create(1,ccp(15,0));
-		CCAction* cseq2=CCRepeatForever::create(cocos2d::cocos2dx2_compat::createSequence(cmv2,cmv2->reverse(),NULL));
+		ActionInterval* cmv2=MoveBy::create(1,Vec2(15,0));
+		Action* cseq2=RepeatForever::create(cocos2d::cocos2dx2_compat::createSequence(cmv2,cmv2->reverse(),NULL));
 		cloud_right->runAction(cseq2);
 
-		CCSprite* cloud_top=CCSprite::createWithSpriteFrameName("cloud_top.png");
-		cloud_top->setPosition(ccp(winSize.width/2,winSize.height-(cloud_top->getContentSize().height+12)));
-		cloud_top->setAnchorPoint(ccp(0.5f,0));
+		Sprite* cloud_top=Sprite::createWithSpriteFrameName("cloud_top.png");
+		cloud_top->setPosition(Vec2(winSize.width/2,winSize.height-(cloud_top->getContentSize().height+12)));
+		cloud_top->setAnchorPoint(Vec2(0.5f,0));
 		this->addChild(cloud_top,1);
 
 
@@ -210,23 +210,23 @@ bool RakingLayer::init(){
 
 
 		//produce the menu_bar
-		CCSprite* menu_bar_b = CCSprite::create("menu_bar2.png");
-		menu_bar_b->setAnchorPoint(ccp(0,0));
-		
+		Sprite* menu_bar_b = Sprite::create("menu_bar2.png");
+		menu_bar_b->setAnchorPoint(Vec2(0,0));
+
 		scaleSpriteToScreenWidth(menu_bar_b);
 		this->addChild(menu_bar_b,2);
 
 
-		CCSprite* menu_bar_t = CCSprite::create("menu_bar3.png");
-		menu_bar_t->setAnchorPoint(ccp(0,0));
-		
+		Sprite* menu_bar_t = Sprite::create("menu_bar3.png");
+		menu_bar_t->setAnchorPoint(Vec2(0,0));
+
 		scaleSpriteToScreenWidth(menu_bar_t);
-		menu_bar_t->setPosition(ccp(0,winSize.height-menu_bar_t->getContentSize().height));
+		menu_bar_t->setPosition(Vec2(0,winSize.height-menu_bar_t->getContentSize().height));
 		this->addChild(menu_bar_t,2);
 
-		CCSprite* record_title=CCSprite::createWithSpriteFrameName("record_title.png");
-		record_title->setAnchorPoint(ccp(0,0));
-		record_title->setPosition(ccp(2,winSize.height-record_title->getContentSize().height-2));
+		Sprite* record_title=Sprite::createWithSpriteFrameName("record_title.png");
+		record_title->setAnchorPoint(Vec2(0,0));
+		record_title->setPosition(Vec2(2,winSize.height-record_title->getContentSize().height-2));
 		this->addChild(record_title,3);
 
 
@@ -245,47 +245,47 @@ bool RakingLayer::init(){
 
 
 		CCClippingNode* clipper = CCClippingNode::create();
-		CCNode *stencil = CCSprite::createWithSpriteFrameName("screwMask2.png");
-		stencil->setAnchorPoint(ccp(0,0));
+		Node *stencil = Sprite::createWithSpriteFrameName("screwMask2.png");
+		stencil->setAnchorPoint(Vec2(0,0));
 		clipper->setStencil(stencil);
 
-		ranking_layer=CCLayer::create();
+		ranking_layer=Layer::create();
 
-		ranking_bg=CCSprite::createWithSpriteFrameName("ranking_bg.png");
-		ranking_bg->setAnchorPoint(ccp(0.5f,0.5f));
-		ranking_bg->setPosition(ccp(winSize.width/2,winSize.height/2-15));
+		ranking_bg=Sprite::createWithSpriteFrameName("ranking_bg.png");
+		ranking_bg->setAnchorPoint(Vec2(0.5f,0.5f));
+		ranking_bg->setPosition(Vec2(winSize.width/2,winSize.height/2-15));
 		ranking_layer->addChild(ranking_bg,10);
 
 
-		CCSprite* ranking_logo=CCSprite::createWithSpriteFrameName("ranking_logo.png");
-		ranking_logo->setAnchorPoint(ccp(0.5f,0.5f));
-		ranking_logo->setPosition(ccp(ranking_bg->getPositionX(),ranking_bg->getPositionY()+ranking_bg->getContentSize().height/2+16));
+		Sprite* ranking_logo=Sprite::createWithSpriteFrameName("ranking_logo.png");
+		ranking_logo->setAnchorPoint(Vec2(0.5f,0.5f));
+		ranking_logo->setPosition(Vec2(ranking_bg->getPositionX(),ranking_bg->getPositionY()+ranking_bg->getContentSize().height/2+16));
 		ranking_layer->addChild(ranking_logo,11);
 
 
-		ranking_title=CCSprite::createWithSpriteFrameName("ranking_title1.png");
-		ranking_title->setAnchorPoint(ccp(0,0));
-		ranking_title->setPosition(ccp(ranking_bg->getPositionX()-62,ranking_bg->getPositionY()+ranking_bg->getContentSize().height/2-16));
+		ranking_title=Sprite::createWithSpriteFrameName("ranking_title1.png");
+		ranking_title->setAnchorPoint(Vec2(0,0));
+		ranking_title->setPosition(Vec2(ranking_bg->getPositionX()-62,ranking_bg->getPositionY()+ranking_bg->getContentSize().height/2-16));
 		ranking_layer->addChild(ranking_title,15);
 
 		_screwLayer1=CCScrewLayer::create();
-		_screwLayer1->setAnchorPoint(ccp(0,0));
+		_screwLayer1->setAnchorPoint(Vec2(0,0));
 		_screwLayer1->setPositionY(154);
 		_screwLayer1->line_height=26;
 		_screwLayer1->minY=154;
 
-		clipper->setPosition(ccp(ranking_bg->getPositionX()-ranking_bg->getContentSize().width/2,58));
+		clipper->setPosition(Vec2(ranking_bg->getPositionX()-ranking_bg->getContentSize().width/2,58));
 		clipper->addChild(_screwLayer1,5);
 
 		ranking_layer->addChild(clipper,20);
 
-		
+
 
 
 		side2_btn=MenuItemSprite::create(Sprite::createWithSpriteFrameName("sidebar2_off.png"),Sprite::createWithSpriteFrameName("sidebar2_on.png"),CC_CALLBACK_1(RakingLayer::onSideBar2, this));
-		side2_btn->setAnchorPoint(ccp(0,0));
+		side2_btn->setAnchorPoint(Vec2(0,0));
 		Menu* side_menu2 = Menu::create(side2_btn,NULL);
-		side_menu2->setPosition(ccp(ranking_bg->getPositionX()-ranking_bg->getContentSize().width/2-40,ranking_bg->getPositionY()+ranking_bg->getContentSize().height/2-35));
+		side_menu2->setPosition(Vec2(ranking_bg->getPositionX()-ranking_bg->getContentSize().width/2-40,ranking_bg->getPositionY()+ranking_bg->getContentSize().height/2-35));
 		ranking_layer->addChild(side_menu2,5);
 
 		this->addChild(ranking_layer,100);
@@ -294,7 +294,7 @@ bool RakingLayer::init(){
 		}else{
 			this->produceRanking(2);
 		}
-		
+
 
 
 		bRet=true;
@@ -328,7 +328,7 @@ void RakingLayer::produceRanking(int type){
 		_screwLayer1->removeAllChildren();
 		_screwLayer1->setPositionY(154);
 	}
-	
+
 
 
 	if(order_menu){
@@ -348,7 +348,7 @@ void RakingLayer::produceRanking(int type){
 		if(ranking_title){
 			SpriteFrame *frame=SpriteFrameCache::getInstance()->getSpriteFrameByName("ranking_title1.png");
 			ranking_title->setSpriteFrame(frame);
-			ranking_title->setPosition(ccp(ranking_bg->getPositionX()-62,ranking_bg->getPositionY()+ranking_bg->getContentSize().height/2-16));
+			ranking_title->setPosition(Vec2(ranking_bg->getPositionX()-62,ranking_bg->getPositionY()+ranking_bg->getContentSize().height/2-16));
 		}
 		if(side0_btn){
 			side0_btn->selected();
@@ -365,7 +365,7 @@ void RakingLayer::produceRanking(int type){
 		month_btn=MenuItemSprite::create(Sprite::createWithSpriteFrameName("order_month_off.png"),Sprite::createWithSpriteFrameName("order_month_on.png"),CC_CALLBACK_1(RakingLayer::onMonthBtn, this));
 		order_menu = Menu::create(day_btn,week_btn,month_btn,NULL);
 		order_menu->alignItemsHorizontallyWithPadding(20);
-		order_menu->setPosition(ccp(ranking_bg->getPositionX()+100,ranking_bg->getPositionY()-ranking_bg->getContentSize().height/2+14));
+		order_menu->setPosition(Vec2(ranking_bg->getPositionX()+100,ranking_bg->getPositionY()-ranking_bg->getContentSize().height/2+14));
 		ranking_layer->addChild(order_menu,10);
 		day_btn->selected();
 
@@ -376,7 +376,7 @@ void RakingLayer::produceRanking(int type){
 		if(ranking_title){
 			SpriteFrame *frame=SpriteFrameCache::getInstance()->getSpriteFrameByName("ranking_title1.png");
 			ranking_title->setSpriteFrame(frame);
-			ranking_title->setPosition(ccp(ranking_bg->getPositionX()-62,ranking_bg->getPositionY()+ranking_bg->getContentSize().height/2-16));
+			ranking_title->setPosition(Vec2(ranking_bg->getPositionX()-62,ranking_bg->getPositionY()+ranking_bg->getContentSize().height/2-16));
 		}
 		if(side0_btn){
 			side0_btn->unselected();
@@ -393,7 +393,7 @@ void RakingLayer::produceRanking(int type){
 		month_btn=MenuItemSprite::create(Sprite::createWithSpriteFrameName("order_month_off.png"),Sprite::createWithSpriteFrameName("order_month_on.png"),CC_CALLBACK_1(RakingLayer::onMonthBtn, this));
 		order_menu = Menu::create(day_btn,week_btn,month_btn,NULL);
 		order_menu->alignItemsHorizontallyWithPadding(20);
-		order_menu->setPosition(ccp(ranking_bg->getPositionX()+100,ranking_bg->getPositionY()-ranking_bg->getContentSize().height/2+14));
+		order_menu->setPosition(Vec2(ranking_bg->getPositionX()+100,ranking_bg->getPositionY()-ranking_bg->getContentSize().height/2+14));
 		ranking_layer->addChild(order_menu,10);
 		day_btn->selected();
 
@@ -413,7 +413,7 @@ void RakingLayer::produceRanking(int type){
 		if(ranking_title){
 			SpriteFrame *frame=SpriteFrameCache::getInstance()->getSpriteFrameByName("ranking_title2.png");
 			ranking_title->setSpriteFrame(frame);
-			ranking_title->setPosition(ccp(ranking_bg->getPositionX()-96,ranking_bg->getPositionY()+ranking_bg->getContentSize().height/2-16));
+			ranking_title->setPosition(Vec2(ranking_bg->getPositionX()-96,ranking_bg->getPositionY()+ranking_bg->getContentSize().height/2-16));
 		}
 
 		isMemberSelect=false;
@@ -423,10 +423,10 @@ void RakingLayer::produceRanking(int type){
 		battlePoint_btn=MenuItemSprite::create(Sprite::createWithSpriteFrameName("order_battle_off.png"),Sprite::createWithSpriteFrameName("order_battle_on.png"),CC_CALLBACK_1(RakingLayer::onBattleBtn, this));
 		order_menu = Menu::create(JifenPoint_btn,battlePoint_btn,NULL);
 		order_menu->alignItemsHorizontallyWithPadding(20);
-		order_menu->setPosition(ccp(ranking_bg->getPositionX()+100,ranking_bg->getPositionY()-ranking_bg->getContentSize().height/2+14));
+		order_menu->setPosition(Vec2(ranking_bg->getPositionX()+100,ranking_bg->getPositionY()-ranking_bg->getContentSize().height/2+14));
 		ranking_layer->addChild(order_menu,10);
 		JifenPoint_btn->selected();
-		
+
 		this->postRequest(400);
 
 		break;
@@ -441,7 +441,7 @@ void RakingLayer::produceRanking(int type){
 		if(ranking_title){
 			SpriteFrame *frame=SpriteFrameCache::getInstance()->getSpriteFrameByName("ranking_title3.png");
 			ranking_title->setSpriteFrame(frame);
-			ranking_title->setPosition(ccp(ranking_bg->getPositionX()-106,ranking_bg->getPositionY()+ranking_bg->getContentSize().height/2-16));
+			ranking_title->setPosition(Vec2(ranking_bg->getPositionX()-106,ranking_bg->getPositionY()+ranking_bg->getContentSize().height/2-16));
 		}
 		isMemberSelect=false;
 		isGroupSelect=true;
@@ -450,10 +450,10 @@ void RakingLayer::produceRanking(int type){
 		battlePoint_btn=MenuItemSprite::create(Sprite::createWithSpriteFrameName("order_battle_off.png"),Sprite::createWithSpriteFrameName("order_battle_on.png"),CC_CALLBACK_1(RakingLayer::onBattleBtn, this));
 		order_menu = Menu::create(JifenPoint_btn,battlePoint_btn,NULL);
 		order_menu->alignItemsHorizontallyWithPadding(20);
-		order_menu->setPosition(ccp(ranking_bg->getPositionX()+100,ranking_bg->getPositionY()-ranking_bg->getContentSize().height/2+14));
+		order_menu->setPosition(Vec2(ranking_bg->getPositionX()+100,ranking_bg->getPositionY()-ranking_bg->getContentSize().height/2+14));
 		ranking_layer->addChild(order_menu,10);
 		JifenPoint_btn->selected();
-		
+
 		this->postRequest(600);
 
 
@@ -485,7 +485,7 @@ void RakingLayer::postRequest(int code,CCString* useChar/* =NULL */){
 
 	doc.Parse<kParseDefaultFlags>(clearData.c_str());
 
-	
+
 	rapidjson::Value &arr=doc;
 	int countRow=0;
 
@@ -504,26 +504,26 @@ void RakingLayer::postRequest(int code,CCString* useChar/* =NULL */){
 
 				if(sortNO==0){
 
-					CCDictionary *strings = CCDictionary::createWithContentsOfFile("Element/strings.xml");  
+					CCDictionary *strings = CCDictionary::createWithContentsOfFile("Element/strings.xml");
 					const char *reply;
 					if(postingCode==400){
-						reply= ((CCString*)strings->objectForKey("RankingNull"))->getCString();   
+						reply= ((CCString*)strings->objectForKey("RankingNull"))->getCString();
 					}else{
-						reply= ((CCString*)strings->objectForKey("RankingNull2"))->getCString();   
+						reply= ((CCString*)strings->objectForKey("RankingNull2"))->getCString();
 					}
-					
+
 					rankingDetail=CCLabelTTF::create(CCString::createWithFormat("%s",reply)->getCString(),FONT_TYPE,12);
-					rankingDetail->setAnchorPoint(ccp(0,0.5f));
-					rankingDetail->setPosition(ccp(ranking_bg->getPositionX()-ranking_bg->getContentSize().width/2 +20,ranking_bg->getPositionY()-ranking_bg->getContentSize().height/2+14));
+					rankingDetail->setAnchorPoint(Vec2(0,0.5f));
+					rankingDetail->setPosition(Vec2(ranking_bg->getPositionX()-ranking_bg->getContentSize().width/2 +20,ranking_bg->getPositionY()-ranking_bg->getContentSize().height/2+14));
 					ranking_layer->addChild(rankingDetail,500);
 
 				}else{
-					CCDictionary *strings = CCDictionary::createWithContentsOfFile("Element/strings.xml");  
-					const char *reply = ((CCString*)strings->objectForKey("RankingDetail"))->getCString();  
-					const char *reply2 = ((CCString*)strings->objectForKey("RankingDetail2"))->getCString();  
+					CCDictionary *strings = CCDictionary::createWithContentsOfFile("Element/strings.xml");
+					const char *reply = ((CCString*)strings->objectForKey("RankingDetail"))->getCString();
+					const char *reply2 = ((CCString*)strings->objectForKey("RankingDetail2"))->getCString();
 					rankingDetail=CCLabelTTF::create(CCString::createWithFormat("%s %d %s",reply,sortNO,reply2)->getCString(),FONT_TYPE,12);
-					rankingDetail->setAnchorPoint(ccp(0,0.5f));
-					rankingDetail->setPosition(ccp(ranking_bg->getPositionX()-ranking_bg->getContentSize().width/2 +20,ranking_bg->getPositionY()-ranking_bg->getContentSize().height/2+14));
+					rankingDetail->setAnchorPoint(Vec2(0,0.5f));
+					rankingDetail->setPosition(Vec2(ranking_bg->getPositionX()-ranking_bg->getContentSize().width/2 +20,ranking_bg->getPositionY()-ranking_bg->getContentSize().height/2+14));
 					ranking_layer->addChild(rankingDetail,500);
 				}
 
@@ -587,44 +587,44 @@ void RakingLayer::postRequest(int code,CCString* useChar/* =NULL */){
 
 				CCScrewItem* screwItem=CCScrewItem::create();
 				if(i%2!=0){
-					CCSprite* line_bg=CCSprite::createWithSpriteFrameName("ranking_line.png");
-					line_bg->setAnchorPoint(ccp(0,0));
+					Sprite* line_bg=Sprite::createWithSpriteFrameName("ranking_line.png");
+					line_bg->setAnchorPoint(Vec2(0,0));
 					screwItem->addChild(line_bg);
 				}
 
 				if(i==1){
-					CCSprite* num_icon;
+					Sprite* num_icon;
 					if(postingCode==500){
-						num_icon=CCSprite::createWithSpriteFrameName("num_top3.png");
+						num_icon=Sprite::createWithSpriteFrameName("num_top3.png");
 					}else if(postingCode==400) {
-						num_icon=CCSprite::createWithSpriteFrameName("num_top2.png");
+						num_icon=Sprite::createWithSpriteFrameName("num_top2.png");
 					}else{
-						num_icon=CCSprite::createWithSpriteFrameName("num_top4.png");
+						num_icon=Sprite::createWithSpriteFrameName("num_top4.png");
 					}
-					num_icon->setAnchorPoint(ccp(0,0));
-					num_icon->setPosition(ccp(1,1));
+					num_icon->setAnchorPoint(Vec2(0,0));
+					num_icon->setPosition(Vec2(1,1));
 					screwItem->addChild(num_icon);
 				}else if(i==2){
-					CCSprite* num_icon=CCSprite::createWithSpriteFrameName("num_2.png");
-					num_icon->setAnchorPoint(ccp(0,0));
-					num_icon->setPosition(ccp(1,1));
+					Sprite* num_icon=Sprite::createWithSpriteFrameName("num_2.png");
+					num_icon->setAnchorPoint(Vec2(0,0));
+					num_icon->setPosition(Vec2(1,1));
 					screwItem->addChild(num_icon);
 				}else if(i==3){
-					CCSprite* num_icon=CCSprite::createWithSpriteFrameName("num_3.png");
-					num_icon->setAnchorPoint(ccp(0,0));
-					num_icon->setPosition(ccp(1,1));
+					Sprite* num_icon=Sprite::createWithSpriteFrameName("num_3.png");
+					num_icon->setAnchorPoint(Vec2(0,0));
+					num_icon->setPosition(Vec2(1,1));
 					screwItem->addChild(num_icon);
 				}else{
 					CCLabelTTF* numLabel=CCLabelTTF::create(CCString::createWithFormat("%d",i)->getCString(),"????",12);
-					numLabel->setPosition(ccp(13,13));
+					numLabel->setPosition(Vec2(13,13));
 					screwItem->addChild(numLabel);
 				}
 
 				if(strcmp(npString.c_str(),"")!=0){
 
-					CCSprite* nameplate=CCSprite::createWithSpriteFrameName(CCString::createWithFormat("%s.png",npString.c_str())->getCString());
-					nameplate->setAnchorPoint(ccp(0.5f,0));
-					nameplate->setPosition(ccp(106,0));
+					Sprite* nameplate=Sprite::createWithSpriteFrameName(CCString::createWithFormat("%s.png",npString.c_str())->getCString());
+					nameplate->setAnchorPoint(Vec2(0.5f,0));
+					nameplate->setPosition(Vec2(106,0));
 					screwItem->addChild(nameplate);
 
 					CCStrokeLabel* user_nameStr;
@@ -639,7 +639,7 @@ void RakingLayer::postRequest(int code,CCString* useChar/* =NULL */){
 						user_nameStr = CCStrokeLabel::create(user_name,ccc3(0,0,0),ccc3(255,255,255),1.0f);
 					}
 
-					user_nameStr->setPosition(ccp(106,13));
+					user_nameStr->setPosition(Vec2(106,13));
 					screwItem->addChild(user_nameStr);
 
 					bool isBlink=false;
@@ -666,16 +666,16 @@ void RakingLayer::postRequest(int code,CCString* useChar/* =NULL */){
 						bannerPath="banner_green";
 					}
 
-					CCSprite* nameBaner=CCSprite::createWithSpriteFrameName(CCString::createWithFormat("%s.png",bannerPath)->getCString());
-					nameBaner->setAnchorPoint(ccp(0.5f,0));
-					nameBaner->setPosition(ccp(106,0));
+					Sprite* nameBaner=Sprite::createWithSpriteFrameName(CCString::createWithFormat("%s.png",bannerPath)->getCString());
+					nameBaner->setAnchorPoint(Vec2(0.5f,0));
+					nameBaner->setPosition(Vec2(106,0));
 					screwItem->addChild(nameBaner);
 
 					if(isBlink){
 
-						CCSprite* blink=CCSprite::createWithSpriteFrameName("banner_blink5.png");
-						blink->setAnchorPoint(ccp(0.5f,0));
-						blink->setPosition(ccp(106,0));
+						Sprite* blink=Sprite::createWithSpriteFrameName("banner_blink5.png");
+						blink->setAnchorPoint(Vec2(0.5f,0));
+						blink->setPosition(Vec2(106,0));
 
 						screwItem->addChild(blink);
 
@@ -696,12 +696,12 @@ void RakingLayer::postRequest(int code,CCString* useChar/* =NULL */){
 						}
 
 						CCAnimation* tempAnimation= cocos2d::cocos2dx2_compat::createAnimationWithSpriteFrames(tempArray, 0.1f);
-						CCAction* tempAction=CCAnimate::create(tempAnimation);
+						Action* tempAction=CCAnimate::create(tempAnimation);
 						list->addObject(tempAction);
 						CCDelayTime* delay=CCDelayTime::create(1.0f);
 						list->addObject(delay);
 
-						blink->runAction(CCRepeatForever::create(cocos2d::cocos2dx2_compat::createSequence(list)));
+						blink->runAction(RepeatForever::create(cocos2d::cocos2dx2_compat::createSequence(list)));
 					}
 
 				}else{
@@ -713,8 +713,8 @@ void RakingLayer::postRequest(int code,CCString* useChar/* =NULL */){
 						}
 					}
 
-					user_name->setAnchorPoint(ccp(0.5f,0.5));
-					user_name->setPosition(ccp(106,13));
+					user_name->setAnchorPoint(Vec2(0.5f,0.5));
+					user_name->setPosition(Vec2(106,13));
 					screwItem->addChild(user_name);
 
 				}
@@ -723,8 +723,8 @@ void RakingLayer::postRequest(int code,CCString* useChar/* =NULL */){
 
 				CCLabelTTF* user_score=CCLabelTTF::create(CCString::createWithFormat("%d",score)->getCString(),FONT_TYPE,12);
 
-				user_score->setAnchorPoint(ccp(0.5f,0));
-				user_score->setPosition(ccp(214,5));
+				user_score->setAnchorPoint(Vec2(0.5f,0));
+				user_score->setPosition(Vec2(214,5));
 				screwItem->addChild(user_score);
 
 
@@ -734,25 +734,25 @@ void RakingLayer::postRequest(int code,CCString* useChar/* =NULL */){
 					MenuItemLabel* item=MenuItemLabel::create(group_Name, CC_CALLBACK_1(RakingLayer::onSelectGroupBtn, this));
 
 					Menu* pMenu = Menu::create(item, NULL);
-					pMenu ->setPosition(ccp(304,5));
-					item ->setAnchorPoint(ccp(0.5f,0));
+					pMenu ->setPosition(Vec2(304,5));
+					item ->setAnchorPoint(Vec2(0.5f,0));
 					item->setTag(groupID);
 					screwItem->addChild(pMenu);
-					screwItem->setTag(groupID); 
+					screwItem->setTag(groupID);
 
 				}else if(strcmp(groupName.c_str(),"")!=0 ){
 					CCLabelTTF* group_Name=CCLabelTTF::create(CCString::createWithFormat("%s",groupName.c_str())->getCString(),FONT_TYPE,12);
 
-					group_Name->setAnchorPoint(ccp(0.5f,0));
-					group_Name->setPosition(ccp(304,5));
+					group_Name->setAnchorPoint(Vec2(0.5f,0));
+					group_Name->setPosition(Vec2(304,5));
 					screwItem->addChild(group_Name);
 
 
 				}
 
 				int row=i;
-				screwItem->setPosition(ccp(0,-row*26+26));
-				screwItem->setAnchorPoint(ccp(0,0));
+				screwItem->setPosition(Vec2(0,-row*26+26));
+				screwItem->setAnchorPoint(Vec2(0,0));
 
 				_screwLayer1->addChild(screwItem,10);
 
@@ -772,7 +772,7 @@ void RakingLayer::onCancel(Ref* sender){
 
 	this->removeFromParent();
 	SimpleAudioEngine::getInstance()->playEffect("Audio/Menu/cancel.ogg");
-	
+
 	Director::getInstance()->popScene();
 }
 
@@ -782,13 +782,13 @@ void  RakingLayer::onDayBtn(Ref* sender){
 		_screwLayer1->removeAllChildren();
 		_screwLayer1->setPositionY(154);
 	}
-	
+
 	if(isMemberSelect){
 		this->postRequest(110);
 	}else{
 		this->postRequest(100);
 	}
-	
+
 
 
 	day_btn->selected();
@@ -821,7 +821,7 @@ void  RakingLayer::onMonthBtn(Ref* sender){
 		_screwLayer1->removeAllChildren();
 		_screwLayer1->setPositionY(154);
 	}
-	
+
 	if(isMemberSelect){
 		this->postRequest(310);
 	}else{
@@ -839,19 +839,19 @@ void  RakingLayer::onJifenBtn(Ref* sender){
 		_screwLayer1->removeAllChildren();
 		_screwLayer1->setPositionY(154);
 	}
-	
+
 	if(isGroupSelect){
 		if(ranking_title){
 			SpriteFrame *frame=SpriteFrameCache::getInstance()->getSpriteFrameByName("ranking_title3.png");
 			ranking_title->setSpriteFrame(frame);
-			ranking_title->setPosition(ccp(ranking_bg->getPositionX()-106,ranking_bg->getPositionY()+ranking_bg->getContentSize().height/2-16));
+			ranking_title->setPosition(Vec2(ranking_bg->getPositionX()-106,ranking_bg->getPositionY()+ranking_bg->getContentSize().height/2-16));
 		}
 		this->postRequest(600);
 	}else{
 		this->postRequest(400);
 	}
-	
-	
+
+
 	battlePoint_btn->unselected();
 	JifenPoint_btn->selected();
 
@@ -862,12 +862,12 @@ void  RakingLayer::onBattleBtn(Ref* sender){
 		_screwLayer1->removeAllChildren();
 		_screwLayer1->setPositionY(154);
 	}
-	
+
 	if(isGroupSelect){
 		if(ranking_title){
 			SpriteFrame *frame=SpriteFrameCache::getInstance()->getSpriteFrameByName("ranking_title3.png");
 			ranking_title->setSpriteFrame(frame);
-			ranking_title->setPosition(ccp(ranking_bg->getPositionX()-106,ranking_bg->getPositionY()+ranking_bg->getContentSize().height/2-16));
+			ranking_title->setPosition(Vec2(ranking_bg->getPositionX()-106,ranking_bg->getPositionY()+ranking_bg->getContentSize().height/2-16));
 		}
 		this->postRequest(700);
 	}else{
@@ -902,20 +902,20 @@ void RakingLayer::makeCharList(){
 
 		const char* charName=heroList[i];
 		CCString* path=CCString::createWithFormat("%s_small.png",charName);
-		
-	
+
+
 		RankCharButton* char_btn=RankCharButton::create(path->getCString());
 		char_btn->setDelegate(this);
 		char_btn->setBtnType(CCString::createWithFormat("%s",charName));
-		char_btn->setAnchorPoint(ccp(0,0));
+		char_btn->setAnchorPoint(Vec2(0,0));
 		int row=int(floor(float(i)/8));
 		int column=i-8*row;
 
-		char_btn->setPosition(ccp(10+column*46,-10-row*46));
+		char_btn->setPosition(Vec2(10+column*46,-10-row*46));
 		_screwLayer1->line_height=56;
 		_screwLayer1->addChild(char_btn);
 		_screwLayer1->totalRow=row;
-		
+
 	};
 
 
@@ -923,7 +923,7 @@ void RakingLayer::makeCharList(){
 }
 
 
-void RakingLayer::onHttpRequestCompleted(CCNode *sender ,void *data) {  
+void RakingLayer::onHttpRequestCompleted(Node *sender ,void *data) {
 
 	isPosting=false;
 	//????
@@ -933,35 +933,35 @@ void RakingLayer::onHttpRequestCompleted(CCNode *sender ,void *data) {
 		refreshBtn=NULL;
 	}
 
-	cocos2d::extension::CCHttpResponse *response = (cocos2d::extension::CCHttpResponse*)data;    
-	if (!response)    
-	{  
-		return;    
-	}   
-	if (0 != strlen(response->getHttpRequest()->getTag()))   
-	{  
-		CCLOG("%s completed", response->getHttpRequest()->getTag());  
-	}  
-	int statusCode = response->getResponseCode();  
-	char statusString[64] = {};  
-	sprintf(statusString ,"Http status code:%d ,tag = %s" ,statusCode ,response->getHttpRequest()->getTag());  
-	CCLOG("response code:%d" ,statusCode);  
-	if (!response->isSucceed())  
-	{  
-		CCLOG("response failed");  
+	cocos2d::extension::CCHttpResponse *response = (cocos2d::extension::CCHttpResponse*)data;
+	if (!response)
+	{
+		return;
+	}
+	if (0 != strlen(response->getHttpRequest()->getTag()))
+	{
+		CCLOG("%s completed", response->getHttpRequest()->getTag());
+	}
+	int statusCode = response->getResponseCode();
+	char statusString[64] = {};
+	sprintf(statusString ,"Http status code:%d ,tag = %s" ,statusCode ,response->getHttpRequest()->getTag());
+	CCLOG("response code:%d" ,statusCode);
+	if (!response->isSucceed())
+	{
+		CCLOG("response failed");
 		CCLOG("error buffer:%s" ,response->getErrorBuffer());
 		CCTips *tip=CCTips::create("ServerError");
 		this->addChild(tip,5000);
 		return;
-	}  
-	std::vector<char> *buffer = response->getResponseData();  
-	printf("Http response,dump data:");  
+	}
+	std::vector<char> *buffer = response->getResponseData();
+	printf("Http response,dump data:");
 
 
 	Document doc;
-	//?vector???std::string 
-	std::string buf(buffer->begin(),buffer->end()); 
-	//CCLOG("%s",buf.c_str()); 
+	//?vector???std::string
+	std::string buf(buffer->begin(),buffer->end());
+	//CCLOG("%s",buf.c_str());
 	const char* json=(char*) buf.c_str();
 	doc.Parse<kParseDefaultFlags>(json);
 	rapidjson::Value &arr=doc;
@@ -969,7 +969,7 @@ void RakingLayer::onHttpRequestCompleted(CCNode *sender ,void *data) {
 	if(arr.IsArray()){
 
 		for (SizeType i = 0; i < arr.Size(); i++)  {
-			
+
 
 			rapidjson::Value & node=arr[i];
 
@@ -977,28 +977,28 @@ void RakingLayer::onHttpRequestCompleted(CCNode *sender ,void *data) {
 				//??
 				rapidjson::Value & sortValue= node["newid"];
 				int sortNO=sortValue.GetInt();
-				
+
 
 				if(sortNO==0){
-					CCDictionary *strings = CCDictionary::createWithContentsOfFile("Element/strings.xml");  
-					const char *reply = ((CCString*)strings->objectForKey("RankingNull"))->getCString();   
+					CCDictionary *strings = CCDictionary::createWithContentsOfFile("Element/strings.xml");
+					const char *reply = ((CCString*)strings->objectForKey("RankingNull"))->getCString();
 					rankingDetail=CCLabelTTF::create(CCString::createWithFormat("%s",reply)->getCString(),FONT_TYPE,12);
-					rankingDetail->setAnchorPoint(ccp(0,0.5f));
-					rankingDetail->setPosition(ccp(ranking_bg->getPositionX()-ranking_bg->getContentSize().width/2 +20,ranking_bg->getPositionY()-ranking_bg->getContentSize().height/2+14));
+					rankingDetail->setAnchorPoint(Vec2(0,0.5f));
+					rankingDetail->setPosition(Vec2(ranking_bg->getPositionX()-ranking_bg->getContentSize().width/2 +20,ranking_bg->getPositionY()-ranking_bg->getContentSize().height/2+14));
 					ranking_layer->addChild(rankingDetail,500);
 
 				}else{
-					CCDictionary *strings = CCDictionary::createWithContentsOfFile("Element/strings.xml");  
-					const char *reply = ((CCString*)strings->objectForKey("RankingDetail"))->getCString();  
-					const char *reply2 = ((CCString*)strings->objectForKey("RankingDetail2"))->getCString();  
+					CCDictionary *strings = CCDictionary::createWithContentsOfFile("Element/strings.xml");
+					const char *reply = ((CCString*)strings->objectForKey("RankingDetail"))->getCString();
+					const char *reply2 = ((CCString*)strings->objectForKey("RankingDetail2"))->getCString();
 					rankingDetail=CCLabelTTF::create(CCString::createWithFormat("%s %d %s",reply,sortNO,reply2)->getCString(),FONT_TYPE,12);
-					rankingDetail->setAnchorPoint(ccp(0,0.5f));
-					rankingDetail->setPosition(ccp(ranking_bg->getPositionX()-ranking_bg->getContentSize().width/2 +20,ranking_bg->getPositionY()-ranking_bg->getContentSize().height/2+14));
+					rankingDetail->setAnchorPoint(Vec2(0,0.5f));
+					rankingDetail->setPosition(Vec2(ranking_bg->getPositionX()-ranking_bg->getContentSize().width/2 +20,ranking_bg->getPositionY()-ranking_bg->getContentSize().height/2+14));
 					ranking_layer->addChild(rankingDetail,500);
 				}
 
 			}else{
-				
+
 				rapidjson::Value & idValue= node["member_id"];
 				std::string idString=idValue.GetString();
 				int memberID=atoi(idString.c_str());
@@ -1006,7 +1006,7 @@ void RakingLayer::onHttpRequestCompleted(CCNode *sender ,void *data) {
 				rapidjson::Value & nameValue= node["name"];
 				std::string name=nameValue.GetString();
 
-				
+
 				rapidjson::Value & charValue= node["use_char"];
 				std::string character=charValue.GetString();
 
@@ -1027,17 +1027,17 @@ void RakingLayer::onHttpRequestCompleted(CCNode *sender ,void *data) {
 
 
 				const char * split = ",";
-				char * p; 
+				char * p;
 				char* str = new char[detailString.length()+1];
 				strcpy(str,detailString.c_str());
-				p = strtok (str,split); 
+				p = strtok (str,split);
 				int x=1;
 				char* clear_time=0;
 				int kills=0;
 				int deads=0;
 				int frogs=0;
 
-				while(p!=NULL) { 
+				while(p!=NULL) {
 					if(x==1){
 						clear_time=p;
 					}else if(x==2){
@@ -1048,12 +1048,12 @@ void RakingLayer::onHttpRequestCompleted(CCNode *sender ,void *data) {
 						frogs=atoi(p);
 					}
 					x++;
-					p = strtok(NULL,split); 
-				} 
+					p = strtok(NULL,split);
+				}
 				delete[] str;
 
 
-			
+
 				rapidjson::Value & dateValue= node["upload_time"];
 				std::string upload_time=dateValue.GetString();
 				CCScrewItem* screwItem=CCScrewItem::create();
@@ -1062,29 +1062,29 @@ void RakingLayer::onHttpRequestCompleted(CCNode *sender ,void *data) {
 				std::string npString=npValue.GetString();
 
 				if(i%2!=0){
-					CCSprite* line_bg=CCSprite::createWithSpriteFrameName("ranking_line.png");
-					line_bg->setAnchorPoint(ccp(0,0));
+					Sprite* line_bg=Sprite::createWithSpriteFrameName("ranking_line.png");
+					line_bg->setAnchorPoint(Vec2(0,0));
 					screwItem->addChild(line_bg);
 				}
 
 				if(i==1){
-					CCSprite* num_icon=CCSprite::createWithSpriteFrameName("num_top1.png");
-					num_icon->setAnchorPoint(ccp(0,0));
-					num_icon->setPosition(ccp(1,1));
+					Sprite* num_icon=Sprite::createWithSpriteFrameName("num_top1.png");
+					num_icon->setAnchorPoint(Vec2(0,0));
+					num_icon->setPosition(Vec2(1,1));
 					screwItem->addChild(num_icon);
 				}else if(i==2){
-					CCSprite* num_icon=CCSprite::createWithSpriteFrameName("num_2.png");
-					num_icon->setAnchorPoint(ccp(0,0));
-					num_icon->setPosition(ccp(1,1));
+					Sprite* num_icon=Sprite::createWithSpriteFrameName("num_2.png");
+					num_icon->setAnchorPoint(Vec2(0,0));
+					num_icon->setPosition(Vec2(1,1));
 					screwItem->addChild(num_icon);
 				}else if(i==3){
-					CCSprite* num_icon=CCSprite::createWithSpriteFrameName("num_3.png");
-					num_icon->setAnchorPoint(ccp(0,0));
-					num_icon->setPosition(ccp(1,1));
+					Sprite* num_icon=Sprite::createWithSpriteFrameName("num_3.png");
+					num_icon->setAnchorPoint(Vec2(0,0));
+					num_icon->setPosition(Vec2(1,1));
 					screwItem->addChild(num_icon);
 				}else{
 					CCLabelTTF* numLabel=CCLabelTTF::create(CCString::createWithFormat("%d",i)->getCString(),"????",12);
-					numLabel->setPosition(ccp(13,13));
+					numLabel->setPosition(Vec2(13,13));
 					screwItem->addChild(numLabel);
 				}
 				CCString* path;
@@ -1094,20 +1094,20 @@ void RakingLayer::onHttpRequestCompleted(CCNode *sender ,void *data) {
 					path=CCString::createWithFormat(("%s_small.png"),character.c_str());
 				}
 				if(isMemberSelect){
-					CCSprite* avator_small=CCSprite::createWithSpriteFrameName(path->getCString());
-					avator_small->setAnchorPoint(ccp(0,0));
-					avator_small->setPosition(ccp(183,0));
+					Sprite* avator_small=Sprite::createWithSpriteFrameName(path->getCString());
+					avator_small->setAnchorPoint(Vec2(0,0));
+					avator_small->setPosition(Vec2(183,0));
 					screwItem->addChild(avator_small);
 
 				}else{
 					RankCharButton* char_btn=RankCharButton::create(path->getCString());
 					char_btn->setDelegate(this);
 					char_btn->setBtnType(CCString::createWithFormat("%s",character.c_str()));
-					char_btn->setAnchorPoint(ccp(0,0));
-					char_btn->setPosition(ccp(183,0));
+					char_btn->setAnchorPoint(Vec2(0,0));
+					char_btn->setPosition(Vec2(183,0));
 					screwItem->addChild(char_btn);
 				}
-				
+
 				const char* path2;
 				if(bonds>=300){
 					path2="small_sss.png";
@@ -1123,17 +1123,17 @@ void RakingLayer::onHttpRequestCompleted(CCNode *sender ,void *data) {
 					path2="small_c.png";
 				}
 
-				CCSprite* bondsLevel=CCSprite::createWithSpriteFrameName(path2);
-				bondsLevel->setAnchorPoint(ccp(0,0));
-				bondsLevel->setPosition(ccp(174,16));
+				Sprite* bondsLevel=Sprite::createWithSpriteFrameName(path2);
+				bondsLevel->setAnchorPoint(Vec2(0,0));
+				bondsLevel->setPosition(Vec2(174,16));
 				screwItem->addChild(bondsLevel,500);
 
 
 				if(strcmp(npString.c_str(),"")!=0){
 
-					CCSprite* nameplate=CCSprite::createWithSpriteFrameName(CCString::createWithFormat("%s.png",npString.c_str())->getCString());
-					nameplate->setAnchorPoint(ccp(0.5f,0));
-					nameplate->setPosition(ccp(106,0));
+					Sprite* nameplate=Sprite::createWithSpriteFrameName(CCString::createWithFormat("%s.png",npString.c_str())->getCString());
+					nameplate->setAnchorPoint(Vec2(0.5f,0));
+					nameplate->setPosition(Vec2(106,0));
 					screwItem->addChild(nameplate);
 
 					CCStrokeLabel* user_nameStr;
@@ -1148,7 +1148,7 @@ void RakingLayer::onHttpRequestCompleted(CCNode *sender ,void *data) {
 						user_nameStr = CCStrokeLabel::create(user_name,ccc3(0,0,0),ccc3(255,255,255),1.0f);
 					}
 
-					user_nameStr->setPosition(ccp(106,13));
+					user_nameStr->setPosition(Vec2(106,13));
 					screwItem->addChild(user_nameStr);
 
 					bool isBlink=false;
@@ -1175,17 +1175,17 @@ void RakingLayer::onHttpRequestCompleted(CCNode *sender ,void *data) {
 						bannerPath="banner_green";
 					}
 
-					CCSprite* nameBaner=CCSprite::createWithSpriteFrameName(CCString::createWithFormat("%s.png",bannerPath)->getCString());
-					nameBaner->setAnchorPoint(ccp(0.5f,0));
-					nameBaner->setPosition(ccp(106,0));
+					Sprite* nameBaner=Sprite::createWithSpriteFrameName(CCString::createWithFormat("%s.png",bannerPath)->getCString());
+					nameBaner->setAnchorPoint(Vec2(0.5f,0));
+					nameBaner->setPosition(Vec2(106,0));
 					screwItem->addChild(nameBaner);
 
 
 					if(isBlink){
 
-						CCSprite* blink=CCSprite::createWithSpriteFrameName("banner_blink5.png");
-						blink->setAnchorPoint(ccp(0.5f,0));
-						blink->setPosition(ccp(106,0));
+						Sprite* blink=Sprite::createWithSpriteFrameName("banner_blink5.png");
+						blink->setAnchorPoint(Vec2(0.5f,0));
+						blink->setPosition(Vec2(106,0));
 
 						screwItem->addChild(blink);
 
@@ -1206,12 +1206,12 @@ void RakingLayer::onHttpRequestCompleted(CCNode *sender ,void *data) {
 						}
 
 						CCAnimation* tempAnimation= cocos2d::cocos2dx2_compat::createAnimationWithSpriteFrames(tempArray, 0.1f);
-						CCAction* tempAction=CCAnimate::create(tempAnimation);
+						Action* tempAction=CCAnimate::create(tempAnimation);
 						list->addObject(tempAction);
 						CCDelayTime* delay=CCDelayTime::create(1.0f);
 						list->addObject(delay);
 
-						blink->runAction(CCRepeatForever::create(cocos2d::cocos2dx2_compat::createSequence(list)));
+						blink->runAction(RepeatForever::create(cocos2d::cocos2dx2_compat::createSequence(list)));
 					}
 
 				}else{
@@ -1223,40 +1223,40 @@ void RakingLayer::onHttpRequestCompleted(CCNode *sender ,void *data) {
 						}
 					}
 
-					user_name->setAnchorPoint(ccp(0.5f,0.5));
-					user_name->setPosition(ccp(106,13));
+					user_name->setAnchorPoint(Vec2(0.5f,0.5));
+					user_name->setPosition(Vec2(106,13));
 					screwItem->addChild(user_name);
 
 				}
 
-				
+
 
 
 				CCLabelTTF* user_score=CCLabelTTF::create(CCString::createWithFormat("%.2f",score)->getCString(),FONT_TYPE,12);
-				user_score->setAnchorPoint(ccp(0.5f,0));
-				user_score->setPosition(ccp(240,5));
+				user_score->setAnchorPoint(Vec2(0.5f,0));
+				user_score->setPosition(Vec2(240,5));
 				screwItem->addChild(user_score);
 
 				CCLabelTTF* user_time=CCLabelTTF::create(clear_time,FONT_TYPE,12);
-				user_time->setAnchorPoint(ccp(0.5f,0));
-				user_time->setPosition(ccp(284,5));
+				user_time->setAnchorPoint(Vec2(0.5f,0));
+				user_time->setPosition(Vec2(284,5));
 				screwItem->addChild(user_time);
 
 
 				CCLabelTTF* user_detail=CCLabelTTF::create(CCString::createWithFormat("%d/%d/%d",kills,deads,frogs)->getCString(),FONT_TYPE,12);
-				user_detail->setAnchorPoint(ccp(0.5f,0));
-				user_detail->setPosition(ccp(335,5));
+				user_detail->setAnchorPoint(Vec2(0.5f,0));
+				user_detail->setPosition(Vec2(335,5));
 				screwItem->addChild(user_detail);
 
 
 				int row=i;
-				screwItem->setPosition(ccp(0,-row*26+26));
-				screwItem->setAnchorPoint(ccp(0,0));
+				screwItem->setPosition(Vec2(0,-row*26+26));
+				screwItem->setAnchorPoint(Vec2(0,0));
 
 				_screwLayer1->addChild(screwItem,10);
 				countRow++;
 			}
-			
+
 
 		}
 
@@ -1264,18 +1264,18 @@ void RakingLayer::onHttpRequestCompleted(CCNode *sender ,void *data) {
 	}
 
 	//printf("%c" ,temp.c_str());
-	//for (unsigned int i = 0; i < buffer->size(); i ++)  
-	//{  
+	//for (unsigned int i = 0; i < buffer->size(); i ++)
+	//{
 	////printf("%c" ,(*buffer)[i]);
-	//}  
+	//}
 
-}  
-
-
+}
 
 
 
-void RakingLayer::onHttpRequestCompleted2(CCNode *sender ,void *data) {  
+
+
+void RakingLayer::onHttpRequestCompleted2(Node *sender ,void *data) {
 
 	isPosting=false;
 	//????
@@ -1285,35 +1285,35 @@ void RakingLayer::onHttpRequestCompleted2(CCNode *sender ,void *data) {
 		refreshBtn=NULL;
 	}
 
-	cocos2d::extension::CCHttpResponse *response = (cocos2d::extension::CCHttpResponse*)data;    
-	if (!response)    
-	{  
-		return;    
-	}   
-	if (0 != strlen(response->getHttpRequest()->getTag()))   
-	{  
-		CCLOG("%s completed", response->getHttpRequest()->getTag());  
-	}  
-	int statusCode = response->getResponseCode();  
-	char statusString[64] = {};  
-	sprintf(statusString ,"Http status code:%d ,tag = %s" ,statusCode ,response->getHttpRequest()->getTag());  
-	CCLOG("response code:%d" ,statusCode);  
-	if (!response->isSucceed())  
-	{  
-		CCLOG("response failed");  
+	cocos2d::extension::CCHttpResponse *response = (cocos2d::extension::CCHttpResponse*)data;
+	if (!response)
+	{
+		return;
+	}
+	if (0 != strlen(response->getHttpRequest()->getTag()))
+	{
+		CCLOG("%s completed", response->getHttpRequest()->getTag());
+	}
+	int statusCode = response->getResponseCode();
+	char statusString[64] = {};
+	sprintf(statusString ,"Http status code:%d ,tag = %s" ,statusCode ,response->getHttpRequest()->getTag());
+	CCLOG("response code:%d" ,statusCode);
+	if (!response->isSucceed())
+	{
+		CCLOG("response failed");
 		CCLOG("error buffer:%s" ,response->getErrorBuffer());
 		CCTips *tip=CCTips::create("ServerError");
 		this->addChild(tip,5000);
 		return;
-	}  
-	std::vector<char> *buffer = response->getResponseData();  
-	printf("Http response,dump data:");  
+	}
+	std::vector<char> *buffer = response->getResponseData();
+	printf("Http response,dump data:");
 
 
 	Document doc;
-	//?vector???std::string 
-	std::string buf(buffer->begin(),buffer->end()); 
-	//CCLOG("%s",buf.c_str()); 
+	//?vector???std::string
+	std::string buf(buffer->begin(),buffer->end());
+	//CCLOG("%s",buf.c_str());
 	const char* json=(char*) buf.c_str();
 	doc.Parse<kParseDefaultFlags>(json);
 	rapidjson::Value &arr=doc;
@@ -1324,7 +1324,7 @@ void RakingLayer::onHttpRequestCompleted2(CCNode *sender ,void *data) {
 
 
 			rapidjson::Value & node=arr[i];
-			
+
 			if(i==0){
 				//??
 				rapidjson::Value & sortValue= node["newid"];
@@ -1332,37 +1332,37 @@ void RakingLayer::onHttpRequestCompleted2(CCNode *sender ,void *data) {
 
 
 				if(sortNO==0){
-					CCDictionary *strings = CCDictionary::createWithContentsOfFile("Element/strings.xml");  
-					const char *reply = ((CCString*)strings->objectForKey("RankingNull"))->getCString();   
+					CCDictionary *strings = CCDictionary::createWithContentsOfFile("Element/strings.xml");
+					const char *reply = ((CCString*)strings->objectForKey("RankingNull"))->getCString();
 					rankingDetail=CCLabelTTF::create(CCString::createWithFormat("%s",reply)->getCString(),FONT_TYPE,12);
-					rankingDetail->setAnchorPoint(ccp(0,0.5f));
-					rankingDetail->setPosition(ccp(ranking_bg->getPositionX()-ranking_bg->getContentSize().width/2 +20,ranking_bg->getPositionY()-ranking_bg->getContentSize().height/2+14));
+					rankingDetail->setAnchorPoint(Vec2(0,0.5f));
+					rankingDetail->setPosition(Vec2(ranking_bg->getPositionX()-ranking_bg->getContentSize().width/2 +20,ranking_bg->getPositionY()-ranking_bg->getContentSize().height/2+14));
 					ranking_layer->addChild(rankingDetail,500);
 
 				}else{
-					CCDictionary *strings = CCDictionary::createWithContentsOfFile("Element/strings.xml");  
-					const char *reply = ((CCString*)strings->objectForKey("RankingDetail"))->getCString();  
-					const char *reply2 = ((CCString*)strings->objectForKey("RankingDetail2"))->getCString();  
+					CCDictionary *strings = CCDictionary::createWithContentsOfFile("Element/strings.xml");
+					const char *reply = ((CCString*)strings->objectForKey("RankingDetail"))->getCString();
+					const char *reply2 = ((CCString*)strings->objectForKey("RankingDetail2"))->getCString();
 					rankingDetail=CCLabelTTF::create(CCString::createWithFormat("%s %d %s",reply,sortNO,reply2)->getCString(),FONT_TYPE,12);
-					rankingDetail->setAnchorPoint(ccp(0,0.5f));
-					rankingDetail->setPosition(ccp(ranking_bg->getPositionX()-ranking_bg->getContentSize().width/2 +20,ranking_bg->getPositionY()-ranking_bg->getContentSize().height/2+14));
+					rankingDetail->setAnchorPoint(Vec2(0,0.5f));
+					rankingDetail->setPosition(Vec2(ranking_bg->getPositionX()-ranking_bg->getContentSize().width/2 +20,ranking_bg->getPositionY()-ranking_bg->getContentSize().height/2+14));
 					ranking_layer->addChild(rankingDetail,500);
 				}
 
 			}else{
 
-				
+
 				rapidjson::Value & idValue= node["id"];
 				std::string idString=idValue.GetString();
 				int memberID=atoi(idString.c_str());
 
-				
+
 				rapidjson::Value & nameValue= node["name"];
 				std::string name=nameValue.GetString();
 
 				rapidjson::Value & npValue= node["np_id"];
 				std::string npString=npValue.GetString();
-				
+
 				rapidjson::Value & groupNameValue= node["group_name"];
 				std::string groupName;
 				int groupID=0;
@@ -1376,13 +1376,13 @@ void RakingLayer::onHttpRequestCompleted2(CCNode *sender ,void *data) {
 						std::string groupString=gidValue.GetString();
 						groupID=atoi(groupString.c_str());
 					}
-					
+
 
 				}
-				
-			
-				
-				
+
+
+
+
 				int score;
 				rapidjson::Value & bpointValue= node["battle_point"];
 				std::string bpointString=bpointValue.GetString();
@@ -1409,44 +1409,44 @@ void RakingLayer::onHttpRequestCompleted2(CCNode *sender ,void *data) {
 
 				CCScrewItem* screwItem=CCScrewItem::create();
 				if(i%2!=0){
-					CCSprite* line_bg=CCSprite::createWithSpriteFrameName("ranking_line.png");
-					line_bg->setAnchorPoint(ccp(0,0));
+					Sprite* line_bg=Sprite::createWithSpriteFrameName("ranking_line.png");
+					line_bg->setAnchorPoint(Vec2(0,0));
 					screwItem->addChild(line_bg);
 				}
 
 				if(i==1){
-					CCSprite* num_icon;
+					Sprite* num_icon;
 					if(postingCode==500){
-						num_icon=CCSprite::createWithSpriteFrameName("num_top3.png");
+						num_icon=Sprite::createWithSpriteFrameName("num_top3.png");
 					}else if(postingCode==400) {
-						num_icon=CCSprite::createWithSpriteFrameName("num_top2.png");
+						num_icon=Sprite::createWithSpriteFrameName("num_top2.png");
 					}else{
-						num_icon=CCSprite::createWithSpriteFrameName("num_top4.png");
+						num_icon=Sprite::createWithSpriteFrameName("num_top4.png");
 					}
-					num_icon->setAnchorPoint(ccp(0,0));
-					num_icon->setPosition(ccp(1,1));
+					num_icon->setAnchorPoint(Vec2(0,0));
+					num_icon->setPosition(Vec2(1,1));
 					screwItem->addChild(num_icon);
 				}else if(i==2){
-					CCSprite* num_icon=CCSprite::createWithSpriteFrameName("num_2.png");
-					num_icon->setAnchorPoint(ccp(0,0));
-					num_icon->setPosition(ccp(1,1));
+					Sprite* num_icon=Sprite::createWithSpriteFrameName("num_2.png");
+					num_icon->setAnchorPoint(Vec2(0,0));
+					num_icon->setPosition(Vec2(1,1));
 					screwItem->addChild(num_icon);
 				}else if(i==3){
-					CCSprite* num_icon=CCSprite::createWithSpriteFrameName("num_3.png");
-					num_icon->setAnchorPoint(ccp(0,0));
-					num_icon->setPosition(ccp(1,1));
+					Sprite* num_icon=Sprite::createWithSpriteFrameName("num_3.png");
+					num_icon->setAnchorPoint(Vec2(0,0));
+					num_icon->setPosition(Vec2(1,1));
 					screwItem->addChild(num_icon);
 				}else{
 					CCLabelTTF* numLabel=CCLabelTTF::create(CCString::createWithFormat("%d",i)->getCString(),"????",12);
-					numLabel->setPosition(ccp(13,13));
+					numLabel->setPosition(Vec2(13,13));
 					screwItem->addChild(numLabel);
 				}
-		
+
 				if(strcmp(npString.c_str(),"")!=0){
 
-					CCSprite* nameplate=CCSprite::createWithSpriteFrameName(CCString::createWithFormat("%s.png",npString.c_str())->getCString());
-					nameplate->setAnchorPoint(ccp(0.5f,0));
-					nameplate->setPosition(ccp(106,0));
+					Sprite* nameplate=Sprite::createWithSpriteFrameName(CCString::createWithFormat("%s.png",npString.c_str())->getCString());
+					nameplate->setAnchorPoint(Vec2(0.5f,0));
+					nameplate->setPosition(Vec2(106,0));
 					screwItem->addChild(nameplate);
 
 					CCStrokeLabel* user_nameStr;
@@ -1461,7 +1461,7 @@ void RakingLayer::onHttpRequestCompleted2(CCNode *sender ,void *data) {
 						user_nameStr = CCStrokeLabel::create(user_name,ccc3(0,0,0),ccc3(255,255,255),1.0f);
 					}
 
-					user_nameStr->setPosition(ccp(106,13));
+					user_nameStr->setPosition(Vec2(106,13));
 					screwItem->addChild(user_nameStr);
 
 					bool isBlink=false;
@@ -1488,17 +1488,17 @@ void RakingLayer::onHttpRequestCompleted2(CCNode *sender ,void *data) {
 						bannerPath="banner_green";
 					}
 
-					CCSprite* nameBaner=CCSprite::createWithSpriteFrameName(CCString::createWithFormat("%s.png",bannerPath)->getCString());
-					nameBaner->setAnchorPoint(ccp(0.5f,0));
-					nameBaner->setPosition(ccp(106,0));
+					Sprite* nameBaner=Sprite::createWithSpriteFrameName(CCString::createWithFormat("%s.png",bannerPath)->getCString());
+					nameBaner->setAnchorPoint(Vec2(0.5f,0));
+					nameBaner->setPosition(Vec2(106,0));
 					screwItem->addChild(nameBaner);
 
 					if(isBlink){
 
-						CCSprite* blink=CCSprite::createWithSpriteFrameName("banner_blink5.png");
-						blink->setAnchorPoint(ccp(0.5f,0));
-						blink->setPosition(ccp(106,0));
-						
+						Sprite* blink=Sprite::createWithSpriteFrameName("banner_blink5.png");
+						blink->setAnchorPoint(Vec2(0.5f,0));
+						blink->setPosition(Vec2(106,0));
+
 						screwItem->addChild(blink);
 
 
@@ -1512,18 +1512,18 @@ void RakingLayer::onHttpRequestCompleted2(CCNode *sender ,void *data) {
 							CCString* path=CCString::createWithFormat("banner_blink%d.png",i);
 							SpriteFrame* frame = SpriteFrameCache::getInstance()->getSpriteFrameByName(path->getCString());
 							tempArray->addObject(frame);
-							
-							
+
+
 							i+=1;
 						}
 
 						CCAnimation* tempAnimation= cocos2d::cocos2dx2_compat::createAnimationWithSpriteFrames(tempArray, 0.1f);
-						CCAction* tempAction=CCAnimate::create(tempAnimation);
+						Action* tempAction=CCAnimate::create(tempAnimation);
 						list->addObject(tempAction);
 						CCDelayTime* delay=CCDelayTime::create(1.0f);
 						list->addObject(delay);
 
-						blink->runAction(CCRepeatForever::create(cocos2d::cocos2dx2_compat::createSequence(list)));
+						blink->runAction(RepeatForever::create(cocos2d::cocos2dx2_compat::createSequence(list)));
 					}
 
 				}else{
@@ -1535,8 +1535,8 @@ void RakingLayer::onHttpRequestCompleted2(CCNode *sender ,void *data) {
 						}
 					}
 
-					user_name->setAnchorPoint(ccp(0.5f,0.5));
-					user_name->setPosition(ccp(106,13));
+					user_name->setAnchorPoint(Vec2(0.5f,0.5));
+					user_name->setPosition(Vec2(106,13));
 					screwItem->addChild(user_name);
 
 				}
@@ -1545,36 +1545,36 @@ void RakingLayer::onHttpRequestCompleted2(CCNode *sender ,void *data) {
 
 				CCLabelTTF* user_score=CCLabelTTF::create(CCString::createWithFormat("%d",score)->getCString(),FONT_TYPE,12);
 
-				user_score->setAnchorPoint(ccp(0.5f,0));
-				user_score->setPosition(ccp(214,5));
+				user_score->setAnchorPoint(Vec2(0.5f,0));
+				user_score->setPosition(Vec2(214,5));
 				screwItem->addChild(user_score);
 
-				
+
 				if(groupID!=0){
 					CCLabelTTF* group_Name=CCLabelTTF::create(CCString::createWithFormat("%s",groupName.c_str())->getCString(),FONT_TYPE,12);
 
 					MenuItemLabel* item=MenuItemLabel::create(group_Name, CC_CALLBACK_1(RakingLayer::onSelectGroupBtn, this));
 
 					Menu* pMenu = Menu::create(item, NULL);
-					pMenu ->setPosition(ccp(304,5));
-					item ->setAnchorPoint(ccp(0.5f,0));
+					pMenu ->setPosition(Vec2(304,5));
+					item ->setAnchorPoint(Vec2(0.5f,0));
 					item->setTag(groupID);
 					screwItem->addChild(pMenu);
-					screwItem->setTag(groupID); 
-					
+					screwItem->setTag(groupID);
+
 				}else if(strcmp(groupName.c_str(),"")!=0 ){
 					CCLabelTTF* group_Name=CCLabelTTF::create(CCString::createWithFormat("%s",groupName.c_str())->getCString(),FONT_TYPE,12);
 
-					group_Name->setAnchorPoint(ccp(0.5f,0));
-					group_Name->setPosition(ccp(304,5));
+					group_Name->setAnchorPoint(Vec2(0.5f,0));
+					group_Name->setPosition(Vec2(304,5));
 					screwItem->addChild(group_Name);
 
 
 				}
 
 				int row=i;
-				screwItem->setPosition(ccp(0,-row*26+26));
-				screwItem->setAnchorPoint(ccp(0,0));
+				screwItem->setPosition(Vec2(0,-row*26+26));
+				screwItem->setAnchorPoint(Vec2(0,0));
 
 				_screwLayer1->addChild(screwItem,10);
 
@@ -1587,10 +1587,10 @@ void RakingLayer::onHttpRequestCompleted2(CCNode *sender ,void *data) {
 	}
 
 
-}  
+}
 
 
-void RakingLayer::onHttpRequestCompleted3(CCNode *sender ,void *data) {  
+void RakingLayer::onHttpRequestCompleted3(Node *sender ,void *data) {
 
 	isPosting=false;
 	//????
@@ -1600,35 +1600,35 @@ void RakingLayer::onHttpRequestCompleted3(CCNode *sender ,void *data) {
 		refreshBtn=NULL;
 	}
 
-	cocos2d::extension::CCHttpResponse *response = (cocos2d::extension::CCHttpResponse*)data;    
-	if (!response)    
-	{  
-		return;    
-	}   
-	if (0 != strlen(response->getHttpRequest()->getTag()))   
-	{  
-		CCLOG("%s completed", response->getHttpRequest()->getTag());  
-	}  
-	int statusCode = response->getResponseCode();  
-	char statusString[64] = {};  
-	sprintf(statusString ,"Http status code:%d ,tag = %s" ,statusCode ,response->getHttpRequest()->getTag());  
-	CCLOG("response code:%d" ,statusCode);  
-	if (!response->isSucceed())  
-	{  
-		CCLOG("response failed");  
+	cocos2d::extension::CCHttpResponse *response = (cocos2d::extension::CCHttpResponse*)data;
+	if (!response)
+	{
+		return;
+	}
+	if (0 != strlen(response->getHttpRequest()->getTag()))
+	{
+		CCLOG("%s completed", response->getHttpRequest()->getTag());
+	}
+	int statusCode = response->getResponseCode();
+	char statusString[64] = {};
+	sprintf(statusString ,"Http status code:%d ,tag = %s" ,statusCode ,response->getHttpRequest()->getTag());
+	CCLOG("response code:%d" ,statusCode);
+	if (!response->isSucceed())
+	{
+		CCLOG("response failed");
 		CCLOG("error buffer:%s" ,response->getErrorBuffer());
 		CCTips *tip=CCTips::create("ServerError");
 		this->addChild(tip,5000);
 		return;
-	}  
-	std::vector<char> *buffer = response->getResponseData();  
-	printf("Http response,dump data:");  
+	}
+	std::vector<char> *buffer = response->getResponseData();
+	printf("Http response,dump data:");
 
 
 	Document doc;
-	//?vector???std::string 
-	std::string buf(buffer->begin(),buffer->end()); 
-	//CCLOG("%s",buf.c_str()); 
+	//?vector???std::string
+	std::string buf(buffer->begin(),buffer->end());
+	//CCLOG("%s",buf.c_str());
 	const char* json=(char*) buf.c_str();
 	doc.Parse<kParseDefaultFlags>(json);
 	rapidjson::Value &arr=doc;
@@ -1647,20 +1647,20 @@ void RakingLayer::onHttpRequestCompleted3(CCNode *sender ,void *data) {
 
 
 				if(sortNO==0){
-					CCDictionary *strings = CCDictionary::createWithContentsOfFile("Element/strings.xml");  
-					const char *reply = ((CCString*)strings->objectForKey("GroupNull"))->getCString();   
+					CCDictionary *strings = CCDictionary::createWithContentsOfFile("Element/strings.xml");
+					const char *reply = ((CCString*)strings->objectForKey("GroupNull"))->getCString();
 					rankingDetail=CCLabelTTF::create(CCString::createWithFormat("%s",reply)->getCString(),FONT_TYPE,12);
-					rankingDetail->setAnchorPoint(ccp(0,0.5f));
-					rankingDetail->setPosition(ccp(ranking_bg->getPositionX()-ranking_bg->getContentSize().width/2 +20,ranking_bg->getPositionY()-ranking_bg->getContentSize().height/2+14));
+					rankingDetail->setAnchorPoint(Vec2(0,0.5f));
+					rankingDetail->setPosition(Vec2(ranking_bg->getPositionX()-ranking_bg->getContentSize().width/2 +20,ranking_bg->getPositionY()-ranking_bg->getContentSize().height/2+14));
 					ranking_layer->addChild(rankingDetail,500);
 
 				}else{
-					CCDictionary *strings = CCDictionary::createWithContentsOfFile("Element/strings.xml");  
-					const char *reply = ((CCString*)strings->objectForKey("GroupDetail"))->getCString();  
-					const char *reply2 = ((CCString*)strings->objectForKey("RankingDetail2"))->getCString();  
+					CCDictionary *strings = CCDictionary::createWithContentsOfFile("Element/strings.xml");
+					const char *reply = ((CCString*)strings->objectForKey("GroupDetail"))->getCString();
+					const char *reply2 = ((CCString*)strings->objectForKey("RankingDetail2"))->getCString();
 					rankingDetail=CCLabelTTF::create(CCString::createWithFormat("%s %d %s",reply,sortNO,reply2)->getCString(),FONT_TYPE,12);
-					rankingDetail->setAnchorPoint(ccp(0,0.5f));
-					rankingDetail->setPosition(ccp(ranking_bg->getPositionX()-ranking_bg->getContentSize().width/2 +20,ranking_bg->getPositionY()-ranking_bg->getContentSize().height/2+14));
+					rankingDetail->setAnchorPoint(Vec2(0,0.5f));
+					rankingDetail->setPosition(Vec2(ranking_bg->getPositionX()-ranking_bg->getContentSize().width/2 +20,ranking_bg->getPositionY()-ranking_bg->getContentSize().height/2+14));
 					ranking_layer->addChild(rankingDetail,500);
 				}
 
@@ -1674,10 +1674,10 @@ void RakingLayer::onHttpRequestCompleted3(CCNode *sender ,void *data) {
 
 				rapidjson::Value & groupNameValue= node["group_name"];
 				std::string groupName=groupNameValue.GetString();
-				
 
 
-				
+
+
 				rapidjson::Value & pointValue= node["totalPoint"];
 				std::string pointString=pointValue.GetString();
 				int point;
@@ -1686,69 +1686,69 @@ void RakingLayer::onHttpRequestCompleted3(CCNode *sender ,void *data) {
 				}else{
 					point=atof(pointString.c_str());
 				}
-				
+
 
 				CCScrewItem* screwItem=CCScrewItem::create();
 				if(i%2!=0){
-					CCSprite* line_bg=CCSprite::createWithSpriteFrameName("ranking_line.png");
-					line_bg->setAnchorPoint(ccp(0,0));
+					Sprite* line_bg=Sprite::createWithSpriteFrameName("ranking_line.png");
+					line_bg->setAnchorPoint(Vec2(0,0));
 					screwItem->addChild(line_bg);
 				}
 
 				if(i==1){
-					CCSprite* num_icon;
-					
-					num_icon=CCSprite::createWithSpriteFrameName("num_top5.png");
-					
-					num_icon->setAnchorPoint(ccp(0,0));
-					num_icon->setPosition(ccp(1,1));
+					Sprite* num_icon;
+
+					num_icon=Sprite::createWithSpriteFrameName("num_top5.png");
+
+					num_icon->setAnchorPoint(Vec2(0,0));
+					num_icon->setPosition(Vec2(1,1));
 					screwItem->addChild(num_icon);
 				}else if(i==2){
-					CCSprite* num_icon=CCSprite::createWithSpriteFrameName("num_2.png");
-					num_icon->setAnchorPoint(ccp(0,0));
-					num_icon->setPosition(ccp(1,1));
+					Sprite* num_icon=Sprite::createWithSpriteFrameName("num_2.png");
+					num_icon->setAnchorPoint(Vec2(0,0));
+					num_icon->setPosition(Vec2(1,1));
 					screwItem->addChild(num_icon);
 				}else if(i==3){
-					CCSprite* num_icon=CCSprite::createWithSpriteFrameName("num_3.png");
-					num_icon->setAnchorPoint(ccp(0,0));
-					num_icon->setPosition(ccp(1,1));
+					Sprite* num_icon=Sprite::createWithSpriteFrameName("num_3.png");
+					num_icon->setAnchorPoint(Vec2(0,0));
+					num_icon->setPosition(Vec2(1,1));
 					screwItem->addChild(num_icon);
 				}else{
 					CCLabelTTF* numLabel=CCLabelTTF::create(CCString::createWithFormat("%d",i)->getCString(),"????",12);
-					numLabel->setPosition(ccp(13,13));
+					numLabel->setPosition(Vec2(13,13));
 					screwItem->addChild(numLabel);
 				}
 
 
 				CCLabelTTF* group_name=CCLabelTTF::create(groupName.c_str(),FONT_TYPE,12);
-				
+
 				if(GroupID){
 					if(GroupID==groupID){
 						group_name->setColor(ccc3(236,162,8));
 					}
 				}
 				MenuItemLabel* item=MenuItemLabel::create(group_name, CC_CALLBACK_1(RakingLayer::onSelectGroupBtn, this));
-				item->setTag(groupID); 
+				item->setTag(groupID);
 
 				Menu* pMenu = Menu::create(item, NULL);
-				
-				pMenu ->setPosition(ccp(108,5));
-				item ->setAnchorPoint(ccp(0.5f,0));
-				screwItem->addChild(pMenu);
-				
 
-				
+				pMenu ->setPosition(Vec2(108,5));
+				item ->setAnchorPoint(Vec2(0.5f,0));
+				screwItem->addChild(pMenu);
+
+
+
 				CCLabelTTF* user_score=CCLabelTTF::create(CCString::createWithFormat("%d",point)->getCString(),FONT_TYPE,12);
 
-				user_score->setAnchorPoint(ccp(0.5f,0));
-				user_score->setPosition(ccp(242,5));
+				user_score->setAnchorPoint(Vec2(0.5f,0));
+				user_score->setPosition(Vec2(242,5));
 				screwItem->addChild(user_score);
 
-				
+
 
 				int row=i;
-				screwItem->setPosition(ccp(0,-row*26+26));
-				screwItem->setAnchorPoint(ccp(0,0));
+				screwItem->setPosition(Vec2(0,-row*26+26));
+				screwItem->setAnchorPoint(Vec2(0,0));
 
 				_screwLayer1->addChild(screwItem,10);
 
@@ -1761,7 +1761,7 @@ void RakingLayer::onHttpRequestCompleted3(CCNode *sender ,void *data) {
 	}
 
 
-}  
+}
 
 void RakingLayer::onSelectGroupBtn(Ref* sender){
 	if(_screwLayer1){
@@ -1776,17 +1776,17 @@ void RakingLayer::onSelectGroupBtn(Ref* sender){
 	if(ranking_title){
 		SpriteFrame *frame=SpriteFrameCache::getInstance()->getSpriteFrameByName("ranking_title2.png");
 		ranking_title->setSpriteFrame(frame);
-		ranking_title->setPosition(ccp(ranking_bg->getPositionX()-96,ranking_bg->getPositionY()+ranking_bg->getContentSize().height/2-16));
+		ranking_title->setPosition(Vec2(ranking_bg->getPositionX()-96,ranking_bg->getPositionY()+ranking_bg->getContentSize().height/2-16));
 	}
 
 	CCDictionary *strings = CCDictionary::createWithContentsOfFile("Element/strings.xml");
 	const char *reply = ((CCString*)strings->objectForKey("RankingNull2"))->getCString();
 	rankingDetail=CCLabelTTF::create(CCString::createWithFormat("%s",reply)->getCString(),FONT_TYPE,12);
-	rankingDetail->setAnchorPoint(ccp(0,0.5f));
-	rankingDetail->setPosition(ccp(ranking_bg->getPositionX()-ranking_bg->getContentSize().width/2 +20,ranking_bg->getPositionY()-ranking_bg->getContentSize().height/2+14));
+	rankingDetail->setAnchorPoint(Vec2(0,0.5f));
+	rankingDetail->setPosition(Vec2(ranking_bg->getPositionX()-ranking_bg->getContentSize().width/2 +20,ranking_bg->getPositionY()-ranking_bg->getContentSize().height/2+14));
 	ranking_layer->addChild(rankingDetail,500);
 
-	
+
 }
 
 
