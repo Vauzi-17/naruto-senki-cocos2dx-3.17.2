@@ -22,7 +22,7 @@ masih memakai API 2.x seperti `CCLayer`, `CCSprite`, `CCMenu`, `CCPoint`,
 
 ## Estimasi Progress Migrasi
 
-Estimasi progress menuju kode full cocos2d-x 3.17.2: **sekitar 72%**.
+Estimasi progress menuju kode full cocos2d-x 3.17.2: **sekitar 73%**.
 
 Alasan estimasi:
 
@@ -238,10 +238,10 @@ Catatan progress terbaru:
 
 ### Tahap 4: Cleanup dan Compatibility Reduction
 
-Status: **berjalan; cleanup utility, ranking offline/dekoratif, dan ranking
-node/action sudah build-tested oleh pengguna di Android; commit penghapusan
-callback HTTP ranking, cleanup dasar `KTools`, dan pengurangan compat touch
-terbaru belum build-tested**.
+Status: **menjelang selesai; cleanup utility, ranking offline/dekoratif,
+ranking node/action, penghapusan callback HTTP ranking, cleanup dasar `KTools`,
+dan pengurangan compat touch sudah build-tested oleh pengguna di Android; commit
+cleanup text/helper terbaru belum build-tested**.
 
 Prioritas:
 
@@ -273,6 +273,8 @@ Commit awal tahap 4:
 - `4705b67 refactor: remove ranking http callbacks`
 - `9f47577 refactor: migrate ktools helper basics`
 - `f2bd820 refactor: drop unused touch delegate compat`
+- `0022806 refactor: migrate ranking text helpers`
+- `690dc85 refactor: migrate game over text helpers`
 
 Catatan progress terbaru:
 
@@ -317,20 +319,29 @@ Catatan progress terbaru:
   Alias HTTP, EditBox, Scale9, ScrollView, time, array, string, dan sequence
   masih dipertahankan karena masih ada pemakai aktif.
 - Commit penghapusan callback HTTP ranking, cleanup dasar `KTools`, dan
-  pengurangan compat touch terbaru belum dibuild ulang oleh Codex sesuai aturan
-  kerja; perlu uji Android pengguna sebelum lanjut ke pembersihan berikutnya.
+  pengurangan compat touch terbaru sudah dibuild pengguna lewat Android Studio
+  dan berjalan lancar.
+- Text helper ranking dibersihkan lagi dari `CCLabelTTF`: `RankingLayer` dan
+  `CCStrokeLabel` memakai `Label::createWithSystemFont`, sementara loader file
+  ranking memakai `FileUtils::getInstance`.
+- Text helper `GameOver` dibersihkan untuk label CHANGE/REMATCH/change-character
+  dan akses `SHA.xml` memakai `FileUtils::getInstance`.
+- Commit cleanup text/helper terbaru belum dibuild ulang oleh Codex sesuai
+  aturan kerja; perlu uji Android pengguna sebelum tahap 4 ditutup.
 
 Rencana langkah berikutnya:
 
-- Setelah commit terbaru lulus build Android, lanjutkan audit sisa helper
-  non-core yang masih aman seperti `CCStrokeLabel`, potongan kecil `KTools`, dan
-  app entry yang belum menyentuh kontrak data gameplay.
-- Audit `Cocos2dx2Compat.h` dilanjutkan dengan pola yang sama: hanya hapus alias
-  yang sudah terbukti tidak punya pemakai aktif. Alias HTTP/EditBox/Scale9/Scroll
-  dan helper container tetap dipertahankan selama masih dipakai.
-- Migrasi `CCArray`, `CCDictionary`, dan `CCString` tetap ditahan sampai ranking,
-  helper non-core, dan compatibility shim kecil lebih bersih, agar kontrak data
-  gameplay tidak berubah terlalu cepat.
+- Setelah commit cleanup text/helper terbaru lulus build Android, tahap 4 bisa
+  dianggap selesai untuk jalur aman non-core.
+- Tahap berikutnya adalah tahap 5 container/data: mulai migrasi
+  `CCArray`, `CCDictionary`, `CCString`, dan sisa helper sequence/animation
+  secara bertahap per batas modul, bukan sekaligus satu project.
+- Urutan awal tahap 5 yang disarankan: audit pemakai `Cocos2dx2Compat.h`, lalu
+  bersihkan adapter paling lokal lebih dulu, kemudian masuk ke kontrak besar di
+  `ActionManager`, `Element`, `Characters`, loader XML, dan scene gameplay.
+- Alias HTTP/EditBox/Scale9/Scroll di `Cocos2dx2Compat.h` belum dihapus karena
+  masih punya pemakai aktif; pembersihan flow online/dekoratif lama sebaiknya
+  dipisah dari migrasi container agar risiko build lebih mudah dilacak.
 
 ## Cara Kerja Migrasi
 
