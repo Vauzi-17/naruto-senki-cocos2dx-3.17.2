@@ -15,24 +15,24 @@ masih memakai API 2.x seperti `CCLayer`, `CCSprite`, `CCMenu`, `CCPoint`,
 | --- | --- |
 | Engine/runtime | cocos2d-x 3.17.2 |
 | Branch kerja | `migrate` |
-| Android build | Berhasil menurut uji pengguna setelah tahap 2 |
+| Android build | Berhasil menurut uji pengguna setelah tahap 3 |
 | Windows build | Pernah berjalan sebelum migrasi tahap ini, perlu uji ulang berkala |
 | Push remote | Tidak dilakukan |
 | Build oleh Codex | Tidak dilakukan |
 
 ## Estimasi Progress Migrasi
 
-Estimasi progress menuju kode full cocos2d-x 3.17.2: **sekitar 56%**.
+Estimasi progress menuju kode full cocos2d-x 3.17.2: **sekitar 64%**.
 
 Alasan estimasi:
 
 - Alur scene utama sudah dimigrasi dari menu awal sampai masuk gameplay.
 - Area HUD dan layer gameplay pendukung sudah banyak memakai API 3.x.
-- Build Android sudah berhasil dan game bisa dimainkan setelah tahap 2.
-- Masih ada file besar yang sangat menentukan gameplay, terutama `ActionManager`
-  dan `Element`, yang masih banyak memakai API 2.x.
-- Masih ada beberapa area non-core seperti ranking, utility UI, app delegate, dan
-  compatibility bridge yang perlu dibersihkan bertahap.
+- Build Android sudah berhasil dan game bisa dimainkan setelah tahap 3.
+- Area gameplay core sudah mulai distabilkan lewat migrasi callback/action/frame
+  tanpa mengubah kontrak data lama secara paksa.
+- Masih ada sisa API 2.x yang cukup banyak di `ActionManager`, `Element`,
+  `RankingLayer`, beberapa utility UI, app delegate, dan compatibility bridge.
 
 Angka ini bukan hitungan matematis murni dari jumlah file, karena sebagian file
 sisa jauh lebih besar dan lebih berisiko daripada scene kecil. Secara jalur main
@@ -72,8 +72,7 @@ Commit penting:
 
 ## Tahap 2: Gameplay Shell dan UI Pendukung
 
-Status: **berjalan, sebagian besar sudah selesai, Android build berhasil menurut
-uji pengguna**.
+Status: **selesai dan sudah build-tested oleh pengguna**.
 
 File/area yang sudah dimigrasi:
 
@@ -143,7 +142,7 @@ Catatan khusus:
 
 ### Tahap 3: Gameplay Core
 
-Status: **mulai berjalan, belum build-tested oleh pengguna**.
+Status: **selesai dan sudah build-tested oleh pengguna**.
 
 Prioritas:
 
@@ -191,6 +190,8 @@ Commit awal tahap 3:
 
 Catatan progress terbaru:
 
+- Tahap 3 sudah dibuild pengguna di Android dan game berhasil berjalan.
+
 - Fix runtime setelah uji Android pengguna: frame report kill feed seperti
   `*_rpf.png` dan `slain.png` hilang pada match kedua setelah CHANGE/REMATCH.
   Alur rematch di `GameLayer::onLeft()` sekarang me-load ulang `Report.plist`
@@ -212,20 +213,21 @@ Catatan progress terbaru:
   tersebut diganti ke nama API 3.x seperti `Action`, `ActionInterval`,
   `FiniteTimeAction`, `MoveTo`, `MoveBy`, `EaseIn`, `DelayTime`, dan
   `RepeatForever`.
-- Potongan ini belum build-tested oleh pengguna.
+- Potongan tahap 3 sudah build-tested oleh pengguna; sisa API 2.x di core
+  sengaja tidak dipaksa habis pada tahap ini agar behavior gameplay tetap stabil.
 
 ### Tahap 4: Cleanup dan Compatibility Reduction
+
+Status: **mulai berjalan, belum build-tested oleh pengguna setelah commit awal
+tahap 4**.
 
 Prioritas:
 
 - `RankingLayer`
 - `MyUtils/KTools`
-- `MyUtils/CCScrewLayer`
-- `MyUtils/CCShake`
 - `MyUtils/CCStrokeLabel`
 - `AppDelegate`
 - `AppMacros`
-- `HelloWorldScene`
 - pengurangan isi `Cocos2dx2Compat.h`
 
 Target migrasi:
@@ -234,6 +236,21 @@ Target migrasi:
 - Mengganti sisa helper lama ke API 3.x asli.
 - Membersihkan UI ranking dan utility layer.
 - Mengecek ulang Android dan Windows setelah semua file core stabil.
+
+Commit awal tahap 4:
+
+- `2305287 refactor: migrate utility touch and action helpers`
+
+Catatan progress terbaru:
+
+- `CCScrewLayer` dan `CCScrewItem` mulai memakai `Layer`, `Sprite`,
+  `Touch`, `Event`, `Rect`, `Size`, serta listener touch 3.x langsung tanpa
+  `CCTouchDelegate` compatibility helper.
+- `CCShake` mulai memakai `ActionInterval`, `Node`, dan `Vec2`.
+- `CCTips` di `KTools` mulai memakai base `Sprite` dan action callback 3.x.
+- `HelloWorldScene` sample lama dibersihkan ke API scene/menu/sprite/label 3.x.
+- Area ini belum dibuild ulang oleh Codex sesuai aturan kerja; perlu uji Android
+  pengguna sebelum tahap final.
 
 ## Cara Kerja Migrasi
 
