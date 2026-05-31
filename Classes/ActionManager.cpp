@@ -176,6 +176,27 @@ NarutoSenki::ActionManager::ActionManager(void)
 
 	_gearArray=NULL;
 
+	callValue=NULL;
+
+	idleArray=NULL;
+	walkArray=NULL;
+	hurtArray=NULL;
+	airHurtArray=NULL;
+	knockDownArray=NULL;
+	floatArray=NULL;
+	deadArray=NULL;
+	nattackArray=NULL;
+	skill1Array=NULL;
+	skill2Array=NULL;
+	skill3Array=NULL;
+	skill4Array=NULL;
+	skill5Array=NULL;
+	skillSPC1Array=NULL;
+	skillSPC2Array=NULL;
+	skillSPC3Array=NULL;
+	skillSPC4Array=NULL;
+	skillSPC5Array=NULL;
+
 }
 
 

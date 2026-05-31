@@ -792,8 +792,8 @@ void HeroElement::dealloc(){
 						
 					};
 					this->getMonsterArray()->removeAllObjects();
-					_monsterArray=NULL;
 					_monsterArray->release();
+					_monsterArray=NULL;
 					
 				
 				}
