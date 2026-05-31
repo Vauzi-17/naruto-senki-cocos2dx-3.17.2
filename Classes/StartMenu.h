@@ -13,10 +13,10 @@
 
 
 USING_NS_CC;
-using namespace rapidjson; 
+using namespace rapidjson;
 
 
-// declare menuButton 
+// declare menuButton
 enum btnType{
 	Network,
 	Training,
@@ -27,7 +27,7 @@ enum btnType{
 
 class StartMenu;
 
-class MenuButton : public CCSprite, public CCTouchDelegate{
+class MenuButton : public Sprite {
 
 public:
 	MenuButton(void);
@@ -39,33 +39,33 @@ public:
 
 	virtual bool		init(const char *szImage);
 	static MenuButton*	create(const char *szImage);
-	
-	CCRect				getRect();
-	
-	
+
+	Rect				getRect();
+
+
 	void				setBtnType(btnType type);
 	btnType 			getBtnType();
 	void				playSound();
 
 	float			prePosY;
-	
+
 
 
 	CC_SYNTHESIZE(StartMenu*,_delegate,Delegate);
 
 
 
-	
-	
+
+
 protected:
 
 	virtual void	onEnter();
 	virtual void	onExit();
-	virtual bool	ccTouchBegan(CCTouch* touch,CCEvent* event);
-	virtual void    ccTouchMoved(CCTouch* touch, CCEvent* event);
-	virtual void	ccTouchEnded(CCTouch* touch,CCEvent* event);
+	virtual bool	ccTouchBegan(Touch* touch,Event* event);
+	virtual void    ccTouchMoved(Touch* touch, Event* event);
+	virtual void	ccTouchEnded(Touch* touch,Event* event);
 
-	bool			containsTouchLocation(CCTouch* touch);
+	bool			containsTouchLocation(Touch* touch);
 
 };
 
@@ -75,7 +75,7 @@ protected:
 
 
 
-class StartMenu : public CCLayer{
+class StartMenu : public Layer{
 
 public:
 	StartMenu(void);
@@ -87,68 +87,68 @@ public:
 	void				onTrainingCallBack();
 	void				showTrainingOptions();
 	void				refreshTrainingOptions();
-	void				onTrainingModeOption(CCObject* sender);
-	void				onTrainingTeamOption(CCObject* sender);
-	void				onTrainingEnemyOption(CCObject* sender);
-	void				onTrainingKillOption(CCObject* sender);
-	void				onTrainingPixelOption(CCObject* sender);
-	void				onTrainingStart(CCObject* sender);
+	void				onTrainingModeOption(Ref* sender);
+	void				onTrainingTeamOption(Ref* sender);
+	void				onTrainingEnemyOption(Ref* sender);
+	void				onTrainingKillOption(Ref* sender);
+	void				onTrainingPixelOption(Ref* sender);
+	void				onTrainingStart(Ref* sender);
 	void				startTrainingBattle(int teamSize, bool randomTeam, bool randomEnemy, bool trainingMode, int killLimit);
-	void				onHardCoreOn(CCObject* sender);
-	void				onHardCoreOff(CCObject* sender);
+	void				onHardCoreOn(Ref* sender);
+	void				onHardCoreOff(Ref* sender);
 	void				onHardLayerCallBack();
 	void				onHardCoreCallBack();
-	void				onNormalCallBack(CCObject* sender);
+	void				onNormalCallBack(Ref* sender);
 	void				onCreditsCallBack();
 	void				onExitCallBack();
-	void				onNewsBtn(CCObject* sender);
-	void				onLoginBtn(CCObject* sender);
-	void				onTasksBtn(CCObject* sender);
-	void				onProfileBtn(CCObject* sender);
+	void				onNewsBtn(Ref* sender);
+	void				onLoginBtn(Ref* sender);
+	void				onTasksBtn(Ref* sender);
+	void				onProfileBtn(Ref* sender);
 
-	void				onIterfaceClose(CCObject* sender);
-	void				onInputBoxClose(CCObject* sender);
+	void				onIterfaceClose(Ref* sender);
+	void				onInputBoxClose(Ref* sender);
 
 
-	void				onLoginOn(CCObject* sender);
-	void				onLoginCancel(CCObject* sender);
+	void				onLoginOn(Ref* sender);
+	void				onLoginCancel(Ref* sender);
 	void				setOfferWall();
 	void				setProfile();
 	void				setGroup();
-	
-	void				onGroupBtn(CCObject* sender);
-	void				onSearchBtn(CCObject* sender);
-	void				onCreateBtn(CCObject* sender);
-	void				onCreateComfirm(CCObject* sender);
-	void				onSelectGroupBtn(CCObject* sender);
-	void				onJoinGroup(CCObject* sender);
-	void				onKickBtn(CCObject* sender);
-	void				onQuitBtn(CCObject* sender);
-	void				onJoinComfirm(CCObject* sender);
-	void				onDissolveBtn(CCObject* sender);
-	void				onQuitComfirm(CCObject* sender);
-	void				onKickComfirm(CCObject* sender);
 
-	void				onGPWComfirm(CCObject* sender);
-	void				onLockBtn(CCObject* sender);
-	void				onNoticeBtn(CCObject* sender);
-	void				onNoticeComfirm(CCObject* sender);
+	void				onGroupBtn(Ref* sender);
+	void				onSearchBtn(Ref* sender);
+	void				onCreateBtn(Ref* sender);
+	void				onCreateComfirm(Ref* sender);
+	void				onSelectGroupBtn(Ref* sender);
+	void				onJoinGroup(Ref* sender);
+	void				onKickBtn(Ref* sender);
+	void				onQuitBtn(Ref* sender);
+	void				onJoinComfirm(Ref* sender);
+	void				onDissolveBtn(Ref* sender);
+	void				onQuitComfirm(Ref* sender);
+	void				onKickComfirm(Ref* sender);
 
-	void				onNamePlate(CCObject* sender);
-	void				onNamePlateClick(CCObject* sender);
-	void				onNamePlateComfrim(CCObject* sender);
+	void				onGPWComfirm(Ref* sender);
+	void				onLockBtn(Ref* sender);
+	void				onNoticeBtn(Ref* sender);
+	void				onNoticeComfirm(Ref* sender);
+
+	void				onNamePlate(Ref* sender);
+	void				onNamePlateClick(Ref* sender);
+	void				onNamePlateComfrim(Ref* sender);
 	void				scrollMenu(int posY);
-	CCSprite*			menuText;
+	Sprite*			menuText;
 
 	MenuButton* hardCore_btn;
 
-	CCLayer* hardCoreLayer;
+	Layer* hardCoreLayer;
 
-	
-	CCLayer* profile_layer;
-	CCLayer* group_layer;
-	
-	CCLayer* input_layer;
+
+	Layer* profile_layer;
+	Layer* group_layer;
+
+	Layer* input_layer;
 
 	cocos2d::extension::CCEditBox* usernameInput;
 	cocos2d::extension::CCEditBox* pwInput;
@@ -163,7 +163,7 @@ public:
 	bool  isClockwise;
 	bool  isDrag;
 	bool  isNewAviable;
-	bool  isBondAviable;	
+	bool  isBondAviable;
 
 	bool isTasking;
 	bool isPosting;
@@ -175,21 +175,21 @@ public:
 
 	int leaderID;
 
-	CCMenuItem*  lock_btn;
+	MenuItem*  lock_btn;
 	bool isLock;
-	 CCLabelTTF* notice_label;
+	 Label* notice_label;
 
-	CCLabelTTF* totalGroupNum;
+	Label* totalGroupNum;
 	int maxGroupNum;
 
-	CCSprite* refreshBtn;
-	CCMenuItem* task_btn;
-	CCMenuItem* login_btn;
+	Sprite* refreshBtn;
+	MenuItem* task_btn;
+	MenuItem* login_btn;
 	void setNotice();
 
-	CCLayer* notice_layer;
+	Layer* notice_layer;
 	void update(float dt);
-	CCLabelTTF* noticeLabel;
+	Label* noticeLabel;
 
 	CCScrewLayer* _screwLayer1;
 
@@ -197,21 +197,21 @@ public:
 	virtual void   onKeyReleased(EventKeyboard::KeyCode keyCode, Event* event);
 	void onBackKeyClicked();
 
-	CC_SYNTHESIZE_RETAIN(CCArray*,_menu_array, Menus);
+	CC_SYNTHESIZE_RETAIN(CCArray*, _menu_array, Menus);
 	CREATE_FUNC(StartMenu);
 
-    
-	void onLoginRequestCompleted(CCNode *sender ,void *data);
-	void onGroupRequestCompleted(CCNode *sender ,void *data);
-	void onGroupManageRequestCompleted(CCNode *sender ,void *data);
-	void onJoinRequestCompleted(CCNode *sender ,void *data);
-	void onSeachRequestCompleted(CCNode *sender ,void *data);
-	void onCreateRequestCompleted(CCNode *sender ,void *data);
-	void onQuitGroupRequestCompleted(CCNode *sender ,void *data);
-	void onNoticeRequestCompleted(CCNode *sender ,void *data);
-	void onProfileRequestCompleted(CCNode *sender ,void *data);
-	void onGPWRequestCompleted(CCNode *sender ,void *data);
-	void onNamePlateRequestCompleted(CCNode *sender ,void *data);
+
+	void onLoginRequestCompleted(Node *sender ,void *data);
+	void onGroupRequestCompleted(Node *sender ,void *data);
+	void onGroupManageRequestCompleted(Node *sender ,void *data);
+	void onJoinRequestCompleted(Node *sender ,void *data);
+	void onSeachRequestCompleted(Node *sender ,void *data);
+	void onCreateRequestCompleted(Node *sender ,void *data);
+	void onQuitGroupRequestCompleted(Node *sender ,void *data);
+	void onNoticeRequestCompleted(Node *sender ,void *data);
+	void onProfileRequestCompleted(Node *sender ,void *data);
+	void onGPWRequestCompleted(Node *sender ,void *data);
+	void onNamePlateRequestCompleted(Node *sender ,void *data);
 
 protected:
 	void onEnter();
@@ -219,6 +219,3 @@ protected:
 
 
 };
-
-
-
