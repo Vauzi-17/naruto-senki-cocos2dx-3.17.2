@@ -210,7 +210,7 @@ void LoadLayer::preloadIMG(){
 			loadingAvator->setPosition(Vec2(winSize.width-100+i*16,30));
 			loadingAvator->setAnchorPoint(Vec2(0,0));
 
-			CCArray* animeFrames = CCArray::create();
+			Vector<SpriteFrame*> animeFrames;
 			CCString* str;
 
 			const char* file=CCString::createWithFormat("%s_Walk_",player->getCString())->getCString();
@@ -226,15 +226,13 @@ void LoadLayer::preloadIMG(){
 				SpriteFrame *frame =  SpriteFrameCache::getInstance()->spriteFrameByName(str->getCString());
 				applyPixelArtToFrame(frame);
 				if(frame){
-					animeFrames->addObject(frame);
+					animeFrames.pushBack(frame);
 				}
 			}
 
-			Animation* tempAnimation=cocos2d::cocos2dx2_compat::createAnimationWithSpriteFrames(animeFrames, float(1.0 / 10.0));
-			Action* tempAction=Animate::create(tempAnimation);
-			CCArray* seqArray=CCArray::createWithObject(tempAction);
-			Action* seq;
-            seq=RepeatForever::create(cocos2d::cocos2dx2_compat::createSequence(seqArray));
+			Animation* tempAnimation=Animation::createWithSpriteFrames(animeFrames, float(1.0 / 10.0));
+			FiniteTimeAction* tempAction=Animate::create(tempAnimation);
+			Action* seq=RepeatForever::create(Sequence::create(tempAction,nullptr));
 
 			this->addChild(loadingAvator);
 			loadingAvator->runAction(seq);

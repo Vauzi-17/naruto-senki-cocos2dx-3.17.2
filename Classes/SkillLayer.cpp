@@ -556,28 +556,25 @@ void SkillLayer::initInterface(){
 			this->addChild(blink,9);
 
 
-			CCArray* tempArray= CCArray::create();
+			Vector<SpriteFrame*> tempArray;
 
 			int i=1;
 
-			CCArray* list=CCArray::create();
 			while (i<7)
 			{
 				CCString* path=CCString::createWithFormat("skill_blink%d.png",i);
 				SpriteFrame* frame = SpriteFrameCache::getInstance()->spriteFrameByName(path->getCString());
-				tempArray->addObject(frame);
+				tempArray.pushBack(frame);
 
 
 				i+=1;
 			}
 
-			Animation* tempAnimation= cocos2d::cocos2dx2_compat::createAnimationWithSpriteFrames(tempArray, 0.1f);
-			Action* tempAction=Animate::create(tempAnimation);
-			list->addObject(tempAction);
+			Animation* tempAnimation= Animation::createWithSpriteFrames(tempArray, 0.1f);
+			FiniteTimeAction* tempAction=Animate::create(tempAnimation);
 			DelayTime* delay=DelayTime::create(2.0f);
-			list->addObject(delay);
 
-			blink->runAction(RepeatForever::create(cocos2d::cocos2dx2_compat::createSequence(list)));
+			blink->runAction(RepeatForever::create(Sequence::create(tempAction,delay,nullptr)));
 		}
 
 
