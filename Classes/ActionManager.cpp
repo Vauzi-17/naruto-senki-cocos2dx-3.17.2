@@ -1115,9 +1115,9 @@ Action* NarutoSenki::ActionManager::createAnimation(CCArray* ationArray,float fp
 	CCObject* tObject;
 	CCArray* animeFrames=CCArray::create();
 	CCArray* seqArray=CCArray::create();
-	CCAnimation* tempAnimation;
-	CCAction* tempAction;
-	CCAction* seq;
+	Animation* tempAnimation;
+	Action* tempAction;
+	Action* seq;
 
 
 	CCARRAY_FOREACH(ationArray,tObject){
@@ -1138,7 +1138,7 @@ Action* NarutoSenki::ActionManager::createAnimation(CCArray* ationArray,float fp
 
 			}else{
 				tempAnimation=cocos2d::cocos2dx2_compat::createAnimationWithSpriteFrames(animeFrames, float(1.0 / fps));
-				tempAction=CCAnimate::create(tempAnimation);
+				tempAction=Animate::create(tempAnimation);
 			
 				seqArray->addObject(tempAction);
 				if(strcmp(key,"setAttackBox")==0){
@@ -1161,7 +1161,7 @@ Action* NarutoSenki::ActionManager::createAnimation(CCArray* ationArray,float fp
 					seqArray->addObject(call);
 				}else if(strcmp(key,"setDelay")==0){
 					float delayTime=dic->valueForKey(key)->intValue();
-					CCAction* delay=CCDelayTime::create(delayTime/100);
+					Action* delay=DelayTime::create(delayTime/100);
 					seqArray->addObject(delay);
 				}else if(strcmp(key,"setMove")==0){
 					int moveLength=dic->valueForKey(key)->intValue();
@@ -1285,12 +1285,12 @@ Action* NarutoSenki::ActionManager::createAnimation(CCArray* ationArray,float fp
 	};
 	if(animeFrames->count()>0){
 		tempAnimation= cocos2d::cocos2dx2_compat::createAnimationWithSpriteFrames(animeFrames, float(1.0 / fps));
-		tempAction=CCAnimate::create(tempAnimation);
+		tempAction=Animate::create(tempAnimation);
 		seqArray->addObject(tempAction);
 	};
 
 	if(isRepeat){
-		seq=CCRepeatForever::create(cocos2d::cocos2dx2_compat::createSequence(seqArray));
+		seq=RepeatForever::create(cocos2d::cocos2dx2_compat::createSequence(seqArray));
 
 	}else{
 		if(isReturn){
@@ -1335,9 +1335,9 @@ void NarutoSenki::ActionManager::setShadow(CCNode* sender,void* date){
 	charN->setAnchorPoint(ccp(0.5,0));
 	charN->setFlipX(_isFlipped);
 	charN->setPosition(this->getPosition());
-	CCDelayTime* delay=CCDelayTime::create(0.1f);
+	DelayTime* delay=DelayTime::create(0.1f);
 	CCFiniteTimeAction *call = CCCallFuncN::create(charN,callfuncN_selector(NarutoSenki::ActionManager::enableShadow));
-	charN->runAction(CCSequence::createWithTwoActions(delay,call));
+	charN->runAction(Sequence::createWithTwoActions(delay,call));
 	_delegate->addChild(charN,-this->getPositionY()-1);
 }
 
@@ -1345,9 +1345,9 @@ void NarutoSenki::ActionManager::enableShadow(CCNode* sender){
 
 	CCSprite* charN=(CCSprite *) sender;
 	charN->setVisible(true);
-	CCDelayTime* delay=CCDelayTime::create(0.1f);
+	DelayTime* delay=DelayTime::create(0.1f);
 	CCFiniteTimeAction *call = CCCallFuncN::create(charN,callfuncN_selector(NarutoSenki::ActionManager::disableShadow));
-	charN->runAction(CCSequence::createWithTwoActions(delay,call));
+	charN->runAction(Sequence::createWithTwoActions(delay,call));
 
 }
 
@@ -1765,14 +1765,14 @@ void NarutoSenki::ActionManager::setCoinDisplay(int num){
 	coinDisplay->setPosition(ccp(this->getPositionX(),this->getPositionY()+this->getContentSize().height/2));
 	_delegate->addChild(coinDisplay,5000);
 	
-	CCActionInterval*  mv=CCMoveBy::create(0.5f,ccp(0,12));
-	CCActionInterval* fadeOut=CCFadeOut::create(0.8f);
+	ActionInterval*  mv=MoveBy::create(0.5f,ccp(0,12));
+	ActionInterval* fadeOut=FadeOut::create(0.8f);
 	CCFiniteTimeAction *call=CCCallFuncND::create(coinDisplay,callfuncND_selector(NarutoSenki::ActionManager::removeCoinDisplay),NULL);
-	CCActionInterval* sp=CCSpawn::create(fadeOut,mv,NULL);
+	ActionInterval* sp=Spawn::create(fadeOut,mv,NULL);
 	CCArray* seqArray=CCArray::create();
 	seqArray->addObject(sp);
 	seqArray->addObject(call);
-	CCAction* seq=cocos2d::cocos2dx2_compat::createSequence(seqArray);
+	Action* seq=cocos2d::cocos2dx2_compat::createSequence(seqArray);
 	coinDisplay->runAction(seq);
 
 }
@@ -1804,12 +1804,12 @@ void NarutoSenki::ActionManager::setDamgeDisplay(unsigned int value,const char* 
 	_delegate->addChild(damageFont,currentNumberTag);	
 	_damageArray->addObject(damageFont);
 
-	CCActionInterval*  sd=CCScaleBy::create(0.2f,0.5f);
+	ActionInterval*  sd=ScaleBy::create(0.2f,0.5f);
 	CCFiniteTimeAction *call=CCCallFunc::create(this,callfunc_selector(NarutoSenki::ActionManager::removeDamageDisplay));
 
-	CCActionInterval*  mv=CCMoveBy::create(0.4f,ccp(0,12));
-	CCActionInterval* fadeOut=CCFadeOut::create(0.4f);
-	CCActionInterval* sp=CCSpawn::create(fadeOut,mv,NULL);
+	ActionInterval*  mv=MoveBy::create(0.4f,ccp(0,12));
+	ActionInterval* fadeOut=FadeOut::create(0.4f);
+	ActionInterval* sp=Spawn::create(fadeOut,mv,NULL);
 
 	CCArray* seqArray=CCArray::create();
 	seqArray->addObject(sd);
@@ -1817,7 +1817,7 @@ void NarutoSenki::ActionManager::setDamgeDisplay(unsigned int value,const char* 
 	seqArray->addObject(call);
 
 
-	CCAction* seq=cocos2d::cocos2dx2_compat::createSequence(seqArray);
+	Action* seq=cocos2d::cocos2dx2_compat::createSequence(seqArray);
 
 	damageFont->runAction(seq);
 
@@ -2492,17 +2492,17 @@ void NarutoSenki::ActionManager::setMove(CCNode* sender,void* date){
 		this->getPositionX()<(_delegate->currentMap->getMapSize().width-1)*_delegate->currentMap->getTileSize().width
 		){
 
-			CCActionInterval* mv;
+			ActionInterval* mv;
 			if(this->_actionState==ACTION_STATE_HURT) {
 				if(!_knockDiretion){
-					mv =CCMoveBy::create(0.1f,ccp(_hurtFromRight?-moveLength:moveLength,0));
+					mv =MoveBy::create(0.1f,ccp(_hurtFromRight?-moveLength:moveLength,0));
 				}else{
 					
-					mv =CCMoveBy::create(0.1f,ccp(_knockDiretion?-moveLength:moveLength,0));
+					mv =MoveBy::create(0.1f,ccp(_knockDiretion?-moveLength:moveLength,0));
 				}
 				this->runAction(mv);
 			}else{
-				mv=CCMoveBy::create(0.1f,ccp(_isFlipped?-moveLength:moveLength,0));
+				mv=MoveBy::create(0.1f,ccp(_isFlipped?-moveLength:moveLength,0));
 				this->runAction(mv);
 			};
 	}
@@ -2546,7 +2546,7 @@ void NarutoSenki::ActionManager::setCharge(CCNode* sender,void* date){
 		){
 			return;
 	}else{
-		_moveAction=CCMoveBy::create(0.1f,ccp(_isFlipped?-moveLength*winSize.width/1280:moveLength*winSize.width/1280,0));
+		_moveAction=MoveBy::create(0.1f,ccp(_isFlipped?-moveLength*winSize.width/1280:moveLength*winSize.width/1280,0));
 		this->runAction(_moveAction);
 		
 	}
@@ -2569,7 +2569,7 @@ void NarutoSenki::ActionManager::setChargeB(CCNode* sender,void* date){
 		){
 		return;
 	}else{
-			_moveAction=CCMoveBy::create(delay,ccp(_isFlipped?-moveLength*winSize.width/1280:moveLength*winSize.width/1280,0));
+			_moveAction=MoveBy::create(delay,ccp(_isFlipped?-moveLength*winSize.width/1280:moveLength*winSize.width/1280,0));
 			this->runAction(_moveAction);
 	}
 
@@ -2844,13 +2844,13 @@ void NarutoSenki::ActionManager::setCommand(CCNode* sender,void* date){
 		
 
 
-		CCAnimation* tempAnimation= cocos2d::cocos2dx2_compat::createAnimationWithSpriteFrames(tempArray, 0.1f);
+		Animation* tempAnimation= cocos2d::cocos2dx2_compat::createAnimationWithSpriteFrames(tempArray, 0.1f);
 		CCFiniteTimeAction *call = CCCallFuncN::create(this,callfuncN_selector(NarutoSenki::ActionManager::disableShadow));
-		CCAction* tempAction=CCAnimate::create(tempAnimation);
+		Action* tempAction=Animate::create(tempAnimation);
 		CCArray* list=CCArray::create();
 		list->addObject(tempAction);
 		list->addObject(call);
-		CCAction* seq=cocos2d::cocos2dx2_compat::createSequence(list);
+		Action* seq=cocos2d::cocos2dx2_compat::createSequence(list);
 
 		CCSprite* tempChar=CCSprite::createWithSpriteFrameName(CCString::createWithFormat("%s_Extern_01.png",this->getCharacter()->getCString())->getCString());
 
@@ -7152,8 +7152,8 @@ bool NarutoSenki::ActionManager::hardHurt(int delayTime,bool isHurtAction,bool i
 				SpriteFrame* frame = SpriteFrameCache::getInstance()->spriteFrameByName(path->getCString());
 				CCArray* tempArray= CCArray::create();
 				tempArray->addObject(frame);
-				CCAnimation* tempAnimation= cocos2d::cocos2dx2_compat::createAnimationWithSpriteFrames(tempArray, 0.1f);
-				CCAction* tempAction=CCAnimate::create(tempAnimation);
+				Animation* tempAnimation= cocos2d::cocos2dx2_compat::createAnimationWithSpriteFrames(tempArray, 0.1f);
+				Action* tempAction=Animate::create(tempAnimation);
 				list->addObject(tempAction);
 			}
 			
