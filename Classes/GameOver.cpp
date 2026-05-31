@@ -94,7 +94,7 @@ bool GameOver::init(RenderTexture* snapshoot){
 		this->addChild(result_bg,4);
 
 		ScaleTo* su=ScaleTo::create(0.2f,1.0);
-		Action* seq=cocos2d::cocos2dx2_compat::createSequence(su,CallFunc::create(CC_CALLBACK_0(GameOver::listResult, this)),nullptr);
+		Action* seq=Sequence::create(su,CallFunc::create(CC_CALLBACK_0(GameOver::listResult, this)),nullptr);
 		result_bg->runAction(seq);
 
 

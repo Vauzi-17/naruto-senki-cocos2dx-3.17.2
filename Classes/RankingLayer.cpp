@@ -184,7 +184,7 @@ bool RakingLayer::init(){
 		this->addChild(cloud_left,2);
 
 		ActionInterval* cmv1=MoveBy::create(1,Vec2(-15,0));
-		Action* cseq1=RepeatForever::create(cocos2d::cocos2dx2_compat::createSequence(cmv1,cmv1->reverse(),NULL));
+		Action* cseq1=RepeatForever::create(Sequence::create(cmv1,cmv1->reverse(),nullptr));
 		cloud_left->runAction(cseq1);
 
 		Sprite* cloud_right=Sprite::createWithSpriteFrameName("cloud.png");
@@ -194,7 +194,7 @@ bool RakingLayer::init(){
 		this->addChild(cloud_right,2);
 
 		ActionInterval* cmv2=MoveBy::create(1,Vec2(15,0));
-		Action* cseq2=RepeatForever::create(cocos2d::cocos2dx2_compat::createSequence(cmv2,cmv2->reverse(),NULL));
+		Action* cseq2=RepeatForever::create(Sequence::create(cmv2,cmv2->reverse(),nullptr));
 		cloud_right->runAction(cseq2);
 
 		Sprite* cloud_top=Sprite::createWithSpriteFrameName("cloud_top.png");
@@ -680,28 +680,25 @@ void RakingLayer::postRequest(int code,CCString* useChar/* =NULL */){
 						screwItem->addChild(blink);
 
 
-						CCArray* tempArray= CCArray::create();
+						Vector<SpriteFrame*> tempArray;
 
 						int i=1;
 
-						CCArray* list=CCArray::create();
 						while (i<7)
 						{
 							CCString* path=CCString::createWithFormat("banner_blink%d.png",i);
 							SpriteFrame* frame = SpriteFrameCache::getInstance()->getSpriteFrameByName(path->getCString());
-							tempArray->addObject(frame);
+							tempArray.pushBack(frame);
 
 
 							i+=1;
 						}
 
-						Animation* tempAnimation= cocos2d::cocos2dx2_compat::createAnimationWithSpriteFrames(tempArray, 0.1f);
-						Action* tempAction=Animate::create(tempAnimation);
-						list->addObject(tempAction);
+						Animation* tempAnimation= Animation::createWithSpriteFrames(tempArray, 0.1f);
+						FiniteTimeAction* tempAction=Animate::create(tempAnimation);
 						DelayTime* delay=DelayTime::create(1.0f);
-						list->addObject(delay);
 
-						blink->runAction(RepeatForever::create(cocos2d::cocos2dx2_compat::createSequence(list)));
+						blink->runAction(RepeatForever::create(Sequence::create(tempAction,delay,nullptr)));
 					}
 
 				}else{
