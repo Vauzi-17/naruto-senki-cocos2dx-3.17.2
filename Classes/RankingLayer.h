@@ -59,11 +59,6 @@ public:
 	int postingCode;
 
 private:
-	void onHttpRequestCompleted(Node *sender ,void *data);
-	void onHttpRequestCompleted2(Node *sender ,void *data);
-	void onHttpRequestCompleted3(Node *sender ,void *data);
-
-	
 	void produceRanking(int type);
 
 	void				onDayBtn(Ref* sender);
