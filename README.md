@@ -334,8 +334,8 @@ Catatan progress terbaru:
 
 ### Tahap 5: Container/Data dan Sisa Action Bridge
 
-Status: **berjalan; commit awal `ActionManager` sudah build-tested oleh
-pengguna di Android, commit cleanup `Effect` terbaru belum build-tested**.
+Status: **berjalan; commit `ActionManager` dan `Effect` sudah build-tested oleh
+pengguna di Android, commit cleanup `HudLayer` terbaru belum build-tested**.
 
 Prioritas:
 
@@ -358,6 +358,7 @@ Commit awal tahap 5:
 
 - `7dc2520 refactor: migrate action manager local action aliases`
 - `c9a65db refactor: migrate effect sequence helpers`
+- `7061c4b refactor: migrate hud sequence helpers`
 
 Catatan progress terbaru:
 
@@ -377,9 +378,15 @@ Catatan progress terbaru:
   sequence sederhana memakai `Sequence::create`, frame animasi lokal memakai
   `Vector<SpriteFrame*>`, dan animasi dibuat langsung lewat
   `Animation::createWithSpriteFrames`.
-- Setelah commit cleanup `Effect` lulus build Android, langkah berikutnya adalah
-  memilih satu adapter lokal lagi, misalnya sequence helper di `HudLayer` atau
-  area kecil `Element`, sebelum menyentuh migrasi container besar.
+- Commit cleanup `Effect` sudah dibuild pengguna di Android dan berjalan aman.
+- `HudLayer.cpp` dibersihkan dari helper compat sequence/animation lokal untuk
+  animasi start match, pulse mark skill, clear buff, SPC report, dan cutline
+  ougis. Area ini memakai `Sequence::create`, `Vector<SpriteFrame*>`, serta
+  `Animation::createWithSpriteFrames` langsung.
+- Setelah commit cleanup `HudLayer` lulus build Android, langkah berikutnya
+  adalah memilih adapter lokal kecil lagi, misalnya area kecil `Element` atau
+  sisa helper dekoratif di menu/ranking, sebelum menyentuh migrasi container
+  besar.
 - Alias HTTP/EditBox/Scale9/Scroll di `Cocos2dx2Compat.h` belum dihapus karena
   masih punya pemakai aktif.
 
