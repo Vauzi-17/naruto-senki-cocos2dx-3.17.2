@@ -6,7 +6,7 @@ USING_NS_CC;
 
 
 class GameLayer;
-class CreditsLayer : public CCLayer{
+class CreditsLayer : public Layer{
 
 public:
 	CreditsLayer(void);
@@ -14,12 +14,14 @@ public:
 
 	bool	init();
 
-
 	CREATE_FUNC(CreditsLayer);
 
 	virtual void onKeyReleased(EventKeyboard::KeyCode keyCode, Event* event);
 	void onBackKeyClicked();
 
+protected:
+	void onEnter();
+	void onExit();
 };
 
 
