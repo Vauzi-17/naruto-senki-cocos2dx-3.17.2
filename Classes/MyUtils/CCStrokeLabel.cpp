@@ -25,12 +25,12 @@ bool  CCStrokeLabel::init()
 		// float fontSize = m_fontSize - 2 * strokeSize;
 		// 	m_label = CCLabelTTF::labelWithString(
 		// 		m_str.c_str(), m_font.c_str(), m_fontSize);
-		CCSize textureSize = m_label->getContentSize();
+		Size textureSize = m_label->getContentSize();
 		textureSize.width += 2 * strokeSize;
 		textureSize.height += 2 * strokeSize;
 		//call to clear error
 		glGetError();
-		CCRenderTexture *rt = CCRenderTexture::create(
+		RenderTexture *rt = RenderTexture::create(
 			textureSize.width, textureSize.height);
 		if(!rt)
 		{
@@ -48,32 +48,32 @@ bool  CCStrokeLabel::init()
 		m_label->setBlendFunc(func);
 
 
-		m_label->setAnchorPoint(ccp(0.5, 0.5));
+		m_label->setAnchorPoint(Vec2(0.5f, 0.5f));
 
 
 		rt->begin();
 		for(int i = 0; i < 360; i += 15)
 		{
 			float r = CC_DEGREES_TO_RADIANS(i);
-			m_label->setPosition(ccp(
+			m_label->setPosition(Vec2(
 				textureSize.width * 0.5f + sin(r) * strokeSize,
 				textureSize.height * 0.5f + cos(r) * strokeSize));
 			cocos2d::cocos2dx2_compat::visitNode(m_label);
 		}
 		m_label->setColor(m_StrokeColor);
 		m_label->setBlendFunc(originalBlend);
-		m_label->setPosition(ccp(textureSize.width * 0.5f, textureSize.height * 0.5f));
+		m_label->setPosition(Vec2(textureSize.width * 0.5f, textureSize.height * 0.5f));
 		cocos2d::cocos2dx2_compat::visitNode(m_label);
 		rt->end();
 
 
-		CCTexture2D *texture = rt->getSprite()->getTexture();
+		Texture2D *texture = rt->getSprite()->getTexture();
 		texture->setAliasTexParameters();
-		m_sprite = CCSprite::createWithTexture(rt->getSprite()->getTexture());
+		m_sprite = Sprite::createWithTexture(rt->getSprite()->getTexture());
 		setContentSize(m_sprite->getContentSize());
-		m_sprite->setAnchorPoint(ccp(0.5f, 0.5f));
-		m_sprite->setPosition(ccp(0, 0));
-		((CCSprite *)m_sprite)->setFlipY(true);
+		m_sprite->setAnchorPoint(Vec2(0.5f, 0.5f));
+		m_sprite->setPosition(Vec2::ZERO);
+		m_sprite->setFlippedY(true);
 		addChild(m_sprite);
 	}while(0);
 

@@ -204,7 +204,7 @@ void  KTools::prepareFileMD5(){
 
 	};
 
-	std::string filePath = CCFileUtils::sharedFileUtils()->getWritablePath() + "checkMD5.xml";
+	std::string filePath = FileUtils::getInstance()->getWritablePath() + "checkMD5.xml";
 	//xml�ĵ�
 	tinyxml2::XMLDocument* pDoc = new tinyxml2::XMLDocument();  
 	if (NULL==pDoc) {
@@ -392,7 +392,7 @@ void  KTools::prepareFileSHA(){
 		"Element/Tsunade/Tsunade.xml"
 	};
 
-	std::string filePath = CCFileUtils::sharedFileUtils()->getWritablePath() + "SHA.xml";
+	std::string filePath = FileUtils::getInstance()->getWritablePath() + "SHA.xml";
 	//xml�ĵ�
 	tinyxml2::XMLDocument* pDoc = new tinyxml2::XMLDocument();  
 	if (NULL==pDoc) {
@@ -439,7 +439,7 @@ int KTools::checkMD5(std::string findPath /* ="" */){
 	
 	std::string md5Path =  "Element/md5.xml";
 
-	bool isExisted=CCFileUtils::sharedFileUtils()->isFileExist(md5Path);
+	bool isExisted=FileUtils::getInstance()->isFileExist(md5Path);
 
 	if(!isExisted){
 		return 0;
@@ -451,7 +451,7 @@ int KTools::checkMD5(std::string findPath /* ="" */){
 
 	tinyxml2::XMLDocument* doc = new tinyxml2::XMLDocument();  
 	ssize_t nSize;
-	const char *pXmlBuffer = (const char*)CCFileUtils::sharedFileUtils()->getFileData(md5Path.c_str(), "r", &nSize);
+	const char *pXmlBuffer = (const char*)FileUtils::getInstance()->getFileData(md5Path.c_str(), "r", &nSize);
 	doc->Parse(pXmlBuffer);
 
 	XMLElement *rootEle=doc->RootElement();
@@ -660,9 +660,9 @@ std::string  KTools::getKeycode(std::string path){
 
 bool KTools::checkData(){
 
-	const std::string filePath = CCFileUtils::sharedFileUtils()->getWritablePath() + "CheckMD5_113.xml";
+	const std::string filePath = FileUtils::getInstance()->getWritablePath() + "CheckMD5_113.xml";
 
-	bool isExisted=CCFileUtils::sharedFileUtils()->isFileExist(filePath);
+	bool isExisted=FileUtils::getInstance()->isFileExist(filePath);
 
 
 	if(!isExisted){
@@ -671,7 +671,7 @@ bool KTools::checkData(){
 
 	tinyxml2::XMLDocument* doc = new tinyxml2::XMLDocument();  
 	ssize_t nSize;
-	const char *pXmlBuffer = (const char*)CCFileUtils::sharedFileUtils()->getFileData(filePath.c_str(), "r", &nSize);
+	const char *pXmlBuffer = (const char*)FileUtils::getInstance()->getFileData(filePath.c_str(), "r", &nSize);
 	doc->Parse(pXmlBuffer);
 
 	XMLElement *rootEle=doc->RootElement();
@@ -687,7 +687,7 @@ bool KTools::checkData(){
 	while (fileEle){
 
 		std::string pathMD5= fileEle->GetText();	
-		std::string savePath = CCFileUtils::sharedFileUtils()->getWritablePath() + "sql.db";
+		std::string savePath = FileUtils::getInstance()->getWritablePath() + "sql.db";
 		std::string strFileMD5 =CMD5Checksum::GetMD5(savePath);
 
 
@@ -712,7 +712,7 @@ bool KTools::checkData(){
 
 void KTools::updateData(){
 
-	std::string filePath = CCFileUtils::sharedFileUtils()->getWritablePath() + "CheckMD5_113.xml";
+	std::string filePath = FileUtils::getInstance()->getWritablePath() + "CheckMD5_113.xml";
 
 
 	//xml�ĵ�
@@ -732,7 +732,7 @@ void KTools::updateData(){
 	XMLElement *fileElement = pDoc->NewElement("data");
 	pDoc->LinkEndChild(fileElement);
 
-	std::string savePath = CCFileUtils::sharedFileUtils()->getWritablePath() + "sql.db";
+	std::string savePath = FileUtils::getInstance()->getWritablePath() + "sql.db";
 	std::string strFileMD5 =CMD5Checksum::GetMD5(savePath);
 	XMLElement *pathElement = pDoc->NewElement("path");
 	pathElement->LinkEndChild(pDoc->NewText(strFileMD5.c_str()));
@@ -750,7 +750,7 @@ bool KTools::readXMLToArray(const char* filePath,CCArray* &array)
 	tinyxml2::XMLDocument* doc = new tinyxml2::XMLDocument();  
 	//doc->LoadFile(filePath);  this's doesn't work for android
 	ssize_t nSize;
-	const char *data = (const char*)CCFileUtils::sharedFileUtils()->getFileData(filePath, "r", &nSize);
+	const char *data = (const char*)FileUtils::getInstance()->getFileData(filePath, "r", &nSize);
 	doc->Parse(data);
 
 
@@ -865,7 +865,7 @@ void KTools::initTableInDB(){
 
 	sqlite3* pDB = NULL;
 	char* errorMsg=NULL;
-	std::string path=CCFileUtils::sharedFileUtils()->getWritablePath() +"sql.db"; 
+	std::string path=FileUtils::getInstance()->getWritablePath() +"sql.db";
 	int result=sqlite3_open(path.c_str(),&pDB);  
 	if(result!=SQLITE_OK){
 		CCLOG("open sql file Failed!");
@@ -977,7 +977,7 @@ void KTools::initColumeInDB(){
 
 	sqlite3* pDB = NULL;
 	char* errorMsg=NULL;
-	std::string path=CCFileUtils::sharedFileUtils()->getWritablePath() +"sql.db"; 
+	std::string path=FileUtils::getInstance()->getWritablePath() +"sql.db";
 	int result=sqlite3_open(path.c_str(),&pDB);  
 	if(result!=SQLITE_OK){
 		CCLOG("open sql file Failed!");
@@ -1004,7 +1004,7 @@ void KTools::initColumeInDB(){
 		this->updateData();
 	}
 
-	/*std::string folderPath =CCFileUtils::sharedFileUtils()->getWritablePath()+"DLC";
+	/*std::string folderPath =FileUtils::getInstance()->getWritablePath()+"DLC";
 	this->dfsFolder(folderPath);*/
 	
 	
@@ -1087,7 +1087,7 @@ void KTools::dfsFolder(std::string folderPath, int depth /* = 0 */,int type/* =0
 			}else if(type==1){
 				
 				//CCLOG("damn3:%s",filename.c_str());
-				SimpleAudioEngine::sharedEngine()->preloadEffect(filename.c_str());
+				SimpleAudioEngine::getInstance()->preloadEffect(filename.c_str());
 			}
 			
 		}
@@ -1114,11 +1114,11 @@ static void loadAudioListCache()
 
     std::string md5Path = "Audio/list.xml";
 
-    if (!CCFileUtils::sharedFileUtils()->isFileExist(md5Path))
+    if (!FileUtils::getInstance()->isFileExist(md5Path))
         return;
 
     ssize_t nSize = 0;
-    unsigned char* pXmlBuffer = CCFileUtils::sharedFileUtils()->getFileData(md5Path.c_str(), "r", &nSize);
+    unsigned char* pXmlBuffer = FileUtils::getInstance()->getFileData(md5Path.c_str(), "r", &nSize);
 
     if (!pXmlBuffer || nSize <= 0)
         return;
@@ -1155,7 +1155,7 @@ static void loadAudioListCache()
 
 void KTools::prepareFileOGG(const char* listName, int type /* = 0 */)
 {
-    if (!CCUserDefault::sharedUserDefault()->getBoolForKey("isPreload"))
+    if (!UserDefault::getInstance()->getBoolForKey("isPreload"))
         return;
 
     if (!listName || !listName[0])
@@ -1196,7 +1196,7 @@ void KTools::preloadEffectCached(const char* soundPath)
     if (sPreloadedEffects[key])
         return;
 
-    SimpleAudioEngine::sharedEngine()->preloadEffect(key.c_str());
+    SimpleAudioEngine::getInstance()->preloadEffect(key.c_str());
     sPreloadedEffects[key] = true;
 }
 
@@ -1207,7 +1207,7 @@ void KTools::unloadEffectCached(const char* soundPath)
 
     std::string key = soundPath;
     std::replace(key.begin(), key.end(), '\\', '/');
-    SimpleAudioEngine::sharedEngine()->unloadEffect(key.c_str());
+    SimpleAudioEngine::getInstance()->unloadEffect(key.c_str());
     sPreloadedEffects.erase(key);
     sLastEffectFrame.erase(key);
 }
@@ -1217,7 +1217,7 @@ unsigned int KTools::playEffectOptimized(const char* soundPath, unsigned int min
     if (!soundPath || !soundPath[0])
         return 0;
 
-    unsigned int frame = CCDirector::sharedDirector()->getTotalFrames();
+    unsigned int frame = Director::getInstance()->getTotalFrames();
     if (frame != sEffectFrame)
     {
         sEffectFrame = frame;
@@ -1233,12 +1233,12 @@ unsigned int KTools::playEffectOptimized(const char* soundPath, unsigned int min
     if (it != sLastEffectFrame.end() && frame - it->second < minFrameGap)
         return 0;
 
-    if (CCUserDefault::sharedUserDefault()->getBoolForKey("isPreload"))
+    if (UserDefault::getInstance()->getBoolForKey("isPreload"))
         KTools::preloadEffectCached(soundPath);
 
     sLastEffectFrame[key] = frame;
     ++sEffectsPlayedThisFrame;
-    return SimpleAudioEngine::sharedEngine()->playEffect(key.c_str());
+    return SimpleAudioEngine::getInstance()->playEffect(key.c_str());
 }
 
 
@@ -1273,7 +1273,7 @@ sqlite3* KTools::prepareTableInDB(){
 	sqlite3* pDB = NULL;
 	char* errorMsg=NULL;
 
-	std::string path=CCFileUtils::sharedFileUtils()->getWritablePath() +"sql.db"; 
+	std::string path=FileUtils::getInstance()->getWritablePath() +"sql.db";
 	int result=sqlite3_open(path.c_str(),&pDB);  
 
 	if(result!=SQLITE_OK){

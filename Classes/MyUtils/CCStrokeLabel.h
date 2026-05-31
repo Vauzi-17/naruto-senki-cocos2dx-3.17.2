@@ -4,7 +4,7 @@
 #include "2d/CCLabelTTF.h"
 
 
-class CCStrokeLabel : public cocos2d::CCNode {
+class CCStrokeLabel : public cocos2d::Node {
     
 public:
     
@@ -15,7 +15,7 @@ public:
     
 private:
 
-	cocos2d::CCSprite* m_sprite;
+	cocos2d::Sprite* m_sprite;
 	cocos2d::CCLabelTTF* m_label;
 	cocos2d::ccColor3B m_fullColor;
 	cocos2d::ccColor3B m_StrokeColor;
