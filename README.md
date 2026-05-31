@@ -15,22 +15,22 @@ masih memakai API 2.x seperti `CCLayer`, `CCSprite`, `CCMenu`, `CCPoint`,
 | --- | --- |
 | Engine/runtime | cocos2d-x 3.17.2 |
 | Branch kerja | `migrate` |
-| Android build | Berhasil menurut uji pengguna setelah cleanup tahap 4 awal |
+| Android build | Berhasil menurut uji pengguna setelah ranking offline/dekoratif |
 | Windows build | Pernah berjalan sebelum migrasi tahap ini, perlu uji ulang berkala |
 | Push remote | Tidak dilakukan |
 | Build oleh Codex | Tidak dilakukan |
 
 ## Estimasi Progress Migrasi
 
-Estimasi progress menuju kode full cocos2d-x 3.17.2: **sekitar 69%**.
+Estimasi progress menuju kode full cocos2d-x 3.17.2: **sekitar 70%**.
 
 Alasan estimasi:
 
 - Alur scene utama sudah dimigrasi dari menu awal sampai masuk gameplay.
 - Area HUD dan layer gameplay pendukung sudah banyak memakai API 3.x.
 - Build Android sudah berhasil dan game bisa dimainkan setelah cleanup tahap 4
-  awal; pengguna sudah menjalankan game di HP sekitar 2 match tanpa masalah
-  terlihat.
+  awal serta setelah ranking dibuat offline/dekoratif; pengguna sudah menjalankan
+  game di HP tanpa crash.
 - Area gameplay core sudah mulai distabilkan lewat migrasi callback/action/frame
   tanpa mengubah kontrak data lama secara paksa.
 - Masih ada sisa API 2.x yang cukup banyak di `ActionManager`, `Element`,
@@ -238,8 +238,8 @@ Catatan progress terbaru:
 
 ### Tahap 4: Cleanup dan Compatibility Reduction
 
-Status: **berjalan; cleanup utility awal sudah build-tested oleh pengguna,
-commit ranking terbaru belum build-tested**.
+Status: **berjalan; cleanup utility dan ranking offline/dekoratif sudah
+build-tested oleh pengguna di Android**.
 
 Prioritas:
 
@@ -264,6 +264,8 @@ Commit awal tahap 4:
 - `2305287 refactor: migrate utility touch and action helpers`
 - `31ea26c refactor: migrate utility singleton helpers`
 - `0602b67 refactor: migrate ranking touch and frame helpers`
+- `8a394f4 refactor: keep ranking offline decorative`
+- `7aad4b1 refactor: remove obsolete ranking request stub`
 
 Catatan progress terbaru:
 
@@ -285,8 +287,10 @@ Catatan progress terbaru:
   `setSpriteFrame`, `UserDefault`, dan `SimpleAudioEngine::getInstance`.
 - Jalur klik grup ranking lama tidak lagi membuat HTTP request; ranking tetap
   tampil sebagai hiasan offline dengan pesan/detail lokal.
-- Commit ranking terbaru belum dibuild ulang oleh Codex sesuai aturan kerja;
-  perlu uji Android pengguna sebelum lanjut terlalu jauh ke ranking/container.
+- Stub request ranking lama yang sudah obsolete dihapus agar file tidak lagi
+  terlihat seperti masih punya jalur request aktif.
+- Cleanup ranking offline/dekoratif sudah dibuild pengguna lewat Android Studio
+  dan dijalankan di HP tanpa crash.
 
 ## Cara Kerja Migrasi
 
