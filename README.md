@@ -22,7 +22,7 @@ masih memakai API 2.x seperti `CCLayer`, `CCSprite`, `CCMenu`, `CCPoint`,
 
 ## Estimasi Progress Migrasi
 
-Estimasi progress menuju kode full cocos2d-x 3.17.2: **sekitar 71%**.
+Estimasi progress menuju kode full cocos2d-x 3.17.2: **sekitar 72%**.
 
 Alasan estimasi:
 
@@ -240,7 +240,8 @@ Catatan progress terbaru:
 
 Status: **berjalan; cleanup utility, ranking offline/dekoratif, dan ranking
 node/action sudah build-tested oleh pengguna di Android; commit penghapusan
-callback HTTP ranking terbaru belum build-tested**.
+callback HTTP ranking, cleanup dasar `KTools`, dan pengurangan compat touch
+terbaru belum build-tested**.
 
 Prioritas:
 
@@ -270,6 +271,8 @@ Commit awal tahap 4:
 - `5a288a0 refactor: migrate ranking menu callbacks`
 - `99d1d5b refactor: migrate ranking node action types`
 - `4705b67 refactor: remove ranking http callbacks`
+- `9f47577 refactor: migrate ktools helper basics`
+- `f2bd820 refactor: drop unused touch delegate compat`
 
 Catatan progress terbaru:
 
@@ -306,21 +309,28 @@ Catatan progress terbaru:
 - Callback HTTP ranking lama dihapus karena tidak lagi punya jalur request aktif
   setelah ranking dijadikan dekorasi offline. `CCClippingNode`, `CCAnimation`,
   `CCAnimate`, dan `CCDelayTime` di ranking juga mulai dibersihkan ke API 3.x.
-- Commit penghapusan callback HTTP ranking terbaru belum dibuild ulang oleh
-  Codex sesuai aturan kerja; perlu uji Android pengguna sebelum lanjut ke
-  pembersihan ranking yang lebih besar.
+- `KTools` dibersihkan sedikit lagi tanpa menyentuh kontrak besar: base class
+  utama memakai `Ref`, include `CCFileUtils` lama dihapus, dan label tips lokal
+  memakai `Label::createWithSystemFont`.
+- `Cocos2dx2Compat.h` dikurangi dari touch delegate shim lama yang sudah tidak
+  dipakai (`CCTouchDelegate`, `addTargetedDelegate`, dan `removeDelegate`).
+  Alias HTTP, EditBox, Scale9, ScrollView, time, array, string, dan sequence
+  masih dipertahankan karena masih ada pemakai aktif.
+- Commit penghapusan callback HTTP ranking, cleanup dasar `KTools`, dan
+  pengurangan compat touch terbaru belum dibuild ulang oleh Codex sesuai aturan
+  kerja; perlu uji Android pengguna sebelum lanjut ke pembersihan berikutnya.
 
 Rencana langkah berikutnya:
 
-- Setelah commit penghapusan callback HTTP ranking terbaru lulus build Android,
-  lanjutkan audit sisa `RankingLayer`: bedakan sisa tampilan lama yang aman
-  dari container/text lama yang sengaja ditahan.
-- Setelah area ranking non-container stabil, lanjutkan ke `MyUtils/KTools` untuk
-  sisa API 2.x helper lokal, masih tanpa menyentuh kontrak besar
-  `CCArray`/`CCString`.
-- Migrasi `CCArray`, `CCDictionary`, dan `CCString` tetap ditahan sampai ranking
-  dan helper non-core lebih bersih, agar kontrak data gameplay tidak berubah
-  terlalu cepat.
+- Setelah commit terbaru lulus build Android, lanjutkan audit sisa helper
+  non-core yang masih aman seperti `CCStrokeLabel`, potongan kecil `KTools`, dan
+  app entry yang belum menyentuh kontrak data gameplay.
+- Audit `Cocos2dx2Compat.h` dilanjutkan dengan pola yang sama: hanya hapus alias
+  yang sudah terbukti tidak punya pemakai aktif. Alias HTTP/EditBox/Scale9/Scroll
+  dan helper container tetap dipertahankan selama masih dipakai.
+- Migrasi `CCArray`, `CCDictionary`, dan `CCString` tetap ditahan sampai ranking,
+  helper non-core, dan compatibility shim kecil lebih bersih, agar kontrak data
+  gameplay tidak berubah terlalu cepat.
 
 ## Cara Kerja Migrasi
 
