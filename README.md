@@ -239,7 +239,8 @@ Catatan progress terbaru:
 ### Tahap 4: Cleanup dan Compatibility Reduction
 
 Status: **berjalan; cleanup utility dan ranking offline/dekoratif sudah
-build-tested oleh pengguna di Android**.
+build-tested oleh pengguna di Android, commit menu callback terbaru belum
+build-tested**.
 
 Prioritas:
 
@@ -266,6 +267,7 @@ Commit awal tahap 4:
 - `0602b67 refactor: migrate ranking touch and frame helpers`
 - `8a394f4 refactor: keep ranking offline decorative`
 - `7aad4b1 refactor: remove obsolete ranking request stub`
+- `5a288a0 refactor: migrate ranking menu callbacks`
 
 Catatan progress terbaru:
 
@@ -291,6 +293,12 @@ Catatan progress terbaru:
   terlihat seperti masih punya jalur request aktif.
 - Cleanup ranking offline/dekoratif sudah dibuild pengguna lewat Android Studio
   dan dijalankan di HP tanpa crash.
+- Callback menu aktif di `RankingLayer` mulai memakai `MenuItem`,
+  `MenuItemSprite`, `MenuItemLabel`, `Menu`, `Ref`, dan `CC_CALLBACK_1`.
+  Komentar sidebar lama yang masih menyimpan selector 2.x juga dihapus.
+- Commit menu callback terbaru belum dibuild ulang oleh Codex sesuai aturan
+  kerja; perlu uji Android pengguna sebelum lanjut ke pembersihan ranking yang
+  lebih besar.
 
 ## Cara Kerja Migrasi
 
