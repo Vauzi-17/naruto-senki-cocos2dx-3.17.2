@@ -47,7 +47,7 @@ bool HeroElement::init(){
 		CC_BREAK_IF(!NarutoSenki::ActionManager::init());
 		this->setAnchorPoint(ccp(0.5,0));		
 		this->scheduleUpdate();
-		//this->schedule(schedule_selector(HeroElement::neicun),0.5f);
+		//this->schedule(CC_SCHEDULE_SELECTOR(HeroElement::neicun),0.5f);
 		bRet=true;
 	}while(0);
 
@@ -83,7 +83,7 @@ void HeroElement::setID(CCString* character,CCString* role,CCString* group){
 
 	tool->readXMLToArray(filePath,animationArray);	
 
-	CCSpriteFrame* firstFrame=NULL;
+	SpriteFrame* firstFrame=NULL;
 	if(animationArray->count()>0){
 		CCArray* firstAction=(CCArray*)animationArray->objectAtIndex(0);
 		if(firstAction && firstAction->count()>1){
@@ -91,12 +91,12 @@ void HeroElement::setID(CCString* character,CCString* role,CCString* group){
 			if(firstFrames && firstFrames->count()>0){
 				CCDictionary* firstFrameDict=(CCDictionary*)firstFrames->objectAtIndex(0);
 				const char* firstFrameName=firstFrameDict->valueForKey("frameName")->getCString();
-				firstFrame=CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName(firstFrameName);
+				firstFrame=SpriteFrameCache::getInstance()->spriteFrameByName(firstFrameName);
 			}
 		}
 	}
 	if(firstFrame){
-		this->setDisplayFrame(firstFrame);
+		this->setSpriteFrame(firstFrame);
 		applyPixelArtToSprite(this);
 	}
 
@@ -428,7 +428,7 @@ void HeroElement::setID(CCString* character,CCString* role,CCString* group){
 		_isBati=true;
 	}
 	if(strcmp(this->getCharacter()->getCString(),"Kakuzu")==0){
-		_heartEffect=CCSprite::createWithSpriteFrameName("Heart_Effect_00.png");
+		_heartEffect=Sprite::createWithSpriteFrameName("Heart_Effect_00.png");
 		_heartEffect->setPosition(ccp(this->getContentSize().width+40,70));
 		this->addChild(_heartEffect);
 	}
@@ -446,7 +446,7 @@ void HeroElement::setID(CCString* character,CCString* role,CCString* group){
 	
 
 	this->initAction();
-	CCNotificationCenter::sharedNotificationCenter()->addObserver(this, callfuncO_selector(NarutoSenki::ActionManager::acceptAttack), "acceptAttack", NULL);
+	NotificationCenter::getInstance()->addObserver(this, callfuncO_selector(NarutoSenki::ActionManager::acceptAttack), "acceptAttack", NULL);
 	
 };
 
@@ -476,7 +476,7 @@ void HeroElement::initAction(){
 void HeroElement::setShadows(){
 
 	if(!_shadow){
-		_shadow=CCSprite::createWithSpriteFrameName("shadows.png");
+		_shadow=Sprite::createWithSpriteFrameName("shadows.png");
 		_shadow->setAnchorPoint(ccp(0.5,0.5));
 		_shadow->setPosition(this->getPosition());
 		this->getDelegate()->shadowBatch->addChild(_shadow);
@@ -605,8 +605,8 @@ void HeroElement::changeHPbar(){
 		}
 
 		if(_hpBar){	
-			CCSpriteFrame* frame = CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName(CCString::createWithFormat("hp_bottom%d.png",int(_level))->getCString());  
-			_hpBar->getHPBottom()->setDisplayFrame(frame);
+			SpriteFrame* frame = SpriteFrameCache::getInstance()->spriteFrameByName(CCString::createWithFormat("hp_bottom%d.png",int(_level))->getCString());
+			_hpBar->getHPBottom()->setSpriteFrame(frame);
 		}
 
 	if(_delegate){
@@ -643,7 +643,7 @@ void HeroElement::dealloc(){
 				if(index>=0){
 					_delegate->_CharacterArray->removeObjectAtIndex(index);
 				}
-				CCNotificationCenter::sharedNotificationCenter()->removeObserver(mo,"acceptAttack");
+				NotificationCenter::getInstance()->removeObserver(mo,"acceptAttack");
 				mo->stopAllActions();
 				mo->unscheduleAllSelectors();
 				mo->setActionState(ACTION_STATE_DEAD);
@@ -662,8 +662,8 @@ void HeroElement::dealloc(){
 			strcmp(this->getRole()->getCString(),"Kuilei")==0 ||
 			strcmp(this->getRole()->getCString(),"Summon")==0 
 			){
-			this->unschedule(schedule_selector(NarutoSenki::ActionManager::setAI));
-			CCNotificationCenter::sharedNotificationCenter()->removeObserver(this,"acceptAttack");
+			this->unschedule(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::setAI));
+			NotificationCenter::getInstance()->removeObserver(this,"acceptAttack");
 				
 			//�Ƴ�����ɫ��
 			int index=_delegate->_CharacterArray->indexOfObject(this);
@@ -784,7 +784,7 @@ void HeroElement::dealloc(){
 						if(index>=0){
 							_delegate->_CharacterArray->removeObjectAtIndex(index);
 						}
-						CCNotificationCenter::sharedNotificationCenter()->removeObserver(mo,"acceptAttack");
+						NotificationCenter::getInstance()->removeObserver(mo,"acceptAttack");
 						mo->stopAllActions();
 						mo->unscheduleAllSelectors();
 						mo->setActionState(ACTION_STATE_DEAD);
@@ -806,10 +806,10 @@ void HeroElement::dealloc(){
 				strcmp(this->getCharacter()->getCString(),"Han")!=0
 				){
 					if(rebornLabelTime==3){
-						this->scheduleOnce(schedule_selector(HeroElement::reborn),3.0f);
+						this->scheduleOnce(CC_SCHEDULE_SELECTOR(HeroElement::reborn),3.0f);
 					}else{
 						rebornLabelTime=this->getRebornTime();
-						this->scheduleOnce(schedule_selector(HeroElement::reborn),this->getRebornTime());
+						this->scheduleOnce(CC_SCHEDULE_SELECTOR(HeroElement::reborn),this->getRebornTime());
 					}
 
 				
@@ -817,8 +817,8 @@ void HeroElement::dealloc(){
 					//�����ʱ
 					if(!this->rebornSprite){
 
-						rebornSprite=CCSprite::create();
-						CCSprite* skullSpirte=CCSprite::createWithSpriteFrameName("skull.png");
+						rebornSprite=Sprite::create();
+						Sprite* skullSpirte=Sprite::createWithSpriteFrameName("skull.png");
 						skullSpirte->setPosition(ccp(0,0));
 						rebornSprite->addChild(skullSpirte);
 
@@ -831,7 +831,7 @@ void HeroElement::dealloc(){
 						this->addChild(rebornSprite);
 
 					}
-					this->schedule(schedule_selector(HeroElement::countDown),1);
+					this->schedule(CC_SCHEDULE_SELECTOR(HeroElement::countDown),1);
 
 			}
 			
@@ -855,7 +855,7 @@ void HeroElement::reborn(float dt){
 
 	if(this->getPosition().equals(this->getSpawnPoint()))
 	{
-		CCNotificationCenter::sharedNotificationCenter()->addObserver(this, callfuncO_selector(NarutoSenki::ActionManager::acceptAttack), "acceptAttack", NULL);
+		NotificationCenter::getInstance()->addObserver(this, callfuncO_selector(NarutoSenki::ActionManager::acceptAttack), "acceptAttack", NULL);
 		this->setOpacity(255);
 		this->setHP(CCString::create(this->getMaxHP()->getCString()));
 		if(_delegate && _delegate->_isDuelMode && _delegate->currentPlayer){
@@ -888,7 +888,7 @@ void HeroElement::reborn(float dt){
 
 		this->idle();
 		if(rebornSprite){
-			this->unschedule(schedule_selector(HeroElement::countDown));
+			this->unschedule(CC_SCHEDULE_SELECTOR(HeroElement::countDown));
 			rebornSprite->removeFromParent();
 			rebornSprite=NULL;
 		}
@@ -1049,7 +1049,7 @@ void Flog::setID(CCString* character,CCString* role,CCString* group){
 
 
 	this->initAction();
-	CCNotificationCenter::sharedNotificationCenter()->addObserver(this, callfuncO_selector(NarutoSenki::ActionManager::acceptAttack), "acceptAttack", NULL);
+	NotificationCenter::getInstance()->addObserver(this, callfuncO_selector(NarutoSenki::ActionManager::acceptAttack), "acceptAttack", NULL);
 
 };
 
@@ -1169,7 +1169,7 @@ void Flog::setAI(float dt){
 
 
 void Flog::dealloc(){
-	this->unschedule(schedule_selector(NarutoSenki::ActionManager::setAI));
+	this->unschedule(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::setAI));
 	this->setActionState(ACTION_STATE_DEAD);
 	this->stopAllActions();
 
@@ -1281,7 +1281,7 @@ void Tower::setID(CCString* character,CCString* role,CCString* group){
 
 	this->initAction();
 
-	CCNotificationCenter::sharedNotificationCenter()->addObserver(this, callfuncO_selector(NarutoSenki::ActionManager::acceptAttack), "acceptAttack", NULL);
+	NotificationCenter::getInstance()->addObserver(this, callfuncO_selector(NarutoSenki::ActionManager::acceptAttack), "acceptAttack", NULL);
 
 }
 
@@ -1307,7 +1307,7 @@ void Tower::setHPbar(){
 
 
 void Tower::dealloc(){
-	this->unschedule(schedule_selector(NarutoSenki::ActionManager::setAI));
+	this->unschedule(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::setAI));
 	this->setActionState(ACTION_STATE_DEAD);
 	this->stopAllActions();
 
@@ -1519,8 +1519,8 @@ void Monster::changeHPbar(){
 	}
 
 	if(_hpBar){	
-		CCSpriteFrame* frame = CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName(CCString::createWithFormat("hp_bottom%d.png",int(_level))->getCString());  
-		_hpBar->getHPBottom()->setDisplayFrame(frame);
+		SpriteFrame* frame = SpriteFrameCache::getInstance()->spriteFrameByName(CCString::createWithFormat("hp_bottom%d.png",int(_level))->getCString());
+		_hpBar->getHPBottom()->setSpriteFrame(frame);
 	}
 
 
@@ -1551,7 +1551,7 @@ void Monster::setAI(float dt){
 						CCString* monterName=CCString::create("KageHand");
 						dic->setObject(monterName,1);
 						this->setMon(this,(void*) dic);
-						this->unschedule(schedule_selector(NarutoSenki::ActionManager::setAI));
+						this->unschedule(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::setAI));
 					}
 				}
 
@@ -1643,7 +1643,7 @@ void Monster::setAI(float dt){
 				if(strcmp(_mainTarget->getRole()->getCString(),"Player")==0 || 
 					strcmp(_mainTarget->getRole()->getCString(),"Com")==0 ){
 					this->attack(NAttack);
-					this->unschedule(schedule_selector(NarutoSenki::ActionManager::setAI));
+					this->unschedule(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::setAI));
 				}
 
 			}else{
@@ -1651,7 +1651,7 @@ void Monster::setAI(float dt){
 				this->attack(NAttack);
 
 				if(strcmp(getCharacter()->getCString(),"SmallSlug")!=0){
-						this->unschedule(schedule_selector(NarutoSenki::ActionManager::setAI));
+						this->unschedule(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::setAI));
 				}
 
 			}
@@ -1677,7 +1677,7 @@ void Monster::setAI(float dt){
 
 void Monster::dealloc(){
 
-	this->unschedule(schedule_selector(NarutoSenki::ActionManager::setAI));
+	this->unschedule(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::setAI));
 	this->setActionState(ACTION_STATE_DEAD);
 	this->stopAllActions();
 
@@ -1700,11 +1700,11 @@ void Monster::dealloc(){
 
 		_master->_isCanSkill1=false;
 		_master->setActionResume();
-		_master->scheduleOnce(schedule_selector(NarutoSenki::ActionManager::enableSkill1),_sattackcoldDown1);
+		_master->scheduleOnce(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::enableSkill1),_sattackcoldDown1);
 
 		if(strcmp(_master->getRole()->getCString(),"Player")==0){
-			CCSpriteFrame *frame=CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName("Minato_skill1.png"); 
-			_delegate->getHudLayer()->skill1Button->setDisplayFrame(frame);
+			SpriteFrame *frame=SpriteFrameCache::getInstance()->spriteFrameByName("Minato_skill1.png");
+			_delegate->getHudLayer()->skill1Button->setSpriteFrame(frame);
 			_delegate->getHudLayer()->skill1Button->_clickNum++;
 			_delegate->clearDoubleClick();
 		}
