@@ -334,7 +334,8 @@ Catatan progress terbaru:
 
 ### Tahap 5: Container/Data dan Sisa Action Bridge
 
-Status: **baru dimulai; commit awal belum build-tested oleh pengguna**.
+Status: **berjalan; commit awal `ActionManager` sudah build-tested oleh
+pengguna di Android, commit cleanup `Effect` terbaru belum build-tested**.
 
 Prioritas:
 
@@ -356,6 +357,7 @@ Target migrasi:
 Commit awal tahap 5:
 
 - `7dc2520 refactor: migrate action manager local action aliases`
+- `c9a65db refactor: migrate effect sequence helpers`
 
 Catatan progress terbaru:
 
@@ -369,9 +371,15 @@ Catatan progress terbaru:
 - Cleanup ini tetap mempertahankan `CCArray` sebagai container sequence/frame
   internal karena helper compat `createSequence` dan
   `createAnimationWithSpriteFrames` masih menjadi jembatan aman untuk data lama.
-- Setelah commit awal tahap 5 lulus build Android, langkah berikutnya adalah
-  memilih satu adapter lokal lagi, misalnya sequence helper di `Effect`,
-  `HudLayer`, atau `Element`, sebelum menyentuh migrasi container besar.
+- Commit awal `ActionManager` sudah dibuild pengguna di Android dan berjalan
+  aman.
+- `Effect.cpp` dibersihkan dari helper compat sequence/animation lokal:
+  sequence sederhana memakai `Sequence::create`, frame animasi lokal memakai
+  `Vector<SpriteFrame*>`, dan animasi dibuat langsung lewat
+  `Animation::createWithSpriteFrames`.
+- Setelah commit cleanup `Effect` lulus build Android, langkah berikutnya adalah
+  memilih satu adapter lokal lagi, misalnya sequence helper di `HudLayer` atau
+  area kecil `Element`, sebelum menyentuh migrasi container besar.
 - Alias HTTP/EditBox/Scale9/Scroll di `Cocos2dx2Compat.h` belum dihapus karena
   masih punya pemakai aktif.
 
