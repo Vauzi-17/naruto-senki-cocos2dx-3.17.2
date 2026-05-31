@@ -30,7 +30,7 @@ class HPBar;
 
 namespace NarutoSenki {
 
-	class ActionManager :public CCSprite {
+	class ActionManager :public Sprite {
 	public:
 		ActionManager(void);
 		~ActionManager(void);
@@ -76,11 +76,11 @@ namespace NarutoSenki {
 
 
 
-		CCSprite* _heartEffect;
+		Sprite* _heartEffect;
 		Effect* _healBuffEffect;
 		Effect* _powerBuffEffect;
 		Effect* _skillBuffEffect;
-		CCSprite* _dehealBuffEffect;
+		Sprite* _dehealBuffEffect;
 		Effect* _healItemEffect;
 		Effect* _speedItemEffect;
 		float				_buffStartTime;
@@ -98,8 +98,8 @@ namespace NarutoSenki {
 
 		bool				_isPausing;
 
-		CCPoint				_markPoint;
-		CCPoint				_startPoint;
+		Vec2				_markPoint;
+		Vec2				_startPoint;
 
 		bool				_isAI;
 		bool				_isControled;
@@ -119,7 +119,7 @@ namespace NarutoSenki {
 
 
 		HPBar* _hpBar;
-		CCSprite* _shadow;
+		Sprite* _shadow;
 		float				_originY;
 		float				_backY;
 		float				_DiretionY;
@@ -156,7 +156,7 @@ namespace NarutoSenki {
 		CC_SYNTHESIZE(unsigned int, _rebornTime, RebornTime);
 
 
-		CC_SYNTHESIZE(CCPoint, _spawnPoint, SpawnPoint);
+		CC_SYNTHESIZE(Vec2, _spawnPoint, SpawnPoint);
 
 
 		CC_SYNTHESIZE(Hero*, _master, Master);
@@ -267,8 +267,8 @@ namespace NarutoSenki {
 		CC_SYNTHESIZE(CCArray*, _monsterArray, MonsterArray);
 
 		//movement
-		CC_SYNTHESIZE(cocos2d::CCPoint, _velocity, Velocity);
-		CC_SYNTHESIZE(cocos2d::CCPoint, _desiredPosition, DesiredPosition);
+		CC_SYNTHESIZE(cocos2d::Vec2, _velocity, Velocity);
+		CC_SYNTHESIZE(cocos2d::Vec2, _desiredPosition, DesiredPosition);
 
 		CC_SYNTHESIZE(actionState, _actionState, ActionState);
 		CC_SYNTHESIZE(GameLayer*, _delegate, Delegate);
@@ -276,26 +276,26 @@ namespace NarutoSenki {
 
 
 
-		CC_SYNTHESIZE_RETAIN(CCAction*, _idleAction, IdleAction);
-		CC_SYNTHESIZE_RETAIN(CCAction*, _nattackAction, NAttackAction);
-		CC_SYNTHESIZE_RETAIN(CCAction*, _walkAction, WalkAction);
-		CC_SYNTHESIZE_RETAIN(CCAction*, _hurtAction, HurtAction);
-		CC_SYNTHESIZE_RETAIN(CCAction*, _knockDownAction, KnockDownAction);
-		CC_SYNTHESIZE_RETAIN(CCAction*, _airHurtAction, AirHurtAction);
-		CC_SYNTHESIZE_RETAIN(CCAction*, _floatAction, FloatAction);
-		CC_SYNTHESIZE_RETAIN(CCAction*, _deadAction, DeadAction);
+		CC_SYNTHESIZE_RETAIN(Action*, _idleAction, IdleAction);
+		CC_SYNTHESIZE_RETAIN(Action*, _nattackAction, NAttackAction);
+		CC_SYNTHESIZE_RETAIN(Action*, _walkAction, WalkAction);
+		CC_SYNTHESIZE_RETAIN(Action*, _hurtAction, HurtAction);
+		CC_SYNTHESIZE_RETAIN(Action*, _knockDownAction, KnockDownAction);
+		CC_SYNTHESIZE_RETAIN(Action*, _airHurtAction, AirHurtAction);
+		CC_SYNTHESIZE_RETAIN(Action*, _floatAction, FloatAction);
+		CC_SYNTHESIZE_RETAIN(Action*, _deadAction, DeadAction);
 
 
-		CC_SYNTHESIZE_RETAIN(CCAction*, _skill1Action, Skill1Action);
-		CC_SYNTHESIZE_RETAIN(CCAction*, _skill2Action, Skill2Action);
-		CC_SYNTHESIZE_RETAIN(CCAction*, _skill3Action, Skill3Action);
-		CC_SYNTHESIZE_RETAIN(CCAction*, _skill4Action, Skill4Action);
-		CC_SYNTHESIZE_RETAIN(CCAction*, _skill5Action, Skill5Action);
+		CC_SYNTHESIZE_RETAIN(Action*, _skill1Action, Skill1Action);
+		CC_SYNTHESIZE_RETAIN(Action*, _skill2Action, Skill2Action);
+		CC_SYNTHESIZE_RETAIN(Action*, _skill3Action, Skill3Action);
+		CC_SYNTHESIZE_RETAIN(Action*, _skill4Action, Skill4Action);
+		CC_SYNTHESIZE_RETAIN(Action*, _skill5Action, Skill5Action);
 
 
-		CC_SYNTHESIZE_RETAIN(CCActionInterval*, _moveAction, MoveAction);
-		CC_SYNTHESIZE_RETAIN(CCAction*, _floatUPAction, FloatUPAction);
-		CC_SYNTHESIZE_RETAIN(CCActionInterval*, _jumpUPAction, JumpUPAction);
+		CC_SYNTHESIZE_RETAIN(ActionInterval*, _moveAction, MoveAction);
+		CC_SYNTHESIZE_RETAIN(Action*, _floatUPAction, FloatUPAction);
+		CC_SYNTHESIZE_RETAIN(ActionInterval*, _jumpUPAction, JumpUPAction);
 
 
 		void				update(float dt);
@@ -306,14 +306,14 @@ namespace NarutoSenki {
 
 
 		void				idle();
-		void				walk(CCPoint direction);
+		void				walk(Vec2 direction);
 		void				attack(abType type);
 		void				sAttack(abType type);
 		void				nAttack();
 		void				oAttack(abType type);
 		bool				hurt();
 		bool				hardHurt(int delayTime, bool isHurtAction, bool isCatch, bool isStick, bool isStun);
-		void				absorb(CCPoint position, bool isImmediate);
+		void				absorb(Vec2 position, bool isImmediate);
 		void				jump();
 		void				knockDown();
 		void				dead();
@@ -413,7 +413,7 @@ namespace NarutoSenki {
 
 		void				readDate(CCArray* tmpDate, CCString*& attackType, CCString*& attackValue, int& attackRangeX, int& attackRangeY, unsigned int& coldDown, int& combatPoint);
 
-		CCAction* createAnimation(CCArray* ationArray, float fps, bool isRepeat, bool isReturn);
+		Action* createAnimation(CCArray* ationArray, float fps, bool isRepeat, bool isReturn);
 
 		CCDictionary* callValue;
 
@@ -465,8 +465,8 @@ namespace NarutoSenki {
 
 		void				removeCoinDisplay(CCNode* sender, void* date);
 
-		CCRect				setHalfBox();
-		CCRect				setHitBox();
+		Rect				setHalfBox();
+		Rect				setHitBox();
 
 		void				checkActionFinish(float dt);
 
@@ -483,7 +483,7 @@ namespace NarutoSenki {
 		bool				stepBack2();
 		bool				checkRetri();
 		void				stepOn();
-		void				changeSide(CCPoint sp);
+		void				changeSide(Vec2 sp);
 
 
 

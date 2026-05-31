@@ -23,7 +23,7 @@ public:
 	virtual void setAI(float dt);
 	
 
-	CCSprite* rebornSprite;
+	Sprite* rebornSprite;
 	CCLabelBMFont* rebornLabel;
 	void	reborn(float dt);
 	void	dealloc();

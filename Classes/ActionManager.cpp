@@ -1088,7 +1088,7 @@ void NarutoSenki::ActionManager::acceptAttack(CCObject* object){
 };
 
 
-CCAction* NarutoSenki::ActionManager::createAnimation(CCArray* ationArray,float fps,bool isRepeat,bool isReturn){
+Action* NarutoSenki::ActionManager::createAnimation(CCArray* ationArray,float fps,bool isRepeat,bool isReturn){
 
 
 	CCObject* tObject;
@@ -1343,7 +1343,7 @@ void NarutoSenki::ActionManager::setOugis(CCNode* sender){
 		_delegate->setOugis(this);
 }
 
-CCRect NarutoSenki::ActionManager::setHalfBox(){
+Rect NarutoSenki::ActionManager::setHalfBox(){
 	CCRect halfbox =CCRectMake(_isFlipped?this->getPositionX()- this->getContentSize().width/2:this->getPositionX(),
 		this->getPositionY()+this->getContentSize().height/2,
 		this->getContentSize().width/2,
@@ -1351,7 +1351,7 @@ CCRect NarutoSenki::ActionManager::setHalfBox(){
 	return  halfbox;
 };
 
-CCRect NarutoSenki::ActionManager::setHitBox(){
+Rect NarutoSenki::ActionManager::setHitBox(){
 	CCRect hitbox=this->boundingBox();
 	return hitbox;
 };
@@ -6914,7 +6914,7 @@ void NarutoSenki::ActionManager::idle(){
 };
 
 
-void NarutoSenki::ActionManager::walk(CCPoint direction){
+void NarutoSenki::ActionManager::walk(Vec2 direction){
 	if(_actionState==ACTION_STATE_IDLE || _actionState==ACTION_STATE_WALK || ( _actionState==ACTION_STATE_ATTACK && strcmp(this->getRole()->getCString(),"Player")!=0) ){
 		
 		isHurtingTower=false;
@@ -7189,7 +7189,7 @@ void NarutoSenki::ActionManager::resumePauseStuff(float dt){
 
 }
 
-void NarutoSenki::ActionManager::absorb(CCPoint position,bool isImmediate){
+void NarutoSenki::ActionManager::absorb(Vec2 position,bool isImmediate){
 	if(_actionState==ACTION_STATE_IDLE ||
 		_actionState==ACTION_STATE_WALK || 
 		_actionState==ACTION_STATE_ATTACK 
@@ -8093,7 +8093,7 @@ bool NarutoSenki::ActionManager::stepBack2(){
 }
 
 
-void NarutoSenki::ActionManager::changeSide(CCPoint sp){
+void NarutoSenki::ActionManager::changeSide(Vec2 sp){
 	if(sp.x>0){
 		this->setFlipX(false);
 		this->_isFlipped=false;
