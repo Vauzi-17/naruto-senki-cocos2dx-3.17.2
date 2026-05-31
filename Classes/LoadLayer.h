@@ -23,9 +23,9 @@
 #endif
 
 USING_NS_CC;
-using namespace rapidjson; 
+using namespace rapidjson;
 
-class LoadLayer : public CCLayer{
+class LoadLayer : public Layer{
 
 public:
 	LoadLayer(void);
@@ -56,12 +56,12 @@ public:
 	void onLoadFinish(float dt);
 
 	bool isPosting;
-	void onHttpRequestCompleted(CCNode *sender ,void *data);
+	void onHttpRequestCompleted(Node *sender ,void *data);
 
 	CCArray* DLCArray;
 private:
-	
-	void preloadPlist(CCObject* obj);
+
+	void preloadPlist(Ref* obj);
 
 protected:
 	void onEnter();
@@ -69,6 +69,3 @@ protected:
 
 
 };
-
-
-
