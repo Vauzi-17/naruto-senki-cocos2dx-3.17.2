@@ -204,7 +204,7 @@ void HudLayer::initGearButton(){
 
 void HudLayer::onKaichang(){
 
-	CCArray* tempArray= CCArray::create();
+	Vector<SpriteFrame*> tempArray;
 
 	int i=1;
 
@@ -212,24 +212,21 @@ void HudLayer::onKaichang(){
 	{
 		CCString* path=CCString::createWithFormat("gameStart_00%d.png",i);
 		SpriteFrame* frame = SpriteFrameCache::getInstance()->spriteFrameByName(path->getCString());
-		tempArray->addObject(frame);
+		tempArray.pushBack(frame);
 		i+=1;
 	}
 
 
 
-	Animation* tempAnimation= cocos2d::cocos2dx2_compat::createAnimationWithSpriteFrames(tempArray, 0.1f);
+	Animation* tempAnimation= Animation::createWithSpriteFrames(tempArray, 0.1f);
 	Action* tempAction=Animate::create(tempAnimation);
-	CCArray* list=CCArray::create();
-	list->addObject(tempAction);
-	Action* seq=cocos2d::cocos2dx2_compat::createSequence(list);
 
 	Kaichang=Sprite::createWithSpriteFrameName(CCString::createWithFormat("gameStart_001.png")->getCString());
 
 	Kaichang->setAnchorPoint(Vec2(0.5f,0.5f));
 	Kaichang->setPosition(Vec2(winSize.width/2+32,winSize.height/2));
 	this->addChild(Kaichang,5000);
-	Kaichang->runAction(seq);
+	Kaichang->runAction(tempAction);
 }
 
 void HudLayer::initHeroInterface(){
@@ -800,11 +797,7 @@ void HudLayer::setCKRLose(bool isCRK2){
 				skill4Button->_isMarkVisable=false;
 				ActionInterval*  su=ScaleBy::create(0.2f,1.1f);
 				FiniteTimeAction* call=CallFunc::create(CC_CALLBACK_0(ActionButton::setProgressMark, skill4Button));
-				CCArray* list=CCArray::create();
-				list->addObject(su);
-				list->addObject(su->reverse());
-				list->addObject(call);
-				Action* seq=cocos2d::cocos2dx2_compat::createSequence(list);
+				Action* seq=Sequence::create(su,su->reverse(),call,nullptr);
 				skill4Button->runAction(seq);
 			}else{
 				skill4Button->updateProgressMark();
@@ -821,11 +814,7 @@ void HudLayer::setCKRLose(bool isCRK2){
 				skill5Button->_isMarkVisable=false;
 				ActionInterval*  su=ScaleBy::create(0.2f,1.1f);
 				FiniteTimeAction* call=CallFunc::create(CC_CALLBACK_0(ActionButton::setProgressMark, skill5Button));
-				CCArray* list=CCArray::create();
-				list->addObject(su);
-				list->addObject(su->reverse());
-				list->addObject(call);
-				Action* seq=cocos2d::cocos2dx2_compat::createSequence(list);
+				Action* seq=Sequence::create(su,su->reverse(),call,nullptr);
 				skill5Button->runAction(seq);
 			}else{
 				skill5Button->updateProgressMark();
@@ -976,12 +965,7 @@ void HudLayer::setBuffDisplay(const char* buffName, float buffStayTime){
 	FiniteTimeAction* call=CallFuncN::create(CC_CALLBACK_1(HudLayer::clearBuffDisplay, this));
 	DelayTime* delay=DelayTime::create(buffStayTime-3);
 
-	CCArray* seqArray=CCArray::create();
-	seqArray->addObject(delay);
-	seqArray->addObject(call);
-
-
-	Action* seq=cocos2d::cocos2dx2_compat::createSequence(seqArray);
+	Action* seq=Sequence::create(delay,call,nullptr);
 	buffSprite->runAction(seq);
 	buffSprite->setTag(0);
 
@@ -1143,11 +1127,7 @@ void HudLayer::setReportCache(){
 					Spawn* sp=Spawn::createWithTwoActions(fn,mv);
 					DelayTime* delay2=DelayTime::create(1.6f);
 					FiniteTimeAction* call2=CallFunc::create(CC_CALLBACK_0(HudLayer::clearSPCReport, this));
-					CCArray* list=CCArray::create();
-					list->addObject(sp);
-					list->addObject(delay2);
-					list->addObject(call2);
-					Action* seq2=cocos2d::cocos2dx2_compat::createSequence(list);
+					Action* seq2=Sequence::create(sp,delay2,call2,nullptr);
 					reportSPCSprite->runAction(seq2);
 				}else if(num2>=2){
 
@@ -1455,13 +1435,13 @@ void HudLayer::setOugis(CCString* character,CCString* group){
 		ougisLayer->addChild(CutBg);
 
 
-		CCArray* animeFrames=CCArray::create();
+		Vector<SpriteFrame*> animeFrames;
 		for (int i=1;i<=8; i++){
 			SpriteFrame *frame = SpriteFrameCache::getInstance()->spriteFrameByName(CCString::createWithFormat("CutLine_%02d.png",i)->getCString());
-			animeFrames->addObject(frame);
+			animeFrames.pushBack(frame);
 		}
 
-		Animation* tempAnimation= cocos2d::cocos2dx2_compat::createAnimationWithSpriteFrames(animeFrames,0.1f);
+		Animation* tempAnimation= Animation::createWithSpriteFrames(animeFrames,0.1f);
 		Action* tempAction=Animate::create(tempAnimation);
 
 		Sprite* CutLine=Sprite::createWithSpriteFrameName("CutLine_01.png");
