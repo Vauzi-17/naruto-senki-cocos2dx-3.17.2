@@ -11,7 +11,7 @@ USING_NS_CC;
 class NetworkLayer;
 using namespace rapidjson; 
 
-class RakingLayer : public CCLayer{
+class RakingLayer : public Layer{
 
 public:
 	RakingLayer(void);
@@ -87,7 +87,7 @@ private:
 
 
 
-class RankCharButton : public CCSprite, public CCTouchDelegate{
+class RankCharButton : public Sprite{
 
 public:
 	RankCharButton(void);
@@ -97,7 +97,7 @@ public:
 	virtual bool		init(const char *szImage);
 	static RankCharButton*	create(const char *szImage);
 
-	CCRect				getRect();
+	Rect				getRect();
 	void				setBtnType(CCString* buttonChar);
 
 	CC_SYNTHESIZE(CCString*,_btnType,btnType);
@@ -109,11 +109,11 @@ protected:
 
 	virtual void	onEnter();
 	virtual void	onExit();
-	virtual bool	ccTouchBegan(CCTouch* touch,CCEvent* event);
-	virtual void    ccTouchMoved(CCTouch* touch, CCEvent* event);
-	virtual void	ccTouchEnded(CCTouch* touch,CCEvent* event);
+	virtual bool	onTouchBegan(Touch* touch, Event* event);
+	virtual void    onTouchMoved(Touch* touch, Event* event);
+	virtual void	onTouchEnded(Touch* touch, Event* event);
 
-	bool			containsTouchLocation(CCTouch* touch);
+	bool			containsTouchLocation(Touch* touch);
 
 
 };

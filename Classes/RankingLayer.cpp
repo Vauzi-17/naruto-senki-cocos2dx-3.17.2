@@ -22,12 +22,12 @@ RankCharButton::~RankCharButton(void)
 bool RankCharButton::init(const char *szImage){
 	bool bRet = false;
 	do{
-		CC_BREAK_IF(!CCSprite::init());
+		CC_BREAK_IF(!Sprite::init());
 		if(strcmp(szImage,"")!=0)
 			this->initWithSpriteFrameName(szImage);
 			
 
-		this->setAnchorPoint(ccp(0,0));
+		this->setAnchorPoint(Vec2(0,0));
 
 		bRet=true;
 
@@ -38,20 +38,25 @@ bool RankCharButton::init(const char *szImage){
 }
 
 void RankCharButton::onEnter(){
-	CCSprite::onEnter();
-	cocos2d::cocos2dx2_compat::addTargetedDelegate(this,-1,true);
+	Sprite::onEnter();
+	auto listener = EventListenerTouchOneByOne::create();
+	listener->setSwallowTouches(true);
+	listener->onTouchBegan = CC_CALLBACK_2(RankCharButton::onTouchBegan, this);
+	listener->onTouchMoved = CC_CALLBACK_2(RankCharButton::onTouchMoved, this);
+	listener->onTouchEnded = CC_CALLBACK_2(RankCharButton::onTouchEnded, this);
+	Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, this);
 }
 void RankCharButton::onExit(){
-	CCSprite::onExit();
-	cocos2d::cocos2dx2_compat::removeDelegate(this);
+	Director::getInstance()->getEventDispatcher()->removeEventListenersForTarget(this);
+	Sprite::onExit();
 }
 
-CCRect RankCharButton::getRect(){
-	CCSize size=this->getContentSize();
-	return CCRect(0,0, size.width, size.height);
+Rect RankCharButton::getRect(){
+	Size size=this->getContentSize();
+	return Rect(0,0, size.width, size.height);
 
 }
-bool  RankCharButton::containsTouchLocation(CCTouch *touch){
+bool  RankCharButton::containsTouchLocation(Touch *touch){
 
 	return getRect().containsPoint(convertTouchToNodeSpace(touch));
 }
@@ -66,7 +71,7 @@ void RankCharButton::setBtnType(CCString* buttonChar){
 	
 
 
-bool RankCharButton::ccTouchBegan(CCTouch* touch,CCEvent* event){
+bool RankCharButton::onTouchBegan(Touch* touch, Event* event){
 	// touch area 
 	if (!this->containsTouchLocation(touch)){
 		return false;
@@ -77,12 +82,12 @@ bool RankCharButton::ccTouchBegan(CCTouch* touch,CCEvent* event){
 
 }
 
-void RankCharButton::ccTouchMoved(CCTouch* touch,CCEvent* event){
+void RankCharButton::onTouchMoved(Touch* touch, Event* event){
 	// touch area 
 
 }
 
-void RankCharButton::ccTouchEnded(CCTouch* touch,CCEvent* event){
+void RankCharButton::onTouchEnded(Touch* touch, Event* event){
 	if(_delegate->_screwLayer1){
 		_delegate->_screwLayer1->removeAllChildren();
 		_delegate->_screwLayer1->setPositionY(154);
@@ -153,10 +158,10 @@ bool RakingLayer::init(){
 
 	bool bRet=false;
 	do{
-		CC_BREAK_IF(!CCLayer::init());
+		CC_BREAK_IF(!Layer::init());
 	
 		//?????
-		CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("Ranking.plist");
+		SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Ranking.plist");
 
 		CCSprite* gold_left=CCSprite::createWithSpriteFrameName("gold_left.png");
 		gold_left->setAnchorPoint(ccp(0,0));
@@ -199,8 +204,8 @@ bool RakingLayer::init(){
 
 
 
-		if(CCUserDefault::sharedUserDefault()->getBoolForKey("isBGM")!=false){
-			SimpleAudioEngine::sharedEngine()->playBackgroundMusic("Audio/Music/ranking_music.mp3",true);
+		if(UserDefault::getInstance()->getBoolForKey("isBGM")!=false){
+			SimpleAudioEngine::getInstance()->playBackgroundMusic("Audio/Music/ranking_music.mp3",true);
 		}
 
 
@@ -376,8 +381,8 @@ void RakingLayer::produceRanking(int type){
 
 	case 0:
 		if(ranking_title){
-			CCSpriteFrame *frame=CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName("ranking_title1.png"); 
-			ranking_title->setDisplayFrame(frame);
+			SpriteFrame *frame=SpriteFrameCache::getInstance()->getSpriteFrameByName("ranking_title1.png");
+			ranking_title->setSpriteFrame(frame);
 			ranking_title->setPosition(ccp(ranking_bg->getPositionX()-62,ranking_bg->getPositionY()+ranking_bg->getContentSize().height/2-16));
 		}
 		if(side0_btn){
@@ -404,8 +409,8 @@ void RakingLayer::produceRanking(int type){
 	case 1:
 
 		if(ranking_title){
-			CCSpriteFrame *frame=CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName("ranking_title1.png"); 
-			ranking_title->setDisplayFrame(frame);
+			SpriteFrame *frame=SpriteFrameCache::getInstance()->getSpriteFrameByName("ranking_title1.png");
+			ranking_title->setSpriteFrame(frame);
 			ranking_title->setPosition(ccp(ranking_bg->getPositionX()-62,ranking_bg->getPositionY()+ranking_bg->getContentSize().height/2-16));
 		}
 		if(side0_btn){
@@ -441,8 +446,8 @@ void RakingLayer::produceRanking(int type){
 		//side3_btn->unselected();
 
 		if(ranking_title){
-			CCSpriteFrame *frame=CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName("ranking_title2.png"); 
-			ranking_title->setDisplayFrame(frame);
+			SpriteFrame *frame=SpriteFrameCache::getInstance()->getSpriteFrameByName("ranking_title2.png");
+			ranking_title->setSpriteFrame(frame);
 			ranking_title->setPosition(ccp(ranking_bg->getPositionX()-96,ranking_bg->getPositionY()+ranking_bg->getContentSize().height/2-16));
 		}
 
@@ -469,8 +474,8 @@ void RakingLayer::produceRanking(int type){
 		side1_btn->unselected();
 		side2_btn->unselected();
 		if(ranking_title){
-			CCSpriteFrame *frame=CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName("ranking_title3.png"); 
-			ranking_title->setDisplayFrame(frame);
+			SpriteFrame *frame=SpriteFrameCache::getInstance()->getSpriteFrameByName("ranking_title3.png");
+			ranking_title->setSpriteFrame(frame);
 			ranking_title->setPosition(ccp(ranking_bg->getPositionX()-106,ranking_bg->getPositionY()+ranking_bg->getContentSize().height/2-16));
 		}
 		isMemberSelect=false;
@@ -718,7 +723,7 @@ void RakingLayer::postRequest(int code,CCString* useChar/* =NULL */){
 						while (i<7)
 						{
 							CCString* path=CCString::createWithFormat("banner_blink%d.png",i);
-							CCSpriteFrame* frame = CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName(path->getCString());
+							SpriteFrame* frame = SpriteFrameCache::getInstance()->getSpriteFrameByName(path->getCString());
 							tempArray->addObject(frame);
 
 
@@ -840,7 +845,7 @@ void RakingLayer::postRequest(int code,CCString* useChar/* =NULL */){
 void RakingLayer::onCancel(CCObject* sender){
 
 	this->removeFromParent();
-	SimpleAudioEngine::sharedEngine()->playEffect("Audio/Menu/cancel.ogg");
+	SimpleAudioEngine::getInstance()->playEffect("Audio/Menu/cancel.ogg");
 	
 	CCDirector::sharedDirector()->popScene();
 }
@@ -911,8 +916,8 @@ void  RakingLayer::onJifenBtn(CCObject* sender){
 	
 	if(isGroupSelect){
 		if(ranking_title){
-			CCSpriteFrame *frame=CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName("ranking_title3.png"); 
-			ranking_title->setDisplayFrame(frame);
+			SpriteFrame *frame=SpriteFrameCache::getInstance()->getSpriteFrameByName("ranking_title3.png");
+			ranking_title->setSpriteFrame(frame);
 			ranking_title->setPosition(ccp(ranking_bg->getPositionX()-106,ranking_bg->getPositionY()+ranking_bg->getContentSize().height/2-16));
 		}
 		this->postRequest(600);
@@ -934,8 +939,8 @@ void  RakingLayer::onBattleBtn(CCObject* sender){
 	
 	if(isGroupSelect){
 		if(ranking_title){
-			CCSpriteFrame *frame=CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName("ranking_title3.png"); 
-			ranking_title->setDisplayFrame(frame);
+			SpriteFrame *frame=SpriteFrameCache::getInstance()->getSpriteFrameByName("ranking_title3.png");
+			ranking_title->setSpriteFrame(frame);
 			ranking_title->setPosition(ccp(ranking_bg->getPositionX()-106,ranking_bg->getPositionY()+ranking_bg->getContentSize().height/2-16));
 		}
 		this->postRequest(700);
@@ -1267,7 +1272,7 @@ void RakingLayer::onHttpRequestCompleted(CCNode *sender ,void *data) {
 						while (i<7)
 						{
 							CCString* path=CCString::createWithFormat("banner_blink%d.png",i);
-							CCSpriteFrame* frame = CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName(path->getCString());
+							SpriteFrame* frame = SpriteFrameCache::getInstance()->getSpriteFrameByName(path->getCString());
 							tempArray->addObject(frame);
 
 
@@ -1579,7 +1584,7 @@ void RakingLayer::onHttpRequestCompleted2(CCNode *sender ,void *data) {
 						while (i<7)
 						{
 							CCString* path=CCString::createWithFormat("banner_blink%d.png",i);
-							CCSpriteFrame* frame = CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName(path->getCString());
+							SpriteFrame* frame = SpriteFrameCache::getInstance()->getSpriteFrameByName(path->getCString());
 							tempArray->addObject(frame);
 							
 							
@@ -1849,8 +1854,8 @@ void RakingLayer::onSelectGroupBtn(CCObject* sender){
 	}
 
 	if(ranking_title){
-		CCSpriteFrame *frame=CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName("ranking_title2.png"); 
-		ranking_title->setDisplayFrame(frame);
+		SpriteFrame *frame=SpriteFrameCache::getInstance()->getSpriteFrameByName("ranking_title2.png");
+		ranking_title->setSpriteFrame(frame);
 		ranking_title->setPosition(ccp(ranking_bg->getPositionX()-96,ranking_bg->getPositionY()+ranking_bg->getContentSize().height/2-16));
 	}
 
