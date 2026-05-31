@@ -681,7 +681,7 @@ void GameOver::listResult(){
 	this->addChild(overMenu,7);
 
 	if(_delegate->_isDuelMode || _delegate->_isTrainingMode){
-		CCLabelTTF* changeLabel=CCLabelTTF::create("CHANGE",FONT_TYPE,11);
+		Label* changeLabel=Label::createWithSystemFont("CHANGE",FONT_TYPE,11);
 		changeLabel->setColor(ccc3(255,224,80));
 		MenuItemLabel* changeBtn=MenuItemLabel::create(changeLabel,CC_CALLBACK_1(GameOver::onChangeChar, this));
 		Menu* changeMenu=Menu::create(changeBtn,nullptr);
@@ -690,7 +690,7 @@ void GameOver::listResult(){
 	}
 
 	if(_delegate->_isDuelMode){
-		CCLabelTTF* rematchLabel=CCLabelTTF::create("REMATCH",FONT_TYPE,11);
+		Label* rematchLabel=Label::createWithSystemFont("REMATCH",FONT_TYPE,11);
 		rematchLabel->setColor(ccc3(255,224,80));
 		MenuItemLabel* rematchBtn=MenuItemLabel::create(rematchLabel,CC_CALLBACK_1(GameOver::onRematch, this));
 		Menu* rematchMenu=Menu::create(rematchBtn,nullptr);
@@ -745,18 +745,18 @@ void GameOver::onChangeChar(Ref* sender){
 	}
 	float cx=winSize.width/2;
 	float cy=winSize.height/2;
-	CCLabelTTF* title=CCLabelTTF::create("CHANGE CHARACTER",FONT_TYPE,14);
+	Label* title=Label::createWithSystemFont("CHANGE CHARACTER",FONT_TYPE,14);
 	title->setColor(ccc3(126,58,30));
 	title->setPosition(Vec2(cx,cy+96));
 	changeCharLayer->addChild(title,2);
 
 	Menu* targetMenu=nullptr;
 	if(_delegate->_isDuelMode){
-		CCLabelTTF* playerLabel=CCLabelTTF::create("PLAYER",FONT_TYPE,changeTargetEnemy?11:13);
+		Label* playerLabel=Label::createWithSystemFont("PLAYER",FONT_TYPE,changeTargetEnemy?11:13);
 		playerLabel->setColor(changeTargetEnemy?ccc3(86,70,52):ccc3(142,63,28));
 		MenuItemLabel* playerItem=MenuItemLabel::create(playerLabel,CC_CALLBACK_1(GameOver::onChangeCharTarget, this));
 		playerItem->setTag(0);
-		CCLabelTTF* enemyLabel=CCLabelTTF::create("ENEMY",FONT_TYPE,changeTargetEnemy?13:11);
+		Label* enemyLabel=Label::createWithSystemFont("ENEMY",FONT_TYPE,changeTargetEnemy?13:11);
 		enemyLabel->setColor(changeTargetEnemy?ccc3(142,63,28):ccc3(86,70,52));
 		MenuItemLabel* enemyItem=MenuItemLabel::create(enemyLabel,CC_CALLBACK_1(GameOver::onChangeCharTarget, this));
 		enemyItem->setTag(1);
@@ -766,7 +766,7 @@ void GameOver::onChangeChar(Ref* sender){
 		changeCharLayer->addChild(targetMenu,2);
 	}else{
 		changeTargetEnemy=false;
-		CCLabelTTF* playerOnly=CCLabelTTF::create("PLAYER",FONT_TYPE,13);
+		Label* playerOnly=Label::createWithSystemFont("PLAYER",FONT_TYPE,13);
 		playerOnly->setColor(ccc3(142,63,28));
 		playerOnly->setPosition(Vec2(cx,cy+72));
 		changeCharLayer->addChild(playerOnly,2);
@@ -814,7 +814,7 @@ void GameOver::onChangeChar(Ref* sender){
 	changeCharLayer->addChild(heroScroll,2);
 
 	CCString* pickText=CCString::createWithFormat("%s: %s",changeTargetEnemy?"ENEMY":"PLAYER",changeTargetEnemy && changeEnemyPick?changeEnemyPick->getCString():changePlayerPick->getCString());
-	CCLabelTTF* pickLabel=CCLabelTTF::create(pickText->getCString(),FONT_TYPE,10);
+	Label* pickLabel=Label::createWithSystemFont(pickText->getCString(),FONT_TYPE,10);
 	pickLabel->setColor(ccc3(72,55,40));
 	pickLabel->setPosition(Vec2(cx,cy-76));
 	changeCharLayer->addChild(pickLabel,2);
@@ -909,7 +909,7 @@ void GameOver::onUPloadBtn(Ref* sender){
 		KTools* tool=KTools::create();
 
 		tool->prepareFileSHA();
-		std::string filePath=CCFileUtils::sharedFileUtils()->getWritablePath()+"SHA.xml";
+		std::string filePath=FileUtils::getInstance()->getWritablePath()+"SHA.xml";
 		std::string strFileMD5 =CMD5Checksum::GetMD5(filePath);
 		remove(filePath.c_str());
 
