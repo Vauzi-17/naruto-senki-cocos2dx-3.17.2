@@ -131,6 +131,14 @@ Strateginya adalah membersihkan API node/action/input terlebih dahulu, lalu baru
 membersihkan container/data structure lama setelah modul gameplay utama lebih
 stabil.
 
+Catatan khusus:
+
+- `CCArray` di scene awal seperti `StartMenu`, `NetworkLayer`, dan `LoadLayer`
+  sengaja belum dipaksa migrasi karena masih menjadi kontrak data dengan
+  gameplay core. Pembersihan container sebaiknya dilakukan setelah
+  `ActionManager`, `Element`, dan `Characters` lebih stabil, agar tidak perlu
+  membuat adapter bolak-balik antara scene awal dan gameplay.
+
 ## Tahap Berikutnya
 
 ### Tahap 3: Gameplay Core
@@ -177,9 +185,16 @@ Commit awal tahap 3:
 - `0229d2d refactor: migrate action manager scheduler selectors`
 - `56981ee refactor: migrate character scheduler selectors`
 - `79e334c refactor: migrate element action callbacks`
+- `0cd115b refactor: migrate action manager direct callbacks`
 
 Catatan progress terbaru:
 
+- `ActionManager.cpp` mulai dibersihkan dari callback action langsung yang tidak
+  membawa payload `void*`: beberapa alur `disableShack`, `idle`, `dealloc`, dan
+  `knockDown` sudah memakai `CallFunc` + `CC_CALLBACK_0`. Tipe action lokal di
+  area terkait juga mulai diganti ke API 3.x seperti `Action`,
+  `ActionInterval`, `FiniteTimeAction`, `DelayTime`, `MoveTo`, `JumpTo`,
+  `FadeOut`, dan `Sequence`.
 - `Element.cpp` mulai dibersihkan dari callback action lama di alur
   `Monster` dan `Bullet`: `CCCallFunc`/`callfunc_selector` diganti ke
   `CallFunc` + `CC_CALLBACK_0`, dan tipe action lokal di fungsi gerak/dealloc
