@@ -799,45 +799,6 @@ void RakingLayer::postRequest(int code,CCString* useChar/* =NULL */){
 
 	}
 
-
-	//if(!isPosting){
-
-	//	isPosting=true;
-	//	postingCode=code;
-	//	//????
-	//	if(!refreshBtn){
-	//		refreshBtn=CCSprite::createWithSpriteFrameName("refresh_btn.png");
-	//		refreshBtn->setPosition(ccp(winSize.width/2,winSize.height/2));
-	//		CCActionInterval* rt=CCRotateBy::create(0.3f,180,180);
-	//		refreshBtn->runAction(CCRepeatForever::create(rt));
-	//		this->addChild(refreshBtn,1000);
-
-
-	//	}
-	//	cocos2d::extension::CCHttpRequest* request = new CCHttpRequest(); 
-	//	std::string codeFinal;
-	//	if(useChar){
-	//		codeFinal=CCString::createWithFormat("code=%d&id=%d&char=%s",code,MemberID,useChar->getCString())->getCString();
-	//	}else{
-	//		codeFinal=CCString::createWithFormat("code=%d&id=%d&group_id=%d",code,MemberID,GroupID?GroupID:0)->getCString();
-	//	}
-	//
-	//	std::string url=SERVER"nsk/rank.php?"+codeFinal;
-	//	request->setUrl(url.c_str());  
-	//	request->setRequestType(CCHttpRequest::kHttpGet);  
-	//	if(code>510){
-	//		request->setResponseCallback(this, callfuncND_selector(RakingLayer::onHttpRequestCompleted3));  
-	//	}else if(code>310){
-	//		request->setResponseCallback(this, callfuncND_selector(RakingLayer::onHttpRequestCompleted2));  
-	//	}else {
-	//		request->setResponseCallback(this, callfuncND_selector(RakingLayer::onHttpRequestCompleted));  
-	//	}
-
-	//	request->setTag("Post_My_Data");  
-	//	cocos2d::extension::CCHttpClient::getInstance()->send(request);  
-	//	request->release();  
-	//}
-
 }
 
 
