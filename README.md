@@ -22,7 +22,7 @@ masih memakai API 2.x seperti `CCLayer`, `CCSprite`, `CCMenu`, `CCPoint`,
 
 ## Estimasi Progress Migrasi
 
-Estimasi progress menuju kode full cocos2d-x 3.17.2: **sekitar 73%**.
+Estimasi progress menuju kode full cocos2d-x 3.17.2: **sekitar 74%**.
 
 Alasan estimasi:
 
@@ -33,6 +33,9 @@ Alasan estimasi:
   game di HP tanpa crash.
 - Area gameplay core sudah mulai distabilkan lewat migrasi callback/action/frame
   tanpa mengubah kontrak data lama secara paksa.
+- Tahap 5 sudah dimulai secara aman dari area lokal `ActionManager`: sisa alias
+  action/animation 2.x di beberapa helper internal dibersihkan tanpa mengubah
+  kontrak container besar.
 - Masih ada sisa API 2.x yang cukup banyak di `ActionManager`, `Element`,
   `RankingLayer`, beberapa utility UI, app delegate, dan compatibility bridge.
 - Untuk mencapai 100%, sisa terbesar bukan sekadar rename API, tetapi migrasi
@@ -329,19 +332,48 @@ Catatan progress terbaru:
 - Commit cleanup text/helper terbaru belum dibuild ulang oleh Codex sesuai
   aturan kerja; perlu uji Android pengguna sebelum tahap 4 ditutup.
 
-Rencana langkah berikutnya:
+### Tahap 5: Container/Data dan Sisa Action Bridge
 
-- Setelah commit cleanup text/helper terbaru lulus build Android, tahap 4 bisa
-  dianggap selesai untuk jalur aman non-core.
-- Tahap berikutnya adalah tahap 5 container/data: mulai migrasi
-  `CCArray`, `CCDictionary`, `CCString`, dan sisa helper sequence/animation
-  secara bertahap per batas modul, bukan sekaligus satu project.
-- Urutan awal tahap 5 yang disarankan: audit pemakai `Cocos2dx2Compat.h`, lalu
-  bersihkan adapter paling lokal lebih dulu, kemudian masuk ke kontrak besar di
+Status: **baru dimulai; commit awal belum build-tested oleh pengguna**.
+
+Prioritas:
+
+- Audit pemakai `Cocos2dx2Compat.h`.
+- Bersihkan adapter paling lokal lebih dulu.
+- Migrasi `CCArray`, `CCDictionary`, dan `CCString` per batas modul.
+- Lanjutkan dari area paling aman sebelum masuk kontrak besar di
   `ActionManager`, `Element`, `Characters`, loader XML, dan scene gameplay.
+
+Target migrasi:
+
+- Mengurangi pemakaian alias/helper sequence dan animation lama yang masih
+  bergantung pada compatibility bridge.
+- Menjaga `CCArray`, `CCDictionary`, dan `CCString` tetap hidup di batas modul
+  yang masih menjadi kontrak gameplay sampai ada migrasi data yang lebih aman.
+- Tidak mencampur pembersihan flow online/dekoratif lama dengan migrasi
+  container besar agar error build lebih mudah dilacak.
+
+Commit awal tahap 5:
+
+- `7dc2520 refactor: migrate action manager local action aliases`
+
+Catatan progress terbaru:
+
+- Audit awal menunjukkan `CCArray`, `CCDictionary`, dan `CCString` masih dipakai
+  luas lintas `ActionManager`, `Element`, `Characters`, scene awal, loader XML,
+  dan UI, sehingga belum aman dimigrasi sekaligus.
+- `ActionManager.cpp` dibersihkan dari sisa alias action/animation 2.x lokal
+  seperti `CCAnimation`, `CCAnimate`, `CCAction`, `CCRepeatForever`,
+  `CCSequence`, `CCMoveBy`, `CCFadeOut`, `CCSpawn`, `CCScaleBy`, dan
+  `CCDelayTime`.
+- Cleanup ini tetap mempertahankan `CCArray` sebagai container sequence/frame
+  internal karena helper compat `createSequence` dan
+  `createAnimationWithSpriteFrames` masih menjadi jembatan aman untuk data lama.
+- Setelah commit awal tahap 5 lulus build Android, langkah berikutnya adalah
+  memilih satu adapter lokal lagi, misalnya sequence helper di `Effect`,
+  `HudLayer`, atau `Element`, sebelum menyentuh migrasi container besar.
 - Alias HTTP/EditBox/Scale9/Scroll di `Cocos2dx2Compat.h` belum dihapus karena
-  masih punya pemakai aktif; pembersihan flow online/dekoratif lama sebaiknya
-  dipisah dari migrasi container agar risiko build lebih mudah dilacak.
+  masih punya pemakai aktif.
 
 ## Cara Kerja Migrasi
 
