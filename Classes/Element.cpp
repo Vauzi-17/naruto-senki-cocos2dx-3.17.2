@@ -1685,11 +1685,11 @@ void Monster::dealloc(){
 		strcmp(this->getCharacter()->getCString(),"FudonSRK2")==0
 		){
 
-			CCFiniteTimeAction *call=CCCallFunc::create(this,callfunc_selector(Monster::dealloc2));
+			FiniteTimeAction* call = CallFunc::create(CC_CALLBACK_0(Monster::dealloc2, this));
 			CCArray* seqArray=CCArray::create();
 			seqArray->addObject(this->getDeadAction());
 			seqArray->addObject(call);
-			CCAction* seq=cocos2d::cocos2dx2_compat::createSequence(seqArray);
+			Action* seq=cocos2d::cocos2dx2_compat::createSequence(seqArray);
 			this->runAction(seq);
 			return;
 
@@ -1750,17 +1750,17 @@ void Monster::dealloc(){
 		strcmp(this->getCharacter()->getCString(),"Kage")==0
 		){
 
-		CCFiniteTimeAction *call=CCCallFunc::create(this,callfunc_selector(Monster::dealloc2));
+		FiniteTimeAction* call = CallFunc::create(CC_CALLBACK_0(Monster::dealloc2, this));
 
 		
 		CCArray* seqArray=CCArray::create();
 		seqArray->addObject(this->getDeadAction());
 		seqArray->addObject(call);
 		
-		CCFiniteTimeAction *call2=CCCallFunc::create(this,callfunc_selector(Monster::setResume));
+		FiniteTimeAction* call2 = CallFunc::create(CC_CALLBACK_0(Monster::setResume, this));
 		seqArray->addObject(call2);
 	
-		CCAction* seq=cocos2d::cocos2dx2_compat::createSequence(seqArray);
+		Action* seq=cocos2d::cocos2dx2_compat::createSequence(seqArray);
 		this->runAction(seq);
 		
 
@@ -1777,16 +1777,16 @@ void Monster::dealloc(){
 
 void Monster::setDirectMove(unsigned int length,float delay,bool isReverse){
 
-	CCPoint direction=ccp(this->_isFlipped?this->getPosition().x-length:this->getPosition().x+length,
+	Vec2 direction=Vec2(this->_isFlipped?this->getPosition().x-length:this->getPosition().x+length,
 		this->getPositionY());
-	CCPoint direction2=this->getPosition();
-	CCActionInterval* mv=CCMoveTo::create(delay,direction);
-	CCFiniteTimeAction* call=CCCallFunc::create(this,callfunc_selector(Monster::dealloc));
-	CCAction* seq;
+	Vec2 direction2=this->getPosition();
+	ActionInterval* mv=MoveTo::create(delay,direction);
+	FiniteTimeAction* call = CallFunc::create(CC_CALLBACK_0(Monster::dealloc, this));
+	Action* seq;
 	if (!isReverse) {
 		seq=cocos2d::cocos2dx2_compat::createSequence(mv,call,NULL);
 	}else{
-		CCActionInterval* mv2=CCMoveTo::create(delay,direction2);
+		ActionInterval* mv2=MoveTo::create(delay,direction2);
 		seq=cocos2d::cocos2dx2_compat::createSequence(mv,mv2,call,NULL);
 	}
 
@@ -1796,37 +1796,37 @@ void Monster::setDirectMove(unsigned int length,float delay,bool isReverse){
 }
 void Monster::setEaseIn(unsigned int length,float delay){
 
-	CCPoint direction=ccp(this->_isFlipped?this->getPosition().x-length:this->getPosition().x+length,
+	Vec2 direction=Vec2(this->_isFlipped?this->getPosition().x-length:this->getPosition().x+length,
 		this->getPositionY());
-	CCActionInterval* mv=CCMoveTo::create(1.0f,direction);
-	CCActionInterval* eo=CCEaseIn::create(mv,delay);
+	ActionInterval* mv=MoveTo::create(1.0f,direction);
+	ActionInterval* eo=EaseIn::create(mv,delay);
 	
-	CCFiniteTimeAction* call=CCCallFunc::create(this,callfunc_selector(Monster::dealloc));
-	CCAction* seq=cocos2d::cocos2dx2_compat::createSequence(eo,call,NULL);
+	FiniteTimeAction* call = CallFunc::create(CC_CALLBACK_0(Monster::dealloc, this));
+	Action* seq=cocos2d::cocos2dx2_compat::createSequence(eo,call,NULL);
 	this->runAction(seq) ;
 }
 
 void Monster::setDirectMoveBy(unsigned int length,float delay){
 
-	CCPoint direction=ccp(this->_isFlipped?this->getPosition().x-length:this->getPosition().x+length,
+	Vec2 direction=Vec2(this->_isFlipped?this->getPosition().x-length:this->getPosition().x+length,
 		this->getPositionY());
 
 	if(_mainTarget ){
 		
-		CCActionInterval* mv=CCMoveBy::create(0.1f,ccp(_mainTarget->getPositionX()>this->getPositionX()?16:-16,_mainTarget->getPositionY()>this->getPositionY()?16:-16));
+		ActionInterval* mv=MoveBy::create(0.1f,Vec2(_mainTarget->getPositionX()>this->getPositionX()?16:-16,_mainTarget->getPositionY()>this->getPositionY()?16:-16));
 
-		this->runAction(CCRepeatForever::create(mv));
+		this->runAction(RepeatForever::create(mv));
 	_mainTarget =NULL;
 	_master->_mainTarget=NULL;
 	}else{
-		CCActionInterval* mv=CCMoveBy::create(0.1f,ccp(this->_isFlipped?-16:16,0));
+		ActionInterval* mv=MoveBy::create(0.1f,Vec2(this->_isFlipped?-16:16,0));
 
-		this->runAction(CCRepeatForever::create(mv));
+		this->runAction(RepeatForever::create(mv));
 	}
 
-	CCDelayTime* dl=CCDelayTime::create(delay);
-	CCFiniteTimeAction* call=CCCallFunc::create(this,callfunc_selector(Monster::dealloc));
-	CCAction* seq=cocos2d::cocos2dx2_compat::createSequence(dl,call,NULL);
+	DelayTime* dl=DelayTime::create(delay);
+	FiniteTimeAction* call = CallFunc::create(CC_CALLBACK_0(Monster::dealloc, this));
+	Action* seq=cocos2d::cocos2dx2_compat::createSequence(dl,call,NULL);
 	this->runAction(seq) ;
 	
 }
@@ -1959,11 +1959,11 @@ void Bullet::dealloc(){
 	if(strcmp(this->getCharacter()->getCString(),"Amaterasu")==0 
 		){
 		
-		CCFiniteTimeAction *call=CCCallFunc::create(this,callfunc_selector(Bullet::dealloc2));
+		FiniteTimeAction* call = CallFunc::create(CC_CALLBACK_0(Bullet::dealloc2, this));
 		CCArray* seqArray=CCArray::create();
 		seqArray->addObject(this->getDeadAction());
 		seqArray->addObject(call);
-		CCAction* seq=cocos2d::cocos2dx2_compat::createSequence(seqArray);
+		Action* seq=cocos2d::cocos2dx2_compat::createSequence(seqArray);
 		this->runAction(seq);
 
 
@@ -1999,17 +1999,17 @@ void Bullet::dealloc2(){
 }
 
 void Bullet::setMove(unsigned int length,float delay,bool isReverse){
-	CCPoint direction=ccp(this->_isFlipped?this->getPosition().x-length:this->getPosition().x+length,
+	Vec2 direction=Vec2(this->_isFlipped?this->getPosition().x-length:this->getPosition().x+length,
 		this->getPositionY());
-	CCPoint direction2=this->getPosition();
-	CCActionInterval* mv=CCMoveTo::create(delay,direction);
-	CCFiniteTimeAction* call=CCCallFunc::create(this,callfunc_selector(Bullet::dealloc));
-	CCAction* seq;
+	Vec2 direction2=this->getPosition();
+	ActionInterval* mv=MoveTo::create(delay,direction);
+	FiniteTimeAction* call = CallFunc::create(CC_CALLBACK_0(Bullet::dealloc, this));
+	Action* seq;
 	if (!isReverse) {
 	
 		seq=cocos2d::cocos2dx2_compat::createSequence(mv,call,NULL);
 	}else{
-		CCActionInterval* mv2=CCMoveTo::create(delay,direction2);
+		ActionInterval* mv2=MoveTo::create(delay,direction2);
 		seq=cocos2d::cocos2dx2_compat::createSequence(mv,mv2,call,NULL);
 	}
 	
@@ -2018,13 +2018,13 @@ void Bullet::setMove(unsigned int length,float delay,bool isReverse){
 
 void Bullet::setEaseIn(unsigned int length,float delay){
 
-	CCPoint direction=ccp(this->_isFlipped?this->getPosition().x-length:this->getPosition().x+length,
+	Vec2 direction=Vec2(this->_isFlipped?this->getPosition().x-length:this->getPosition().x+length,
 		this->getPositionY());
-	CCActionInterval* mv=CCMoveTo::create(1.0f,direction);
-	CCActionInterval* eo=CCEaseIn::create(mv,delay);
+	ActionInterval* mv=MoveTo::create(1.0f,direction);
+	ActionInterval* eo=EaseIn::create(mv,delay);
 
-    CCFiniteTimeAction* call=CCCallFunc::create(this,callfunc_selector(Bullet::dealloc));
-	CCAction* seq=cocos2d::cocos2dx2_compat::createSequence(eo,call,NULL);
+    FiniteTimeAction* call = CallFunc::create(CC_CALLBACK_0(Bullet::dealloc, this));
+	Action* seq=cocos2d::cocos2dx2_compat::createSequence(eo,call,NULL);
 	this->runAction(seq) ;
 }
 
