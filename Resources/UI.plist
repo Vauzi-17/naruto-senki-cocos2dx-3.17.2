@@ -1733,6 +1733,19 @@
                 <key>sourceSize</key>
                 <string>{100,88}</string>
             </dict>
+            <key>Minato_cBuff.png</key>
+            <dict>
+                            <key>frame</key>
+                            <string>{{770,483},{44,44}}</string>
+                            <key>offset</key>
+                            <string>{0,0}</string>
+                            <key>rotated</key>
+                            <false/>
+                            <key>sourceColorRect</key>
+                            <string>{{0,0},{44,44}}</string>
+                            <key>sourceSize</key>
+                            <string>{44,44}</string>
+            </dict>
             <key>Minato_skill1.png</key>
             <dict>
                 <key>frame</key>

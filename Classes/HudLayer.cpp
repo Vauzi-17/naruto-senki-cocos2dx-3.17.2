@@ -945,6 +945,11 @@ void HudLayer::setBuffDisplay(const char* buffName, float buffStayTime){
 
 
 	Sprite* buffSprite=Sprite::createWithSpriteFrameName(CCString::createWithFormat("%s_%s.png",_delegate->currentPlayer->getCharacter()->getCString(),buffName)->getCString());
+    buffSprite->setScale(24.0f / buffSprite->getContentSize().width);
+
+    CCLOG("buff=%s", buffName);
+    CCLOG("size=%f", buffSprite->getContentSize().width);
+    CCLOG("scale=%f", buffSprite->getScale());
 	buffSprite->setAnchorPoint(Vec2(0,0));
 	buffSprite->setPosition(Vec2(8,item1Button->getPositionY()+76-28*_buffCount));
 	if(buffStayTime !=0){
