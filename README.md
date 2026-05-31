@@ -334,9 +334,9 @@ Catatan progress terbaru:
 
 ### Tahap 5: Container/Data dan Sisa Action Bridge
 
-Status: **berjalan; commit `ActionManager`, `Effect`, `HudLayer`, dan dekoratif
-UI sudah build-tested oleh pengguna di Android, commit scene/loading terbaru
-belum build-tested**.
+Status: **berjalan; commit `ActionManager`, `Effect`, `HudLayer`, dekoratif UI,
+dan scene/loading sudah build-tested oleh pengguna di Android, commit
+`StartMenu` terbaru belum build-tested**.
 
 Prioritas:
 
@@ -362,6 +362,7 @@ Commit awal tahap 5:
 - `7061c4b refactor: migrate hud sequence helpers`
 - `dca5a44 refactor: migrate decorative sequence helpers`
 - `8c16cf1 refactor: migrate scene animation helpers`
+- `859af1f refactor: migrate start menu sequence helpers`
 
 Catatan progress terbaru:
 
@@ -397,9 +398,13 @@ Catatan progress terbaru:
   memakai `Sequence::create`, `Vector<SpriteFrame*>`, serta
   `Animation::createWithSpriteFrames` langsung tanpa mengubah kontrak
   `CCArray` loader seperti `tempHeros` dan `DLCArray`.
-- Setelah commit scene/loading ini lulus build Android, langkah berikutnya
-  adalah memilih adapter lokal kecil lagi, misalnya area kecil `StartMenu` atau
-  mulai masuk `Element` secara sangat terbatas.
+- Commit scene/loading sudah dibuild pengguna di Android dan berjalan aman.
+- `StartMenu.cpp` dibersihkan dari helper compat sequence/animation aktif untuk
+  cloud, menu text pulse, menu intro, avatar loop, dan dua transisi scroll menu.
+  Komentar contoh lama tidak dijadikan target agar perubahan tetap kecil.
+- Setelah commit `StartMenu` ini lulus build Android, langkah berikutnya adalah
+  mulai masuk `Element` secara sangat terbatas atau lanjut membersihkan sisa
+  helper yang benar-benar lokal.
 - Alias HTTP/EditBox/Scale9/Scroll di `Cocos2dx2Compat.h` belum dihapus karena
   masih punya pemakai aktif.
 
