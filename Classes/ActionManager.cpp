@@ -5987,7 +5987,9 @@ void NarutoSenki::ActionManager::setMon(CCNode* sender,void* date){
 	}else if(
 		strcmp(monsterType->getCString(),"Shisui-M1")==0 ||
 		strcmp(monsterType->getCString(),"Shisui-M2")==0 ||
-		strcmp(monsterType->getCString(),"Shisui-M3")==0 
+		strcmp(monsterType->getCString(),"Shisui-M3")==0 ||
+		strcmp(monsterType->getCString(),"Shisui-M6")==0 ||
+		strcmp(monsterType->getCString(),"Shisui-M5")==0 
 		){
 		monster->setPositionY(this->getPositionY()-1);
 		monster->setPositionX(this->getPositionX()+(_isFlipped?-64:64));

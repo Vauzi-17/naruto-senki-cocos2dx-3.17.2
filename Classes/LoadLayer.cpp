@@ -184,6 +184,9 @@ void LoadLayer::preloadIMG(){
 			CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("Element/Shisui/Shisui-1.plist");
 			CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("Element/Shisui/Shisui-2.plist");
 			CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("Element/Shisui/Shisui-3.plist");
+			CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("Element/Shisui/Shisui-4.plist");
+			CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("Element/Shisui/Shisui-5.plist");
+			CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("Element/Shisui/Shisui-6.plist");
 		}else if(strcmp(player->getCString(),"Kakashi")==0){
 			CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("Element/DogWall/DogWall.plist");
 		}else if(strcmp(player->getCString(),"Deidara")==0){

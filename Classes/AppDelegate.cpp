@@ -40,7 +40,8 @@ bool AppDelegate::applicationDidFinishLaunching()
 
     if (pEGLView)
     {
-        pEGLView->setDesignResolutionSize(480, 320, ResolutionPolicy::FIXED_HEIGHT);
+        pEGLView->setDesignResolutionSize(480, 320, ResolutionPolicy::FIXED_HEIGHT); 
+        // 480 x 320
     }
 
     // turn off display FPS

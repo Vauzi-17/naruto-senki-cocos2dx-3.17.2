@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animation>
+
+  <action value="Idle">
+    <date>
+      <dateName type="attackType">Shisui-M6</dateName>
+      <dateName type="attackValue">0</dateName>
+      <dateName type="attackRangeX">51</dateName>
+      <dateName type="attackRangeY">11</dateName>
+      <coldName type="coldDown">224</coldName>
+    </date>
+    <frame>
+      <frameName>Shisui_M6_01.png</frameName>
+    </frame>
+  </action>
+
+  <action value="Walk">
+    <frame>
+      <frameName>Shisui_M6_01.png</frameName>
+    </frame>
+  </action>
+
+  <action value="Hurt">
+    <frame>
+    </frame>
+  </action>
+
+  <action value="AirHurt">
+    <frame>
+
+    </frame>
+  </action>
+
+  <action value="KnockDown">
+    <frame>
+    </frame>
+  </action>
+
+  <action value="Float">
+    <frame>
+    </frame>
+  </action>
+
+  <action value="Dead">
+    <frame>
+      <frameName>Shisui_M6_01.png</frameName>
+    </frame>
+  </action>
+
+  <action value="nAttack">
+    <date>
+      <dateName type="attackType">aAttack</dateName>
+      <dateName type="attackValue">560</dateName>
+      <dateName type="attackRangeX">10</dateName>
+      <dateName type="attackRangeY">48</dateName>
+      <coldName type="coldDown">0</coldName>
+    </date>
+    <frame>
+      <eventName type="setSkillEffect">smk</eventName>
+      <frameName>Shisui_M6_01.png</frameName>
+      <eventName type="setDelay">-4</eventName>
+      <eventName type="setSound">Element/Shisui/sound/2-4.wav</eventName>
+      <frameName>Shisui_M6_02.png</frameName>
+      <eventName type="setDelay">-4</eventName>
+      <frameName>Shisui_M6_03.png</frameName>
+      <eventName type="setDelay">-4</eventName>
+      <frameName>Shisui_M6_04.png</frameName>
+      <eventName type="setDelay">-4</eventName>
+      <frameName>Shisui_M6_05.png</frameName>
+      <eventName type="setDelay">-4</eventName>
+      <frameName>Shisui_M6_06.png</frameName>
+      <eventName type="setDelay">-4</eventName>
+      <frameName>Shisui_M6_07.png</frameName>
+      <eventName type="setDelay">-4</eventName>
+      <frameName>Shisui_M6_08.png</frameName>
+      <eventName type="setDelay">-4</eventName>
+      <frameName>Shisui_M6_09.png</frameName>
+      <eventName type="setDelay">-4</eventName>
+      <frameName>Shisui_M6_010.png</frameName>
+      <eventName type="setDelay">-4</eventName>
+      <eventName type="setSound">Element/Shisui/sound/breg.wav</eventName>
+      <frameName>Shisui_M6_011.png</frameName>
+      <eventName type="setDelay">-4</eventName>
+      <frameName>Shisui_M6_012.png</frameName>
+      <eventName type="setDelay">-4</eventName>
+      <eventName type="setSound">Element/Shisui/sound/fire.wav</eventName>
+      <frameName>Shisui_M6_013.png</frameName>
+      <eventName type="setDelay">-4</eventName>
+      <frameName>Shisui_M6_014.png</frameName>
+      <eventName type="setDelay">-4</eventName>
+      <frameName>Shisui_M6_015.png</frameName>
+      <eventName type="setDelay">-4</eventName>
+      <eventName type="setAttackBox">b_hit</eventName>
+      <frameName>Shisui_M6_016.png</frameName>
+      <eventName type="setDelay">-4</eventName>
+      <eventName type="setAttackBox">c_hit</eventName>
+      <frameName>Shisui_M6_017.png</frameName>
+      <eventName type="setDelay">-4</eventName>
+      <eventName type="setAttackBox">c_hit</eventName>
+      <frameName>Shisui_M6_018.png</frameName>
+      <eventName type="setDelay">-4</eventName>
+      <eventName type="setAttackBox">c_hit</eventName>
+      <frameName>Shisui_M6_019.png</frameName>
+      <eventName type="setDelay">-4</eventName>
+      <eventName type="setAttackBox">c_hit</eventName>
+      <frameName>Shisui_M6_020.png</frameName>
+      <eventName type="setDelay">-4</eventName>
+      <eventName type="setAttackBox">c_hit</eventName>
+      <frameName>Shisui_M6_021.png</frameName>
+      <eventName type="setDelay">-4</eventName>
+      <eventName type="setAttackBox">c_hit</eventName>
+      <frameName>Shisui_M6_022.png</frameName>
+      <eventName type="setDelay">-4</eventName>
+      <eventName type="setAttackBox">c_hit</eventName>
+      <frameName>Shisui_M6_023.png</frameName>
+      <eventName type="setDelay">-4</eventName>
+      <frameName>Shisui_M6_024.png</frameName>
+      <eventName type="setDelay">-4</eventName>
+      <frameName>Shisui_M6_025.png</frameName>
+      <eventName type="setDelay">-4</eventName>
+      <eventName type="setSkillEffect">smk</eventName>
+      <frameName>Shisui_M6_026.png</frameName>
+      <eventName type="setDelay">-4</eventName>
+      <frameName>Shisui_M6_027.png</frameName>
+      <eventName type="setDelay">-4</eventName>
+      <frameName>Shisui_M6_028.png</frameName>
+      <eventName type="setDelay">-4</eventName>
+      <frameName>Shisui_M6_029.png</frameName>
+      <eventName type="setDelay">-4</eventName>
+      <frameName>Shisui_M6_030.png</frameName>
+      <eventName type="setDelay">-4</eventName>
+      <frameName>Shisui_M6_031.png</frameName>
+      <eventName type="setDelay">-4</eventName>
+      <eventName type="setDetonation">0</eventName>
+    </frame>
+  </action>
+
+</animation>
