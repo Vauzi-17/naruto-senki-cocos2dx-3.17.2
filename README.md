@@ -22,7 +22,7 @@ masih memakai API 2.x seperti `CCLayer`, `CCSprite`, `CCMenu`, `CCPoint`,
 
 ## Estimasi Progress Migrasi
 
-Estimasi progress menuju kode full cocos2d-x 3.17.2: **sekitar 70%**.
+Estimasi progress menuju kode full cocos2d-x 3.17.2: **sekitar 71%**.
 
 Alasan estimasi:
 
@@ -238,9 +238,9 @@ Catatan progress terbaru:
 
 ### Tahap 4: Cleanup dan Compatibility Reduction
 
-Status: **berjalan; cleanup utility dan ranking offline/dekoratif sudah
-build-tested oleh pengguna di Android, commit ranking node/action terbaru belum
-build-tested**.
+Status: **berjalan; cleanup utility, ranking offline/dekoratif, dan ranking
+node/action sudah build-tested oleh pengguna di Android; commit penghapusan
+callback HTTP ranking terbaru belum build-tested**.
 
 Prioritas:
 
@@ -269,6 +269,7 @@ Commit awal tahap 4:
 - `7aad4b1 refactor: remove obsolete ranking request stub`
 - `5a288a0 refactor: migrate ranking menu callbacks`
 - `99d1d5b refactor: migrate ranking node action types`
+- `4705b67 refactor: remove ranking http callbacks`
 
 Catatan progress terbaru:
 
@@ -300,17 +301,23 @@ Catatan progress terbaru:
 - Tipe node/action/posisi di `RankingLayer` mulai dibersihkan dari
   `CCSprite`, `CCLayer`, `CCNode`, `CCSpriteBatchNode`, `CCActionInterval`,
   `CCAction`, `CCMoveBy`, `CCRepeatForever`, dan `ccp(...)`.
-- Commit ranking node/action terbaru belum dibuild ulang oleh Codex sesuai
-  aturan kerja; perlu uji Android pengguna sebelum lanjut ke pembersihan ranking
-  yang lebih besar.
+- Commit ranking node/action sudah dibuild pengguna lewat Android Studio dan
+  berjalan seperti biasa.
+- Callback HTTP ranking lama dihapus karena tidak lagi punya jalur request aktif
+  setelah ranking dijadikan dekorasi offline. `CCClippingNode`, `CCAnimation`,
+  `CCAnimate`, dan `CCDelayTime` di ranking juga mulai dibersihkan ke API 3.x.
+- Commit penghapusan callback HTTP ranking terbaru belum dibuild ulang oleh
+  Codex sesuai aturan kerja; perlu uji Android pengguna sebelum lanjut ke
+  pembersihan ranking yang lebih besar.
 
 Rencana langkah berikutnya:
 
-- Setelah commit ranking node/action terbaru lulus build Android, lanjutkan
-  pembersihan `RankingLayer` yang masih aman: `CCClippingNode`, `CCDelayTime`,
-  `CCAnimate`, dan callback HTTP lama yang kini tidak punya jalur request aktif.
-- Setelah area ranking stabil, lanjutkan ke `MyUtils/KTools` untuk sisa API 2.x
-  helper lokal, masih tanpa menyentuh kontrak besar `CCArray`/`CCString`.
+- Setelah commit penghapusan callback HTTP ranking terbaru lulus build Android,
+  lanjutkan audit sisa `RankingLayer`: bedakan sisa tampilan lama yang aman
+  dari container/text lama yang sengaja ditahan.
+- Setelah area ranking non-container stabil, lanjutkan ke `MyUtils/KTools` untuk
+  sisa API 2.x helper lokal, masih tanpa menyentuh kontrak besar
+  `CCArray`/`CCString`.
 - Migrasi `CCArray`, `CCDictionary`, dan `CCString` tetap ditahan sampai ranking
   dan helper non-core lebih bersih, agar kontrak data gameplay tidak berubah
   terlalu cepat.
