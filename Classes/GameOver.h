@@ -11,29 +11,29 @@ USING_NS_CC;
 
 class GameLayer;
 class Hero;
-class GameOver : public CCLayer{
+class GameOver : public Layer{
 
 public:
 	GameOver(void);
 	~GameOver(void);
 
-	bool	init(CCRenderTexture* snapshoot);
+	bool	init(RenderTexture* snapshoot);
 	CC_SYNTHESIZE(bool,_isWin,Win);
 
-	static GameOver*	create(CCRenderTexture* snapshoot);
+	static GameOver*	create(RenderTexture* snapshoot);
 	
-	CCLayer* exitLayer;
-	CCLayer* cheatLayer;
-	CCSprite* result_bg;
+	Layer* exitLayer;
+	Layer* cheatLayer;
+	Sprite* result_bg;
 
 	bool isPosting;
-	CCSprite* refreshBtn;
-	CCLayer* changeCharLayer;
+	Sprite* refreshBtn;
+	Layer* changeCharLayer;
 	CCString* changePlayerPick;
 	CCString* changeEnemyPick;
 	bool changeTargetEnemy;
 
-	CCMenuItem* upload_btn;
+	MenuItem* upload_btn;
 
 	//CC_SYNTHESIZE_RETAIN(CCString*,detailRecord,DetialRecord);
 	 std::string detailRecord;
@@ -41,19 +41,19 @@ public:
 	CC_SYNTHESIZE_RETAIN(CCString*,resultChar,ResultChar);
 
 private:
-	void	onBackToMenu(CCObject* sender);
+	void	onBackToMenu(Ref* sender);
 	void	listResult();
-	void	onCancel(CCObject* sender);
-	void	onLeft(CCObject* sender);
-	void	onRematch(CCObject* sender);
-	void	onChangeChar(CCObject* sender);
-	void	onChangeCharTarget(CCObject* sender);
-	void	onChangeCharPick(CCObject* sender);
-	void	onChangeCharConfirm(CCObject* sender);
-	void	onChangeCharCancel(CCObject* sender);
-	void	onUPloadBtn(CCObject* sender);
+	void	onCancel(Ref* sender);
+	void	onLeft(Ref* sender);
+	void	onRematch(Ref* sender);
+	void	onChangeChar(Ref* sender);
+	void	onChangeCharTarget(Ref* sender);
+	void	onChangeCharPick(Ref* sender);
+	void	onChangeCharConfirm(Ref* sender);
+	void	onChangeCharCancel(Ref* sender);
+	void	onUPloadBtn(Ref* sender);
 	CC_SYNTHESIZE(GameLayer*,_delegate,Delegate);
-	void onHttpRequestCompleted(CCNode *sender ,void *data);
+	void onHttpRequestCompleted(Node *sender ,void *data);
 };
 
 

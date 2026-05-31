@@ -25,14 +25,14 @@ static void resultAddHero(CCArray* heros, const char* character, const char* rol
 }
 GameOver::GameOver(void)
 {
-	exitLayer=NULL;
-	cheatLayer=NULL;
-	changeCharLayer=NULL;
-	changePlayerPick=NULL;
-	changeEnemyPick=NULL;
+	exitLayer=nullptr;
+	cheatLayer=nullptr;
+	changeCharLayer=nullptr;
+	changePlayerPick=nullptr;
+	changeEnemyPick=nullptr;
 	changeTargetEnemy=false;
 	isPosting=false;
-	refreshBtn=NULL;
+	refreshBtn=nullptr;
 }
 
 
@@ -40,64 +40,64 @@ GameOver::~GameOver(void)
 {
 	CC_SAFE_RELEASE(changePlayerPick);
 	CC_SAFE_RELEASE(changeEnemyPick);
-	CCAnimationCache::purgeSharedAnimationCache();
-	CCSpriteFrameCache::sharedSpriteFrameCache()->removeUnusedSpriteFrames();
-	CCTextureCache::sharedTextureCache()->removeUnusedTextures();
+	AnimationCache::destroyInstance();
+	SpriteFrameCache::getInstance()->removeUnusedSpriteFrames();
+	Director::getInstance()->getTextureCache()->removeUnusedTextures();
 
 }
 
-bool GameOver::init(CCRenderTexture* snapshoot){
+bool GameOver::init(RenderTexture* snapshoot){
 
 	bool bRet=false;
 	do{
-		CC_BREAK_IF(!CCLayer::init());
+		CC_BREAK_IF(!Layer::init());
 
-		SimpleAudioEngine::sharedEngine()->stopAllEffects();
-		SimpleAudioEngine::sharedEngine()->stopBackgroundMusic();
+		SimpleAudioEngine::getInstance()->stopAllEffects();
+		SimpleAudioEngine::getInstance()->stopBackgroundMusic();
 
-	
-		
 
-		CCTexture2D* bgTexture=snapshoot->getSprite()->getTexture();
-		CCSprite* bg=CCSprite::createWithTexture(bgTexture);
-		bg->setAnchorPoint(ccp(0,0));
+
+
+		Texture2D* bgTexture=snapshoot->getSprite()->getTexture();
+		Sprite* bg=Sprite::createWithTexture(bgTexture);
+		bg->setAnchorPoint(Vec2(0,0));
 		bg->setFlipY(true);
 		this->addChild(bg,0);
 
-		CCLayer* blend=CCLayerColor::create(ccc4(0, 0, 0, 150),winSize.width,winSize.height);
+		Layer* blend=LayerColor::create(Color4B(0, 0, 0, 150),winSize.width,winSize.height);
 		this->addChild(blend,1);
 
 		//produce the menu_bar
-		CCSprite* menu_bar_b = CCSprite::create("menu_bar2.png");
-		menu_bar_b->setAnchorPoint(ccp(0,0));
-		
+		Sprite* menu_bar_b = Sprite::create("menu_bar2.png");
+		menu_bar_b->setAnchorPoint(Vec2(0,0));
+
 		scaleSpriteToScreenWidth(menu_bar_b);
 		this->addChild(menu_bar_b,2);
 
 
-		CCSprite* menu_bar_t = CCSprite::create("menu_bar3.png");
-		menu_bar_t->setAnchorPoint(ccp(0,0));
-		
+		Sprite* menu_bar_t = Sprite::create("menu_bar3.png");
+		menu_bar_t->setAnchorPoint(Vec2(0,0));
+
 		scaleSpriteToScreenWidth(menu_bar_t);
-		menu_bar_t->setPosition(ccp(0,winSize.height-menu_bar_t->getContentSize().height));
+		menu_bar_t->setPosition(Vec2(0,winSize.height-menu_bar_t->getContentSize().height));
 		this->addChild(menu_bar_t,2);
 
-		CCSprite* result_title=CCSprite::createWithSpriteFrameName("result_title.png");
-		result_title->setAnchorPoint(ccp(0,0));
-		result_title->setPosition(ccp(2,winSize.height-result_title->getContentSize().height-2));
+		Sprite* result_title=Sprite::createWithSpriteFrameName("result_title.png");
+		result_title->setAnchorPoint(Vec2(0,0));
+		result_title->setPosition(Vec2(2,winSize.height-result_title->getContentSize().height-2));
 		this->addChild(result_title,3);
 
-		result_bg=CCSprite::createWithSpriteFrameName("gameover_bg.png");
-		result_bg->setAnchorPoint(ccp(0.5f,0.5f));
+		result_bg=Sprite::createWithSpriteFrameName("gameover_bg.png");
+		result_bg->setAnchorPoint(Vec2(0.5f,0.5f));
 		result_bg->setScale(0.5f);
-		result_bg->setPosition(ccp(winSize.width/2,winSize.height/2-6));
+		result_bg->setPosition(Vec2(winSize.width/2,winSize.height/2-6));
 		this->addChild(result_bg,4);
 
-		CCScaleTo* su=CCScaleTo::create(0.2f,1.0);
-		CCAction* seq=cocos2d::cocos2dx2_compat::createSequence(su,CCCallFunc::create(this,callfunc_selector(GameOver::listResult)),NULL);
+		ScaleTo* su=ScaleTo::create(0.2f,1.0);
+		Action* seq=cocos2d::cocos2dx2_compat::createSequence(su,CallFunc::create(CC_CALLBACK_0(GameOver::listResult, this)),nullptr);
 		result_bg->runAction(seq);
 
-		
+
 
 		bRet=true;
 	}while(0);
@@ -107,19 +107,19 @@ bool GameOver::init(CCRenderTexture* snapshoot){
 }
 
 void GameOver::listResult(){
-	
+
 	isPlayed=true;
 	if(_delegate->_isHardCoreGame){
-		SimpleAudioEngine::sharedEngine()->playEffect("Audio/Menu/battle_over1.ogg");
+		SimpleAudioEngine::getInstance()->playEffect("Audio/Menu/battle_over1.ogg");
 
 	}else{
-		SimpleAudioEngine::sharedEngine()->playEffect("Audio/Menu/battle_over.ogg");
+		SimpleAudioEngine::getInstance()->playEffect("Audio/Menu/battle_over.ogg");
 	}
-	
+
 	CCString* path=CCString::createWithFormat("%s_half.png",_delegate->currentPlayer->getCharacter()->getCString());
-	CCSprite* half=CCSprite::createWithSpriteFrameName(path->getCString());
+	Sprite* half=Sprite::createWithSpriteFrameName(path->getCString());
 	if(!half){
-		half=CCSprite::createWithSpriteFrameName("Tobirama_half.png");
+		half=Sprite::createWithSpriteFrameName("Tobirama_half.png");
 	}
 
 	if(strcmp(_delegate->currentPlayer->getCharacter()->getCString(),"Konan")==0||
@@ -142,68 +142,68 @@ void GameOver::listResult(){
 		half->setFlipX(true);
 	}
 
-	half->setAnchorPoint(ccp(0,0));
-	half->setPosition(ccp(winSize.width/2+result_bg->getContentSize().width/2-half->getContentSize().width,result_bg->getPositionY()-result_bg->getContentSize().height/2+9));
+	half->setAnchorPoint(Vec2(0,0));
+	half->setPosition(Vec2(winSize.width/2+result_bg->getContentSize().width/2-half->getContentSize().width,result_bg->getPositionY()-result_bg->getContentSize().height/2+9));
 	this->addChild(half,5);
 
 
-	CCSprite* list_bg=CCSprite::createWithSpriteFrameName("list_bg.png");
-	list_bg->setAnchorPoint(ccp(0,0));
-	list_bg->setPosition(ccp(winSize.width/2-result_bg->getContentSize().width/2+2,result_bg->getPositionY()-result_bg->getContentSize().height/2+26));
+	Sprite* list_bg=Sprite::createWithSpriteFrameName("list_bg.png");
+	list_bg->setAnchorPoint(Vec2(0,0));
+	list_bg->setPosition(Vec2(winSize.width/2-result_bg->getContentSize().width/2+2,result_bg->getPositionY()-result_bg->getContentSize().height/2+26));
 	this->addChild(list_bg,5);
 
-	
-	
+
+
 
 	int _hour=_delegate->_minute/60;
 	int _minute=_delegate->_minute%60;
 
 
-	CCSprite* timeBG=CCSprite::createWithSpriteFrameName("time_bg.png");
-	timeBG->setAnchorPoint(ccp(0,0));
-	timeBG->setPosition(ccp(winSize.width/2+result_bg->getContentSize().width/2-11-timeBG->getContentSize().width,result_bg->getPositionY()-result_bg->getContentSize().height/2+46));
+	Sprite* timeBG=Sprite::createWithSpriteFrameName("time_bg.png");
+	timeBG->setAnchorPoint(Vec2(0,0));
+	timeBG->setPosition(Vec2(winSize.width/2+result_bg->getContentSize().width/2-11-timeBG->getContentSize().width,result_bg->getPositionY()-result_bg->getContentSize().height/2+46));
 	this->addChild(timeBG,6);
 
 
 	CCString* tempTime=CCString::createWithFormat("%02d:%02d:%02d",_hour,_minute,_delegate->_second);
-	
 
-	CCLabelBMFont* gameClock=CCLabelBMFont::create(tempTime->getCString(),"Fonts/1.fnt");
-	gameClock->setAnchorPoint(ccp(0.5f,0));
-    gameClock->setPosition(ccp(timeBG->getPositionX()+timeBG->getContentSize().width/2,timeBG->getPositionY()+3));
+
+	LabelBMFont* gameClock=LabelBMFont::create(tempTime->getCString(),"Fonts/1.fnt");
+	gameClock->setAnchorPoint(Vec2(0.5f,0));
+    gameClock->setPosition(Vec2(timeBG->getPositionX()+timeBG->getContentSize().width/2,timeBG->getPositionY()+3));
 	gameClock->setScale(0.48f);
 	this->addChild(gameClock,7);
 
 	if(_delegate->_isDuelMode){
 		CCString* duelScore=CCString::createWithFormat("DUEL %d:%d",_delegate->_duelPlayerScore,_delegate->_duelEnemyScore);
-		CCLabelBMFont* duelScoreLabel=CCLabelBMFont::create(duelScore->getCString(),"Fonts/1.fnt");
-		duelScoreLabel->setAnchorPoint(ccp(0.5f,0.5f));
-		duelScoreLabel->setPosition(ccp(result_bg->getPositionX()+12,result_bg->getPositionY()+result_bg->getContentSize().height/2-52));
+		LabelBMFont* duelScoreLabel=LabelBMFont::create(duelScore->getCString(),"Fonts/1.fnt");
+		duelScoreLabel->setAnchorPoint(Vec2(0.5f,0.5f));
+		duelScoreLabel->setPosition(Vec2(result_bg->getPositionX()+12,result_bg->getPositionY()+result_bg->getContentSize().height/2-52));
 		duelScoreLabel->setScale(0.38f);
 		this->addChild(duelScoreLabel,7);
 	}
 
-	
+
 
 	float _totalSecond=_delegate->_minute*60+_delegate->_second;
 	float resultScore=0;
 	int killDead=atoi(_delegate->currentPlayer->getKillNum()->getCString())-_delegate->currentPlayer->_deadNum;
-	
-	
+
+
 	if(!_delegate->_isDuelMode && !_delegate->_isTrainingMode && _totalSecond != atoi(_delegate->getTotalTM()->getCString())){
-		SimpleAudioEngine::sharedEngine()->stopBackgroundMusic();
-		CCDirector::sharedDirector()->end();
+		SimpleAudioEngine::getInstance()->stopBackgroundMusic();
+		Director::getInstance()->end();
 		return;
 
 	}
-	
+
 	if(_delegate->_isHardCoreGame){
 		if(_totalSecond>900.0){
 			resultScore=float((killDead/float(_totalSecond/60))/3)*100;
 		}else{
 			resultScore=float((killDead-((_totalSecond/60-15)*3))/45)*100;
 		}
-		
+
 	}else{
 		if(_totalSecond>600.0){
 			resultScore=float((killDead/float(_totalSecond/60))/4)*100;
@@ -213,17 +213,17 @@ void GameOver::listResult(){
 	}
 
 	KTools* tool= KTools::create();
-	
+
 	if(!_delegate->_isDuelMode && !_delegate->_isTrainingMode && _totalSecond <2*30+5 && _isWin ){
-		SimpleAudioEngine::sharedEngine()->stopBackgroundMusic();
-		CCDirector::sharedDirector()->end();
+		SimpleAudioEngine::getInstance()->stopBackgroundMusic();
+		Director::getInstance()->end();
 		return;
 	}
 
 
 
 
-	CCObject* pObject;
+	Ref* pObject;
 	int i=0;
 	int konohaKill=0;
 	int akatsukiKill=0;
@@ -261,13 +261,13 @@ void GameOver::listResult(){
 
 	CCARRAY_FOREACH(_delegate->_CharacterArray,pObject){
 
-		
+
 		Hero* hero=(Hero*)pObject;
-		if(strcmp(hero->getRole()->getCString(),"Clone")==0 || 
-			strcmp(hero->getRole()->getCString(),"Summon")==0|| 
-			strcmp(hero->getRole()->getCString(),"Kuilei")==0 || 
+		if(strcmp(hero->getRole()->getCString(),"Clone")==0 ||
+			strcmp(hero->getRole()->getCString(),"Summon")==0||
+			strcmp(hero->getRole()->getCString(),"Kuilei")==0 ||
 			strcmp(hero->getCharacter()->getCString(),"Han")==0 ||
-			strcmp(hero->getCharacter()->getCString(),"Roshi")==0 
+			strcmp(hero->getCharacter()->getCString(),"Roshi")==0
 			){
 				continue;
 		}
@@ -285,14 +285,14 @@ void GameOver::listResult(){
 		}
 
 		CCString* path=CCString::createWithFormat(("%s_small.png"),hero->getCharacter()->getCString());
-		CCSprite* avator_small=CCSprite::createWithSpriteFrameName(path->getCString());
+		Sprite* avator_small=Sprite::createWithSpriteFrameName(path->getCString());
 		if(!avator_small){
-			avator_small=CCSprite::createWithSpriteFrameName("error_small.png");
+			avator_small=Sprite::createWithSpriteFrameName("error_small.png");
 		}
 		if(!avator_small){
 			continue;
 		}
-		avator_small->setAnchorPoint(ccp(0,0));
+		avator_small->setAnchorPoint(Vec2(0,0));
 		avator_small->setScale(avatarScale);
 
 
@@ -306,15 +306,15 @@ void GameOver::listResult(){
 		}
 
 		CCString* knum=CCString::createWithFormat("%d",realKillNum);
-		CCLabelBMFont* killNum=CCLabelBMFont::create(knum->getCString(),"Fonts/1.fnt");
+		LabelBMFont* killNum=LabelBMFont::create(knum->getCString(),"Fonts/1.fnt");
 		killNum->setScale(labelScale);
 
 		CCString* dnum=CCString::createWithFormat("%d",hero->_deadNum);
-		CCLabelBMFont* deadNum=CCLabelBMFont::create(dnum->getCString(),"Fonts/1.fnt");
+		LabelBMFont* deadNum=LabelBMFont::create(dnum->getCString(),"Fonts/1.fnt");
 		deadNum->setScale(labelScale);
 
 		CCString* fnum=CCString::createWithFormat("%d",hero->_flogNum);
-		CCLabelBMFont* flogNum=CCLabelBMFont::create(fnum->getCString(),"Fonts/1.fnt");
+		LabelBMFont* flogNum=LabelBMFont::create(fnum->getCString(),"Fonts/1.fnt");
 		flogNum->setScale(labelScale);
 
 
@@ -331,19 +331,19 @@ void GameOver::listResult(){
 			rowIndex=akatsukiIndex++;
 			rowY=result_bg->getPositionY()-result_bg->getContentSize().height/2+(compactResult?74:76)-(rowIndex*rowGap);
 		}
-		avator_small->setPosition(ccp(posX,rowY));
-		killNum->setPosition(ccp(posX+44,avator_small->getPositionY()+avatarHeight/2));
-		deadNum->setPosition(ccp(posX+68,avator_small->getPositionY()+avatarHeight/2));
-		flogNum->setPosition(ccp(posX+94,avator_small->getPositionY()+avatarHeight/2));
+		avator_small->setPosition(Vec2(posX,rowY));
+		killNum->setPosition(Vec2(posX+44,avator_small->getPositionY()+avatarHeight/2));
+		deadNum->setPosition(Vec2(posX+68,avator_small->getPositionY()+avatarHeight/2));
+		flogNum->setPosition(Vec2(posX+94,avator_small->getPositionY()+avatarHeight/2));
 
 		if(hero->getGearArray() && hero->getGearArray()->count()>0){
 
-			CCObject* pObject;
+			Ref* pObject;
 			int i=0;
 			CCARRAY_FOREACH(hero->getGearArray(),pObject){
 				CCString* tmpGear=(CCString*) pObject;
-				CCSprite* gearIcon=CCSprite::createWithSpriteFrameName(CCString::createWithFormat("gear_%02d.png",atoi(tmpGear->getCString()))->getCString());
-				gearIcon->setPosition(ccp(flogNum->getPositionX()+22+i*gearGap,flogNum->getPositionY()-1));
+				Sprite* gearIcon=Sprite::createWithSpriteFrameName(CCString::createWithFormat("gear_%02d.png",atoi(tmpGear->getCString()))->getCString());
+				gearIcon->setPosition(Vec2(flogNum->getPositionX()+22+i*gearGap,flogNum->getPositionY()-1));
 				gearIcon->setScale(gearScale);
 				this->addChild(gearIcon,7);
 				i++;
@@ -373,17 +373,17 @@ void GameOver::listResult(){
 			}
 		}
 	}
-	
+
 	if(Cheats<=10 && !_delegate->_isDuelMode && !_delegate->_isTrainingMode){
 
 		if(akatsukiKill+konohaKill !=atoi(_delegate->getTotalKills()->getCString())){
-			SimpleAudioEngine::sharedEngine()->stopBackgroundMusic();
-			CCDirector::sharedDirector()->end();
+			SimpleAudioEngine::getInstance()->stopBackgroundMusic();
+			Director::getInstance()->end();
 			return;
 		}
 
 	int realKillNum=atoi(_delegate->currentPlayer->getKillNum()->getCString());
-	
+
 	std::string tempReward="";
 	if(_delegate->_isHardCoreGame){
 		tempReward="FDDD";
@@ -401,16 +401,16 @@ void GameOver::listResult(){
 		rewardNum=realKillNum*50;
 	}
 
-	
 
-	CCSprite* coinBG=CCSprite::createWithSpriteFrameName("coin_bg.png");
-	coinBG->setAnchorPoint(ccp(0,0));
-	coinBG->setPosition(ccp(winSize.width/2+result_bg->getContentSize().width/2-coinBG->getContentSize().width -11,result_bg->getPositionY()-result_bg->getContentSize().height/2+12));
+
+	Sprite* coinBG=Sprite::createWithSpriteFrameName("coin_bg.png");
+	coinBG->setAnchorPoint(Vec2(0,0));
+	coinBG->setPosition(Vec2(winSize.width/2+result_bg->getContentSize().width/2-coinBG->getContentSize().width -11,result_bg->getPositionY()-result_bg->getContentSize().height/2+12));
 	this->addChild(coinBG,6);
 
-	CCSprite* adExtra=CCSprite::createWithSpriteFrameName("adExtra.png");
-	adExtra->setAnchorPoint(ccp(0.5f,0));
-	adExtra->setPosition(ccp(coinBG->getPositionX()+70,coinBG->getPositionY()+22));
+	Sprite* adExtra=Sprite::createWithSpriteFrameName("adExtra.png");
+	adExtra->setAnchorPoint(Vec2(0.5f,0));
+	adExtra->setPosition(Vec2(coinBG->getPositionX()+70,coinBG->getPositionY()+22));
 	this->addChild(adExtra,7);
 
 	CCString* extraCoin;
@@ -420,34 +420,34 @@ void GameOver::listResult(){
 		tool->decode(tempEtra);
 		tempCoin=rewardNum+atoi(cl->getCString())+atoi(tempEtra.c_str());
 		extraCoin=CCString::createWithFormat("+%d",500);
-	}else{	
+	}else{
 		tempCoin=rewardNum+atoi(cl->getCString());
-		extraCoin=CCString::createWithFormat("+%d",0);	
+		extraCoin=CCString::createWithFormat("+%d",0);
 	}
 
 	CCString* realCoin=CCString::createWithFormat("%d",tempCoin);
 	tool->saveToSQLite("GameRecord","coin",realCoin->getCString(),false);
 
 
-	CCLabelBMFont* extraLabel=CCLabelBMFont::create(extraCoin->getCString(),"Fonts/yellow.fnt");
+	LabelBMFont* extraLabel=LabelBMFont::create(extraCoin->getCString(),"Fonts/yellow.fnt");
 	extraLabel->setScale(0.5f);
-	extraLabel->setAnchorPoint(ccp(0.5f,0));
-	extraLabel->setPosition(ccp(coinBG->getPositionX()+68,coinBG->getPositionY()+3));
-	this->addChild(extraLabel,7);	
+	extraLabel->setAnchorPoint(Vec2(0.5f,0));
+	extraLabel->setPosition(Vec2(coinBG->getPositionX()+68,coinBG->getPositionY()+3));
+	this->addChild(extraLabel,7);
 
 
 	CCString* rewardCoin=CCString::createWithFormat("%d",rewardNum);
-	CCLabelBMFont* rewardLabel=CCLabelBMFont::create(rewardCoin->getCString(),"Fonts/yellow.fnt");	
-	rewardLabel->setAnchorPoint(ccp(0.5f,0));
-	rewardLabel->setPosition(ccp(coinBG->getPositionX()+28,coinBG->getPositionY()+3));
+	LabelBMFont* rewardLabel=LabelBMFont::create(rewardCoin->getCString(),"Fonts/yellow.fnt");
+	rewardLabel->setAnchorPoint(Vec2(0.5f,0));
+	rewardLabel->setPosition(Vec2(coinBG->getPositionX()+28,coinBG->getPositionY()+3));
 	rewardLabel->setScale(0.55f);
 	this->addChild(rewardLabel,7);
 
 	}
-	
+
 	char* imgSrc="";
 
-	
+
 	if(_isWin && adResult==1){
 		if(resultScore>=140 && _delegate->_isHardCoreGame && _delegate->_isRandomChar){
 			imgSrc="result_SSSR.png";
@@ -473,19 +473,19 @@ void GameOver::listResult(){
 	}
 
 	if(strcmp(imgSrc,"")!=0){
-		CCSprite* recordSprite=CCSprite::createWithSpriteFrameName(imgSrc);
-		recordSprite->setAnchorPoint(ccp(0,0));
-		recordSprite->setPosition(ccp(winSize.width/2+result_bg->getContentSize().width/2-recordSprite->getContentSize().width-12,result_bg->getPositionY()-result_bg->getContentSize().height/2+88));
+		Sprite* recordSprite=Sprite::createWithSpriteFrameName(imgSrc);
+		recordSprite->setAnchorPoint(Vec2(0,0));
+		recordSprite->setPosition(Vec2(winSize.width/2+result_bg->getContentSize().width/2-recordSprite->getContentSize().width-12,result_bg->getPositionY()-result_bg->getContentSize().height/2+88));
 		this->addChild(recordSprite,7);
-		/*CCSprite* koSprite=NULL;
+		/*Sprite* koSprite=nullptr;
 		if(isTKO && resultScore<120){
-			koSprite=CCSprite::createWithSpriteFrameName("twin.png");
+			koSprite=Sprite::createWithSpriteFrameName("twin.png");
 		}else if(_isWin && resultScore<120){
-			koSprite=CCSprite::createWithSpriteFrameName("dwin.png");
+			koSprite=Sprite::createWithSpriteFrameName("dwin.png");
 		}
 		if(koSprite){
-			koSprite->setAnchorPoint(ccp(0.5f,0.5f));
-			koSprite->setPosition(ccp(recordSprite->getPositionX()+recordSprite->getContentSize().width/2,recordSprite->getPositionY()+8));
+			koSprite->setAnchorPoint(Vec2(0.5f,0.5f));
+			koSprite->setPosition(Vec2(recordSprite->getPositionX()+recordSprite->getContentSize().width/2,recordSprite->getPositionY()+8));
 			this->addChild(koSprite,8);
 		}*/
 
@@ -494,16 +494,16 @@ void GameOver::listResult(){
 			finnalScore=resultScore+float(_delegate->currentPlayer->_flogNum)/100;
 			CCString* recordString=CCString::createWithFormat("%0.2fPts",finnalScore);
 
-			CCLabelBMFont* recordScore=CCLabelBMFont::create(recordString->getCString(),"Fonts/1.fnt");
-			recordScore->setAnchorPoint(ccp(1,0.5f));
-			recordScore->setPosition(ccp(recordSprite->getPositionX()+recordSprite->getContentSize().width,recordSprite->getPositionY()-7));
+			LabelBMFont* recordScore=LabelBMFont::create(recordString->getCString(),"Fonts/1.fnt");
+			recordScore->setAnchorPoint(Vec2(1,0.5f));
+			recordScore->setPosition(Vec2(recordSprite->getPositionX()+recordSprite->getContentSize().width,recordSprite->getPositionY()-7));
 			recordScore->setScale(0.35f);
 			this->addChild(recordScore,10);
 
-			upload_btn=CCMenuItemSprite::create(CCSprite::createWithSpriteFrameName("upload_btn.png"),CCSprite::createWithSpriteFrameName("upload_btn.png"),NULL,this,menu_selector(GameOver::onUPloadBtn));
-			CCMenu* upMenu=CCMenu::create(upload_btn,NULL);
-			upload_btn->setAnchorPoint(ccp(1.0,0));
-			upMenu->setPosition(ccp(winSize.width/2+result_bg->getContentSize().width/2-14,winSize.height/2+result_bg->getContentSize().height/2-62));
+			upload_btn=MenuItemSprite::create(Sprite::createWithSpriteFrameName("upload_btn.png"),Sprite::createWithSpriteFrameName("upload_btn.png"),nullptr,CC_CALLBACK_1(GameOver::onUPloadBtn, this));
+			Menu* upMenu=Menu::create(upload_btn,nullptr);
+			upload_btn->setAnchorPoint(Vec2(1.0,0));
+			upMenu->setPosition(Vec2(winSize.width/2+result_bg->getContentSize().width/2-14,winSize.height/2+result_bg->getContentSize().height/2-62));
 			this->addChild(upMenu,7);
 
 
@@ -533,7 +533,7 @@ void GameOver::listResult(){
 			if(_isWin ){
 				CCString* winNum=tool->readSQLite("CharRecord","name",resultChar->getCString(),"column1");
 				int tempWin=0;
-				
+
 				if(resultScore>=140){
 					tempWin=atoi(winNum->getCString())+3;
 				}else if(resultScore>=120){
@@ -541,14 +541,14 @@ void GameOver::listResult(){
 				}else{
 					tempWin=atoi(winNum->getCString())+1;
 				}
-				
+
 				CCString* realWin=CCString::createWithFormat("%d",tempWin);
 				if(CError!=1){
 					tool->saveSQLite("CharRecord","name",resultChar->getCString(),"column1",(char*) realWin->getCString(),false);
 				}
 				//
 				if(_delegate->_isRandomChar && resultScore>=120 ){
-					CCObject* pObject;
+					Ref* pObject;
 
 					if(_delegate->currentPlayer->_isControled){
 						_delegate->currentPlayer->_isControled=false;
@@ -559,12 +559,12 @@ void GameOver::listResult(){
 					CCARRAY_FOREACH(_delegate->_CharacterArray,pObject){
 
 						Hero* hero=(Hero*)pObject;
-						if(strcmp(hero->getRole()->getCString(),"Clone")==0 || 
+						if(strcmp(hero->getRole()->getCString(),"Clone")==0 ||
 							strcmp(hero->getRole()->getCString(),"Player")==0 ||
-							strcmp(hero->getRole()->getCString(),"Summon")==0|| 
-							strcmp(hero->getRole()->getCString(),"Kuilei")==0 || 
+							strcmp(hero->getRole()->getCString(),"Summon")==0||
+							strcmp(hero->getRole()->getCString(),"Kuilei")==0 ||
 							strcmp(hero->getCharacter()->getCString(),"Han")==0 ||
-							strcmp(hero->getCharacter()->getCString(),"Roshi")==0 
+							strcmp(hero->getCharacter()->getCString(),"Roshi")==0
 							){
 								continue;
 						}
@@ -574,7 +574,7 @@ void GameOver::listResult(){
 							hero->changeGroup();
 						}
 
-						
+
 						if(strcmp(hero->getGroup()->getCString(),_delegate->currentPlayer->getGroup()->getCString())==0){
 
 							CCString* winNum=tool->readSQLite("CharRecord","name",hero->getCharacter()->getCString(),"column1");
@@ -623,7 +623,7 @@ void GameOver::listResult(){
 							}
 						}else {
 
-							isNewRecord=false;	
+							isNewRecord=false;
 						}
 
 					}else{
@@ -643,7 +643,7 @@ void GameOver::listResult(){
 
 			}/*else{
 
-			 CCString* loseNum=tool->readSQLite("Achievement","name",resultChar->getCString(),"column2"); 
+			 CCString* loseNum=tool->readSQLite("Achievement","name",resultChar->getCString(),"column2");
 			 int tempLose=atoi(loseNum->getCString())+1;
 			 CCString* realLose=CCString::createWithFormat("%d",tempLose);
 			 if(CError!=1){
@@ -653,67 +653,67 @@ void GameOver::listResult(){
 
 
 
-			
-		
-	}
-	
 
-	
+
+	}
+
+
+
 
 	if(Cheats<=10 && !_delegate->_isDuelMode && !_delegate->_isTrainingMode){
-		CCLabelBMFont* version=CCLabelBMFont::create("The Last Fixed","Fonts/1.fnt");
-		version->setPosition(ccp(winSize.width/2+94,result_bg->getPositionY()-result_bg->getContentSize().height/2+6));
+		LabelBMFont* version=LabelBMFont::create("The Last Fixed","Fonts/1.fnt");
+		version->setPosition(Vec2(winSize.width/2+94,result_bg->getPositionY()-result_bg->getContentSize().height/2+6));
 		version->setScale(0.3f);
 		this->addChild(version,5);
 
 	}else{
 
-		CCLabelBMFont* version=CCLabelBMFont::create("The Carnival","Fonts/1.fnt");
-		version->setPosition(ccp(winSize.width/2+94,result_bg->getPositionY()-result_bg->getContentSize().height/2+6));
+		LabelBMFont* version=LabelBMFont::create("The Carnival","Fonts/1.fnt");
+		version->setPosition(Vec2(winSize.width/2+94,result_bg->getPositionY()-result_bg->getContentSize().height/2+6));
 		version->setScale(0.3f);
 		this->addChild(version,5);
 	}
 
-	
-	CCMenuItem* btm_btn=CCMenuItemSprite::create(CCSprite::createWithSpriteFrameName("close_btn1.png"),CCSprite::createWithSpriteFrameName("close_btn2.png"),NULL,this,menu_selector(GameOver::onBackToMenu));
-	CCMenu* overMenu=CCMenu::create(btm_btn,NULL);
-	overMenu->setPosition(ccp(winSize.width/2+result_bg->getContentSize().width/2-12,winSize.height/2+result_bg->getContentSize().height/2-18));
+
+	MenuItem* btm_btn=MenuItemSprite::create(Sprite::createWithSpriteFrameName("close_btn1.png"),Sprite::createWithSpriteFrameName("close_btn2.png"),nullptr,CC_CALLBACK_1(GameOver::onBackToMenu, this));
+	Menu* overMenu=Menu::create(btm_btn,nullptr);
+	overMenu->setPosition(Vec2(winSize.width/2+result_bg->getContentSize().width/2-12,winSize.height/2+result_bg->getContentSize().height/2-18));
 	this->addChild(overMenu,7);
 
 	if(_delegate->_isDuelMode || _delegate->_isTrainingMode){
 		CCLabelTTF* changeLabel=CCLabelTTF::create("CHANGE",FONT_TYPE,11);
 		changeLabel->setColor(ccc3(255,224,80));
-		CCMenuItemLabel* changeBtn=CCMenuItemLabel::create(changeLabel,this,menu_selector(GameOver::onChangeChar));
-		CCMenu* changeMenu=CCMenu::create(changeBtn,NULL);
-		changeMenu->setPosition(ccp(result_bg->getPositionX()+result_bg->getContentSize().width/2-105,result_bg->getPositionY()-result_bg->getContentSize().height/2+18));
+		MenuItemLabel* changeBtn=MenuItemLabel::create(changeLabel,CC_CALLBACK_1(GameOver::onChangeChar, this));
+		Menu* changeMenu=Menu::create(changeBtn,nullptr);
+		changeMenu->setPosition(Vec2(result_bg->getPositionX()+result_bg->getContentSize().width/2-105,result_bg->getPositionY()-result_bg->getContentSize().height/2+18));
 		this->addChild(changeMenu,7);
 	}
 
 	if(_delegate->_isDuelMode){
 		CCLabelTTF* rematchLabel=CCLabelTTF::create("REMATCH",FONT_TYPE,11);
 		rematchLabel->setColor(ccc3(255,224,80));
-		CCMenuItemLabel* rematchBtn=CCMenuItemLabel::create(rematchLabel,this,menu_selector(GameOver::onRematch));
-		CCMenu* rematchMenu=CCMenu::create(rematchBtn,NULL);
-		rematchMenu->setPosition(ccp(result_bg->getPositionX()+result_bg->getContentSize().width/2-45,result_bg->getPositionY()-result_bg->getContentSize().height/2+18));
+		MenuItemLabel* rematchBtn=MenuItemLabel::create(rematchLabel,CC_CALLBACK_1(GameOver::onRematch, this));
+		Menu* rematchMenu=Menu::create(rematchBtn,nullptr);
+		rematchMenu->setPosition(Vec2(result_bg->getPositionX()+result_bg->getContentSize().width/2-45,result_bg->getPositionY()-result_bg->getContentSize().height/2+18));
 		this->addChild(rematchMenu,7);
 	}
-	
+
 	_delegate->_isSurrender=false;
 
 }
-void GameOver::onRematch(CCObject* sender){
+void GameOver::onRematch(Ref* sender){
 
-	SimpleAudioEngine::sharedEngine()->playEffect("Audio/Menu/confirm.ogg");
+	SimpleAudioEngine::getInstance()->playEffect("Audio/Menu/confirm.ogg");
 	if(_delegate){
 		_delegate->onRematch();
 	}
 
 }
-void GameOver::onChangeChar(CCObject* sender){
-	SimpleAudioEngine::sharedEngine()->playEffect(SELECT_SOUND);
+void GameOver::onChangeChar(Ref* sender){
+	SimpleAudioEngine::getInstance()->playEffect(SELECT_SOUND);
 	if(changeCharLayer){
 		changeCharLayer->removeFromParentAndCleanup(true);
-		changeCharLayer=NULL;
+		changeCharLayer=nullptr;
 	}
 	if(!_delegate || !_delegate->currentPlayer){
 		return;
@@ -723,7 +723,7 @@ void GameOver::onChangeChar(CCObject* sender){
 		changePlayerPick->retain();
 	}
 	if(!changeEnemyPick){
-		CCObject* pObject=NULL;
+		Ref* pObject=nullptr;
 		CCARRAY_FOREACH(_delegate->_CharacterArray,pObject){
 			NarutoSenki::ActionManager* hero=(NarutoSenki::ActionManager*)pObject;
 			if(strcmp(hero->getRole()->getCString(),"Com")==0 && strcmp(hero->getGroup()->getCString(),_delegate->currentPlayer->getGroup()->getCString())!=0){
@@ -734,109 +734,109 @@ void GameOver::onChangeChar(CCObject* sender){
 		}
 	}
 
-	changeCharLayer=CCLayer::create();
-	CCLayerColor* blend=CCLayerColor::create(ccc4(0,0,0,150),winSize.width,winSize.height);
+	changeCharLayer=Layer::create();
+	LayerColor* blend=LayerColor::create(Color4B(0,0,0,150),winSize.width,winSize.height);
 	changeCharLayer->addChild(blend,0);
 	CCScale9Sprite* bg=CCScale9Sprite::createWithSpriteFrameName("confirm_bg.png");
 	if(bg){
-		bg->setContentSize(CCSizeMake(336,236));
-		bg->setPosition(ccp(winSize.width/2,winSize.height/2));
+		bg->setContentSize(SizeMake(336,236));
+		bg->setPosition(Vec2(winSize.width/2,winSize.height/2));
 		changeCharLayer->addChild(bg,1);
 	}
 	float cx=winSize.width/2;
 	float cy=winSize.height/2;
 	CCLabelTTF* title=CCLabelTTF::create("CHANGE CHARACTER",FONT_TYPE,14);
 	title->setColor(ccc3(126,58,30));
-	title->setPosition(ccp(cx,cy+96));
+	title->setPosition(Vec2(cx,cy+96));
 	changeCharLayer->addChild(title,2);
 
-	CCMenu* targetMenu=NULL;
+	Menu* targetMenu=nullptr;
 	if(_delegate->_isDuelMode){
 		CCLabelTTF* playerLabel=CCLabelTTF::create("PLAYER",FONT_TYPE,changeTargetEnemy?11:13);
 		playerLabel->setColor(changeTargetEnemy?ccc3(86,70,52):ccc3(142,63,28));
-		CCMenuItemLabel* playerItem=CCMenuItemLabel::create(playerLabel,this,menu_selector(GameOver::onChangeCharTarget));
+		MenuItemLabel* playerItem=MenuItemLabel::create(playerLabel,CC_CALLBACK_1(GameOver::onChangeCharTarget, this));
 		playerItem->setTag(0);
 		CCLabelTTF* enemyLabel=CCLabelTTF::create("ENEMY",FONT_TYPE,changeTargetEnemy?13:11);
 		enemyLabel->setColor(changeTargetEnemy?ccc3(142,63,28):ccc3(86,70,52));
-		CCMenuItemLabel* enemyItem=CCMenuItemLabel::create(enemyLabel,this,menu_selector(GameOver::onChangeCharTarget));
+		MenuItemLabel* enemyItem=MenuItemLabel::create(enemyLabel,CC_CALLBACK_1(GameOver::onChangeCharTarget, this));
 		enemyItem->setTag(1);
-		targetMenu=CCMenu::create(playerItem,enemyItem,NULL);
+		targetMenu=Menu::create(playerItem,enemyItem,nullptr);
 		targetMenu->alignItemsHorizontallyWithPadding(40);
-		targetMenu->setPosition(ccp(cx,cy+72));
+		targetMenu->setPosition(Vec2(cx,cy+72));
 		changeCharLayer->addChild(targetMenu,2);
 	}else{
 		changeTargetEnemy=false;
 		CCLabelTTF* playerOnly=CCLabelTTF::create("PLAYER",FONT_TYPE,13);
 		playerOnly->setColor(ccc3(142,63,28));
-		playerOnly->setPosition(ccp(cx,cy+72));
+		playerOnly->setPosition(Vec2(cx,cy+72));
 		changeCharLayer->addChild(playerOnly,2);
 	}
 
-	CCSize viewSize=CCSizeMake(286,122);
+	Size viewSize=SizeMake(286,122);
 	int heroCount=sizeof(gResultHeroList)/sizeof(char*);
 	int columnCount=5;
 	int rowCount=(heroCount+columnCount-1)/columnCount;
 	float cellW=56;
 	float cellH=50;
 	float contentH=rowCount*cellH+8;
-	CCLayer* heroContainer=CCLayer::create();
-	heroContainer->setContentSize(CCSizeMake(viewSize.width,contentH));
-	CCMenu* heroMenu=CCMenu::create(NULL);
+	Layer* heroContainer=Layer::create();
+	heroContainer->setContentSize(SizeMake(viewSize.width,contentH));
+	Menu* heroMenu=Menu::create(nullptr);
 	heroMenu->setPosition(Vec2::ZERO);
 	heroContainer->addChild(heroMenu,1);
 	for(int i=0;i<heroCount;i++){
 		const char* heroName=gResultHeroList[i];
-		CCSprite* normal=CCSprite::createWithSpriteFrameName(CCString::createWithFormat("%s_rp.png",heroName)->getCString());
+		Sprite* normal=Sprite::createWithSpriteFrameName(CCString::createWithFormat("%s_rp.png",heroName)->getCString());
 		if(!normal){
-			normal=CCSprite::createWithSpriteFrameName(CCString::createWithFormat("%s_small.png",heroName)->getCString());
+			normal=Sprite::createWithSpriteFrameName(CCString::createWithFormat("%s_small.png",heroName)->getCString());
 		}
-		CCSprite* selected=CCSprite::createWithSpriteFrameName(CCString::createWithFormat("%s_rp.png",heroName)->getCString());
+		Sprite* selected=Sprite::createWithSpriteFrameName(CCString::createWithFormat("%s_rp.png",heroName)->getCString());
 		if(!selected){
-			selected=CCSprite::createWithSpriteFrameName(CCString::createWithFormat("%s_small.png",heroName)->getCString());
+			selected=Sprite::createWithSpriteFrameName(CCString::createWithFormat("%s_small.png",heroName)->getCString());
 		}
 		if(!normal || !selected){
 			continue;
 		}
 		normal->setScale(0.72f);
 		selected->setScale(0.82f);
-		CCMenuItemSprite* item=CCMenuItemSprite::create(normal,selected,this,menu_selector(GameOver::onChangeCharPick));
+		MenuItemSprite* item=MenuItemSprite::create(normal,selected,CC_CALLBACK_1(GameOver::onChangeCharPick, this));
 		item->setTag(i);
 		int col=i%columnCount;
 		int row=i/columnCount;
-		item->setPosition(ccp(30+col*cellW,contentH-30-row*cellH));
+		item->setPosition(Vec2(30+col*cellW,contentH-30-row*cellH));
 		heroMenu->addChild(item);
 	}
 	CCScrollView* heroScroll=CCScrollView::create(viewSize,heroContainer);
 	heroScroll->setDirection(kCCScrollViewDirectionVertical);
 	heroScroll->setClippingToBounds(true);
-	heroScroll->setPosition(ccp(cx-viewSize.width/2,cy-58));
-	heroScroll->setContentOffset(ccp(0,viewSize.height-contentH));
+	heroScroll->setPosition(Vec2(cx-viewSize.width/2,cy-58));
+	heroScroll->setContentOffset(Vec2(0,viewSize.height-contentH));
 	changeCharLayer->addChild(heroScroll,2);
 
 	CCString* pickText=CCString::createWithFormat("%s: %s",changeTargetEnemy?"ENEMY":"PLAYER",changeTargetEnemy && changeEnemyPick?changeEnemyPick->getCString():changePlayerPick->getCString());
 	CCLabelTTF* pickLabel=CCLabelTTF::create(pickText->getCString(),FONT_TYPE,10);
 	pickLabel->setColor(ccc3(72,55,40));
-	pickLabel->setPosition(ccp(cx,cy-76));
+	pickLabel->setPosition(Vec2(cx,cy-76));
 	changeCharLayer->addChild(pickLabel,2);
 
-	CCMenuItem* yesBtn=CCMenuItemSprite::create(CCSprite::createWithSpriteFrameName("yes_btn1.png"),CCSprite::createWithSpriteFrameName("yes_btn2.png"),this,menu_selector(GameOver::onChangeCharConfirm));
-	CCMenuItem* noBtn=CCMenuItemSprite::create(CCSprite::createWithSpriteFrameName("no_btn1.png"),CCSprite::createWithSpriteFrameName("no_btn2.png"),this,menu_selector(GameOver::onChangeCharCancel));
+	MenuItem* yesBtn=MenuItemSprite::create(Sprite::createWithSpriteFrameName("yes_btn1.png"),Sprite::createWithSpriteFrameName("yes_btn2.png"),CC_CALLBACK_1(GameOver::onChangeCharConfirm, this));
+	MenuItem* noBtn=MenuItemSprite::create(Sprite::createWithSpriteFrameName("no_btn1.png"),Sprite::createWithSpriteFrameName("no_btn2.png"),CC_CALLBACK_1(GameOver::onChangeCharCancel, this));
 	yesBtn->setScale(0.82f);
 	noBtn->setScale(0.82f);
-	CCMenu* confirmMenu=CCMenu::create(yesBtn,noBtn,NULL);
+	Menu* confirmMenu=Menu::create(yesBtn,noBtn,nullptr);
 	confirmMenu->alignItemsHorizontallyWithPadding(26);
-	confirmMenu->setPosition(ccp(cx,cy-102));
+	confirmMenu->setPosition(Vec2(cx,cy-102));
 	changeCharLayer->addChild(confirmMenu,3);
 	this->addChild(changeCharLayer,800);
 }
 
-void GameOver::onChangeCharTarget(CCObject* sender){
-	changeTargetEnemy=((CCNode*)sender)->getTag()==1;
+void GameOver::onChangeCharTarget(Ref* sender){
+	changeTargetEnemy=((Node*)sender)->getTag()==1;
 	onChangeChar(sender);
 }
 
-void GameOver::onChangeCharPick(CCObject* sender){
-	int index=((CCNode*)sender)->getTag();
+void GameOver::onChangeCharPick(Ref* sender){
+	int index=((Node*)sender)->getTag();
 	int heroCount=sizeof(gResultHeroList)/sizeof(char*);
 	if(index<0 || index>=heroCount){
 		return;
@@ -853,13 +853,13 @@ void GameOver::onChangeCharPick(CCObject* sender){
 	onChangeChar(sender);
 }
 
-void GameOver::onChangeCharConfirm(CCObject* sender){
-	SimpleAudioEngine::sharedEngine()->playEffect("Audio/Menu/confirm.ogg");
+void GameOver::onChangeCharConfirm(Ref* sender){
+	SimpleAudioEngine::getInstance()->playEffect("Audio/Menu/confirm.ogg");
 	if(!_delegate || !changePlayerPick){
 		return;
 	}
 	CCArray* rematchHeros=CCArray::create();
-	CCObject* pObject=NULL;
+	Ref* pObject=nullptr;
 	CCARRAY_FOREACH(_delegate->_CharacterArray,pObject){
 		NarutoSenki::ActionManager* hero=(NarutoSenki::ActionManager*)pObject;
 		if(strcmp(hero->getRole()->getCString(),"Player")!=0 && strcmp(hero->getRole()->getCString(),"Com")!=0){
@@ -882,14 +882,14 @@ void GameOver::onChangeCharConfirm(CCObject* sender){
 	_delegate->onRematch();
 }
 
-void GameOver::onChangeCharCancel(CCObject* sender){
-	SimpleAudioEngine::sharedEngine()->playEffect("Audio/Menu/cancel.ogg");
+void GameOver::onChangeCharCancel(Ref* sender){
+	SimpleAudioEngine::getInstance()->playEffect("Audio/Menu/cancel.ogg");
 	if(changeCharLayer){
 		changeCharLayer->removeFromParentAndCleanup(true);
-		changeCharLayer=NULL;
+		changeCharLayer=nullptr;
 	}
 }
-void GameOver::onUPloadBtn(CCObject* sender){
+void GameOver::onUPloadBtn(Ref* sender){
 
 	CCTips *tip=CCTips::create("ServerMainten");
 	this->addChild(tip,5000);
@@ -899,10 +899,10 @@ void GameOver::onUPloadBtn(CCObject* sender){
 		isPosting=true;
 		//刷新按钮
 		if(!refreshBtn){
-			refreshBtn=CCSprite::createWithSpriteFrameName("refresh_btn.png");
-			refreshBtn->setPosition(ccp(winSize.width/2,winSize.height/2));
-			CCActionInterval* rt=CCRotateBy::create(0.3f,180,180);
-			refreshBtn->runAction(CCRepeatForever::create(rt));
+			refreshBtn=Sprite::createWithSpriteFrameName("refresh_btn.png");
+			refreshBtn->setPosition(Vec2(winSize.width/2,winSize.height/2));
+			ActionInterval* rt=RotateBy::create(0.3f,180,180);
+			refreshBtn->runAction(RepeatForever::create(rt));
 			this->addChild(refreshBtn,1000);
 
 		}
@@ -912,10 +912,10 @@ void GameOver::onUPloadBtn(CCObject* sender){
 		std::string filePath=CCFileUtils::sharedFileUtils()->getWritablePath()+"SHA.xml";
 		std::string strFileMD5 =CMD5Checksum::GetMD5(filePath);
 		remove(filePath.c_str());
-		
 
-		cocos2d::extension::CCHttpRequest* request = new CCHttpRequest();  
-		
+
+		cocos2d::extension::CCHttpRequest* request = new CCHttpRequest();
+
 		std::string code="code=1000";
 		std::string mem=tool->encodeData(CCString::createWithFormat("%d",MemberID)->getCString());
 		std::string code2=CCString::createWithFormat("&version=%d",CURRENT_VERSION)->getCString();
@@ -923,96 +923,96 @@ void GameOver::onUPloadBtn(CCObject* sender){
 		std::string code4=CCString::createWithFormat("&use_char=%s",this->_delegate->currentPlayer->getCharacter()->getCString())->getCString();
 		std::string code5=CCString::createWithFormat("%s%s",strFileMD5.substr(16,5).c_str(),strFileMD5.substr(6,5).c_str())->getCString();
 
-		
+
 		std::string codeFinal=code+"&member_id="+mem+"&pw="+PWord+code2+code3+code4+"&detail="+detailRecord+"&path="+code5;
 		std::string url=SERVER"nsk/record.php?"+codeFinal;
-		request->setUrl(url.c_str());  
-		request->setRequestType(CCHttpRequest::kHttpGet);  
-		request->setResponseCallback(this, callfuncND_selector(GameOver::onHttpRequestCompleted));  
-		request->setTag("Post_My_Data");  
-		cocos2d::extension::CCHttpClient::getInstance()->send(request);  
-		request->release(); 
+		request->setUrl(url.c_str());
+		request->setRequestType(CCHttpRequest::kHttpGet);
+		request->setResponseCallback(this, callfuncND_selector(GameOver::onHttpRequestCompleted));
+		request->setTag("Post_My_Data");
+		cocos2d::extension::CCHttpClient::getInstance()->send(request);
+		request->release();
 
 	}
 
 }
 
-void GameOver::onHttpRequestCompleted(CCNode *sender ,void *data) {  
+void GameOver::onHttpRequestCompleted(Node *sender ,void *data) {
 
 	isPosting=false;
 	//刷新按钮
 	if(refreshBtn){
 		refreshBtn->stopAllActions();
 		refreshBtn->removeFromParent();
-		refreshBtn=NULL;
+		refreshBtn=nullptr;
 	}
-	cocos2d::extension::CCHttpResponse *response = (cocos2d::extension::CCHttpResponse*)data;    
-	if (!response)    
-	{  
-		return;    
-	}   
-	if (0 != strlen(response->getHttpRequest()->getTag()))   
-	{  
-	CCLOG("%s completed", response->getHttpRequest()->getTag());  
-	}  
-	int statusCode = response->getResponseCode();  
-	char statusString[64] = {};  
-	sprintf(statusString ,"Http status code:%d ,tag = %s" ,statusCode ,response->getHttpRequest()->getTag());  
-	CCLOG("response code:%d" ,statusCode);  
-	if (!response->isSucceed())  
-	{  
-	CCLOG("response failed");  
-	CCLOG("error buffer:%s" ,response->getErrorBuffer()); 
+	cocos2d::extension::CCHttpResponse *response = (cocos2d::extension::CCHttpResponse*)data;
+	if (!response)
+	{
+		return;
+	}
+	if (0 != strlen(response->getHttpRequest()->getTag()))
+	{
+	CCLOG("%s completed", response->getHttpRequest()->getTag());
+	}
+	int statusCode = response->getResponseCode();
+	char statusString[64] = {};
+	sprintf(statusString ,"Http status code:%d ,tag = %s" ,statusCode ,response->getHttpRequest()->getTag());
+	CCLOG("response code:%d" ,statusCode);
+	if (!response->isSucceed())
+	{
+	CCLOG("response failed");
+	CCLOG("error buffer:%s" ,response->getErrorBuffer());
 	CCTips *tip=CCTips::create("ServerError");
 	this->addChild(tip,5000);
 	return;
-	}  
-	std::vector<char> *buffer = response->getResponseData();  
-	printf("Http response,dump data:");  
-	
-	std::string buf(buffer->begin(),buffer->end()); 
-	
+	}
+	std::vector<char> *buffer = response->getResponseData();
+	printf("Http response,dump data:");
+
+	std::string buf(buffer->begin(),buffer->end());
+
 	if(strcmp(buf.c_str(),"true")==0){
 		if(upload_btn){
 			upload_btn->removeFromParent();
-			upload_btn=NULL;
+			upload_btn=nullptr;
 		}
 
 		CCTips *tip=CCTips::create("UploadSuccess");
 		this->addChild(tip,5000);
-		
+
 	}else{
 		CCTips *tip=CCTips::create(buf.c_str());
 		this->addChild(tip,5000);
-			
+
 	}
 
-		
-	
-}  
 
 
-void GameOver::onBackToMenu(CCObject* sender){
+}
+
+
+void GameOver::onBackToMenu(Ref* sender){
 
 	if(!exitLayer){
-		SimpleAudioEngine::sharedEngine()->playEffect("Audio/Menu/select.mp3");
-		exitLayer=CCLayer::create();
+		SimpleAudioEngine::getInstance()->playEffect("Audio/Menu/select.mp3");
+		exitLayer=Layer::create();
 
-		CCSprite* exit_bg=CCSprite::createWithSpriteFrameName("confirm_bg.png");
-		exit_bg->setPosition(ccp(winSize.width/2,winSize.height/2));
+		Sprite* exit_bg=Sprite::createWithSpriteFrameName("confirm_bg.png");
+		exit_bg->setPosition(Vec2(winSize.width/2,winSize.height/2));
 
-		CCSprite* comfirm_title=CCSprite::createWithSpriteFrameName("confirm_title.png");
-		comfirm_title->setPosition(ccp(winSize.width/2,winSize.height/2+38));
+		Sprite* comfirm_title=Sprite::createWithSpriteFrameName("confirm_title.png");
+		comfirm_title->setPosition(Vec2(winSize.width/2,winSize.height/2+38));
 
-		CCSprite* btm_text=CCSprite::createWithSpriteFrameName("btm_text.png");
-		btm_text->setPosition(ccp(winSize.width/2,winSize.height/2+8));
+		Sprite* btm_text=Sprite::createWithSpriteFrameName("btm_text.png");
+		btm_text->setPosition(Vec2(winSize.width/2,winSize.height/2+8));
 
-		CCMenuItem* yes_btn=CCMenuItemSprite::create(CCSprite::createWithSpriteFrameName("yes_btn1.png"),CCSprite::createWithSpriteFrameName("yes_btn2.png"),this,menu_selector(GameOver::onLeft));
-		CCMenuItem* no_btn=CCMenuItemSprite::create(CCSprite::createWithSpriteFrameName("no_btn1.png"),CCSprite::createWithSpriteFrameName("no_btn2.png"),this,menu_selector(GameOver::onCancel));
+		MenuItem* yes_btn=MenuItemSprite::create(Sprite::createWithSpriteFrameName("yes_btn1.png"),Sprite::createWithSpriteFrameName("yes_btn2.png"),CC_CALLBACK_1(GameOver::onLeft, this));
+		MenuItem* no_btn=MenuItemSprite::create(Sprite::createWithSpriteFrameName("no_btn1.png"),Sprite::createWithSpriteFrameName("no_btn2.png"),CC_CALLBACK_1(GameOver::onCancel, this));
 
-		CCMenu* confirm_menu = CCMenu::create(yes_btn,no_btn,NULL);
+		Menu* confirm_menu = Menu::create(yes_btn,no_btn,nullptr);
 		confirm_menu->alignItemsHorizontallyWithPadding(24);
-		confirm_menu->setPosition(ccp(winSize.width/2,winSize.height/2-30));
+		confirm_menu->setPosition(Vec2(winSize.width/2,winSize.height/2-30));
 
 		exitLayer->addChild(exit_bg,1);
 		exitLayer->addChild(confirm_menu,2);
@@ -1020,31 +1020,31 @@ void GameOver::onBackToMenu(CCObject* sender){
 		exitLayer->addChild(btm_text,2);
 		this->addChild(exitLayer,500);
 	}
-	
+
 
 };
 
-void GameOver::onLeft(CCObject* sender){
+void GameOver::onLeft(Ref* sender){
 
-	SimpleAudioEngine::sharedEngine()->playEffect("Audio/Menu/confirm.ogg");
+	SimpleAudioEngine::getInstance()->playEffect("Audio/Menu/confirm.ogg");
 
 
 
 	_delegate->_isExiting=true;
-	CCDirector::sharedDirector()->popScene();
+	Director::getInstance()->popScene();
 
 }
 
-void GameOver::onCancel(CCObject* sender){
+void GameOver::onCancel(Ref* sender){
 
-	SimpleAudioEngine::sharedEngine()->playEffect("Audio/Menu/cancel.ogg");
+	SimpleAudioEngine::getInstance()->playEffect("Audio/Menu/cancel.ogg");
 	exitLayer->removeFromParent();
-	exitLayer=NULL;
+	exitLayer=nullptr;
 }
 
 
 
-GameOver*  GameOver::create(CCRenderTexture* snapshoot){
+GameOver*  GameOver::create(RenderTexture* snapshoot){
 	GameOver* pl=new  GameOver();
 	if (pl && pl->init(snapshoot))
 	{
@@ -1054,7 +1054,7 @@ GameOver*  GameOver::create(CCRenderTexture* snapshoot){
 	else
 	{
 		delete pl;
-		return NULL;
+		return nullptr;
 	}
 }
 
