@@ -1430,6 +1430,7 @@ void GameLayer::onLeft(){
 		SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Menu.plist");
 		SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Result.plist");
 		SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Select.plist");
+		SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Report.plist");
 		SpriteFrameCache::getInstance()->addSpriteFramesWithFile("UI.plist");
 		SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Ougis.plist");
 		SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Ougis2.plist");
