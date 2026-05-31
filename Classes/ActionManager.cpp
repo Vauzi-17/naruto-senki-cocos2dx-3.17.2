@@ -292,12 +292,12 @@ void NarutoSenki::ActionManager::update(float dt){
 					if(strcmp(this->_group->getCString(),"Konoha")==0 && this->getPositionX()<=11*32){
 					    _isHealling=true;
 						if(this->getHpPercent()<1.0f){
-							this->scheduleOnce(schedule_selector(NarutoSenki::ActionManager::setRestore),1.0f);							
+							this->scheduleOnce(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::setRestore),1.0f);
 						}
 					}else if(strcmp(this->_group->getCString(),"Akatsuki")==0 && this->getPositionX()>=85*32){
 						_isHealling=true;
 						if ( this->getHpPercent()<1.0f){	
-							this->scheduleOnce(schedule_selector(NarutoSenki::ActionManager::setRestore),1.0f);						
+							this->scheduleOnce(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::setRestore),1.0f);
 						}
 					}else{
 						_isHealling=false;
@@ -376,7 +376,7 @@ void NarutoSenki::ActionManager::acceptAttack(CCObject* object){
 			this->getActionState()==ACTION_STATE_ATTACK
 			)){
 				if (this->getOpacity()==255){
-					this->scheduleOnce(schedule_selector(NarutoSenki::ActionManager::disableBuff),0.2f);
+					this->scheduleOnce(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::disableBuff),0.2f);
 				}
 				this->setOpacity(150);
 				return;			
@@ -543,7 +543,7 @@ void NarutoSenki::ActionManager::acceptAttack(CCObject* object){
 									if(Attacker->_master->getActionState()==ACTION_STATE_O2ATTACK){
 										Attacker->_master->stopAllActions();
 										Attacker->_master->runAction(createAnimation(Attacker->_master->skillSPC1Array,10.0f,false,false));
-										Attacker->_master->scheduleOnce(schedule_selector(NarutoSenki::ActionManager::resumeAction),15);
+										Attacker->_master->scheduleOnce(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::resumeAction),15);
 										Attacker->_master->_isBati=true;
 										Attacker->_master->_isWudi=false;
 									}
@@ -756,7 +756,7 @@ void NarutoSenki::ActionManager::acceptAttack(CCObject* object){
 							this->hurt();
 							if(this->getWalkSpeed()==224){
 							this->setWalkSpeed(112);
-							this->schedule(schedule_selector(NarutoSenki::ActionManager::disableDebuff),3);
+							this->schedule(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::disableDebuff),3);
 							}						
 
 						}else if(strcmp(hitType,"ac_hit")==0){
@@ -800,9 +800,9 @@ void NarutoSenki::ActionManager::acceptAttack(CCObject* object){
 							}else {
 								this->_dehealBuffValue=1000;
 								this->setBuffEffect("dhBuff");
-								this->schedule(schedule_selector(NarutoSenki::ActionManager::dehealBuff),1);
+								this->schedule(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::dehealBuff),1);
 							}
-							this->scheduleOnce(schedule_selector(NarutoSenki::ActionManager::disableBuff),5);
+							this->scheduleOnce(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::disableBuff),5);
 
 						}
 						else if(strcmp(hitType,"ct_hit")==0){
@@ -825,13 +825,13 @@ void NarutoSenki::ActionManager::acceptAttack(CCObject* object){
 													strcmp(Attacker->getCharacter()->getCString(),"Shenwei2")==0){
 														if(this->hardHurt(3000,false,true,false,false)){
 																Attacker->_isCatchOne=true;
-															this->scheduleOnce(schedule_selector(NarutoSenki::ActionManager::reCatched),2.9f);
+															this->scheduleOnce(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::reCatched),2.9f);
 														}
 
 												}else if(strcmp(Attacker->getCharacter()->getCString(),"SandBall")==0){
 													if(this->hardHurt(1000,false,true,false,false)){
 																Attacker->_isCatchOne=true;
-															this->scheduleOnce(schedule_selector(NarutoSenki::ActionManager::reCatched),0.9f);
+															this->scheduleOnce(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::reCatched),0.9f);
 														}
 												}else if(strcmp(Attacker->getMaster()->getCharacter()->getCString(),"Shikamaru")==0){
 													bool pianyi=false;
@@ -839,10 +839,10 @@ void NarutoSenki::ActionManager::acceptAttack(CCObject* object){
 														if(pianyi=this->hardHurt(6000,false,false,true,false)){
 															
 															Attacker->stopAllActions();
-															Attacker->schedule(schedule_selector(NarutoSenki::ActionManager::getSticker),0.1f);
-															this->schedule(schedule_selector(NarutoSenki::ActionManager::lostBlood),1.0f);
+															Attacker->schedule(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::getSticker),0.1f);
+															this->schedule(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::lostBlood),1.0f);
 															this->lostBloodValue=400;
-															this->scheduleOnce(schedule_selector(NarutoSenki::ActionManager::removeLostBlood),6.0f);
+															this->scheduleOnce(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::removeLostBlood),6.0f);
 														}
 													
 													}else if(strcmp(Attacker->getCharacter()->getCString(),"QuanRen")==0||
@@ -891,7 +891,7 @@ void NarutoSenki::ActionManager::acceptAttack(CCObject* object){
 												
 													if(this->hardHurt(1000,false,true,false,false)){
 														Attacker->_isCatchOne=true;
-														this->scheduleOnce(schedule_selector(NarutoSenki::ActionManager::reCatched),1.1f);
+														this->scheduleOnce(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::reCatched),1.1f);
 													}
 													
 													
@@ -1370,8 +1370,8 @@ void NarutoSenki::ActionManager::setDamage(CCString* effectType,unsigned int att
 		_hpBar->setVisible(true);
 		}
 		
-		this->unschedule(schedule_selector(NarutoSenki::ActionManager::disableHpBar));
-		this->scheduleOnce(schedule_selector(NarutoSenki::ActionManager::disableHpBar),2.0f);
+		this->unschedule(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::disableHpBar));
+		this->scheduleOnce(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::disableHpBar),2.0f);
 	};
 
 	
@@ -1895,7 +1895,7 @@ void NarutoSenki::ActionManager::setItem(abType type){
 		this->minusCoin(50);
 		
 	}
-	this->scheduleOnce(schedule_selector(Hero::enableItem1),5.0f);
+	this->scheduleOnce(CC_SCHEDULE_SELECTOR(Hero::enableItem1),5.0f);
 
 	
 
@@ -2035,7 +2035,7 @@ void NarutoSenki::ActionManager::useGear(gearType type){
 					_speedItemEffect=Effect::create("speedUp",this);
 					this->addChild(_speedItemEffect);
 
-					this->scheduleOnce(schedule_selector(NarutoSenki::ActionManager::enableGear00),15.0f);
+					this->scheduleOnce(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::enableGear00),15.0f);
 
 					//����
 					if(strcmp(_role->getCString(),"Player")==0 || strcmp(this->getGroup()->getCString(),_delegate->currentPlayer->getGroup()->getCString())==0){
@@ -2056,7 +2056,7 @@ void NarutoSenki::ActionManager::useGear(gearType type){
 					this->setSound(this,callValue2);
 
 
-					this->schedule(schedule_selector(NarutoSenki::ActionManager::disableGear1),3.0f);
+					this->schedule(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::disableGear1),3.0f);
 
 				}
 		}
@@ -2070,10 +2070,10 @@ void NarutoSenki::ActionManager::useGear(gearType type){
 		this->setMon(this,(void*)tmpValue);
 	
 
-		this->scheduleOnce(schedule_selector(NarutoSenki::ActionManager::enableGear03),15.0f);
+		this->scheduleOnce(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::enableGear03),15.0f);
 	}else if(type==gear06){
 		_isCanGear06=false;
-		this->scheduleOnce(schedule_selector(NarutoSenki::ActionManager::enableGear06),15.0f);
+		this->scheduleOnce(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::enableGear06),15.0f);
 
 		
 		if(!_isWudi && !_isBati){
@@ -2101,7 +2101,7 @@ void NarutoSenki::ActionManager::useGear(gearType type){
 					CCDictionary* callValue = CCDictionary::create(); 
 					callValue->setObject(CCString::create("tishen"), 1);
 					this->setSkillEffect(this,callValue);
-					this->scheduleOnce(schedule_selector(NarutoSenki::ActionManager::disableGear2),1.0f);
+					this->scheduleOnce(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::disableGear2),1.0f);
 
 
 					
@@ -2150,7 +2150,7 @@ void NarutoSenki::ActionManager::disableGear1(float dt){
 
 	}else {
 	
-		this->unschedule(schedule_selector(NarutoSenki::ActionManager::disableGear1));
+		this->unschedule(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::disableGear1));
 		if(this->getWalkSpeed()==320){
 			this->setWalkSpeed(224);
 		}	
@@ -2441,7 +2441,7 @@ void NarutoSenki::ActionManager::getSticker(float dt){
 		}
 	};
 
-	this->unschedule(schedule_selector(NarutoSenki::ActionManager::getSticker));	
+	this->unschedule(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::getSticker));
 	this->dealloc();
 	
 }
@@ -2753,7 +2753,7 @@ void NarutoSenki::ActionManager::setCommand(CCNode* sender,void* date){
 				&& tempHero->_actionState==ACTION_STATE_DEAD
 				&&  tempHero->rebornSprite
 				){
-					tempHero->unschedule(schedule_selector(Hero::reborn));
+					tempHero->unschedule(CC_SCHEDULE_SELECTOR(Hero::reborn));
 					tempHero->reborn(0.1f);
 
 			}
@@ -2919,7 +2919,7 @@ void NarutoSenki::ActionManager::setBuff(CCNode* sender,void* date){
 
 	if(strcmp(_attackType->getCString(),"hBuff")==0){
 		_healBuffValue=buffValue;
-		this->schedule(schedule_selector(NarutoSenki::ActionManager::healBuff),1);
+		this->schedule(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::healBuff),1);
 		this->setBuffEffect("hBuff");
 
 	}else if(strcmp(_attackType->getCString(),"sBuff")==0 ||
@@ -2929,7 +2929,7 @@ void NarutoSenki::ActionManager::setBuff(CCNode* sender,void* date){
 		){
 
 		_skillUPBuffValue=buffValue;
-		this->scheduleOnce(schedule_selector(NarutoSenki::ActionManager::disableBuff),buffStayTime);
+		this->scheduleOnce(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::disableBuff),buffStayTime);
 		this->setBuffEffect(_attackType->getCString());
 		
 		this->setsAttackValue1(CCString::createWithFormat("%d",atoi(this->_sattackValue1->getCString())+_skillUPBuffValue));
@@ -2953,7 +2953,7 @@ void NarutoSenki::ActionManager::setBuff(CCNode* sender,void* date){
 								if(strcmp(tempHero->getCharacter()->getCString(),"Konan")==0 ||
 									strcmp(tempHero->getCharacter()->getCString(),"Deidara")==0
 									){
-										tempHero->unschedule(schedule_selector(NarutoSenki::ActionManager::disableBuff));
+										tempHero->unschedule(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::disableBuff));
 								}
 
 
@@ -2994,32 +2994,32 @@ void NarutoSenki::ActionManager::setBuff(CCNode* sender,void* date){
 			){
 
 			if(_skillChangeBuffValue==17){
-				this->scheduleOnce(schedule_selector(NarutoSenki::ActionManager::resumeAction),buffStayTime);
+				this->scheduleOnce(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::resumeAction),buffStayTime);
 			}else if(_skillChangeBuffValue==18){
-				this->unschedule(schedule_selector(NarutoSenki::ActionManager::resumeAction));
+				this->unschedule(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::resumeAction));
 				this->setNAttackAction(createAnimation(nattackArray,10.0f,false,true));
-				this->scheduleOnce(schedule_selector(NarutoSenki::ActionManager::resumeAction),buffStayTime);
+				this->scheduleOnce(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::resumeAction),buffStayTime);
 			}
 
 		}else if(strcmp(this->_character->getCString(),"Kiba")==0){
 			if(_skillChangeBuffValue==18){
-				this->scheduleOnce(schedule_selector(NarutoSenki::ActionManager::resumeAction),buffStayTime);
+				this->scheduleOnce(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::resumeAction),buffStayTime);
 			}
 		}else if( (strcmp(this->_character->getCString(),"ImmortalSasuke")==0 ||
 			strcmp(this->_character->getCString(),"Sasuke")==0 )
 			&& _skillChangeBuffValue==18){
-			this->unschedule(schedule_selector(NarutoSenki::ActionManager::resumeAction));
-			this->unschedule(schedule_selector(NarutoSenki::ActionManager::disableBuff));
+			this->unschedule(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::resumeAction));
+			this->unschedule(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::disableBuff));
 
 			this->_isTaunt=false;
 			this->setHurtAction(createAnimation(hurtArray,10.0f,false,true));
 			this->disableBuff(0);
 
-			this->scheduleOnce(schedule_selector(NarutoSenki::ActionManager::resumeAction),buffStayTime);
+			this->scheduleOnce(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::resumeAction),buffStayTime);
 			
 		}else if(strcmp(this->_character->getCString(),"Minato")==0){
 			if(_skillChangeBuffValue==18){
-				this->scheduleOnce(schedule_selector(NarutoSenki::ActionManager::resumeAction),buffStayTime);
+				this->scheduleOnce(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::resumeAction),buffStayTime);
 			}
 		}else{
 			if(strcmp(this->_character->getCString(),"Kankuro")!=0 &&
@@ -3034,7 +3034,7 @@ void NarutoSenki::ActionManager::setBuff(CCNode* sender,void* date){
 				strcmp(this->_character->getCString(),"Lee")!=0 && 
 				strcmp(this->_character->getCString(),"RockLee")!=0
 				){
-				this->scheduleOnce(schedule_selector(NarutoSenki::ActionManager::resumeAction),buffStayTime);
+				this->scheduleOnce(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::resumeAction),buffStayTime);
 			}
 		}
 
@@ -3043,8 +3043,8 @@ void NarutoSenki::ActionManager::setBuff(CCNode* sender,void* date){
 	}else if(strcmp(_attackType->getCString(),"tBuff")==0){
 
 		_skillChangeBuffValue=buffValue;
-		this->scheduleOnce(schedule_selector(NarutoSenki::ActionManager::resumeAction),buffStayTime);
-		this->scheduleOnce(schedule_selector(NarutoSenki::ActionManager::disableBuff),buffStayTime);
+		this->scheduleOnce(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::resumeAction),buffStayTime);
+		this->scheduleOnce(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::disableBuff),buffStayTime);
 		this->setBuffEffect(_attackType->getCString());
 
 		this->changeAction();
@@ -3063,7 +3063,7 @@ void NarutoSenki::ActionManager::setBuff(CCNode* sender,void* date){
 			_shadow->setVisible(false);
 		}
 		this->_isVisable=false;
-		this->scheduleOnce(schedule_selector(NarutoSenki::ActionManager::disableBuff),buffStayTime);
+		this->scheduleOnce(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::disableBuff),buffStayTime);
 
 	}else if(strcmp(_attackType->getCString(),"GroupHeal")==0 ||
 		strcmp(_attackType->getCString(),"GroupBuff")==0
@@ -3074,7 +3074,7 @@ void NarutoSenki::ActionManager::setBuff(CCNode* sender,void* date){
 			_healBuffValue=buffValue;
 		}
 
-		this->schedule(schedule_selector(NarutoSenki::ActionManager::healBuff),1);
+		this->schedule(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::healBuff),1);
 		
 		
 	}
@@ -3217,7 +3217,7 @@ void NarutoSenki::ActionManager::healBuff(float dt){
 	}
 
 	if(_buffStartTime && curTime-_buffStartTime>=limitTime){
-		this->unschedule(schedule_selector(NarutoSenki::ActionManager::healBuff));
+		this->unschedule(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::healBuff));
 		this->removeBuffEffect("hBuff");
 		_healBuffValue=NULL;
 		_buffStartTime=NULL;
@@ -3430,7 +3430,7 @@ void NarutoSenki::ActionManager::dehealBuff(float dt){
 	
 
 	if(_debuffStartTime&& abs(_debuffStartTime-curTime)>10000){
-		this->unschedule(schedule_selector(NarutoSenki::ActionManager::dehealBuff));
+		this->unschedule(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::dehealBuff));
 		this->setWalkSpeed(_originSpeed);
 		this->removeBuffEffect("dhBuff");
 		_dehealBuffValue=NULL;
@@ -3494,7 +3494,7 @@ void NarutoSenki::ActionManager::lostBlood(float dt){
 
 void NarutoSenki::ActionManager::removeLostBlood(float dt){
 	this->lostBloodValue=0;
-	this->unschedule(schedule_selector(NarutoSenki::ActionManager::lostBlood));
+	this->unschedule(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::lostBlood));
 }
 
 void NarutoSenki::ActionManager::changeAction(){
@@ -3572,7 +3572,7 @@ void NarutoSenki::ActionManager::changeAction(){
 			if(_hpBar){
 				_hpBar->setPositionY(120);
 			}
-			this->schedule(schedule_selector(NarutoSenki::ActionManager::setMonPer),0.5f);
+			this->schedule(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::setMonPer),0.5f);
 			
 		}
 
@@ -3740,7 +3740,7 @@ void NarutoSenki::ActionManager::changeAction(){
 								if(strcmp(tempHero->getCharacter()->getCString(),"Konan")==0 ||
 									strcmp(tempHero->getCharacter()->getCString(),"Deidara")==0
 									){
-										tempHero->unschedule(schedule_selector(NarutoSenki::ActionManager::disableBuff));
+										tempHero->unschedule(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::disableBuff));
 								}
 
 
@@ -3820,7 +3820,7 @@ void NarutoSenki::ActionManager::changeAction(){
 								if(strcmp(tempHero->getCharacter()->getCString(),"Konan")==0 ||
 									strcmp(tempHero->getCharacter()->getCString(),"Deidara")==0
 									){
-										tempHero->unschedule(schedule_selector(NarutoSenki::ActionManager::disableBuff));
+										tempHero->unschedule(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::disableBuff));
 								}
 
 
@@ -3894,7 +3894,7 @@ void NarutoSenki::ActionManager::changeAction(){
 							if(strcmp(tempHero->getCharacter()->getCString(),"Konan")==0 ||
 								strcmp(tempHero->getCharacter()->getCString(),"Deidara")==0
 								){
-									tempHero->unschedule(schedule_selector(NarutoSenki::ActionManager::disableBuff));
+									tempHero->unschedule(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::disableBuff));
 							}
 
 
@@ -3993,7 +3993,7 @@ void NarutoSenki::ActionManager::changeAction(){
 							if(strcmp(tempHero->getCharacter()->getCString(),"Konan")==0 ||
 								strcmp(tempHero->getCharacter()->getCString(),"Deidara")==0
 								){
-									tempHero->unschedule(schedule_selector(NarutoSenki::ActionManager::disableBuff));
+									tempHero->unschedule(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::disableBuff));
 							}
 
 
@@ -4263,7 +4263,7 @@ void NarutoSenki::ActionManager::changeAction(){
 
 		_isBati=true;
 		_healBuffValue=3000;
-		this->schedule(schedule_selector(NarutoSenki::ActionManager::healBuff),1);
+		this->schedule(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::healBuff),1);
 
 		this->setIdleAction(createAnimation(skillSPC1Array,5.0f,true,false));
 		this->setWalkAction(createAnimation(skillSPC2Array,10.0f,true,false));
@@ -4425,7 +4425,7 @@ void NarutoSenki::ActionManager::resumeAction(float dt){
 			_hpBar->setPositionY(this->getHeight());
 			}
 
-			this->unschedule(schedule_selector(NarutoSenki::ActionManager::setMonPer));
+			this->unschedule(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::setMonPer));
 
 		}
 
@@ -4834,7 +4834,7 @@ void NarutoSenki::ActionManager::resumeAction(float dt){
 					tempHero->changeGroup();
 					if(strcmp(tempHero->getRole()->getCString(),"Player")==0){
 						tempHero->_isAI=false;
-						tempHero->unschedule(schedule_selector(NarutoSenki::ActionManager::setAI));
+						tempHero->unschedule(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::setAI));
 						this->_delegate->getHudLayer()->_isAllButtonLocked=false;
 					}
 					if(strcmp(this->getRole()->getCString(),"Player")==0){
@@ -5048,14 +5048,14 @@ void NarutoSenki::ActionManager::setActionResume(){
 
 
 	}else if(strcmp(this->_character->getCString(),"Kakuzu")==0 &&  _skillChangeBuffValue){	
-		this->unschedule(schedule_selector(NarutoSenki::ActionManager::resumeAction));
+		this->unschedule(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::resumeAction));
 		this->removeBuffEffect("sBuff");	
 
 		_skillChangeBuffValue=NULL;
 
 	}else if(strcmp(this->_character->getCString(),"Tobi")==0 && _skillChangeBuffValue){
 
-		this->unschedule(schedule_selector(NarutoSenki::ActionManager::resumeAction));
+		this->unschedule(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::resumeAction));
 		this->setWalkAction(createAnimation(walkArray,10.0f,true,false));
 
 		if (this->getOpacity()!=255){
@@ -5072,7 +5072,7 @@ void NarutoSenki::ActionManager::setActionResume(){
 	}else if(strcmp(this->_character->getCString(),"Kiba")==0 ){
 
 		if(_powerUPBuffValue){
-			this->unschedule(schedule_selector(NarutoSenki::ActionManager::resumeAction));
+			this->unschedule(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::resumeAction));
 			this->setnAttackValue(CCString::createWithFormat("%d",atoi(this->_nattackValue->getCString())-_powerUPBuffValue));
 			_powerUPBuffValue=NULL;
 		}
@@ -5147,7 +5147,7 @@ void NarutoSenki::ActionManager::setActionResume(){
 	}else if((strcmp(this->_character->getCString(),"Sasuke")==0||
 		strcmp(this->_character->getCString(),"ImmortalSasuke")==0) && this->_isTaunt){
 
-			this->unschedule(schedule_selector(NarutoSenki::ActionManager::resumeAction));
+			this->unschedule(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::resumeAction));
 			this->_isTaunt=false;
 			this->setHurtAction(createAnimation(hurtArray,10.0f,false,true));
 			_skillChangeBuffValue=NULL;
@@ -5155,7 +5155,7 @@ void NarutoSenki::ActionManager::setActionResume(){
 	}else if(strcmp(this->_character->getCString(),"ImmortalSasuke")==0  &&  _skillChangeBuffValue ){
 		if(_skillChangeBuffValue==18){
 
-			this->unschedule(schedule_selector(NarutoSenki::ActionManager::resumeAction));
+			this->unschedule(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::resumeAction));
 
 			this->setIdleAction(createAnimation(idleArray,5.0f,true,false));
 			this->setWalkAction(createAnimation(walkArray,10.0f,true,false));
@@ -5194,7 +5194,7 @@ void NarutoSenki::ActionManager::setActionResume(){
 
 		if(_skillChangeBuffValue==17){
 
-			this->unschedule(schedule_selector(NarutoSenki::ActionManager::resumeAction));
+			this->unschedule(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::resumeAction));
 
 			this->setIdleAction(createAnimation(idleArray,5.0f,true,false));
 			this->setWalkAction(createAnimation(walkArray,10.0f,true,false));
@@ -5230,7 +5230,7 @@ void NarutoSenki::ActionManager::setActionResume(){
 
 	}else if(strcmp(this->_character->getCString(),"Choji")==0 && _skillChangeBuffValue){
 
-		this->unschedule(schedule_selector(NarutoSenki::ActionManager::resumeAction));
+		this->unschedule(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::resumeAction));
 
 		this->setnAttackValue(CCString::createWithFormat("%d",atoi(this->_nattackValue->getCString())-460));
 		_nattackRangeX=16;
@@ -5263,7 +5263,7 @@ void NarutoSenki::ActionManager::setActionResume(){
 
 
 	}else if(strcmp(this->_character->getCString(),"Gaara")==0 && _skillChangeBuffValue){
-		this->unschedule(schedule_selector(NarutoSenki::ActionManager::resumeAction));
+		this->unschedule(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::resumeAction));
 		this->setIdleAction(createAnimation(idleArray,5.0f,true,false));
 		this->setWalkAction(createAnimation(walkArray,10.0f,true,false));
 		this->setNAttackAction(createAnimation(nattackArray,10.0f,false,true));
@@ -5288,7 +5288,7 @@ void NarutoSenki::ActionManager::setActionResume(){
 
 	}else if(strcmp(this->_character->getCString(),"Ino")==0){
 
-		this->unschedule(schedule_selector(NarutoSenki::ActionManager::resumeAction));
+		this->unschedule(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::resumeAction));
 		CCObject* pObject;
 		CCARRAY_FOREACH(_delegate->_CharacterArray,pObject){
 			Hero* tempHero=(Hero*) pObject;
@@ -5296,7 +5296,7 @@ void NarutoSenki::ActionManager::setActionResume(){
 				tempHero->_isControled=false;
 				tempHero->changeGroup();
 				if(strcmp(tempHero->getRole()->getCString(),"Player")==0){
-					tempHero->unschedule(schedule_selector(NarutoSenki::ActionManager::setAI));
+					tempHero->unschedule(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::setAI));
 					tempHero->_isAI=false;
 					this->_delegate->getHudLayer()->_isAllButtonLocked=false;
 				}
@@ -5311,7 +5311,7 @@ void NarutoSenki::ActionManager::setActionResume(){
 
 	}else if(strcmp(this->_character->getCString(),"Hidan")==0 && _skillChangeBuffValue){
 
-		this->unschedule(schedule_selector(NarutoSenki::ActionManager::resumeAction));
+		this->unschedule(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::resumeAction));
 		_isBati=false;
 		_isTaunt=false;
 		this->_isOnlySkillLocked=false;
@@ -5362,7 +5362,7 @@ void NarutoSenki::ActionManager::setActionResume(){
 		){
 
 		if(_skillChangeBuffValue){
-			this->unschedule(schedule_selector(NarutoSenki::ActionManager::resumeAction));
+			this->unschedule(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::resumeAction));
 
 			if(_skillChangeBuffValue==17){
 				this->setNAttackAction(createAnimation(nattackArray,10.0f,false,true));
@@ -5390,7 +5390,7 @@ void NarutoSenki::ActionManager::setActionResume(){
 				if(_hpBar){
 					_hpBar->setPositionY(this->getHeight());
 				}
-				this->unschedule(schedule_selector(NarutoSenki::ActionManager::setMonPer));
+				this->unschedule(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::setMonPer));
 			}
 
 			_skillChangeBuffValue=NULL;
@@ -5411,7 +5411,7 @@ void NarutoSenki::ActionManager::setActionResume2(){
 
 
 void NarutoSenki::ActionManager::getCollider(){
-	this->schedule(schedule_selector(NarutoSenki::ActionManager::stopMove),0.0f);
+	this->schedule(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::stopMove),0.0f);
 	
 }
 
@@ -5419,7 +5419,7 @@ void NarutoSenki::ActionManager::stopMove(float dt){
 
 	if(this->getPositionX()<=_delegate->currentMap->getTileSize().width ||
 		this->getPositionX()>=(_delegate->currentMap->getMapSize().width-1)*_delegate->currentMap->getTileSize().width){
-			this->unschedule(schedule_selector(NarutoSenki::ActionManager::stopMove));
+			this->unschedule(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::stopMove));
 			this->getActionManager()->removeAction(_moveAction);
 			return;
 	};
@@ -5437,7 +5437,7 @@ void NarutoSenki::ActionManager::stopMove(float dt){
 			float tempRange1=_attackRangeX+this->getContentSize().width/2;
 			if(abs(distanceX)<=tempRange1 &&
 				abs(tempHero->getPositionY()-this->getPositionY())<=this->_attackRangeY){
-					this->unschedule(schedule_selector(NarutoSenki::ActionManager::stopMove));
+					this->unschedule(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::stopMove));
 					this->getActionManager()->removeAction(_moveAction);
 					return;
 			}
@@ -5451,7 +5451,7 @@ void NarutoSenki::ActionManager::stopJump(CCNode* sender,void* date){
 
 	if(_actionState==ACTION_STATE_JUMP){
 		this->getActionManager()->pauseTarget(this);
-		this->scheduleOnce(schedule_selector(NarutoSenki::ActionManager::resumePauseStuff),float(stopTime)/100);
+		this->scheduleOnce(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::resumePauseStuff),float(stopTime)/100);
 	}
 }
 
@@ -5503,8 +5503,8 @@ void NarutoSenki::ActionManager::setBullet(CCNode* sender,void* date){
 
 		}
 
-		bullet->scheduleOnce(schedule_selector(Bullet::setAttack),0.5f);
-		this->scheduleOnce(schedule_selector(NarutoSenki::ActionManager::setBulletGroup),0.2f);
+		bullet->scheduleOnce(CC_SCHEDULE_SELECTOR(Bullet::setAttack),0.5f);
+		this->scheduleOnce(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::setBulletGroup),0.2f);
 		bullet->setEaseIn(224,5.0f);
 	}
 	else if(strcmp(bulletType->getCString(),"FlyKnife")==0||
@@ -5583,7 +5583,7 @@ void NarutoSenki::ActionManager::setBulletGroup(float dt){
 			bullet->setnAttackValue(CCString::createWithFormat("%d",atoi(bullet->_nattackValue->getCString())+this->_skillUPBuffValue));
 		}
 
-		bullet->scheduleOnce(schedule_selector(Bullet::setAttack),0.5f);
+		bullet->scheduleOnce(CC_SCHEDULE_SELECTOR(Bullet::setAttack),0.5f);
 		bullet->setEaseIn(352,5.0f);
 	}
 
@@ -5833,7 +5833,7 @@ void NarutoSenki::ActionManager::setClone(CCNode* sender,void* date){
 		strcmp(this->getCharacter()->getCString(),"Tsunade")==0 ||
 		strcmp(this->getCharacter()->getCString(),"Deidara")==0
 		){
-		clone->scheduleOnce(schedule_selector(Hero::removeClone),float(cloneTime));	
+		clone->scheduleOnce(CC_SCHEDULE_SELECTOR(Hero::removeClone),float(cloneTime));
 	}
 	
 }
@@ -6268,7 +6268,7 @@ void NarutoSenki::ActionManager::setTrap(CCNode* sender,void* date){
 							if(strcmp(tempHero->getCharacter()->getCString(),"Konan")==0 ||
 								strcmp(tempHero->getCharacter()->getCString(),"Deidara")==0
 								){
-									tempHero->unschedule(schedule_selector(NarutoSenki::ActionManager::disableBuff));
+									tempHero->unschedule(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::disableBuff));
 							}
 
 
@@ -6310,7 +6310,7 @@ void NarutoSenki::ActionManager::setTrap(CCNode* sender,void* date){
 					trap->setPosition(ccp(targetPoint.x,targetPoint.y+32));
 					trap->idle();
 					trap->attack(NAttack);
-					trap->scheduleOnce(schedule_selector(Bullet::removeSelf),4.0f);
+					trap->scheduleOnce(CC_SCHEDULE_SELECTOR(Bullet::removeSelf),4.0f);
 					this->_delegate->addChild(trap,-trap->getPositionY());
 
 				}else if(z==1){
@@ -6323,7 +6323,7 @@ void NarutoSenki::ActionManager::setTrap(CCNode* sender,void* date){
 					trap->setPosition(ccp(targetPoint.x+(i-1)*60,targetPoint.y));
 					trap->idle();
 					trap->attack(NAttack);
-					trap->scheduleOnce(schedule_selector(Bullet::removeSelf),4.0f);
+					trap->scheduleOnce(CC_SCHEDULE_SELECTOR(Bullet::removeSelf),4.0f);
 					this->_delegate->addChild(trap,-trap->getPositionY());
 					}
 
@@ -6337,7 +6337,7 @@ void NarutoSenki::ActionManager::setTrap(CCNode* sender,void* date){
 					trap->setPosition(ccp(targetPoint.x,targetPoint.y-32));
 					trap->idle();
 					trap->attack(NAttack);
-					trap->scheduleOnce(schedule_selector(Bullet::removeSelf),4.0f);
+					trap->scheduleOnce(CC_SCHEDULE_SELECTOR(Bullet::removeSelf),4.0f);
 					this->_delegate->addChild(trap,-trap->getPositionY());
 				}
 			}
@@ -6356,7 +6356,7 @@ void NarutoSenki::ActionManager::setTrap(CCNode* sender,void* date){
 					trap->setPosition(ccp(this->getPositionX()+(_isFlipped?-112:112),this->getPositionY()+(48-i*24)));
 					trap->idle();
 					trap->attack(NAttack);
-					trap->scheduleOnce(schedule_selector(Bullet::removeSelf),2.5f);
+					trap->scheduleOnce(CC_SCHEDULE_SELECTOR(Bullet::removeSelf),2.5f);
 					this->_delegate->addChild(trap,-trap->getPositionY());
 				}
 
@@ -6371,7 +6371,7 @@ void NarutoSenki::ActionManager::setTrap(CCNode* sender,void* date){
 					trap->setPosition(ccp(this->getPositionX()+(_isFlipped?-80:80),this->getPositionY()+(32-i*24)));
 					trap->idle();
 					trap->attack(NAttack);
-					trap->scheduleOnce(schedule_selector(Bullet::removeSelf),2.5f);
+					trap->scheduleOnce(CC_SCHEDULE_SELECTOR(Bullet::removeSelf),2.5f);
 					this->_delegate->addChild(trap,-trap->getPositionY());
 				}
 
@@ -6383,7 +6383,7 @@ void NarutoSenki::ActionManager::setTrap(CCNode* sender,void* date){
 				trap->setPosition(ccp(this->getPositionX()+(_isFlipped?-48:48),this->getPositionY()+22));
 				trap->idle();
 				trap->attack(NAttack);
-				trap->scheduleOnce(schedule_selector(Bullet::removeSelf),2.5f);
+				trap->scheduleOnce(CC_SCHEDULE_SELECTOR(Bullet::removeSelf),2.5f);
 				this->_delegate->addChild(trap,-trap->getPositionY());
 
 			}
@@ -6506,7 +6506,7 @@ void NarutoSenki::ActionManager::setMonAttack(CCNode* sender,void* date){
 void NarutoSenki::ActionManager::setTransform(){
 
 	NotificationCenter::getInstance()->removeObserver(this,"acceptAttack");
-	this->unschedule(schedule_selector(NarutoSenki::ActionManager::dehealBuff));
+	this->unschedule(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::dehealBuff));
 
 	if(strcmp(this->_character->getCString(),"Lee")==0 ||
 		strcmp(this->_character->getCString(),"RockLee")==0
@@ -6517,7 +6517,7 @@ void NarutoSenki::ActionManager::setTransform(){
 	}else{
 
 		if(_skillUPBuffValue){
-			this->unschedule(schedule_selector(NarutoSenki::ActionManager::disableBuff));
+			this->unschedule(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::disableBuff));
 			this->disableBuff(0.1f);
 		}
 
@@ -6758,7 +6758,7 @@ void NarutoSenki::ActionManager::sAttack(abType type){
 			if(strcmp(this->getCharacter()->getCString(),"Konan")==0 ||
 				strcmp(this->getCharacter()->getCString(),"Deidara")==0
 				){
-				this->unschedule(schedule_selector(NarutoSenki::ActionManager::disableBuff));
+				this->unschedule(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::disableBuff));
 			}
 			
 			
@@ -6789,7 +6789,7 @@ void NarutoSenki::ActionManager::sAttack(abType type){
 				//}
 				_isCanSkill1=false;
 				
-				this->scheduleOnce(schedule_selector(Hero::enableSkill1),_sattackcoldDown1);
+				this->scheduleOnce(CC_SCHEDULE_SELECTOR(Hero::enableSkill1),_sattackcoldDown1);
 				break;
 			case SKILL2:
 				if(_isCanSkill2){
@@ -6802,7 +6802,7 @@ void NarutoSenki::ActionManager::sAttack(abType type){
 				
 				_isCanSkill2=false;
 				
-				this->scheduleOnce(schedule_selector(Hero::enableSkill2),_sattackcoldDown2);
+				this->scheduleOnce(CC_SCHEDULE_SELECTOR(Hero::enableSkill2),_sattackcoldDown2);
 
 				break;
 			case SKILL3:
@@ -6815,7 +6815,7 @@ void NarutoSenki::ActionManager::sAttack(abType type){
 				}
 				_isCanSkill3=false;
 				
-				this->scheduleOnce(schedule_selector(Hero::enableSkill3),_sattackcoldDown3);
+				this->scheduleOnce(CC_SCHEDULE_SELECTOR(Hero::enableSkill3),_sattackcoldDown3);
 				break;
 
 			}
@@ -6836,7 +6836,7 @@ void NarutoSenki::ActionManager::oAttack(abType type){
 			if(strcmp(this->getCharacter()->getCString(),"Konan")==0 ||
 				strcmp(this->getCharacter()->getCString(),"Deidara")==0
 				){
-					this->unschedule(schedule_selector(NarutoSenki::ActionManager::disableBuff));
+					this->unschedule(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::disableBuff));
 			}
 
 			
@@ -6890,7 +6890,7 @@ void NarutoSenki::ActionManager::idle(){
 		_sticker=NULL;
 		_knockDiretion=NULL;
 
-		this->unschedule(schedule_selector(NarutoSenki::ActionManager::stopMove));
+		this->unschedule(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::stopMove));
 
 		if(strcmp(_role->getCString(),"Player")==0 ){
 			if(!_isAllAttackLocked &&!_isOnlySkillLocked ){
@@ -7171,12 +7171,12 @@ void NarutoSenki::ActionManager::airHurt(){
 
 	if(_actionState==ACTION_STATE_AIRHURT){
 		this->getActionManager()->removeAction(_airHurtAction);
-		this->unschedule(schedule_selector(NarutoSenki::ActionManager::resumePauseStuff));
+		this->unschedule(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::resumePauseStuff));
 	}
 	_actionState=ACTION_STATE_AIRHURT;
 	this->runAction(_airHurtAction);
 	this->getActionManager()->pauseTarget(this);
-	this->scheduleOnce(schedule_selector(NarutoSenki::ActionManager::resumePauseStuff),0.2f);
+	this->scheduleOnce(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::resumePauseStuff),0.2f);
 			
 	}
 
@@ -7354,7 +7354,7 @@ void NarutoSenki::ActionManager::dead(){
 		}
 
 		if(this->_controler->getActionState()!=ACTION_STATE_DEAD){
-			this->_controler->unschedule(schedule_selector(NarutoSenki::ActionManager::resumeAction));
+			this->_controler->unschedule(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::resumeAction));
 			this->_controler->idle();								
 			this->_controler->_isBati=false;
 		}
@@ -7369,9 +7369,9 @@ void NarutoSenki::ActionManager::dead(){
 	}
 	
 	this->removeLostBlood(0.1f);
-	this->unschedule(schedule_selector(NarutoSenki::ActionManager::stopMove));
-	this->unschedule(schedule_selector(NarutoSenki::ActionManager::setAI));
-	this->unschedule(schedule_selector(NarutoSenki::ActionManager::disableHpBar));
+	this->unschedule(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::stopMove));
+	this->unschedule(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::setAI));
+	this->unschedule(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::disableHpBar));
 	
     
 
@@ -7387,9 +7387,9 @@ void NarutoSenki::ActionManager::dead(){
 
 	if(strcmp(this->_role->getCString(),"Player")==0 ||  strcmp(this->_role->getCString(),"Com")==0){
 
-		this->unschedule(schedule_selector(NarutoSenki::ActionManager::healBuff));
+		this->unschedule(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::healBuff));
 		this->_buffStartTime=NULL;
-		this->unschedule(schedule_selector(NarutoSenki::ActionManager::dehealBuff));	
+		this->unschedule(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::dehealBuff));
 		if(strcmp(this->getCharacter()->getCString(),"RockLee")!=0 &&
 			strcmp(this->getCharacter()->getCString(),"Lee")!=0
 			){
@@ -7515,8 +7515,8 @@ void NarutoSenki::ActionManager::dead(){
 	
 	if(_actionState==ACTION_STATE_FLOAT || _actionState==ACTION_STATE_AIRHURT){
 		_actionState=ACTION_STATE_DEAD;	
-		this->unschedule(schedule_selector(NarutoSenki::ActionManager::removeClone));
-		this->schedule(schedule_selector(NarutoSenki::ActionManager::checkActionFinish),0.0f);
+		this->unschedule(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::removeClone));
+		this->schedule(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::checkActionFinish),0.0f);
 		return;
 		
 	}else if(_actionState==ACTION_STATE_JUMP){
@@ -7551,7 +7551,7 @@ void NarutoSenki::ActionManager::dead(){
 		this->runAction(seq);
 	
 	}else{
-		this->unschedule(schedule_selector(NarutoSenki::ActionManager::removeClone));
+		this->unschedule(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::removeClone));
 		CCDictionary* callValue = CCDictionary::create(); 
 		callValue->setObject(CCString::create("smk"), 1);	
 		this->setSkillEffect(this,callValue);
@@ -7564,7 +7564,7 @@ void NarutoSenki::ActionManager::dead(){
 void NarutoSenki::ActionManager::checkActionFinish(float dt){
 
 	if(this->getActionManager()->numberOfRunningActionsInTarget(this)==0){
-		this->unschedule(schedule_selector(NarutoSenki::ActionManager::checkActionFinish));
+		this->unschedule(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::checkActionFinish));
 		this->stopAllActions();
 		CCActionInterval* fadeOut=CCFadeOut::create(0.5);
 		CCFiniteTimeAction *call=CCCallFunc::create(this,callfunc_selector(NarutoSenki::ActionManager::dealloc));
@@ -7598,7 +7598,7 @@ void NarutoSenki::ActionManager::setAI(float dt){
 
 void NarutoSenki::ActionManager::doAI(){
 	this->_isAI=true;
-	this->schedule(schedule_selector(NarutoSenki::ActionManager::setAI),0.1f);
+	this->schedule(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::setAI),0.1f);
 	
 }
 
