@@ -7,16 +7,16 @@ USING_NS_CC;
 
 class HudLayer;
 
-class JoyStick : public CCSprite ,public CCTouchDelegate{
+class JoyStick : public Sprite {
 public:
 	JoyStick(void);
 	~JoyStick(void);
 
 
-	CCPoint		    _direction;
-	CCSprite*		_joyStickControl;
-	CCPoint			 _defaultPotion;
-	
+	Vec2		    _direction;
+	Sprite*		_joyStickControl;
+	Vec2			 _defaultPotion;
+
 	virtual	bool	init();
 	virtual void	onEnter();
 	virtual void	onExit();
@@ -33,14 +33,11 @@ protected:
 
 
 
-	virtual bool	ccTouchBegan(CCTouch* touch,CCEvent* event);
-	virtual void    ccTouchMoved(CCTouch* touch, CCEvent* event);
-	virtual void	ccTouchEnded(CCTouch* touch,CCEvent* event);
+	virtual bool	ccTouchBegan(Touch* touch,Event* event);
+	virtual void    ccTouchMoved(Touch* touch, Event* event);
+	virtual void	ccTouchEnded(Touch* touch,Event* event);
 
-	void updateDirectionForTouchLocation(CCTouch* touch);
-	void updateJoyStick(float distance,CCPoint direction);
-	
+	void updateDirectionForTouchLocation(Touch* touch);
+	void updateJoyStick(float distance,Vec2 direction);
+
 };
-
-
-
