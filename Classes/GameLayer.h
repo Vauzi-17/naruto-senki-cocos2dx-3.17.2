@@ -24,14 +24,14 @@ namespace NarutoSenki { class ActionManager; }
 class BGLayer;
 class HudLayer;
 
-class GameLayer :public CCLayer{
+class GameLayer :public Layer{
 public:
 	GameLayer(void);
 	~GameLayer(void);
 
-	CCTMXTiledMap*		currentMap;
+	TMXTiledMap*		currentMap;
 	Hero*				currentPlayer;
-	CCPoint				spawnPoint;
+	Vec2				spawnPoint;
 	
 	unsigned int _second;
 	unsigned int _minute;
@@ -63,10 +63,10 @@ public:
 	CC_SYNTHESIZE_RETAIN(CCString*,totalKills,TotalKills);
 	CC_SYNTHESIZE_RETAIN(CCString*,totalTM,TotalTM);
 
-	CCSpriteBatchNode* skillEffectBatch;
-	CCSpriteBatchNode* damageEffectBatch;
-	CCSpriteBatchNode* bulletBatch;
-	CCSpriteBatchNode* shadowBatch;
+	SpriteBatchNode* skillEffectBatch;
+	SpriteBatchNode* damageEffectBatch;
+	SpriteBatchNode* bulletBatch;
+	SpriteBatchNode* shadowBatch;
 
 	bool isPosting;
 	int postTime;
@@ -94,7 +94,7 @@ public:
 	
 
 	void JoyStickRelease();
-	void JoyStickUpdate(CCPoint direction);
+	void JoyStickUpdate(Vec2 direction);
 
 	CC_SYNTHESIZE(bool,_isSkillFinish,SkillFinish);
 	void checkPost(float dt);
@@ -120,13 +120,13 @@ public:
 	void applyDuelTrainStartSetup();
 	void fillCKRToMax(NarutoSenki::ActionManager* hero);
 	bool _isUnlimitedCKR;
-	void setOugis(CCNode* sender);
+	void setOugis(Node* sender);
 	void removeOugis();
-	CCNode* ougisChar;
+	Node* ougisChar;
 
-	CCNode* controlChar;
+	Node* controlChar;
 	
-	CCLayer* blend;
+	Layer* blend;
 
 	void onLeft();
 	void onRematch();
@@ -154,7 +154,7 @@ public:
 	CREATE_FUNC(GameLayer);
 	std::vector<char*> KeyList;
 protected:
-	void onHttpRequestCompleted(CCNode *sender ,void *data);
+	void onHttpRequestCompleted(Node *sender ,void *data);
 	virtual void	onEnter();
 	virtual void	onExit();
 
