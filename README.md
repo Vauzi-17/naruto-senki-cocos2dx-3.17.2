@@ -186,9 +186,15 @@ Commit awal tahap 3:
 - `56981ee refactor: migrate character scheduler selectors`
 - `79e334c refactor: migrate element action callbacks`
 - `0cd115b refactor: migrate action manager direct callbacks`
+- `3bac504 refactor: stabilize monster cleanup pointers`
 
 Catatan progress terbaru:
 
+- Fix runtime setelah build Android pengguna: crash saat mengeluarkan monster
+  ditelusuri ke cleanup `Monster::~Monster()` yang bisa me-release pointer
+  belum terinisialisasi. `ActionManager` sekarang menginisialisasi pointer
+  retained animation/callback ke `NULL`, dan urutan release `_monsterArray` di
+  cleanup monster hero dibetulkan.
 - `ActionManager.cpp` mulai dibersihkan dari callback action langsung yang tidak
   membawa payload `void*`: beberapa alur `disableShack`, `idle`, `dealloc`, dan
   `knockDown` sudah memakai `CallFunc` + `CC_CALLBACK_0`. Tipe action lokal di
