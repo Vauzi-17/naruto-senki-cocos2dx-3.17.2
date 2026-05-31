@@ -335,8 +335,8 @@ Catatan progress terbaru:
 ### Tahap 5: Container/Data dan Sisa Action Bridge
 
 Status: **berjalan; commit `ActionManager`, `Effect`, `HudLayer`, dekoratif UI,
-dan scene/loading sudah build-tested oleh pengguna di Android, commit
-`StartMenu` terbaru belum build-tested**.
+scene/loading, dan `StartMenu` sudah build-tested oleh pengguna di Android,
+commit `Element` terbaru belum build-tested**.
 
 Prioritas:
 
@@ -363,6 +363,7 @@ Commit awal tahap 5:
 - `dca5a44 refactor: migrate decorative sequence helpers`
 - `8c16cf1 refactor: migrate scene animation helpers`
 - `859af1f refactor: migrate start menu sequence helpers`
+- `5eb669c refactor: migrate element local sequence helpers`
 
 Catatan progress terbaru:
 
@@ -402,9 +403,15 @@ Catatan progress terbaru:
 - `StartMenu.cpp` dibersihkan dari helper compat sequence/animation aktif untuk
   cloud, menu text pulse, menu intro, avatar loop, dan dua transisi scroll menu.
   Komentar contoh lama tidak dijadikan target agar perubahan tetap kecil.
-- Setelah commit `StartMenu` ini lulus build Android, langkah berikutnya adalah
-  mulai masuk `Element` secara sangat terbatas atau lanjut membersihkan sisa
-  helper yang benar-benar lokal.
+- Commit `StartMenu` sudah dibuild pengguna di Android dan berjalan aman.
+- `Element.cpp` mulai disentuh secara sangat terbatas: sisa helper
+  `createSequence` lokal di alur `Monster`/`Bullet` dealloc dan movement
+  diganti ke `Sequence::create`. `getDeadAction()` tetap diperlakukan hati-hati
+  lewat `dynamic_cast<FiniteTimeAction*>` dengan fallback callback, meniru
+  perilaku helper compat lama yang hanya memasukkan finite action.
+- Setelah commit `Element` ini lulus build Android, langkah berikutnya adalah
+  lanjut kecil di `ActionManager` atau area `Element` lain yang masih lokal,
+  bukan migrasi container besar sekaligus.
 - Alias HTTP/EditBox/Scale9/Scroll di `Cocos2dx2Compat.h` belum dihapus karena
   masih punya pemakai aktif.
 
