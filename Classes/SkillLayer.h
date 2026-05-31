@@ -4,7 +4,7 @@
 USING_NS_CC;
 
 
-// declare menuButton 
+// declare menuButton
 enum sbtnType{
 	SkillMenu,
 	Unlock1,
@@ -17,7 +17,7 @@ enum sbtnType{
 };
 class SelectLayer;
 class NetworkLayer;
-class SkillLayer : public CCLayer{
+class SkillLayer : public Layer{
 
 public:
 	SkillLayer(void);
@@ -28,24 +28,24 @@ public:
 	void initInterface();
 
 	CREATE_FUNC(SkillLayer);
-	CCSprite* _skillExplain;
+	Sprite* _skillExplain;
 
 	bool isPosting;
-	CCSprite* refreshBtn;
+	Sprite* refreshBtn;
 
-	CCLabelBMFont* coinLabel;
+	LabelBMFont* coinLabel;
 
-	CCLayer* buyLayer;
+	Layer* buyLayer;
 	sbtnType _buyType;
-	CCSprite* _heroFull;
-	CCMenu* changemenu;
+	Sprite* _heroFull;
+	Menu* changemenu;
 	bool _autoMove;
 
-	CCSprite* fengSprite;
-	CCSprite* fengSprite2;
-	CCSprite* skillGroup;
+	Sprite* fengSprite;
+	Sprite* fengSprite2;
+	Sprite* skillGroup;
 
-	CCSprite* skillSprite;
+	Sprite* skillSprite;
 
 	void update(float dt);
 
@@ -53,23 +53,23 @@ public:
 
 
 	void	setSkillExplain(sbtnType type);
-	CCProgressTimer* bonds;
+	ProgressTimer* bonds;
 
 	CC_SYNTHESIZE(SelectLayer*,_delegate,Delegate);
 	CC_SYNTHESIZE(NetworkLayer*,_delegate2,Delegate2);
 private:
 
-	void    onCancel(CCObject* sender);
+	void    onCancel(Ref* sender);
 
 	void	updateSkillGroup();
-	void	onChangeBtn(CCObject* sender);
-	void	onResume(CCObject* sender);
-	void	onSkillRequestCompleted(CCNode *sender ,void *data);
+	void	onChangeBtn(Ref* sender);
+	void	onResume(Ref* sender);
+	void	onSkillRequestCompleted(Node *sender ,void *data);
 };
 
 
 
-class SelectButton : public CCSprite, public CCTouchDelegate{
+class SelectButton : public Sprite {
 
 public:
 	SelectButton(void);
@@ -80,7 +80,7 @@ public:
 	bool _isAviable;
 	virtual bool		init(const char *szImage);
 	static SelectButton*	create(const char *szImage);
-	CCRect				getRect();
+	Rect				getRect();
 	void				click();
 	int				_clickTime;
 	CC_SYNTHESIZE(sbtnType,_btnType,BtnType);
@@ -99,17 +99,12 @@ protected:
 
 	virtual void	onEnter();
 	virtual void	onExit();
-	virtual bool	ccTouchBegan(CCTouch* touch,CCEvent* event);
-	virtual void	ccTouchEnded(CCTouch* touch,CCEvent* event);
+	virtual bool	ccTouchBegan(Touch* touch,Event* event);
+	virtual void	ccTouchEnded(Touch* touch,Event* event);
 
 
-	bool			containsTouchLocation(CCTouch* touch);
+	bool			containsTouchLocation(Touch* touch);
 
 
 
 };
-
-
-
-
-

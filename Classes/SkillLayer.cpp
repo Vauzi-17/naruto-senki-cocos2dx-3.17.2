@@ -34,12 +34,12 @@ SelectButton::~SelectButton(void)
 bool SelectButton::init(const char *szImage){
 	bool bRet = false;
 	do{
-		CC_BREAK_IF(!CCSprite::init());
+		CC_BREAK_IF(!Sprite::init());
 		const char* path;
 
 		path=CCString::createWithFormat("%s",szImage)->getCString();
 		this->initWithSpriteFrameName(path);
-		this->setAnchorPoint(ccp(0,0));
+		this->setAnchorPoint(Vec2(0,0));
 
 		bRet=true;
 
@@ -50,34 +50,38 @@ bool SelectButton::init(const char *szImage){
 }
 
 void SelectButton::onEnter(){
-	CCSprite::onEnter();
-	cocos2d::cocos2dx2_compat::addTargetedDelegate(this,0,true);
+	Sprite::onEnter();
+	auto listener = EventListenerTouchOneByOne::create();
+	listener->setSwallowTouches(true);
+	listener->onTouchBegan = CC_CALLBACK_2(SelectButton::ccTouchBegan, this);
+	listener->onTouchEnded = CC_CALLBACK_2(SelectButton::ccTouchEnded, this);
+	_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 }
 void SelectButton::onExit(){
-	CCSprite::onExit();
-	cocos2d::cocos2dx2_compat::removeDelegate(this);
+	Sprite::onExit();
+	_eventDispatcher->removeEventListenersForTarget(this);
 }
 
-CCRect SelectButton::getRect(){
-	CCSize size=this->getContentSize();
-	return CCRect(0,0, size.width, size.height);
+Rect SelectButton::getRect(){
+	Size size=this->getContentSize();
+	return Rect(0,0, size.width, size.height);
 
 }
 
-bool SelectButton::containsTouchLocation(CCTouch *touch){
+bool SelectButton::containsTouchLocation(Touch *touch){
 
 	return getRect().containsPoint(convertTouchToNodeSpace(touch));
 }
 
-bool SelectButton::ccTouchBegan(CCTouch* touch,CCEvent* event){
-	// touch area 
+bool SelectButton::ccTouchBegan(Touch* touch,Event* event){
+	// touch area
 	if (!this->containsTouchLocation(touch))
 		return false;
 	click();
 	return true;
 
 }
-void SelectButton::ccTouchEnded(CCTouch* touch,CCEvent* event){
+void SelectButton::ccTouchEnded(Touch* touch,Event* event){
 
 };
 
@@ -89,8 +93,8 @@ void SelectButton::click(){
 				this->_delegate2->addChild(tip,5000);
 			}else if( strcmp(_charName->getCString(),"None")!=0){
 			if(!_isAviable && _delegate2 && _delegate2->isHeroConfirmedSelected(_charName->getCString())){
-				SimpleAudioEngine::sharedEngine()->stopAllEffects();
-				CCObject* pObject;
+				SimpleAudioEngine::getInstance()->stopAllEffects();
+				Ref* pObject;
 				CCARRAY_FOREACH(_delegate2->selectArray,pObject){
 					SelectButton* selectBtn=(SelectButton*) pObject;
 					if(strcmp(selectBtn->getCharName()->getCString(),this->getCharName()->getCString())!=0){
@@ -98,11 +102,11 @@ void SelectButton::click(){
 					}
 				}
 				if(this->_clickTime!=20){
-					SimpleAudioEngine::sharedEngine()->playEffect(SELECT_SOUND);
+					SimpleAudioEngine::getInstance()->playEffect(SELECT_SOUND);
 					this->_clickTime=20;
 					_delegate2->setSelected(this);
 				}else if(this->_clickTime==20){
-					SimpleAudioEngine::sharedEngine()->playEffect("Audio/Menu/cancel.ogg");
+					SimpleAudioEngine::getInstance()->playEffect("Audio/Menu/cancel.ogg");
 					_delegate2->unselectHero(_charName->getCString());
 				}
 				return;
@@ -110,7 +114,7 @@ void SelectButton::click(){
 			if(!_isAviable){
 				return;
 			}
-			SimpleAudioEngine::sharedEngine()->stopAllEffects();
+			SimpleAudioEngine::getInstance()->stopAllEffects();
 
 			if(_delegate2){
 				if(_delegate2->_isTrainingSelect){
@@ -126,7 +130,7 @@ void SelectButton::click(){
 						}
 					}
 
-					CCObject* pObject;
+					Ref* pObject;
 					CCARRAY_FOREACH(_delegate2->selectArray,pObject){
 						SelectButton* selectBtn=(SelectButton*) pObject;
 						if (strcmp(selectBtn->getCharName()->getCString(),this->getCharName()->getCString())!=0){
@@ -134,14 +138,14 @@ void SelectButton::click(){
 						}
 					}
 					if(this->_clickTime==0){
-						if(CCUserDefault::sharedUserDefault()->getBoolForKey("isVoice")!=false){
-							SimpleAudioEngine::sharedEngine()->stopAllEffects();
+						if(UserDefault::getInstance()->getBoolForKey("isVoice")!=false){
+							SimpleAudioEngine::getInstance()->stopAllEffects();
 							CCString* introSRC=CCString::createWithFormat("Audio/Intro/%s.mp3",this->getCharName()->getCString());
-							SimpleAudioEngine::sharedEngine()->playEffect(introSRC->getCString());
+							SimpleAudioEngine::getInstance()->playEffect(introSRC->getCString());
 						}
-						SimpleAudioEngine::sharedEngine()->playEffect(SELECT_SOUND);
+						SimpleAudioEngine::getInstance()->playEffect(SELECT_SOUND);
 					}else if(this->_clickTime==1){
-						SimpleAudioEngine::sharedEngine()->playEffect("Audio/Menu/confirm2.ogg");
+						SimpleAudioEngine::getInstance()->playEffect("Audio/Menu/confirm2.ogg");
 						_isAviable=false;
 						this->spriteToGrey();
 						this->getParent()->reorderChild(this,500);
@@ -157,7 +161,7 @@ void SelectButton::click(){
 				}
 				if(!_delegate2->_com2Select || _delegate2->isHeroConfirmedSelected(this->getCharName()->getCString())){
 
-					CCObject* pObject;
+					Ref* pObject;
 					CCARRAY_FOREACH(_delegate2->selectArray,pObject){
 						SelectButton* selectBtn=(SelectButton*) pObject;
 						if (strcmp(selectBtn->getCharName()->getCString(),this->getCharName()->getCString())!=0){
@@ -165,14 +169,14 @@ void SelectButton::click(){
 						}
 					}
 					if(this->_clickTime==0){
-						if(CCUserDefault::sharedUserDefault()->getBoolForKey("isVoice")!=false){
-							SimpleAudioEngine::sharedEngine()->stopAllEffects();
+						if(UserDefault::getInstance()->getBoolForKey("isVoice")!=false){
+							SimpleAudioEngine::getInstance()->stopAllEffects();
 							CCString* introSRC=CCString::createWithFormat("Audio/Intro/%s.mp3",this->getCharName()->getCString());
-							SimpleAudioEngine::sharedEngine()->playEffect(introSRC->getCString());
+							SimpleAudioEngine::getInstance()->playEffect(introSRC->getCString());
 						}
-						SimpleAudioEngine::sharedEngine()->playEffect(SELECT_SOUND);
+						SimpleAudioEngine::getInstance()->playEffect(SELECT_SOUND);
 					}else if(this->_clickTime==1){
-						SimpleAudioEngine::sharedEngine()->playEffect("Audio/Menu/confirm2.ogg");
+						SimpleAudioEngine::getInstance()->playEffect("Audio/Menu/confirm2.ogg");
 						_isAviable=false;
 						this->spriteToGrey();
 						this->getParent()->reorderChild(this,500);
@@ -182,38 +186,38 @@ void SelectButton::click(){
 						){
 							CCTips *tip=CCTips::create("LimitedChar");
 							this->_delegate2->addChild(tip,5000);
-							
+
 					}else{
 						this->_clickTime++;
-						
+
 					}
 
 					_delegate2->setSelected(this);
 				}
-				
+
 
 			}else if(_delegate1){
-				SimpleAudioEngine::sharedEngine()->playEffect(SELECT_SOUND);
+				SimpleAudioEngine::getInstance()->playEffect(SELECT_SOUND);
 				_delegate1->setSelected(this);
 			}
 
-			
+
 		}
 
 	}else{
-		
-		
+
+
 		_delegate3->setSkillExplain(_btnType);
-			
+
 	}
 
 }
 
 
 void SelectButton::spriteToGrey(){
-	CCSprite* black=CCSprite::createWithSpriteFrameName("Black_select.png");
-	black->setAnchorPoint(ccp(0.5,0.5));
-	black->setPosition(ccp(17,32));
+	Sprite* black=Sprite::createWithSpriteFrameName("Black_select.png");
+	black->setAnchorPoint(Vec2(0.5,0.5));
+	black->setPosition(Vec2(17,32));
 	this->addChild(black);
 	//	"#ifdef GL_ES \n \
 	//	precision mediump float; \n \
@@ -297,78 +301,78 @@ bool SkillLayer::init(){
 
 	bool bRet=false;
 	do{
-		CC_BREAK_IF(!CCLayer::init());
-		
-	
-		
-		//produce groud 
+		CC_BREAK_IF(!Layer::init());
 
-		CCSprite* gold_left=CCSprite::createWithSpriteFrameName("gold_left.png");
-		gold_left->setAnchorPoint(ccp(0,0));
-		gold_left->setPosition(ccp(0,20));
+
+
+		//produce groud
+
+		Sprite* gold_left=Sprite::createWithSpriteFrameName("gold_left.png");
+		gold_left->setAnchorPoint(Vec2(0,0));
+		gold_left->setPosition(Vec2(0,20));
 		this->addChild(gold_left,1);
 
 
-		CCSprite* gold_right=CCSprite::createWithSpriteFrameName("gold_right.png");
-		gold_right->setAnchorPoint(ccp(0,1));
-		gold_right->setPosition(ccp(winSize.width-gold_right->getContentSize().width-20,winSize.height-20));
+		Sprite* gold_right=Sprite::createWithSpriteFrameName("gold_right.png");
+		gold_right->setAnchorPoint(Vec2(0,1));
+		gold_right->setPosition(Vec2(winSize.width-gold_right->getContentSize().width-20,winSize.height-20));
 		this->addChild(gold_right,1);
 
 
 		//produce the cloud
-		CCSprite* cloud_left=CCSprite::createWithSpriteFrameName("cloud.png");	
-		cloud_left->setPosition(ccp(0,15));
+		Sprite* cloud_left=Sprite::createWithSpriteFrameName("cloud.png");
+		cloud_left->setPosition(Vec2(0,15));
 		cloud_left->setFlipX(true);
 		cloud_left->setFlipY(true);
-		cloud_left->setAnchorPoint(ccp(0,0));
+		cloud_left->setAnchorPoint(Vec2(0,0));
 		this->addChild(cloud_left,2);
 
-		CCActionInterval* cmv1=CCMoveBy::create(1,ccp(-15,0));
-		CCAction* cseq1=CCRepeatForever::create(cocos2d::cocos2dx2_compat::createSequence(cmv1,cmv1->reverse(),NULL));
+		ActionInterval* cmv1=MoveBy::create(1,Vec2(-15,0));
+		Action* cseq1=RepeatForever::create(Sequence::create(cmv1, cmv1->reverse(), nullptr));
 		cloud_left->runAction(cseq1);
 
-		CCSprite* cloud_right=CCSprite::createWithSpriteFrameName("cloud.png");	
-		cloud_right->setPosition(ccp(winSize.width-cloud_right->getContentSize().width,15));
+		Sprite* cloud_right=Sprite::createWithSpriteFrameName("cloud.png");
+		cloud_right->setPosition(Vec2(winSize.width-cloud_right->getContentSize().width,15));
 		cloud_right->setFlipY(true);
-		cloud_right->setAnchorPoint(ccp(0,0));
+		cloud_right->setAnchorPoint(Vec2(0,0));
 		this->addChild(cloud_right,2);
 
-		CCActionInterval* cmv2=CCMoveBy::create(1,ccp(15,0));
-		CCAction* cseq2=CCRepeatForever::create(cocos2d::cocos2dx2_compat::createSequence(cmv2,cmv2->reverse(),NULL));
+		ActionInterval* cmv2=MoveBy::create(1,Vec2(15,0));
+		Action* cseq2=RepeatForever::create(Sequence::create(cmv2, cmv2->reverse(), nullptr));
 		cloud_right->runAction(cseq2);
 
-		CCSprite* cloud_top=CCSprite::createWithSpriteFrameName("cloud_top.png");
-		cloud_top->setPosition(ccp(winSize.width/2,winSize.height-(cloud_top->getContentSize().height+12)));
-		cloud_top->setAnchorPoint(ccp(0.5f,0));
+		Sprite* cloud_top=Sprite::createWithSpriteFrameName("cloud_top.png");
+		cloud_top->setPosition(Vec2(winSize.width/2,winSize.height-(cloud_top->getContentSize().height+12)));
+		cloud_top->setAnchorPoint(Vec2(0.5f,0));
 		this->addChild(cloud_top,1);
 
 
-	
+
 
 		//produce the menu_bar
-		CCSprite* menu_bar_b = CCSprite::create("menu_bar2.png");
-		menu_bar_b->setAnchorPoint(ccp(0,0));
-		
+		Sprite* menu_bar_b = Sprite::create("menu_bar2.png");
+		menu_bar_b->setAnchorPoint(Vec2(0,0));
+
 		scaleSpriteToScreenWidth(menu_bar_b);
 		this->addChild(menu_bar_b,2);
 
 
-		CCSprite* menu_bar_t = CCSprite::create("menu_bar3.png");
-		menu_bar_t->setAnchorPoint(ccp(0,0));
-		
+		Sprite* menu_bar_t = Sprite::create("menu_bar3.png");
+		menu_bar_t->setAnchorPoint(Vec2(0,0));
+
 		scaleSpriteToScreenWidth(menu_bar_t);
-		menu_bar_t->setPosition(ccp(0,winSize.height-menu_bar_t->getContentSize().height));
+		menu_bar_t->setPosition(Vec2(0,winSize.height-menu_bar_t->getContentSize().height));
 		this->addChild(menu_bar_t,2);
 
-		CCSprite* record_title=CCSprite::createWithSpriteFrameName("record_title.png");
-		record_title->setAnchorPoint(ccp(0,0));
-		record_title->setPosition(ccp(2,winSize.height-record_title->getContentSize().height-2));
+		Sprite* record_title=Sprite::createWithSpriteFrameName("record_title.png");
+		record_title->setAnchorPoint(Vec2(0,0));
+		record_title->setPosition(Vec2(2,winSize.height-record_title->getContentSize().height-2));
 		this->addChild(record_title,3);
 
 
 
-		CCMenuItem* start_bt=CCMenuItemSprite::create(CCSprite::createWithSpriteFrameName("return_btn.png"),NULL,NULL,this,menu_selector(SkillLayer::onCancel));
-		CCMenu* SkillMenu =CCMenu::create(start_bt,NULL);
+		MenuItem* start_bt=MenuItemSprite::create(Sprite::createWithSpriteFrameName("return_btn.png"),NULL,NULL,CC_CALLBACK_1(SkillLayer::onCancel, this));
+		Menu* SkillMenu =Menu::create(start_bt,NULL);
 		SkillMenu->setPosition(winSize.width-38,86);
 		//SkillMenu->setPosition(winSize.width/2+skillSprite->getContentSize().width/2-10,winSize.height/2+skillSprite->getContentSize().height/2-12);
 		this->addChild(SkillMenu,5);
@@ -392,10 +396,10 @@ void SkillLayer::initInterface(){
 		selectHero=_delegate2->_selectHero;
 	}
 
-	CCSprite* bgSprite = CCSprite::create(bg_src);
-	bgSprite->setAnchorPoint(ccp(0,0));
+	Sprite* bgSprite = Sprite::create(bg_src);
+	bgSprite->setAnchorPoint(Vec2(0,0));
 	scaleSpriteToScreen(bgSprite);
-	bgSprite->setPosition(ccp(0,0));
+	bgSprite->setPosition(Vec2(0,0));
 	this->addChild(bgSprite, -5);
 
 	KTools* tool= KTools::create();
@@ -404,65 +408,65 @@ void SkillLayer::initInterface(){
 		return;
 	}
 
-	
+
 
 		char* skillbg_src="skill_bg1.png";
-		
 
-		skillSprite = CCSprite::createWithSpriteFrameName(skillbg_src);
-		skillSprite->setPosition(ccp(winSize.width/2,winSize.height/2));
+
+		skillSprite = Sprite::createWithSpriteFrameName(skillbg_src);
+		skillSprite->setPosition(Vec2(winSize.width/2,winSize.height/2));
 		this->addChild(skillSprite,2);
 
 
-		
 
-	
-		CCMenuItem* change_bt=NULL;
+
+
+		MenuItem* change_bt=NULL;
 		if(strcmp(selectHero,"Naruto")==0 ||
 			strcmp(selectHero,"Jiraiya")==0  ||
-			strcmp(selectHero,"Sasuke")==0 
+			strcmp(selectHero,"Sasuke")==0
 			){
 
-				change_bt=CCMenuItemSprite::create(CCSprite::createWithSpriteFrameName("change_btn.png"),NULL,NULL,this,menu_selector(SkillLayer::onChangeBtn));
+				change_bt=MenuItemSprite::create(Sprite::createWithSpriteFrameName("change_btn.png"),NULL,NULL,CC_CALLBACK_1(SkillLayer::onChangeBtn, this));
 
 		}
 
 		if(change_bt){
-			changemenu =CCMenu::create(change_bt,NULL);
-			changemenu->setPosition(ccp(winSize.width/2,winSize.height/2-skillSprite->getContentSize().height/2+120));
-			CCActionInterval*  fd=CCFadeOut::create(1.0f);
-			CCAction* seq=CCRepeatForever::create(cocos2d::cocos2dx2_compat::createSequence(fd,fd->reverse(),NULL));
+			changemenu =Menu::create(change_bt,NULL);
+			changemenu->setPosition(Vec2(winSize.width/2,winSize.height/2-skillSprite->getContentSize().height/2+120));
+			ActionInterval*  fd=FadeOut::create(1.0f);
+			Action* seq=RepeatForever::create(Sequence::create(fd, fd->reverse(), nullptr));
 			change_bt->runAction(seq);
 			this->addChild(changemenu,15);
 		}
 
-		CCSprite* goldBG=CCSprite::createWithSpriteFrameName("gold_bg.png");
-		goldBG->setAnchorPoint(ccp(0.5,0));
-		goldBG->setPosition(ccp(winSize.width/2+skillSprite->getContentSize().width/4+25,winSize.height/2+skillSprite->getContentSize().width/2-74));
+		Sprite* goldBG=Sprite::createWithSpriteFrameName("gold_bg.png");
+		goldBG->setAnchorPoint(Vec2(0.5,0));
+		goldBG->setPosition(Vec2(winSize.width/2+skillSprite->getContentSize().width/4+25,winSize.height/2+skillSprite->getContentSize().width/2-74));
 		this->addChild(goldBG,9);
 
 		CCString* cl=tool->readFromSQLite();
-		coinLabel=CCLabelBMFont::create(cl->getCString(),"Fonts/1.fnt");
+		coinLabel=LabelBMFont::create(cl->getCString(),"Fonts/1.fnt");
 		coinLabel->setScale(0.3f);
-		coinLabel->setAnchorPoint(ccp(0.5,0));
-		coinLabel->setPosition(ccp(goldBG->getPositionX()-goldBG->getContentSize().width/2+40,goldBG->getPositionY()+4));
+		coinLabel->setAnchorPoint(Vec2(0.5,0));
+		coinLabel->setPosition(Vec2(goldBG->getPositionX()-goldBG->getContentSize().width/2+40,goldBG->getPositionY()+4));
 		this->addChild(coinLabel,15);
 
 
 
 
 
-		CCSprite* bondBG=CCSprite::createWithSpriteFrameName("golds_1.png");
-		bondBG->setAnchorPoint(ccp(0.5,0));
-		bondBG->setPosition(ccp(goldBG->getPositionX()-goldBG->getContentSize().width/2+15,goldBG->getPositionY()+4));
+		Sprite* bondBG=Sprite::createWithSpriteFrameName("golds_1.png");
+		bondBG->setAnchorPoint(Vec2(0.5,0));
+		bondBG->setPosition(Vec2(goldBG->getPositionX()-goldBG->getContentSize().width/2+15,goldBG->getPositionY()+4));
 		this->addChild(bondBG,15);
 
-		CCSprite* bondBG2=CCSprite::createWithSpriteFrameName("golds_2.png");
-		bonds=CCProgressTimer::create(bondBG2);
-		bonds->setType(kCCProgressTimerTypeBar);
-		bonds->setAnchorPoint(ccp(0.5,0));
-		bonds->setMidpoint(ccp(0,0));
-		bonds->setBarChangeRate(ccp(0, 1));
+		Sprite* bondBG2=Sprite::createWithSpriteFrameName("golds_2.png");
+		bonds=ProgressTimer::create(bondBG2);
+		bonds->setType(ProgressTimer::Type::BAR);
+		bonds->setAnchorPoint(Vec2(0.5,0));
+		bonds->setMidpoint(Vec2(0,0));
+		bonds->setBarChangeRate(Vec2(0, 1));
 
 
 
@@ -478,20 +482,20 @@ void SkillLayer::initInterface(){
 		bonds->setPercentage(20);
 		}
 
-		bonds->setPosition(ccp(goldBG->getPositionX()-goldBG->getContentSize().width/2+15,goldBG->getPositionY()+4));
+		bonds->setPosition(Vec2(goldBG->getPositionX()-goldBG->getContentSize().width/2+15,goldBG->getPositionY()+4));
 		this->addChild(bonds,20);
 
 
-		
-		
-		
+
+
+
 
 		CCString* winNum=tool->readSQLite("CharRecord","name",selectHero,"column1");
 		std::string bondString=winNum->getCString();
-		CCString* totalNum=tool->readSQLite("CharRecord","name",selectHero,"column2"); 
-		
+		CCString* totalNum=tool->readSQLite("CharRecord","name",selectHero,"column2");
 
-		
+
+
 		char* rank_src;
 		bool isBlink=false;
 		if(atoi(bondString.c_str())>=300){
@@ -517,28 +521,28 @@ void SkillLayer::initInterface(){
 			rank_src="rank_c.png";
 		}
 
-		skillSprite = CCSprite::createWithSpriteFrameName(skillbg_src);
-		skillSprite->setPosition(ccp(winSize.width/2,winSize.height/2));
+		skillSprite = Sprite::createWithSpriteFrameName(skillbg_src);
+		skillSprite->setPosition(Vec2(winSize.width/2,winSize.height/2));
 		this->addChild(skillSprite,2);
 
 		CCString* imgPath=NULL;
 
-		
-		if((strcmp(selectHero,"Hinata")==0 || 
-			strcmp(selectHero,"Sakura")==0 || 
+
+		if((strcmp(selectHero,"Hinata")==0 ||
+			strcmp(selectHero,"Sakura")==0 ||
 			strcmp(selectHero,"Ino")==0 ||
 			strcmp(selectHero,"Tsunade")==0 ||
 			strcmp(selectHero,"Tenten")==0 ||
 			strcmp(selectHero,"Konan")==0 ||
-			strcmp(selectHero,"Karin")==0 
+			strcmp(selectHero,"Karin")==0
 			) && atoi(bondString.c_str())>=100){
 				imgPath=CCString::createWithFormat("%s_full2.png",selectHero);
 		}else{
 			imgPath=CCString::createWithFormat("%s_full.png",selectHero);
 		}
-		_heroFull=CCSprite::createWithSpriteFrameName(imgPath->getCString());
-		_heroFull->setAnchorPoint(ccp(0.5,0));
-		_heroFull->setPosition(ccp(winSize.width/2,
+		_heroFull=Sprite::createWithSpriteFrameName(imgPath->getCString());
+		_heroFull->setAnchorPoint(Vec2(0.5,0));
+		_heroFull->setPosition(Vec2(winSize.width/2,
 			winSize.height/2-skillSprite->getContentSize().height/2+23));
 		this->addChild(_heroFull,5);
 
@@ -546,8 +550,8 @@ void SkillLayer::initInterface(){
 
 		if(isBlink){
 
-			CCSprite* blink=CCSprite::createWithSpriteFrameName("skill_blink6.png");
-			blink->setPosition(ccp(winSize.width/2,winSize.height/2));
+			Sprite* blink=Sprite::createWithSpriteFrameName("skill_blink6.png");
+			blink->setPosition(Vec2(winSize.width/2,winSize.height/2));
 
 			this->addChild(blink,9);
 
@@ -560,65 +564,65 @@ void SkillLayer::initInterface(){
 			while (i<7)
 			{
 				CCString* path=CCString::createWithFormat("skill_blink%d.png",i);
-				CCSpriteFrame* frame = CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName(path->getCString());
+				SpriteFrame* frame = SpriteFrameCache::getInstance()->spriteFrameByName(path->getCString());
 				tempArray->addObject(frame);
 
 
 				i+=1;
 			}
 
-			CCAnimation* tempAnimation= cocos2d::cocos2dx2_compat::createAnimationWithSpriteFrames(tempArray, 0.1f);
-			CCAction* tempAction=CCAnimate::create(tempAnimation);
+			Animation* tempAnimation= cocos2d::cocos2dx2_compat::createAnimationWithSpriteFrames(tempArray, 0.1f);
+			Action* tempAction=Animate::create(tempAnimation);
 			list->addObject(tempAction);
-			CCDelayTime* delay=CCDelayTime::create(2.0f);
+			DelayTime* delay=DelayTime::create(2.0f);
 			list->addObject(delay);
 
-			blink->runAction(CCRepeatForever::create(cocos2d::cocos2dx2_compat::createSequence(list)));
+			blink->runAction(RepeatForever::create(cocos2d::cocos2dx2_compat::createSequence(list)));
 		}
 
 
-		CCSprite* frameSprite=CCSprite::createWithSpriteFrameName("skill_frame.png");
-		frameSprite->setPosition(ccp(winSize.width/2,winSize.height/2));
+		Sprite* frameSprite=Sprite::createWithSpriteFrameName("skill_frame.png");
+		frameSprite->setPosition(Vec2(winSize.width/2,winSize.height/2));
 		this->addChild( frameSprite,10);
 
-		CCSprite* rankSprite=CCSprite::createWithSpriteFrameName(rank_src);
-		rankSprite->setAnchorPoint(ccp(0,0));
-		rankSprite->setPosition(ccp(skillSprite->getPositionX()-skillSprite->getContentSize().width/2+5,skillSprite->getPositionY()+skillSprite->getContentSize().height/2-20));
+		Sprite* rankSprite=Sprite::createWithSpriteFrameName(rank_src);
+		rankSprite->setAnchorPoint(Vec2(0,0));
+		rankSprite->setPosition(Vec2(skillSprite->getPositionX()-skillSprite->getContentSize().width/2+5,skillSprite->getPositionY()+skillSprite->getContentSize().height/2-20));
 		this->addChild(rankSprite,11);
 
 
-		CCSprite* detailBG1=CCSprite::createWithSpriteFrameName("detail_bg.png");
-		detailBG1->setAnchorPoint(ccp(0,0));
-		detailBG1->setPosition(ccp(skillSprite->getPositionX()-skillSprite->getContentSize().width/2+8,skillSprite->getPositionY()-skillSprite->getContentSize().height/2+74));
+		Sprite* detailBG1=Sprite::createWithSpriteFrameName("detail_bg.png");
+		detailBG1->setAnchorPoint(Vec2(0,0));
+		detailBG1->setPosition(Vec2(skillSprite->getPositionX()-skillSprite->getContentSize().width/2+8,skillSprite->getPositionY()-skillSprite->getContentSize().height/2+74));
 		this->addChild(detailBG1,5);
 
 		CCString* recordTime=tool->readSQLite("CharRecord","name",selectHero,"column3");
-		CCLabelBMFont* bestLabel;
+		LabelBMFont* bestLabel;
 		if(strcmp(recordTime->getCString(),"")==0){
-			bestLabel=CCLabelBMFont::create("00:00:00","Fonts/1.fnt");
+			bestLabel=LabelBMFont::create("00:00:00","Fonts/1.fnt");
 		}else{
-			bestLabel=CCLabelBMFont::create(recordTime->getCString(),"Fonts/1.fnt");
+			bestLabel=LabelBMFont::create(recordTime->getCString(),"Fonts/1.fnt");
 		}
-		
+
 		bestLabel->setScale(0.3f);
-		bestLabel->setAnchorPoint(ccp(0,0));
-		bestLabel->setPosition(ccp(detailBG1->getPositionX()+8,detailBG1->getPositionY()+7));
+		bestLabel->setAnchorPoint(Vec2(0,0));
+		bestLabel->setPosition(Vec2(detailBG1->getPositionX()+8,detailBG1->getPositionY()+7));
 		this->addChild(bestLabel,6);
 
 
 
-		CCSprite* detailBG2=CCSprite::createWithSpriteFrameName("detail_bg.png");
-		detailBG2->setAnchorPoint(ccp(0,0));
-		detailBG2->setPosition(ccp(skillSprite->getPositionX()+skillSprite->getContentSize().width/2-detailBG2->getContentSize().width-8,skillSprite->getPositionY()-skillSprite->getContentSize().height/2+74));
+		Sprite* detailBG2=Sprite::createWithSpriteFrameName("detail_bg.png");
+		detailBG2->setAnchorPoint(Vec2(0,0));
+		detailBG2->setPosition(Vec2(skillSprite->getPositionX()+skillSprite->getContentSize().width/2-detailBG2->getContentSize().width-8,skillSprite->getPositionY()-skillSprite->getContentSize().height/2+74));
 		this->addChild(detailBG2,5);
 
 
 
-		CCLabelBMFont* recordLabel=CCLabelBMFont::create(CCString::createWithFormat("%s bonds",bondString.c_str())->getCString(),"Fonts/1.fnt");
+		LabelBMFont* recordLabel=LabelBMFont::create(CCString::createWithFormat("%s bonds",bondString.c_str())->getCString(),"Fonts/1.fnt");
 		recordLabel->setScale(0.3f);
-		recordLabel->setAnchorPoint(ccp(0,0));
+		recordLabel->setAnchorPoint(Vec2(0,0));
 
-		recordLabel->setPosition(ccp(detailBG2->getPositionX()+12,detailBG2->getPositionY()+7));
+		recordLabel->setPosition(Vec2(detailBG2->getPositionX()+12,detailBG2->getPositionY()+7));
 		this->addChild(recordLabel,6);
 
 
@@ -626,36 +630,36 @@ void SkillLayer::initInterface(){
 
 		//????????
 		this->updateSkillGroup();
-	
+
 	/*else if(_delegate2){
 
 	 if(!refreshBtn){
-	 refreshBtn=CCSprite::createWithSpriteFrameName("refresh_btn.png");
-	 refreshBtn->setPosition(ccp(winSize.width/2,winSize.height/2));
-	 CCActionInterval* rt=CCRotateBy::create(0.3f,180,180);
-	 refreshBtn->runAction(CCRepeatForever::create(rt));
+	 refreshBtn=Sprite::createWithSpriteFrameName("refresh_btn.png");
+	 refreshBtn->setPosition(Vec2(winSize.width/2,winSize.height/2));
+	 ActionInterval* rt=RotateBy::create(0.3f,180,180);
+	 refreshBtn->runAction(RepeatForever::create(rt));
 	 this->addChild(refreshBtn,1000);
 
 	 }
 
-	 cocos2d::extension::CCHttpRequest* request = new  cocos2d::extension::CCHttpRequest(); 
+	 cocos2d::extension::CCHttpRequest* request = new  cocos2d::extension::CCHttpRequest();
 	 std::string codeFinal;
 	 std::string code2=CCString::createWithFormat("&version=%d",CURRENT_VERSION)->getCString();
 	 std::string code1=CCString::createWithFormat("code=200&id=%d&char=%s",MemberID,_delegate2->_selectHero)->getCString();
 	 std::string url=SERVER"nsk/list.php?"+code1+code2;
-	 request->setUrl(url.c_str());  
-	 request->setRequestType( cocos2d::extension::CCHttpRequest::kHttpGet);  
+	 request->setUrl(url.c_str());
+	 request->setRequestType( cocos2d::extension::CCHttpRequest::kHttpGet);
 
-	 request->setResponseCallback(this, callfuncND_selector(SkillLayer::onSkillRequestCompleted));  
+	 request->setResponseCallback(this, callfuncND_selector(SkillLayer::onSkillRequestCompleted));
 
 
-	 request->setTag("Post_My_Data");  
-	 cocos2d::extension::CCHttpClient::getInstance()->send(request);  
-	 request->release();  
+	 request->setTag("Post_My_Data");
+	 cocos2d::extension::CCHttpClient::getInstance()->send(request);
+	 request->release();
 	 }*/
 
 
-	
+
 
 
 
@@ -666,7 +670,7 @@ void SkillLayer::initInterface(){
 }
 
 
-void SkillLayer::onSkillRequestCompleted(CCNode *sender ,void *data){
+void SkillLayer::onSkillRequestCompleted(Node *sender ,void *data){
 
 
 	isPosting=false;
@@ -677,37 +681,37 @@ void SkillLayer::onSkillRequestCompleted(CCNode *sender ,void *data){
 		refreshBtn=NULL;
 	}
 
-	cocos2d::extension::CCHttpResponse *response = (cocos2d::extension::CCHttpResponse*)data;    
-	if (!response)    
-	{  
-		return;    
-	}   
-	if (0 != strlen(response->getHttpRequest()->getTag()))   
-	{  
-		//CCLOG("%s completed", response->getHttpRequest()->getTag());  
-	}  
-	int statusCode = response->getResponseCode();  
-	char statusString[64] = {};  
-	sprintf(statusString ,"Http status code:%d ,tag = %s" ,statusCode ,response->getHttpRequest()->getTag());  
-	CCLOG("response code:%d" ,statusCode);  
-	if (!response->isSucceed())  
-	{  
-		CCLOG("response failed");  
+	cocos2d::extension::CCHttpResponse *response = (cocos2d::extension::CCHttpResponse*)data;
+	if (!response)
+	{
+		return;
+	}
+	if (0 != strlen(response->getHttpRequest()->getTag()))
+	{
+		//CCLOG("%s completed", response->getHttpRequest()->getTag());
+	}
+	int statusCode = response->getResponseCode();
+	char statusString[64] = {};
+	sprintf(statusString ,"Http status code:%d ,tag = %s" ,statusCode ,response->getHttpRequest()->getTag());
+	CCLOG("response code:%d" ,statusCode);
+	if (!response->isSucceed())
+	{
+		CCLOG("response failed");
 		CCLOG("error buffer:%s" ,response->getErrorBuffer());
 		CCTips *tip=CCTips::create("ServerError");
 		this->addChild(tip,5000);
 		return;
-	}  
-	std::vector<char> *buffer = response->getResponseData();  
-	printf("Http response,dump data:");  
+	}
+	std::vector<char> *buffer = response->getResponseData();
+	printf("Http response,dump data:");
 
 
 	Document doc;
-	std::string buf(buffer->begin(),buffer->end()); 	
+	std::string buf(buffer->begin(),buffer->end());
 	const char* json=(char*) buf.c_str();
 	doc.Parse<kParseDefaultFlags>(json);
 	rapidjson::Value &arr=doc;
-	
+
 	std::string bondString="0";
 	std::string scoreString="0";
 	if(arr.IsArray()){
@@ -722,61 +726,61 @@ void SkillLayer::onSkillRequestCompleted(CCNode *sender ,void *data){
 						rapidjson::Value & scoreValue= node["score"];
 						scoreString=scoreValue.GetString();
 					}
-			
+
 
 				}
 
-		
-		
-			
 
-			CCMenuItem* change_bt=NULL;
+
+
+
+			MenuItem* change_bt=NULL;
 			if(strcmp(selectHero,"Naruto")==0 ||
 			strcmp(selectHero,"Jiraiya")==0  ||
-			strcmp(selectHero,"Sasuke")==0 
+			strcmp(selectHero,"Sasuke")==0
 			){
 
-			change_bt=CCMenuItemSprite::create(CCSprite::createWithSpriteFrameName("change_btn.png"),NULL,NULL,this,menu_selector(SkillLayer::onChangeBtn));
+			change_bt=MenuItemSprite::create(Sprite::createWithSpriteFrameName("change_btn.png"),NULL,NULL,CC_CALLBACK_1(SkillLayer::onChangeBtn, this));
 
 			}
 
 			if(change_bt){
-			changemenu =CCMenu::create(change_bt,NULL);
-			changemenu->setPosition(ccp(winSize.width/2,winSize.height/2-skillSprite->getContentSize().height/2+120));
-			CCActionInterval*  fd=CCFadeOut::create(1.0f);
-			CCAction* seq=CCRepeatForever::create(cocos2d::cocos2dx2_compat::createSequence(fd,fd->reverse(),NULL));
+			changemenu =Menu::create(change_bt,NULL);
+			changemenu->setPosition(Vec2(winSize.width/2,winSize.height/2-skillSprite->getContentSize().height/2+120));
+			ActionInterval*  fd=FadeOut::create(1.0f);
+			Action* seq=RepeatForever::create(Sequence::create(fd, fd->reverse(), nullptr));
 			change_bt->runAction(seq);
 			this->addChild(changemenu,15);
 			}
 
-			CCSprite* goldBG=CCSprite::createWithSpriteFrameName("gold_bg.png");
-			goldBG->setAnchorPoint(ccp(0.5,0));
-			goldBG->setPosition(ccp(winSize.width/2+skillSprite->getContentSize().width/4+25,winSize.height/2+skillSprite->getContentSize().width/2-74));
+			Sprite* goldBG=Sprite::createWithSpriteFrameName("gold_bg.png");
+			goldBG->setAnchorPoint(Vec2(0.5,0));
+			goldBG->setPosition(Vec2(winSize.width/2+skillSprite->getContentSize().width/4+25,winSize.height/2+skillSprite->getContentSize().width/2-74));
 			this->addChild(goldBG,9);
 
 			KTools* tool= KTools::create();
 			CCString* cl=tool->readFromSQLite();
-			coinLabel=CCLabelBMFont::create(cl->getCString(),"Fonts/1.fnt");
+			coinLabel=LabelBMFont::create(cl->getCString(),"Fonts/1.fnt");
 			coinLabel->setScale(0.3f);
-			coinLabel->setAnchorPoint(ccp(0,0));
-			coinLabel->setPosition(ccp(goldBG->getPositionX()-goldBG->getContentSize().width/2+23,goldBG->getPositionY()+4));
+			coinLabel->setAnchorPoint(Vec2(0,0));
+			coinLabel->setPosition(Vec2(goldBG->getPositionX()-goldBG->getContentSize().width/2+23,goldBG->getPositionY()+4));
 			this->addChild(coinLabel,10);
 
 
 
 
 
-			CCSprite* bondBG=CCSprite::createWithSpriteFrameName("golds_1.png");
-			bondBG->setAnchorPoint(ccp(0.5,0));
-			bondBG->setPosition(ccp(goldBG->getPositionX()-goldBG->getContentSize().width/2+15,goldBG->getPositionY()+4));
+			Sprite* bondBG=Sprite::createWithSpriteFrameName("golds_1.png");
+			bondBG->setAnchorPoint(Vec2(0.5,0));
+			bondBG->setPosition(Vec2(goldBG->getPositionX()-goldBG->getContentSize().width/2+15,goldBG->getPositionY()+4));
 			this->addChild(bondBG,15);
 
-			CCSprite* bondBG2=CCSprite::createWithSpriteFrameName("golds_2.png");
-			bonds=CCProgressTimer::create(bondBG2);
-			bonds->setType(kCCProgressTimerTypeBar);
-			bonds->setAnchorPoint(ccp(0.5,0));
-			bonds->setMidpoint(ccp(0,0));
-			bonds->setBarChangeRate(ccp(0, 1));
+			Sprite* bondBG2=Sprite::createWithSpriteFrameName("golds_2.png");
+			bonds=ProgressTimer::create(bondBG2);
+			bonds->setType(ProgressTimer::Type::BAR);
+			bonds->setAnchorPoint(Vec2(0.5,0));
+			bonds->setMidpoint(Vec2(0,0));
+			bonds->setBarChangeRate(Vec2(0, 1));
 
 
 			if(atoi(cl->getCString())>=99999){
@@ -791,7 +795,7 @@ void SkillLayer::onSkillRequestCompleted(CCNode *sender ,void *data){
 				bonds->setPercentage(20);
 			}
 
-			bonds->setPosition(ccp(goldBG->getPositionX()-goldBG->getContentSize().width/2+15,goldBG->getPositionY()+4));
+			bonds->setPosition(Vec2(goldBG->getPositionX()-goldBG->getContentSize().width/2+15,goldBG->getPositionY()+4));
 			this->addChild(bonds,20);
 
 
@@ -806,14 +810,14 @@ void SkillLayer::onSkillRequestCompleted(CCNode *sender ,void *data){
 }
 
 
-void SkillLayer::onChangeBtn(CCObject* sender){
+void SkillLayer::onChangeBtn(Ref* sender){
 
 
-	SimpleAudioEngine::sharedEngine()->playEffect("Audio/Menu/chang_btn.ogg");
+	SimpleAudioEngine::getInstance()->playEffect("Audio/Menu/chang_btn.ogg");
 	skillGroup->removeFromParent();
 	changemenu->removeFromParent();
 
-	
+
 
 
 
@@ -828,8 +832,8 @@ void SkillLayer::onChangeBtn(CCObject* sender){
 		selectHero="ImmortalSasuke";
 	}
 
-	CCSpriteFrame *frame=CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName(CCString::createWithFormat("%s_full.png",selectHero)->getCString()); 
-	_heroFull->setDisplayFrame(frame);
+	SpriteFrame *frame=SpriteFrameCache::getInstance()->spriteFrameByName(CCString::createWithFormat("%s_full.png",selectHero)->getCString());
+	_heroFull->setSpriteFrame(frame);
 
 
 	//????????
@@ -837,14 +841,14 @@ void SkillLayer::onChangeBtn(CCObject* sender){
 
 	if(strcmp(selectHero,"SageNaruto")==0 ){
 
-		CCMenuItem* change_bt=CCMenuItemSprite::create(CCSprite::createWithSpriteFrameName("change_btn2.png"),NULL,NULL,this,menu_selector(SkillLayer::onChangeBtn));
+		MenuItem* change_bt=MenuItemSprite::create(Sprite::createWithSpriteFrameName("change_btn2.png"),NULL,NULL,CC_CALLBACK_1(SkillLayer::onChangeBtn, this));
 
 		if(change_bt){
 
-			changemenu =CCMenu::create(change_bt,NULL);
-			changemenu->setPosition(ccp(winSize.width/2,winSize.height/2-skillSprite->getContentSize().height/2+120));
-			CCActionInterval*  fd=CCFadeOut::create(1.0f);
-			CCAction* seq=CCRepeatForever::create(cocos2d::cocos2dx2_compat::createSequence(fd,fd->reverse(),NULL));
+			changemenu =Menu::create(change_bt,NULL);
+			changemenu->setPosition(Vec2(winSize.width/2,winSize.height/2-skillSprite->getContentSize().height/2+120));
+			ActionInterval*  fd=FadeOut::create(1.0f);
+			Action* seq=RepeatForever::create(Sequence::create(fd, fd->reverse(), nullptr));
 			change_bt->runAction(seq);
 			this->addChild(changemenu,15);
 		}
@@ -856,24 +860,24 @@ void SkillLayer::onChangeBtn(CCObject* sender){
 
 void SkillLayer::updateSkillGroup(){
 
-	skillGroup=CCSprite::create();
+	skillGroup=Sprite::create();
 
 	for(int i=1;i<=5;i++){
 
 		CCString* path=CCString::createWithFormat("%s_skill%d.png",selectHero,i);
 		SelectButton* skill_btn=SelectButton::create(path->getCString());
 
-		if(i==4){		
-			skill_btn->_isUnlock=true;	
+		if(i==4){
+			skill_btn->_isUnlock=true;
 		}
 
-		if(i==5){	
+		if(i==5){
 			skill_btn->_isCanBuy2=false;
-			skill_btn->_isUnlock=true;		
+			skill_btn->_isUnlock=true;
 		}
 
-		
-		skill_btn->setPosition(ccp((i-1)*46,0));
+
+		skill_btn->setPosition(Vec2((i-1)*46,0));
 
 
 		skill_btn->setBtnType((sbtnType)(i+2));
@@ -882,49 +886,49 @@ void SkillLayer::updateSkillGroup(){
 		}else{
 			skill_btn->setDelegate2(this->_delegate2);
 		}
-		
-		
+
+
 		skill_btn->setDelegate3(this);
 		skillGroup->addChild(skill_btn);
 
 	}
 
 
-	skillGroup->setPosition(ccp(skillSprite->getPositionX()-skillSprite->getContentSize().width/2+2,60));
+	skillGroup->setPosition(Vec2(skillSprite->getPositionX()-skillSprite->getContentSize().width/2+2,60));
 	this->addChild(skillGroup,8);
 }
 
 void SkillLayer::setSkillExplain(sbtnType type){
 
 
-	SimpleAudioEngine::sharedEngine()->playEffect("Audio/Menu/select.mp3");
+	SimpleAudioEngine::getInstance()->playEffect("Audio/Menu/select.mp3");
 	if(_skillExplain) _skillExplain->removeFromParent();
 	CCString* imgPath=CCString::create("");
 	if(type==Unlock1){
 		imgPath=CCString::createWithFormat("fenglabel.png");
-		
+
 	}else if(type==Unlock2){
 		imgPath=CCString::createWithFormat("fenglabel2.png");
-		
+
 	}else{
 		imgPath=CCString::createWithFormat("%s_label%d.png",selectHero,(int)type-2);
-		
+
 	}
-	
-	CCClippingNode* clipper = CCClippingNode::create();
-	CCNode *stencil = CCSprite::createWithSpriteFrameName("clipperMask.png");
-	stencil->setAnchorPoint(ccp(0,0));
+
+	ClippingNode* clipper = ClippingNode::create();
+	Node *stencil = Sprite::createWithSpriteFrameName("clipperMask.png");
+	stencil->setAnchorPoint(Vec2(0,0));
 	clipper->setStencil(stencil);
-	
-	_skillExplain=CCSprite::createWithSpriteFrameName(imgPath->getCString());
-	_skillExplain->setAnchorPoint(ccp(0,0));
+
+	_skillExplain=Sprite::createWithSpriteFrameName(imgPath->getCString());
+	_skillExplain->setAnchorPoint(Vec2(0,0));
 	_skillExplain->setPositionX(10);
-	
-	clipper->setPosition(ccp(winSize.width/2-skillSprite->getContentSize().width/2+2,
+
+	clipper->setPosition(Vec2(winSize.width/2-skillSprite->getContentSize().width/2+2,
 		winSize.height/2-skillSprite->getContentSize().height/2+4));
 
 	clipper->addChild(_skillExplain);
-	
+
 	this->addChild(clipper,600);
 
 
@@ -951,7 +955,7 @@ void SkillLayer::update(float dt){
 
 
 
-void SkillLayer::onCancel(CCObject* sender){
+void SkillLayer::onCancel(Ref* sender){
 
 	_skillExplain=NULL;
 	buyLayer=NULL;
@@ -960,17 +964,7 @@ void SkillLayer::onCancel(CCObject* sender){
 
 
 	this->removeFromParent();
-	SimpleAudioEngine::sharedEngine()->playEffect("Audio/Menu/cancel.ogg");
+	SimpleAudioEngine::getInstance()->playEffect("Audio/Menu/cancel.ogg");
 
-	CCDirector::sharedDirector()->popScene();
+	Director::getInstance()->popScene();
 }
-
-
-
-
-
-
-
-
-
-
