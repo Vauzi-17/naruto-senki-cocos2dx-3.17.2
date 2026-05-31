@@ -353,7 +353,7 @@ void NarutoSenki::ActionManager::update(float dt){
 		_delegate->reorderChild(this,-this->getPositionY());
 		//����minimap
 		if(strcmp(this->getRole()->getCString(),"Player")==0 || strcmp(this->getRole()->getCString(),"Com")==0){
-			CCNotificationCenter::sharedNotificationCenter()->postNotification("updateMap", this);
+			NotificationCenter::getInstance()->postNotification("updateMap", this);
 		}
 
 	};
@@ -700,8 +700,8 @@ void NarutoSenki::ActionManager::acceptAttack(CCObject* object){
 									Attacker->hearts+=1;	
 
 									if(Attacker->_heartEffect){
-										CCSpriteFrame *frame=CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName(CCString::createWithFormat("Heart_Effect_%02d.png",Attacker->hearts)->getCString()); 
-										Attacker->_heartEffect->setDisplayFrame(frame);
+										SpriteFrame *frame=SpriteFrameCache::getInstance()->spriteFrameByName(CCString::createWithFormat("Heart_Effect_%02d.png",Attacker->hearts)->getCString());
+										Attacker->_heartEffect->setSpriteFrame(frame);
 									}																	
 	
 								}
@@ -743,7 +743,7 @@ void NarutoSenki::ActionManager::acceptAttack(CCObject* object){
 								  }
 
 								 
-								  CCNotificationCenter::sharedNotificationCenter()->postNotification("updateMap", this);
+								  NotificationCenter::getInstance()->postNotification("updateMap", this);
 								  _delegate->reorderChild(this,-this->getPositionY());
 							  }
 							}
@@ -1109,7 +1109,7 @@ Action* NarutoSenki::ActionManager::createAnimation(CCArray* ationArray,float fp
 			const char* keyValue=dic->valueForKey(key)->getCString();
 			if(strcmp(key,"frameName")==0){
 
-				CCSpriteFrame *frame = CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName(keyValue);
+				SpriteFrame *frame = SpriteFrameCache::getInstance()->spriteFrameByName(keyValue);
 				applyPixelArtToFrame(frame);
 				if(frame){
 					animeFrames->addObject(frame);
@@ -1301,7 +1301,7 @@ void NarutoSenki::ActionManager::setShadow(CCNode* sender,void* date){
 
 	CCSize visibleSize = CCDirector::sharedDirector()->getVisibleSize();
 	CCDictionary* file=(CCDictionary*) date;
-	CCSpriteFrame *frame  = (CCSpriteFrame *)(file->objectForKey(1));
+	SpriteFrame *frame  = (SpriteFrame *)(file->objectForKey(1));
 	CCSprite* charN=CCSprite::createWithSpriteFrame(frame);
 	charN->setVisible(false);
 	if(strcmp(this->_group->getCString(),"Konoha")==0){
@@ -2404,7 +2404,7 @@ void NarutoSenki::ActionManager::setAttackBox(CCNode* sender,void* date){
 	}
 	
 
-	CCNotificationCenter::sharedNotificationCenter()->postNotification("acceptAttack", this);
+	NotificationCenter::getInstance()->postNotification("acceptAttack", this);
 
 	if(strcmp(_role->getCString(),"Player")==0){
 
@@ -2650,7 +2650,7 @@ void NarutoSenki::ActionManager::setCommand(CCNode* sender,void* date){
 		}
 
 		this->setPosition(ccp(tsPosX,tsPosY));
-		CCNotificationCenter::sharedNotificationCenter()->postNotification("updateMap", this);
+		NotificationCenter::getInstance()->postNotification("updateMap", this);
 		
 		_delegate->reorderChild(this,-tsPosY);
 
@@ -2696,7 +2696,7 @@ void NarutoSenki::ActionManager::setCommand(CCNode* sender,void* date){
 		}
 
 		this->setPosition(ccp(tsPosX,tsPosY));
-		CCNotificationCenter::sharedNotificationCenter()->postNotification("updateMap", this);
+		NotificationCenter::getInstance()->postNotification("updateMap", this);
 
 		if(strcmp(this->getCharacter()->getCString(),"Yominuma")!=0){
 			_delegate->reorderChild(this,-tsPosY);
@@ -2815,7 +2815,7 @@ void NarutoSenki::ActionManager::setCommand(CCNode* sender,void* date){
 			while (i<11)
 			{
 				CCString* path=CCString::createWithFormat("Tenten_Extern_0%d.png",i);
-				CCSpriteFrame* frame = CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName(path->getCString());
+				SpriteFrame* frame = SpriteFrameCache::getInstance()->spriteFrameByName(path->getCString());
 				tempArray->addObject(frame);
 				i+=1;
 			}
@@ -4017,10 +4017,10 @@ void NarutoSenki::ActionManager::changeAction(){
 		
 
 		if(strcmp(this->_role->getCString(),"Player")==0){
-			CCSpriteFrame *frame=CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName("Kakashi_skill1_1.png"); 
-			_delegate->getHudLayer()->skill1Button->setDisplayFrame(frame);
-			frame=CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName("Kakashi_skill2_1.png"); 
-			_delegate->getHudLayer()->skill2Button->setDisplayFrame(frame);
+			SpriteFrame *frame=SpriteFrameCache::getInstance()->spriteFrameByName("Kakashi_skill1_1.png");
+			_delegate->getHudLayer()->skill1Button->setSpriteFrame(frame);
+			frame=SpriteFrameCache::getInstance()->spriteFrameByName("Kakashi_skill2_1.png");
+			_delegate->getHudLayer()->skill2Button->setSpriteFrame(frame);
 
 		}
 		
@@ -4180,8 +4180,8 @@ void NarutoSenki::ActionManager::changeAction(){
 
 			if(strcmp(this->_role->getCString(),"Player")==0){
 
-				CCSpriteFrame *frame=CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName("Minato_skill1_1.png"); 
-				_delegate->getHudLayer()->skill1Button->setDisplayFrame(frame);
+				SpriteFrame *frame=SpriteFrameCache::getInstance()->spriteFrameByName("Minato_skill1_1.png");
+				_delegate->getHudLayer()->skill1Button->setSpriteFrame(frame);
 				if(_delegate->getHudLayer()->skill1Button->_clickNum<2){
 					_delegate->getHudLayer()->skill1Button->_clickNum++;
 				}
@@ -4209,8 +4209,8 @@ void NarutoSenki::ActionManager::changeAction(){
 		}
 		if(bamen<5){
 			bamen+=1;
-			CCSpriteFrame *frame=CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName(CCString::createWithFormat("Bamen_Effect_%02d.png",this->bamen-1)->getCString()); 
-			this->_heartEffect->setDisplayFrame(frame);
+			SpriteFrame *frame=SpriteFrameCache::getInstance()->spriteFrameByName(CCString::createWithFormat("Bamen_Effect_%02d.png",this->bamen-1)->getCString());
+			this->_heartEffect->setSpriteFrame(frame);
 		}else{
 			return;
 		}
@@ -4585,10 +4585,10 @@ void NarutoSenki::ActionManager::resumeAction(float dt){
 
 		if(strcmp(this->_role->getCString(),"Player")==0){
 			
-			CCSpriteFrame *frame=CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName("Kakashi_skill1.png"); 
-			_delegate->getHudLayer()->skill1Button->setDisplayFrame(frame);
-			frame=CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName("Kakashi_skill2.png"); 
-			_delegate->getHudLayer()->skill2Button->setDisplayFrame(frame);
+			SpriteFrame *frame=SpriteFrameCache::getInstance()->spriteFrameByName("Kakashi_skill1.png");
+			_delegate->getHudLayer()->skill1Button->setSpriteFrame(frame);
+			frame=SpriteFrameCache::getInstance()->spriteFrameByName("Kakashi_skill2.png");
+			_delegate->getHudLayer()->skill2Button->setSpriteFrame(frame);
 
 		}
 
@@ -4877,7 +4877,7 @@ void NarutoSenki::ActionManager::resumeAction(float dt){
 					_delegate->_CharacterArray->removeObjectAtIndex(index);
 				}
 				mo->setActionState(ACTION_STATE_DEAD);
-				CCNotificationCenter::sharedNotificationCenter()->removeObserver(mo,"acceptAttack");
+				NotificationCenter::getInstance()->removeObserver(mo,"acceptAttack");
 				mo->removeFromParent();	
 				mo=NULL;
 
@@ -5337,7 +5337,7 @@ void NarutoSenki::ActionManager::setActionResume(){
 					_delegate->_CharacterArray->removeObjectAtIndex(index);
 				}
 				mo->setActionState(ACTION_STATE_DEAD);
-				CCNotificationCenter::sharedNotificationCenter()->removeObserver(mo,"acceptAttack");
+				NotificationCenter::getInstance()->removeObserver(mo,"acceptAttack");
 				mo->removeFromParent();	
 				mo=NULL;
 
@@ -5661,8 +5661,8 @@ void NarutoSenki::ActionManager::setClone(CCNode* sender,void* date){
 			
 			this->hearts-=1;
 			if(this->_heartEffect){
-				CCSpriteFrame *frame=CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName(CCString::createWithFormat("Heart_Effect_%02d.png",this->hearts)->getCString()); 
-				this->_heartEffect->setDisplayFrame(frame);
+				SpriteFrame *frame=SpriteFrameCache::getInstance()->spriteFrameByName(CCString::createWithFormat("Heart_Effect_%02d.png",this->hearts)->getCString());
+				this->_heartEffect->setSpriteFrame(frame);
 			}
 			
 			if(this->hearts<1 || countMon >=2){
@@ -6505,7 +6505,7 @@ void NarutoSenki::ActionManager::setMonAttack(CCNode* sender,void* date){
 
 void NarutoSenki::ActionManager::setTransform(){
 
-	CCNotificationCenter::sharedNotificationCenter()->removeObserver(this,"acceptAttack");
+	NotificationCenter::getInstance()->removeObserver(this,"acceptAttack");
 	this->unschedule(schedule_selector(NarutoSenki::ActionManager::dehealBuff));
 
 	if(strcmp(this->_character->getCString(),"Lee")==0 ||
@@ -6585,27 +6585,27 @@ void NarutoSenki::ActionManager::setTransform(){
 		this->_delegate->getHudLayer()->skill3Button->_isColdChanged=true;
 
 
-		CCSpriteFrame *frame=CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName(CCString::createWithFormat("%s_skill1.png",charName)->getCString()); 
-		_delegate->getHudLayer()->skill1Button->setDisplayFrame(frame);
-		frame=CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName(CCString::createWithFormat("%s_skill2.png",charName)->getCString()); 
-		_delegate->getHudLayer()->skill2Button->setDisplayFrame(frame);
+		SpriteFrame *frame=SpriteFrameCache::getInstance()->spriteFrameByName(CCString::createWithFormat("%s_skill1.png",charName)->getCString());
+		_delegate->getHudLayer()->skill1Button->setSpriteFrame(frame);
+		frame=SpriteFrameCache::getInstance()->spriteFrameByName(CCString::createWithFormat("%s_skill2.png",charName)->getCString());
+		_delegate->getHudLayer()->skill2Button->setSpriteFrame(frame);
 	
 		
 
-		frame=CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName(CCString::createWithFormat("%s_skill3.png",charName)->getCString()); 
-		_delegate->getHudLayer()->skill3Button->setDisplayFrame(frame);
+		frame=SpriteFrameCache::getInstance()->spriteFrameByName(CCString::createWithFormat("%s_skill3.png",charName)->getCString());
+		_delegate->getHudLayer()->skill3Button->setSpriteFrame(frame);
 
 
-		frame=CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName(CCString::createWithFormat("%s_skill4.png",charName)->getCString()); 
+		frame=SpriteFrameCache::getInstance()->spriteFrameByName(CCString::createWithFormat("%s_skill4.png",charName)->getCString());
 		if(_delegate->getHudLayer()->skill4Button){
-			_delegate->getHudLayer()->skill4Button->setDisplayFrame(frame);
+			_delegate->getHudLayer()->skill4Button->setSpriteFrame(frame);
 		}
 
 
 
-		frame=CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName(CCString::createWithFormat("%s_skill5.png",charName)->getCString()); 
+		frame=SpriteFrameCache::getInstance()->spriteFrameByName(CCString::createWithFormat("%s_skill5.png",charName)->getCString());
 		if(_delegate->getHudLayer()->skill5Button){
-			_delegate->getHudLayer()->skill5Button->setDisplayFrame(frame);
+			_delegate->getHudLayer()->skill5Button->setSpriteFrame(frame);
 		}
 		
 
@@ -7128,7 +7128,7 @@ bool NarutoSenki::ActionManager::hardHurt(int delayTime,bool isHurtAction,bool i
 					path=CCString::createWithFormat("%s_Hurt_02.png",this->getCharacter()->getCString());
 				}
 				
-				CCSpriteFrame* frame = CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName(path->getCString());
+				SpriteFrame* frame = SpriteFrameCache::getInstance()->spriteFrameByName(path->getCString());
 				CCArray* tempArray= CCArray::create();
 				tempArray->addObject(frame);
 				CCAnimation* tempAnimation= cocos2d::cocos2dx2_compat::createAnimationWithSpriteFrames(tempArray, 0.1f);
@@ -7324,7 +7324,7 @@ void NarutoSenki::ActionManager::knockDown(){
 void NarutoSenki::ActionManager::dead(){
 
 
-	CCNotificationCenter::sharedNotificationCenter()->removeObserver(this,"acceptAttack");
+	NotificationCenter::getInstance()->removeObserver(this,"acceptAttack");
 
 	_isHitOne=false;
 	_isCatchOne=false;
@@ -7447,8 +7447,8 @@ void NarutoSenki::ActionManager::dead(){
 
 	if(strcmp(this->getCharacter()->getCString(),"Kakuzu") ==0){
 		if(_heartEffect){
-			CCSpriteFrame *frame=CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName(CCString::createWithFormat("Heart_Effect_%02d.png",this->hearts)->getCString()); 
-			this->_heartEffect->setDisplayFrame(frame);
+			SpriteFrame *frame=SpriteFrameCache::getInstance()->spriteFrameByName(CCString::createWithFormat("Heart_Effect_%02d.png",this->hearts)->getCString());
+			this->_heartEffect->setSpriteFrame(frame);
 		}
 
 		if(strcmp(this->getRole()->getCString(),"Player")==0 && this->getLV()>=2){
@@ -7504,8 +7504,8 @@ void NarutoSenki::ActionManager::dead(){
 				this->_heartEffect->removeFromParent();
 				this->_heartEffect=NULL;
 			}else {
-				CCSpriteFrame *frame=CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName(CCString::createWithFormat("Bamen_Effect_%02d.png",this->bamen-1)->getCString()); 
-				this->_heartEffect->setDisplayFrame(frame);
+				SpriteFrame *frame=SpriteFrameCache::getInstance()->spriteFrameByName(CCString::createWithFormat("Bamen_Effect_%02d.png",this->bamen-1)->getCString());
+				this->_heartEffect->setSpriteFrame(frame);
 			}
 
 		}
@@ -7531,7 +7531,7 @@ void NarutoSenki::ActionManager::dead(){
 	_actionState=ACTION_STATE_DEAD;	
 
 	if(strcmp(this->_role->getCString(),"Player")==0 ||  strcmp(this->_role->getCString(),"Com")==0){
-		CCNotificationCenter::sharedNotificationCenter()->postNotification("updateMap", this);
+		NotificationCenter::getInstance()->postNotification("updateMap", this);
 	}
 
 
