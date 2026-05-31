@@ -3,7 +3,7 @@
 #include "ActionManager.h"
 
 
-class HPBar :public CCSprite{
+class HPBar :public Sprite{
 	HPBar(void);
 	~HPBar(void);
 
@@ -12,8 +12,8 @@ class HPBar :public CCSprite{
 	static HPBar*	create(const char *szImage);
 	void			changeBar(const char *szImage);
 	void			loseHP(float percent);
-	CC_SYNTHESIZE_RETAIN(CCSprite*,hpBottom,HPBottom);
-	CC_SYNTHESIZE_RETAIN(CCSprite*,hpBar,HPBAR);
+	CC_SYNTHESIZE_RETAIN(Sprite*,hpBottom,HPBottom);
+	CC_SYNTHESIZE_RETAIN(Sprite*,hpBar,HPBAR);
 
 
 };
