@@ -334,9 +334,9 @@ Catatan progress terbaru:
 
 ### Tahap 5: Container/Data dan Sisa Action Bridge
 
-Status: **berjalan; commit `ActionManager`, `Effect`, dan `HudLayer` sudah
-build-tested oleh pengguna di Android, commit dekoratif terbaru belum
-build-tested**.
+Status: **berjalan; commit `ActionManager`, `Effect`, `HudLayer`, dan dekoratif
+UI sudah build-tested oleh pengguna di Android, commit scene/loading terbaru
+belum build-tested**.
 
 Prioritas:
 
@@ -361,6 +361,7 @@ Commit awal tahap 5:
 - `c9a65db refactor: migrate effect sequence helpers`
 - `7061c4b refactor: migrate hud sequence helpers`
 - `dca5a44 refactor: migrate decorative sequence helpers`
+- `8c16cf1 refactor: migrate scene animation helpers`
 
 Catatan progress terbaru:
 
@@ -390,9 +391,15 @@ Catatan progress terbaru:
   sequence/animation dekoratif: result popup, cloud ranking, dan banner blink
   memakai `Sequence::create`, `Vector<SpriteFrame*>`, serta
   `Animation::createWithSpriteFrames` langsung.
-- Setelah commit dekoratif ini lulus build Android, langkah berikutnya adalah
-  memilih adapter lokal kecil lagi, misalnya area kecil `StartMenu` atau
-  `Element`, sebelum menyentuh migrasi container besar.
+- Commit dekoratif sudah dibuild pengguna di Android dan berjalan aman.
+- `SkillLayer.cpp` dan `LoadLayer.cpp` dibersihkan dari helper compat
+  sequence/animation lokal untuk blink skill dan avatar loading. Area ini
+  memakai `Sequence::create`, `Vector<SpriteFrame*>`, serta
+  `Animation::createWithSpriteFrames` langsung tanpa mengubah kontrak
+  `CCArray` loader seperti `tempHeros` dan `DLCArray`.
+- Setelah commit scene/loading ini lulus build Android, langkah berikutnya
+  adalah memilih adapter lokal kecil lagi, misalnya area kecil `StartMenu` atau
+  mulai masuk `Element` secara sangat terbatas.
 - Alias HTTP/EditBox/Scale9/Scroll di `Cocos2dx2Compat.h` belum dihapus karena
   masih punya pemakai aktif.
 
