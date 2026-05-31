@@ -3,11 +3,11 @@
 using namespace cocos2d;
 
 
- CCStrokeLabel* CCStrokeLabel::create(cocos2d::CCLabelTTF* labelTTF,cocos2d::ccColor3B fullColor,cocos2d::ccColor3B StrokeColor,float strokeSize)
+ CCStrokeLabel* CCStrokeLabel::create(cocos2d::Label* label,cocos2d::ccColor3B fullColor,cocos2d::ccColor3B StrokeColor,float strokeSize)
  {
 	 CCStrokeLabel* tmp = new CCStrokeLabel;
 	 tmp->autorelease();
-	 tmp->m_label = labelTTF;
+	 tmp->m_label = label;
 	 tmp->m_fullColor = fullColor;
 	 tmp->m_StrokeColor = StrokeColor;
 	 tmp->m_strokeSize = strokeSize;
@@ -22,9 +22,6 @@ bool  CCStrokeLabel::init()
 	do{
 		
 		float strokeSize = getStrokeSize();
-		// float fontSize = m_fontSize - 2 * strokeSize;
-		// 	m_label = CCLabelTTF::labelWithString(
-		// 		m_str.c_str(), m_font.c_str(), m_fontSize);
 		Size textureSize = m_label->getContentSize();
 		textureSize.width += 2 * strokeSize;
 		textureSize.height += 2 * strokeSize;

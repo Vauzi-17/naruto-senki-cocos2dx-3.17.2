@@ -474,9 +474,9 @@ void RakingLayer::postRequest(int code,CCString* useChar/* =NULL */){
 	ssize_t size;
 	const char* data;
 	if(postingCode==400){
-		data=(const char*)CCFileUtils::sharedFileUtils()->getFileData("rank.json", "r",&size);
+		data=(const char*)FileUtils::getInstance()->getFileData("rank.json", "r",&size);
 	}else {
-		data=(const char*)CCFileUtils::sharedFileUtils()->getFileData("rank2.json", "r",&size);
+		data=(const char*)FileUtils::getInstance()->getFileData("rank2.json", "r",&size);
 	}
 
 	std::string clearData(data);
@@ -512,7 +512,7 @@ void RakingLayer::postRequest(int code,CCString* useChar/* =NULL */){
 						reply= ((CCString*)strings->objectForKey("RankingNull2"))->getCString();
 					}
 
-					rankingDetail=CCLabelTTF::create(CCString::createWithFormat("%s",reply)->getCString(),FONT_TYPE,12);
+					rankingDetail=Label::createWithSystemFont(CCString::createWithFormat("%s",reply)->getCString(),FONT_TYPE,12);
 					rankingDetail->setAnchorPoint(Vec2(0,0.5f));
 					rankingDetail->setPosition(Vec2(ranking_bg->getPositionX()-ranking_bg->getContentSize().width/2 +20,ranking_bg->getPositionY()-ranking_bg->getContentSize().height/2+14));
 					ranking_layer->addChild(rankingDetail,500);
@@ -521,7 +521,7 @@ void RakingLayer::postRequest(int code,CCString* useChar/* =NULL */){
 					CCDictionary *strings = CCDictionary::createWithContentsOfFile("Element/strings.xml");
 					const char *reply = ((CCString*)strings->objectForKey("RankingDetail"))->getCString();
 					const char *reply2 = ((CCString*)strings->objectForKey("RankingDetail2"))->getCString();
-					rankingDetail=CCLabelTTF::create(CCString::createWithFormat("%s %d %s",reply,sortNO,reply2)->getCString(),FONT_TYPE,12);
+					rankingDetail=Label::createWithSystemFont(CCString::createWithFormat("%s %d %s",reply,sortNO,reply2)->getCString(),FONT_TYPE,12);
 					rankingDetail->setAnchorPoint(Vec2(0,0.5f));
 					rankingDetail->setPosition(Vec2(ranking_bg->getPositionX()-ranking_bg->getContentSize().width/2 +20,ranking_bg->getPositionY()-ranking_bg->getContentSize().height/2+14));
 					ranking_layer->addChild(rankingDetail,500);
@@ -615,7 +615,7 @@ void RakingLayer::postRequest(int code,CCString* useChar/* =NULL */){
 					num_icon->setPosition(Vec2(1,1));
 					screwItem->addChild(num_icon);
 				}else{
-					CCLabelTTF* numLabel=CCLabelTTF::create(CCString::createWithFormat("%d",i)->getCString(),"????",12);
+					Label* numLabel=Label::createWithSystemFont(CCString::createWithFormat("%d",i)->getCString(),"????",12);
 					numLabel->setPosition(Vec2(13,13));
 					screwItem->addChild(numLabel);
 				}
@@ -628,7 +628,7 @@ void RakingLayer::postRequest(int code,CCString* useChar/* =NULL */){
 					screwItem->addChild(nameplate);
 
 					CCStrokeLabel* user_nameStr;
-					CCLabelTTF* user_name=CCLabelTTF::create(name.c_str(),FONT_TYPE,12);
+					Label* user_name=Label::createWithSystemFont(name.c_str(),FONT_TYPE,12);
 					if(MemberID){
 						if(MemberID==memberID){
 							user_nameStr = CCStrokeLabel::create(user_name,ccc3(0,0,0),ccc3(236,162,8),1.0f);
@@ -705,7 +705,7 @@ void RakingLayer::postRequest(int code,CCString* useChar/* =NULL */){
 					}
 
 				}else{
-					CCLabelTTF* user_name=CCLabelTTF::create(name.c_str(),FONT_TYPE,12);
+					Label* user_name=Label::createWithSystemFont(name.c_str(),FONT_TYPE,12);
 
 					if(MemberID){
 						if(MemberID==memberID){
@@ -721,7 +721,7 @@ void RakingLayer::postRequest(int code,CCString* useChar/* =NULL */){
 
 
 
-				CCLabelTTF* user_score=CCLabelTTF::create(CCString::createWithFormat("%d",score)->getCString(),FONT_TYPE,12);
+				Label* user_score=Label::createWithSystemFont(CCString::createWithFormat("%d",score)->getCString(),FONT_TYPE,12);
 
 				user_score->setAnchorPoint(Vec2(0.5f,0));
 				user_score->setPosition(Vec2(214,5));
@@ -729,7 +729,7 @@ void RakingLayer::postRequest(int code,CCString* useChar/* =NULL */){
 
 
 				if(groupID!=0){
-					CCLabelTTF* group_Name=CCLabelTTF::create(CCString::createWithFormat("%s",groupName.c_str())->getCString(),FONT_TYPE,12);
+					Label* group_Name=Label::createWithSystemFont(CCString::createWithFormat("%s",groupName.c_str())->getCString(),FONT_TYPE,12);
 
 					MenuItemLabel* item=MenuItemLabel::create(group_Name, CC_CALLBACK_1(RakingLayer::onSelectGroupBtn, this));
 
@@ -741,7 +741,7 @@ void RakingLayer::postRequest(int code,CCString* useChar/* =NULL */){
 					screwItem->setTag(groupID);
 
 				}else if(strcmp(groupName.c_str(),"")!=0 ){
-					CCLabelTTF* group_Name=CCLabelTTF::create(CCString::createWithFormat("%s",groupName.c_str())->getCString(),FONT_TYPE,12);
+					Label* group_Name=Label::createWithSystemFont(CCString::createWithFormat("%s",groupName.c_str())->getCString(),FONT_TYPE,12);
 
 					group_Name->setAnchorPoint(Vec2(0.5f,0));
 					group_Name->setPosition(Vec2(304,5));
@@ -942,7 +942,7 @@ void RakingLayer::onSelectGroupBtn(Ref* sender){
 
 	CCDictionary *strings = CCDictionary::createWithContentsOfFile("Element/strings.xml");
 	const char *reply = ((CCString*)strings->objectForKey("RankingNull2"))->getCString();
-	rankingDetail=CCLabelTTF::create(CCString::createWithFormat("%s",reply)->getCString(),FONT_TYPE,12);
+	rankingDetail=Label::createWithSystemFont(CCString::createWithFormat("%s",reply)->getCString(),FONT_TYPE,12);
 	rankingDetail->setAnchorPoint(Vec2(0,0.5f));
 	rankingDetail->setPosition(Vec2(ranking_bg->getPositionX()-ranking_bg->getContentSize().width/2 +20,ranking_bg->getPositionY()-ranking_bg->getContentSize().height/2+14));
 	ranking_layer->addChild(rankingDetail,500);

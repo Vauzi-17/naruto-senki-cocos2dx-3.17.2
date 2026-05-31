@@ -37,7 +37,7 @@ public:
 
 	Menu* order_menu;
 	Sprite* ranking_title;
-	CCLabelTTF* rankingDetail;
+	Label* rankingDetail;
 
 	Layer* ranking_layer;
 	Sprite* ranking_bg;
