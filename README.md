@@ -15,20 +15,22 @@ masih memakai API 2.x seperti `CCLayer`, `CCSprite`, `CCMenu`, `CCPoint`,
 | --- | --- |
 | Engine/runtime | cocos2d-x 3.17.2 |
 | Branch kerja | `migrate` |
-| Android build | Berhasil menurut uji pengguna setelah tahap 3 |
+| Android build | Berhasil menurut uji pengguna setelah cleanup tahap 4 awal |
 | Windows build | Pernah berjalan sebelum migrasi tahap ini, perlu uji ulang berkala |
 | Push remote | Tidak dilakukan |
 | Build oleh Codex | Tidak dilakukan |
 
 ## Estimasi Progress Migrasi
 
-Estimasi progress menuju kode full cocos2d-x 3.17.2: **sekitar 67%**.
+Estimasi progress menuju kode full cocos2d-x 3.17.2: **sekitar 69%**.
 
 Alasan estimasi:
 
 - Alur scene utama sudah dimigrasi dari menu awal sampai masuk gameplay.
 - Area HUD dan layer gameplay pendukung sudah banyak memakai API 3.x.
-- Build Android sudah berhasil dan game bisa dimainkan setelah tahap 3.
+- Build Android sudah berhasil dan game bisa dimainkan setelah cleanup tahap 4
+  awal; pengguna sudah menjalankan game di HP sekitar 2 match tanpa masalah
+  terlihat.
 - Area gameplay core sudah mulai distabilkan lewat migrasi callback/action/frame
   tanpa mengubah kontrak data lama secara paksa.
 - Masih ada sisa API 2.x yang cukup banyak di `ActionManager`, `Element`,
@@ -36,6 +38,9 @@ Alasan estimasi:
 - Untuk mencapai 100%, sisa terbesar bukan sekadar rename API, tetapi migrasi
   kontrak data lama seperti `CCArray`, `CCDictionary`, dan `CCString` yang masih
   dipakai lintas scene, ranking, loader, XML, dan gameplay core.
+- Project ini diperlakukan sebagai game offline. Nama `NetworkLayer` adalah nama
+  lama untuk flow utama/offline saat ini, bukan indikasi mode online yang harus
+  dihapus.
 
 Angka ini bukan hitungan matematis murni dari jumlah file, karena sebagian file
 sisa jauh lebih besar dan lebih berisiko daripada scene kecil. Secara jalur main
@@ -233,8 +238,8 @@ Catatan progress terbaru:
 
 ### Tahap 4: Cleanup dan Compatibility Reduction
 
-Status: **mulai berjalan, belum build-tested oleh pengguna setelah commit awal
-tahap 4**.
+Status: **berjalan; cleanup utility awal sudah build-tested oleh pengguna,
+commit ranking terbaru belum build-tested**.
 
 Prioritas:
 
@@ -250,12 +255,15 @@ Target migrasi:
 - Mengurangi ketergantungan pada compatibility shim.
 - Mengganti sisa helper lama ke API 3.x asli.
 - Membersihkan UI ranking dan utility layer.
+- Menonaktifkan jalur request online ranking lama, tetapi tetap mempertahankan
+  tampilan ranking sebagai dekorasi/menu offline.
 - Mengecek ulang Android dan Windows setelah semua file core stabil.
 
 Commit awal tahap 4:
 
 - `2305287 refactor: migrate utility touch and action helpers`
 - `31ea26c refactor: migrate utility singleton helpers`
+- `0602b67 refactor: migrate ranking touch and frame helpers`
 
 Catatan progress terbaru:
 
@@ -269,8 +277,16 @@ Catatan progress terbaru:
   beberapa singleton/type lama seperti `sharedEngine`, `sharedDirector`,
   `sharedUserDefault`, `sharedFileUtils`, `CCSize`, `CCNode`, `CCSprite`,
   `CCRenderTexture`, dan `CCTexture2D`.
-- Area ini belum dibuild ulang oleh Codex sesuai aturan kerja; perlu uji Android
-  pengguna sebelum tahap final.
+- Cleanup utility awal sudah dibuild pengguna lewat Android Studio dan dimainkan
+  di HP sekitar 2 match tanpa masalah terlihat.
+- `RankingLayer` mulai dibersihkan secara bertahap: `RakingLayer` memakai
+  `Layer`, `RankCharButton` memakai `Sprite` dan listener touch 3.x langsung,
+  serta helper frame/audio ranking mulai memakai `SpriteFrameCache::getInstance`,
+  `setSpriteFrame`, `UserDefault`, dan `SimpleAudioEngine::getInstance`.
+- Jalur klik grup ranking lama tidak lagi membuat HTTP request; ranking tetap
+  tampil sebagai hiasan offline dengan pesan/detail lokal.
+- Commit ranking terbaru belum dibuild ulang oleh Codex sesuai aturan kerja;
+  perlu uji Android pengguna sebelum lanjut terlalu jauh ke ranking/container.
 
 ## Cara Kerja Migrasi
 

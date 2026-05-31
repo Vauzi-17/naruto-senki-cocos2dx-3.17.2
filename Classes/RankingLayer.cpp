@@ -847,7 +847,7 @@ void RakingLayer::onCancel(CCObject* sender){
 	this->removeFromParent();
 	SimpleAudioEngine::getInstance()->playEffect("Audio/Menu/cancel.ogg");
 	
-	CCDirector::sharedDirector()->popScene();
+	Director::getInstance()->popScene();
 }
 
 void  RakingLayer::onDayBtn(CCObject* sender){
@@ -1838,15 +1838,9 @@ void RakingLayer::onHttpRequestCompleted3(CCNode *sender ,void *data) {
 }  
 
 void RakingLayer::onSelectGroupBtn(CCObject* sender){
-	return;
-	CCMenuItemLabel* item=(CCMenuItemLabel*) sender;
-	
-
 	if(_screwLayer1){
-		_screwLayer1->removeAllChildren();
 		_screwLayer1->setPositionY(154);
 	}
-
 
 	if(rankingDetail){
 		rankingDetail->removeFromParent();
@@ -1859,45 +1853,12 @@ void RakingLayer::onSelectGroupBtn(CCObject* sender){
 		ranking_title->setPosition(ccp(ranking_bg->getPositionX()-96,ranking_bg->getPositionY()+ranking_bg->getContentSize().height/2-16));
 	}
 
-	if(!isPosting){
-
-		isPosting=true;
-		
-		//????
-		if(!refreshBtn){
-			refreshBtn=CCSprite::createWithSpriteFrameName("refresh_btn.png");
-			refreshBtn->setPosition(ccp(winSize.width/2,winSize.height/2));
-			CCActionInterval* rt=CCRotateBy::create(0.3f,180,180);
-			refreshBtn->runAction(CCRepeatForever::create(rt));
-			this->addChild(refreshBtn,1000);
-
-
-		}
-		
-
-		cocos2d::extension::CCHttpRequest* request = new CCHttpRequest(); 
-		std::string codeFinal;
-		if(postingCode==600 || postingCode==400){
-			postingCode=800;
-			codeFinal=CCString::createWithFormat("code=800&group_id=%d",item->getTag())->getCString();;
-		}else if(postingCode==700 || postingCode==500){
-			postingCode=900;
-			codeFinal=CCString::createWithFormat("code=900&group_id=%d",item->getTag())->getCString();;
-
-		}
-		
-
-		std::string url=SERVER"nsk/rank.php?"+codeFinal;
-		request->setUrl(url.c_str());  
-		request->setRequestType(CCHttpRequest::kHttpGet);  
-		
-		request->setResponseCallback(this, callfuncND_selector(RakingLayer::onHttpRequestCompleted2));  
-		
-
-		request->setTag("Post_My_Data");  
-		cocos2d::extension::CCHttpClient::getInstance()->send(request);  
-		request->release();  
-	}
+	CCDictionary *strings = CCDictionary::createWithContentsOfFile("Element/strings.xml");
+	const char *reply = ((CCString*)strings->objectForKey("RankingNull2"))->getCString();
+	rankingDetail=CCLabelTTF::create(CCString::createWithFormat("%s",reply)->getCString(),FONT_TYPE,12);
+	rankingDetail->setAnchorPoint(ccp(0,0.5f));
+	rankingDetail->setPosition(ccp(ranking_bg->getPositionX()-ranking_bg->getContentSize().width/2 +20,ranking_bg->getPositionY()-ranking_bg->getContentSize().height/2+14));
+	ranking_layer->addChild(rankingDetail,500);
 
 	
 }
