@@ -13,20 +13,20 @@ USING_NS_CC;
 class GameLayer;
 
 
-class MiniIcon: public CCSprite{
+class MiniIcon: public Sprite{
 public: 
 	MiniIcon(void);
 	~MiniIcon();
 
 	CC_SYNTHESIZE(unsigned int,_charNO,CharNO);
 	static MiniIcon*	create(const char *szImage,bool isNotification);
-	void	updateMap(CCObject* sender);
+	void	updateMap(Ref* sender);
 	void	updateState();
 
-	void	updatePosition(CCPoint location);
+	void	updatePosition(Vec2 location);
 	virtual bool init(const char *szImage,bool isNotification );
 
-	CCLayer*	_delegate;
+	Layer*	_delegate;
 
 };
 
@@ -34,7 +34,7 @@ public:
 
 
 
-class HudLayer : public CCLayer{
+class HudLayer : public Layer{
 public:
 	HudLayer(void);
 	~HudLayer(void);
@@ -43,13 +43,13 @@ public:
 	void			updateSQL(float dt);
 	bool			isOpenSQL;
 
-	CCSprite*			status_bar;
-	CCSprite*			status_hpbar;
-	CCSprite*			status_hpMark;
-	CCSprite*			enemy_status_bar;
-	CCSprite*			enemy_status_hpbar;
-	CCSprite*			enemy_status_hpMark;
-	CCProgressTimer*	status_expbar;
+	Sprite*			status_bar;
+	Sprite*			status_hpbar;
+	Sprite*			status_hpMark;
+	Sprite*			enemy_status_bar;
+	Sprite*			enemy_status_hpbar;
+	Sprite*			enemy_status_hpMark;
+	ProgressTimer*	status_expbar;
 	
 	ActionButton*		nAttackButton;
 	ActionButton*		skill1Button;
@@ -69,38 +69,38 @@ public:
 	ActionButton*		gear1Button;
 	ActionButton*		gear2Button;
 	ActionButton*		gear3Button;
-	CCSprite*			reportSPCSprite;
+	Sprite*			reportSPCSprite;
 
-	CCSprite* reportSprite;
+	Sprite* reportSprite;
 	
 
 	CC_SYNTHESIZE(CCArray*,_reportListArray ,ReportListArray);
 	int _buffCount;
 
-	CCLabelBMFont*		hpLabel;
-	CCLabelBMFont*		expLabel;
-	CCLabelBMFont*		enemyHpLabel;
+	LabelBMFont*		hpLabel;
+	LabelBMFont*		expLabel;
+	LabelBMFont*		enemyHpLabel;
 
 
-	CCLabelBMFont*		coinLabel;
-	CCLabelBMFont*		killLabel;
-	CCLabelBMFont*		deadLabel;
+	LabelBMFont*		coinLabel;
+	LabelBMFont*		killLabel;
+	LabelBMFont*		deadLabel;
 
-	CCLabelBMFont*		KonoLabel;
-	CCLabelBMFont*		AkaLabel;
+	LabelBMFont*		KonoLabel;
+	LabelBMFont*		AkaLabel;
 
 
-    CCLabelBMFont*		gameClock;
-	CCMenu*				pauseNenu;
-	CCMenu*				gearMenu;
+    LabelBMFont*		gameClock;
+	Menu*				pauseNenu;
+	Menu*				gearMenu;
 	CC_SYNTHESIZE(CCArray*,_towerIconArray,TowerIconArray);
 
 	GameLayer*			_delegate;
-	CCLayer*			miniLayer;
+	Layer*			miniLayer;
 	JoyStick*			_joyStick;
 
-	CCTexture2D* 		texUI;
-	CCSpriteBatchNode*	uiBatch;
+	Texture2D* 		texUI;
+	SpriteBatchNode*	uiBatch;
 
 	void	setHPLose(float percent);
 	void	setEnemyHPLose(float percent);
@@ -112,13 +112,13 @@ public:
 	void	attackButtonClick(abType type);
 	void	gearButtonClick(gearType type);
 	void	attackButtonRelease();
-	void	pauseButtonClick(CCObject* sender);
-	void	gearButtonClick(CCObject* sender);
+	void	pauseButtonClick(Ref* sender);
+	void	gearButtonClick(Ref* sender);
 	void	setReport(const char* name1, const char* name2,CCString* killNum);
 	void	setReportCache();
 	void    setBuffDisplay(const char* buffName,float buffStayTime);
 	void	clearSPCReport();
-	void	clearBuffDisplay(CCNode* sender);
+	void	clearBuffDisplay(Node* sender);
 	
 	void	updateBuffDisplay(float dt);
 	void	updateBuffDisplay2(float dt);
@@ -127,24 +127,24 @@ public:
 	void	setTowerState(unsigned int charNO);
 	void	onKaichang();
 
-	CCLabelBMFont* bcdLabel1;
-	CCLabelBMFont* bcdLabel2;
+	LabelBMFont* bcdLabel1;
+	LabelBMFont* bcdLabel2;
 	
 	void JoyStickRelease();
-	void JoyStickUpdate(CCPoint direction);
-	CCSprite* Kaichang;
+	void JoyStickUpdate(Vec2 direction);
+	Sprite* Kaichang;
 
-	CCSprite* createReport(const char* name1, const char* name2,float &length);
-	CCSprite* createSPCReport(const char* killNum,int num);
+	Sprite* createReport(const char* name1, const char* name2,float &length);
+	Sprite* createSPCReport(const char* killNum,int num);
 
 	
 
 	virtual bool	getSkillFinish();
 	virtual bool    getOugisEnable(bool isCKR2);
 	
-	CCLayer* ougisLayer;
+	Layer* ougisLayer;
 	void setOugis(CCString* character,CCString* group);
-	void removeOugis(CCNode* sender);
+	void removeOugis(Node* sender);
 
 	bool	_isAllButtonLocked;
 	
