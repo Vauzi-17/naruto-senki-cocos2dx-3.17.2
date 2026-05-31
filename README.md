@@ -239,7 +239,7 @@ Catatan progress terbaru:
 ### Tahap 4: Cleanup dan Compatibility Reduction
 
 Status: **berjalan; cleanup utility dan ranking offline/dekoratif sudah
-build-tested oleh pengguna di Android, commit menu callback terbaru belum
+build-tested oleh pengguna di Android, commit ranking node/action terbaru belum
 build-tested**.
 
 Prioritas:
@@ -268,6 +268,7 @@ Commit awal tahap 4:
 - `8a394f4 refactor: keep ranking offline decorative`
 - `7aad4b1 refactor: remove obsolete ranking request stub`
 - `5a288a0 refactor: migrate ranking menu callbacks`
+- `99d1d5b refactor: migrate ranking node action types`
 
 Catatan progress terbaru:
 
@@ -296,9 +297,23 @@ Catatan progress terbaru:
 - Callback menu aktif di `RankingLayer` mulai memakai `MenuItem`,
   `MenuItemSprite`, `MenuItemLabel`, `Menu`, `Ref`, dan `CC_CALLBACK_1`.
   Komentar sidebar lama yang masih menyimpan selector 2.x juga dihapus.
-- Commit menu callback terbaru belum dibuild ulang oleh Codex sesuai aturan
-  kerja; perlu uji Android pengguna sebelum lanjut ke pembersihan ranking yang
-  lebih besar.
+- Tipe node/action/posisi di `RankingLayer` mulai dibersihkan dari
+  `CCSprite`, `CCLayer`, `CCNode`, `CCSpriteBatchNode`, `CCActionInterval`,
+  `CCAction`, `CCMoveBy`, `CCRepeatForever`, dan `ccp(...)`.
+- Commit ranking node/action terbaru belum dibuild ulang oleh Codex sesuai
+  aturan kerja; perlu uji Android pengguna sebelum lanjut ke pembersihan ranking
+  yang lebih besar.
+
+Rencana langkah berikutnya:
+
+- Setelah commit ranking node/action terbaru lulus build Android, lanjutkan
+  pembersihan `RankingLayer` yang masih aman: `CCClippingNode`, `CCDelayTime`,
+  `CCAnimate`, dan callback HTTP lama yang kini tidak punya jalur request aktif.
+- Setelah area ranking stabil, lanjutkan ke `MyUtils/KTools` untuk sisa API 2.x
+  helper lokal, masih tanpa menyentuh kontrak besar `CCArray`/`CCString`.
+- Migrasi `CCArray`, `CCDictionary`, dan `CCString` tetap ditahan sampai ranking
+  dan helper non-core lebih bersih, agar kontrak data gameplay tidak berubah
+  terlalu cepat.
 
 ## Cara Kerja Migrasi
 
