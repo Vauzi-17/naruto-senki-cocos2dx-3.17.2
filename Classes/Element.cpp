@@ -1686,10 +1686,8 @@ void Monster::dealloc(){
 		){
 
 			FiniteTimeAction* call = CallFunc::create(CC_CALLBACK_0(Monster::dealloc2, this));
-			CCArray* seqArray=CCArray::create();
-			seqArray->addObject(this->getDeadAction());
-			seqArray->addObject(call);
-			Action* seq=cocos2d::cocos2dx2_compat::createSequence(seqArray);
+			auto deadAction=dynamic_cast<FiniteTimeAction*>(this->getDeadAction());
+			Action* seq=deadAction ? Sequence::create(deadAction,call,nullptr) : Sequence::create(call,nullptr);
 			this->runAction(seq);
 			return;
 
@@ -1753,14 +1751,11 @@ void Monster::dealloc(){
 		FiniteTimeAction* call = CallFunc::create(CC_CALLBACK_0(Monster::dealloc2, this));
 
 		
-		CCArray* seqArray=CCArray::create();
-		seqArray->addObject(this->getDeadAction());
-		seqArray->addObject(call);
+		auto deadAction=dynamic_cast<FiniteTimeAction*>(this->getDeadAction());
 		
 		FiniteTimeAction* call2 = CallFunc::create(CC_CALLBACK_0(Monster::setResume, this));
-		seqArray->addObject(call2);
 	
-		Action* seq=cocos2d::cocos2dx2_compat::createSequence(seqArray);
+		Action* seq=deadAction ? Sequence::create(deadAction,call,call2,nullptr) : Sequence::create(call,call2,nullptr);
 		this->runAction(seq);
 		
 
@@ -1784,10 +1779,10 @@ void Monster::setDirectMove(unsigned int length,float delay,bool isReverse){
 	FiniteTimeAction* call = CallFunc::create(CC_CALLBACK_0(Monster::dealloc, this));
 	Action* seq;
 	if (!isReverse) {
-		seq=cocos2d::cocos2dx2_compat::createSequence(mv,call,NULL);
+		seq=Sequence::create(mv,call,nullptr);
 	}else{
 		ActionInterval* mv2=MoveTo::create(delay,direction2);
-		seq=cocos2d::cocos2dx2_compat::createSequence(mv,mv2,call,NULL);
+		seq=Sequence::create(mv,mv2,call,nullptr);
 	}
 
 	this->runAction(seq);
@@ -1802,7 +1797,7 @@ void Monster::setEaseIn(unsigned int length,float delay){
 	ActionInterval* eo=EaseIn::create(mv,delay);
 	
 	FiniteTimeAction* call = CallFunc::create(CC_CALLBACK_0(Monster::dealloc, this));
-	Action* seq=cocos2d::cocos2dx2_compat::createSequence(eo,call,NULL);
+	Action* seq=Sequence::create(eo,call,nullptr);
 	this->runAction(seq) ;
 }
 
@@ -1826,7 +1821,7 @@ void Monster::setDirectMoveBy(unsigned int length,float delay){
 
 	DelayTime* dl=DelayTime::create(delay);
 	FiniteTimeAction* call = CallFunc::create(CC_CALLBACK_0(Monster::dealloc, this));
-	Action* seq=cocos2d::cocos2dx2_compat::createSequence(dl,call,NULL);
+	Action* seq=Sequence::create(dl,call,nullptr);
 	this->runAction(seq) ;
 	
 }
@@ -1960,10 +1955,8 @@ void Bullet::dealloc(){
 		){
 		
 		FiniteTimeAction* call = CallFunc::create(CC_CALLBACK_0(Bullet::dealloc2, this));
-		CCArray* seqArray=CCArray::create();
-		seqArray->addObject(this->getDeadAction());
-		seqArray->addObject(call);
-		Action* seq=cocos2d::cocos2dx2_compat::createSequence(seqArray);
+		auto deadAction=dynamic_cast<FiniteTimeAction*>(this->getDeadAction());
+		Action* seq=deadAction ? Sequence::create(deadAction,call,nullptr) : Sequence::create(call,nullptr);
 		this->runAction(seq);
 
 
@@ -2007,10 +2000,10 @@ void Bullet::setMove(unsigned int length,float delay,bool isReverse){
 	Action* seq;
 	if (!isReverse) {
 	
-		seq=cocos2d::cocos2dx2_compat::createSequence(mv,call,NULL);
+		seq=Sequence::create(mv,call,nullptr);
 	}else{
 		ActionInterval* mv2=MoveTo::create(delay,direction2);
-		seq=cocos2d::cocos2dx2_compat::createSequence(mv,mv2,call,NULL);
+		seq=Sequence::create(mv,mv2,call,nullptr);
 	}
 	
 	this->runAction(seq);
@@ -2024,7 +2017,7 @@ void Bullet::setEaseIn(unsigned int length,float delay){
 	ActionInterval* eo=EaseIn::create(mv,delay);
 
     FiniteTimeAction* call = CallFunc::create(CC_CALLBACK_0(Bullet::dealloc, this));
-	Action* seq=cocos2d::cocos2dx2_compat::createSequence(eo,call,NULL);
+	Action* seq=Sequence::create(eo,call,nullptr);
 	this->runAction(seq) ;
 }
 
