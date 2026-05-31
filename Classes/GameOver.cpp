@@ -739,7 +739,7 @@ void GameOver::onChangeChar(Ref* sender){
 	changeCharLayer->addChild(blend,0);
 	CCScale9Sprite* bg=CCScale9Sprite::createWithSpriteFrameName("confirm_bg.png");
 	if(bg){
-		bg->setContentSize(SizeMake(336,236));
+		bg->setContentSize(Size(336,236));
 		bg->setPosition(Vec2(winSize.width/2,winSize.height/2));
 		changeCharLayer->addChild(bg,1);
 	}
@@ -772,7 +772,7 @@ void GameOver::onChangeChar(Ref* sender){
 		changeCharLayer->addChild(playerOnly,2);
 	}
 
-	Size viewSize=SizeMake(286,122);
+	Size viewSize=Size(286,122);
 	int heroCount=sizeof(gResultHeroList)/sizeof(char*);
 	int columnCount=5;
 	int rowCount=(heroCount+columnCount-1)/columnCount;
@@ -780,7 +780,7 @@ void GameOver::onChangeChar(Ref* sender){
 	float cellH=50;
 	float contentH=rowCount*cellH+8;
 	Layer* heroContainer=Layer::create();
-	heroContainer->setContentSize(SizeMake(viewSize.width,contentH));
+	heroContainer->setContentSize(Size(viewSize.width,contentH));
 	Menu* heroMenu=Menu::create(nullptr);
 	heroMenu->setPosition(Vec2::ZERO);
 	heroContainer->addChild(heroMenu,1);
