@@ -55,12 +55,12 @@ bool  CCStrokeLabel::init()
 			m_label->setPosition(Vec2(
 				textureSize.width * 0.5f + sin(r) * strokeSize,
 				textureSize.height * 0.5f + cos(r) * strokeSize));
-			cocos2d::cocos2dx2_compat::visitNode(m_label);
+			m_label->visit(Director::getInstance()->getRenderer(), Mat4::IDENTITY, 0);
 		}
 		m_label->setColor(m_StrokeColor);
 		m_label->setBlendFunc(originalBlend);
 		m_label->setPosition(Vec2(textureSize.width * 0.5f, textureSize.height * 0.5f));
-		cocos2d::cocos2dx2_compat::visitNode(m_label);
+		m_label->visit(Director::getInstance()->getRenderer(), Mat4::IDENTITY, 0);
 		rt->end();
 
 

@@ -1213,9 +1213,9 @@ void GameLayer::onPause(){
 	Ref* pObject= f->getChildren().at(0);
 	BGLayer* bg=(BGLayer*) pObject;
 	snapshoot->begin();
-	cocos2d::cocos2dx2_compat::visitNode(bg);
+	bg->visit(Director::getInstance()->getRenderer(), Mat4::IDENTITY, 0);
 
-	cocos2d::cocos2dx2_compat::visitNode(this);
+	this->visit(Director::getInstance()->getRenderer(), Mat4::IDENTITY, 0);
 	snapshoot->end();
 
 
@@ -1237,9 +1237,9 @@ void GameLayer::onGear(){
 		Ref* pObject= f->getChildren().at(0);
 		BGLayer* bg=(BGLayer*) pObject;
 		snapshoot->begin();
-		cocos2d::cocos2dx2_compat::visitNode(bg);
+		bg->visit(Director::getInstance()->getRenderer(), Mat4::IDENTITY, 0);
 
-		cocos2d::cocos2dx2_compat::visitNode(this);
+		this->visit(Director::getInstance()->getRenderer(), Mat4::IDENTITY, 0);
 		snapshoot->end();
 
 		Scene* pscene =Scene::create();
@@ -1267,8 +1267,8 @@ void GameLayer::onGameOver(bool isWin){
 		Ref* pObject= f->getChildren().at(0);
 		BGLayer* bg=(BGLayer*) pObject;
 		snapshoot->begin();
-		cocos2d::cocos2dx2_compat::visitNode(bg);
-		cocos2d::cocos2dx2_compat::visitNode(this);
+		bg->visit(Director::getInstance()->getRenderer(), Mat4::IDENTITY, 0);
+		this->visit(Director::getInstance()->getRenderer(), Mat4::IDENTITY, 0);
 		snapshoot->end();
 
 		Scene* pscene =Scene::create();

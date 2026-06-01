@@ -55,14 +55,6 @@ namespace cocos2dx2_compat
         return ::atoi(value.c_str());
     }
 
-    inline void visitNode(Node* node)
-    {
-        if (node)
-        {
-            node->visit(Director::getInstance()->getRenderer(), Mat4::IDENTITY, 0);
-        }
-    }
-
 }
 
 NS_CC_END
