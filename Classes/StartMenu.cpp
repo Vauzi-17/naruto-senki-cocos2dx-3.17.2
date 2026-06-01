@@ -2377,14 +2377,14 @@ void StartMenu::setProfile(){
 void  StartMenu::onProfileBtn(Ref* sender){
 
 	if(!group_layer && !profile_layer){
-		isPosting=true;
+		isPosting=false;
 		profile_layer=Layer::create();
 		Sprite* profile_bg=Sprite::createWithSpriteFrameName("profile_bg.png");
 		profile_bg->setPosition(Vec2(winSize.width/2,winSize.height/2));
 
 		profile_layer->addChild(profile_bg);
 
-		//�ر�
+		// offline close button
 		MenuItemSprite* close_btn=MenuItemSprite::create(Sprite::createWithSpriteFrameName("profile_closeBtn.png"),NULL,NULL,CC_CALLBACK_1(StartMenu::onIterfaceClose, this));
 		Menu* menu =Menu::create( close_btn,NULL);
 		menu->setPosition(Vec2(profile_bg->getPositionX()+profile_bg->getContentSize().width/2-15,profile_bg->getPositionY()+profile_bg->getContentSize().height/2-12));
@@ -2392,28 +2392,40 @@ void  StartMenu::onProfileBtn(Ref* sender){
 
 		this->addChild(profile_layer,500);
 
-
-
-		cocos2d::extension::CCHttpRequest* request = new CCHttpRequest();
-		std::string code2=CCString::createWithFormat("%d",MemberID)->getCString();
-		std::string code="code=20&id="+code2;
-		std::string url=SERVER"nsk/rank.php?"+code+"&pw="+PWord;
-		request->setUrl(url.c_str());
-		request->setRequestType(CCHttpRequest::kHttpGet);
-		request->setResponseCallback(this, callfuncND_selector(StartMenu::onProfileRequestCompleted));
-		request->setTag("Post_My_Data");
-		cocos2d::extension::CCHttpClient::getInstance()->send(request);
-		request->release();
-
-		//ˢ�°�ť
-		if(!refreshBtn){
-			refreshBtn=Sprite::createWithSpriteFrameName("refresh_btn.png");
-			refreshBtn->setPosition(Vec2(winSize.width/2,winSize.height/2));
-			ActionInterval* rt=RotateBy::create(0.3f,180,180);
-			refreshBtn->runAction(RepeatForever::create(rt));
-			this->addChild(refreshBtn,1000);
-
+		std::string profileName=UserDefault::getInstance()->getStringForKey("userName");
+		if(profileName.empty()){
+			profileName="Offline";
 		}
+
+		int point=std::atoi(CValue.c_str());
+		std::string pointText=CCString::createWithFormat("%d",point)->getCString();
+		std::string namePlate=UserDefault::getInstance()->getStringForKey("namePlateId");
+
+		Label* group_name=Label::createWithSystemFont("Offline",FONT_TYPE,12);
+		group_name->setPosition(Vec2(winSize.width/2+45,182));
+		profile_layer->addChild(group_name);
+
+		Label* user_name=Label::createWithSystemFont(profileName.c_str(),FONT_TYPE,12);
+		user_name->setPosition(Vec2(winSize.width/2+45,210));
+		profile_layer->addChild(user_name);
+
+		Label* user_battle=Label::createWithSystemFont("0",FONT_TYPE,10);
+		user_battle->setPosition(Vec2(winSize.width/2-35,150));
+		profile_layer->addChild(user_battle);
+
+		Label* user_point=Label::createWithSystemFont(pointText.c_str(),FONT_TYPE,10);
+		user_point->setPosition(Vec2(winSize.width/2+72,150));
+		profile_layer->addChild(user_point);
+
+		const char* path="shinobiCard_null.png";
+		if(!namePlate.empty()){
+			path=CCString::createWithFormat("%s.png",namePlate.c_str())->getCString();
+		}
+		MenuItem* np_btn=MenuItemSprite::create(Sprite::createWithSpriteFrameName(path),NULL,NULL,CC_CALLBACK_1(StartMenu::onNamePlate, this));
+		Menu* np_menu =Menu::create(np_btn,NULL);
+		np_btn->setAnchorPoint(Vec2(0.5f,0));
+		np_menu->setPosition(Vec2(winSize.width/2+16,100));
+		profile_layer->addChild(np_menu);
 	}
 
 
@@ -2422,115 +2434,13 @@ void  StartMenu::onProfileBtn(Ref* sender){
 
 
 void StartMenu::onProfileRequestCompleted(Node *sender ,void *data) {
-
 	isPosting=false;
-	//ˢ�°�ť
 	if(refreshBtn){
 		refreshBtn->stopAllActions();
 		refreshBtn->removeFromParent();
 		refreshBtn=NULL;
 	}
-
-	cocos2d::extension::CCHttpResponse *response = (cocos2d::extension::CCHttpResponse*)data;
-	if (!response)
-	{
-		return;
-	}
-	if (0 != strlen(response->getHttpRequest()->getTag()))
-	{
-		CCLOG("%s completed", response->getHttpRequest()->getTag());
-	}
-	int statusCode = response->getResponseCode();
-	char statusString[64] = {};
-	sprintf(statusString ,"Http status code:%d ,tag = %s" ,statusCode ,response->getHttpRequest()->getTag());
-	CCLOG("response code:%d" ,statusCode);
-	if (!response->isSucceed())
-	{
-		CCLOG("response failed");
-		CCLOG("error buffer:%s" ,response->getErrorBuffer());
-		CCTips *tip=CCTips::create("ServerError");
-		this->addChild(tip,5000);
-		return;
-	}
-	std::vector<char> *buffer = response->getResponseData();
-	printf("Http response,dump data:");
-
-
-	Document doc;
-	std::string buf(buffer->begin(),buffer->end());
-	const char* json=(char*) buf.c_str();
-	doc.Parse<kParseDefaultFlags>(json);
-	rapidjson::Value &arr=doc;
-
-	if(arr.IsArray()){
-		for (SizeType i = 0; i < arr.Size(); i++)  {
-
-			rapidjson::Value & node=arr[i];
-
-
-			rapidjson::Value & nameValue= node["name"];
-			std::string nameString=nameValue.GetString();
-
-			rapidjson::Value & battleValue= node["battle_point"];
-			std::string battleString=battleValue.GetString();
-			int battlePoint=atof(battleString.c_str())*100;
-
-			rapidjson::Value & pointValue= node["point"];
-			std::string pointString=pointValue.GetString();
-			int point=std::atoi(pointString.c_str());
-			CValue=CCString::createWithFormat("%d",point)->getCString();
-
-
-			rapidjson::Value & npValue= node["np_id"];
-			std::string npString=npValue.GetString();
-
-
-			rapidjson::Value & groupnameValue= node["group_name"];
-			if(!groupnameValue.IsNull()){
-				std::string groupName=groupnameValue.GetString();
-				Label* group_name=Label::createWithSystemFont(groupName.c_str(),FONT_TYPE,12);
-				group_name->setPosition(Vec2(winSize.width/2+45,182));
-				profile_layer->addChild(group_name);
-			}
-
-
-			Label* user_name=Label::createWithSystemFont(nameString.c_str(),FONT_TYPE,12);
-			user_name->setPosition(Vec2(winSize.width/2+45,210));
-			profile_layer->addChild(user_name);
-
-
-
-
-			Label* user_battle=Label::createWithSystemFont(CCString::createWithFormat("%d", battlePoint)->getCString(),FONT_TYPE,10);
-			user_battle->setPosition(Vec2(winSize.width/2-35,150));
-			//user_battle->enableStroke(Color3B(0,0,0),1);
-			profile_layer->addChild(user_battle);
-
-			Label* user_point=Label::createWithSystemFont(CCString::createWithFormat("%d", point)->getCString(),FONT_TYPE,10);
-			user_point->setPosition(Vec2(winSize.width/2+72,150));
-			//user_point->enableStroke(Color3B(0,0,0),1);
-			profile_layer->addChild(user_point);
-			const char* path;
-
-			if(strcmp(npString.c_str(),"")==0){
-				path="shinobiCard_null.png";
-			}else{
-				path=CCString::createWithFormat("%s.png",npString.c_str())->getCString();
-			}
-			MenuItem* np_btn=MenuItemSprite::create(Sprite::createWithSpriteFrameName(path),NULL,NULL,CC_CALLBACK_1(StartMenu::onNamePlate, this));
-			Menu* menu =Menu::create(np_btn,NULL);
-			np_btn->setAnchorPoint(Vec2(0.5f,0));
-			menu->setPosition(Vec2(winSize.width/2+16,100));
-			profile_layer->addChild(menu);
-
-
-		}
-
-
-	}
-
 }
-
 void  StartMenu::onNamePlate(Ref* sender){
 	if(std::atoi(CValue.c_str())<2*1200+600){
 		CCTips *tip=CCTips::create("CPError2");
@@ -2808,36 +2718,23 @@ void  StartMenu::onNamePlateComfrim(Ref* sender){
 	MenuItem* item=(MenuItem*) sender;
 	KTools* tool=KTools::create();
 	CCString* cl=tool->readFromSQLite();
-	std::string tempCost2="EFDDD";
+	std::string tempCost2="EFDDD\x14";
 	tool->decode(tempCost2);
 
 	int tempCoin =cl->intValue()-std::atoi(tempCost2.c_str());
 	if(tempCoin>=0){
+		std::string namePlate=CCString::createWithFormat("np%d",item->getTag())->getCString();
+		UserDefault::getInstance()->setStringForKey("namePlateId",namePlate);
+		UserDefault::getInstance()->flush();
 
-	isPosting=true;
-	cocos2d::extension::CCHttpRequest* request = new CCHttpRequest();
-	std::string code2=CCString::createWithFormat("&np_id=np%d",item->getTag())->getCString();
-	std::string code3=CCString::createWithFormat("id=%d",MemberID)->getCString();
-	std::string code="code=50&"+code3+code2;
-	std::string url=SERVER"nsk/rank.php?"+code+"&pw="+PWord;
-	request->setUrl(url.c_str());
-	request->setRequestType(CCHttpRequest::kHttpGet);
-	request->setResponseCallback(this, callfuncND_selector(StartMenu::onNamePlateRequestCompleted));
-	request->setTag("Post_My_Data");
-	cocos2d::extension::CCHttpClient::getInstance()->send(request);
-	request->release();
+		CCString* coin= CCString::createWithFormat("%d",tempCoin);
+		tool->saveToSQLite("GameRecord","coin",coin->getCString(),true);
 
-	if(!refreshBtn){
-		refreshBtn=Sprite::createWithSpriteFrameName("refresh_btn.png");
-		refreshBtn->setPosition(Vec2(winSize.width/2,winSize.height/2));
-		ActionInterval* rt=RotateBy::create(0.3f,180,180);
-		refreshBtn->runAction(RepeatForever::create(rt));
-		this->addChild(refreshBtn,1000);
+		CCTips *tip=CCTips::create("ManagementSuccessed");
+		this->addChild(tip,5000);
 
-	}
-
-
-
+		this->onIterfaceClose(NULL);
+		this->onInputBoxClose(NULL);
 	}else{
 		CCTips *tip=CCTips::create("CoinError2");
 		this->addChild(tip,5000);
@@ -2851,65 +2748,12 @@ void  StartMenu::onNamePlateComfrim(Ref* sender){
 
 void StartMenu::onNamePlateRequestCompleted(Node *sender ,void *data) {
 	isPosting=false;
-	//ˢ�°�ť
 	if(refreshBtn){
 		refreshBtn->stopAllActions();
 		refreshBtn->removeFromParent();
 		refreshBtn=NULL;
 	}
-
-	cocos2d::extension::CCHttpResponse *response = (cocos2d::extension::CCHttpResponse*)data;
-	if (!response)
-	{
-		return;
-	}
-	if (0 != strlen(response->getHttpRequest()->getTag()))
-	{
-		CCLOG("%s completed", response->getHttpRequest()->getTag());
-	}
-	int statusCode = response->getResponseCode();
-	char statusString[64] = {};
-	sprintf(statusString ,"Http status code:%d ,tag = %s" ,statusCode ,response->getHttpRequest()->getTag());
-	CCLOG("response code:%d" ,statusCode);
-	if (!response->isSucceed())
-	{
-		CCLOG("response failed");
-		CCLOG("error buffer:%s" ,response->getErrorBuffer());
-		CCTips *tip=CCTips::create("ServerError");
-		this->addChild(tip,5000);
-		return;
-	}
-	std::vector<char> *buffer = response->getResponseData();
-	printf("Http response,dump data:");
-
-
-	Document doc;
-	std::string buf(buffer->begin(),buffer->end());
-	const char* result=(char*) buf.c_str();
-
-	if(strcmp(result,"UpdateNamePlate")==0){
-		CCTips *tip=CCTips::create("ManagementSuccessed");
-		this->addChild(tip,5000);
-
-		KTools* tool=KTools::create();
-		CCString* cl=tool->readFromSQLite();
-		std::string tempCost2="EFDDD";
-		tool->decode(tempCost2);
-		unsigned int tempCoin =cl->intValue()-std::atoi(tempCost2.c_str());
-
-		CCString* coin= CCString::createWithFormat("%d",tempCoin);
-		tool->saveToSQLite("GameRecord","coin",coin->getCString(),true);
-
-		this->onIterfaceClose(NULL);
-		this->onInputBoxClose(NULL);
-
-	}else{
-		CCTips *tip=CCTips::create("ManagementFailed");
-		this->addChild(tip,5000);
-	}
-
 }
-
 
 
 void  StartMenu::onTasksBtn(Ref* sender){

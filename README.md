@@ -216,6 +216,9 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
   lanjut ke `onLoadFinish` karena pengisian `DLCArray` aktif sudah tidak ada.
 - `StartMenu`: notice offline dibuat sepenuhnya lokal. Request/comment notice
   lama dibersihkan, dan konfirmasi notice hanya memperbarui label lokal.
+- `StartMenu`: profile/nameplate dibuat lokal/offline. Pembukaan profil tidak
+  lagi menunggu request ranking, callback lama distub, dan pilihan nameplate
+  disimpan di `UserDefault` sambil tetap memakai biaya coin lokal lama.
 
 1. **Tutup helper compat kecil yang masih lokal**
    - Target file: `Cocos2dx2Compat.h`, `ActionButton`, `HPBar`, `HudLayer`,
