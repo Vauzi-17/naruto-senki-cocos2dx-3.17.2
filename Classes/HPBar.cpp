@@ -255,7 +255,7 @@ void HPBar::loseHP(float percent){
 
 
 			//同队分享
-			CCObject* pObject;
+			Ref* pObject;
 			for(unsigned int characterIndex=0; characterIndex<_delegate->getDelegate()->_CharacterArray->count(); ++characterIndex){
 				pObject=_delegate->getDelegate()->_CharacterArray->objectAtIndex(characterIndex);
 				Hero* otherSlayer=(Hero*) pObject;
@@ -544,7 +544,7 @@ void HPBar::loseHP(float percent){
 				}
 
 				//同队分享
-				CCObject* pObject;
+				Ref* pObject;
 				for(unsigned int characterIndex=0; characterIndex<_delegate->getDelegate()->_CharacterArray->count(); ++characterIndex){
 				pObject=_delegate->getDelegate()->_CharacterArray->objectAtIndex(characterIndex);
 					Hero* otherSlayer=(Hero*) pObject;
