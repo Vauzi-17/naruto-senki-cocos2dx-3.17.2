@@ -178,7 +178,8 @@ void Hero::AI_DuelBasic(){
 	}else{
 		CCObject* pObject;
 		float bestDistance=0;
-		CCARRAY_FOREACH(_delegate->_CharacterArray,pObject){
+		for(unsigned int characterIndex=0; characterIndex<_delegate->_CharacterArray->count(); ++characterIndex){
+						pObject=_delegate->_CharacterArray->objectAtIndex(characterIndex);
 			NarutoSenki::ActionManager* hero=(NarutoSenki::ActionManager*)pObject;
 			if(!hero || hero==this){
 				continue;
@@ -312,7 +313,8 @@ void Hero::AI_DevaPath(){
 
 					if(getMonsterArray() && getMonsterArray()->count()>0){
 						CCObject* pObject;
-						CCARRAY_FOREACH(getMonsterArray(),pObject){
+						for(unsigned int monsterIndex=0; monsterIndex<getMonsterArray()->count(); ++monsterIndex){
+						pObject=getMonsterArray()->objectAtIndex(monsterIndex);
 							Monster* mo=(Monster*) pObject;
 							if (strcmp(mo->getCharacter()->getCString(),"AnimalPath")==0){
 								isHaveKuilei1=true;
@@ -3385,7 +3387,8 @@ void Hero::AI_Guardian(){
 			bool isTurn=false;
 
 			CCObject* pObject;
-			CCARRAY_FOREACH(_delegate->_TowerArray,pObject){
+			for(unsigned int towerIndex=0; towerIndex<_delegate->_TowerArray->count(); ++towerIndex){
+				pObject=_delegate->_TowerArray->objectAtIndex(towerIndex);
 				NarutoSenki::ActionManager* target=(NarutoSenki::ActionManager*) pObject;
 				const char* gardTower;
 				if(this->getDelegate()->zhenying>0){
@@ -5034,7 +5037,8 @@ void Hero::AI_Kankuro(){
 
 	if(getMonsterArray() && getMonsterArray()->count()>0){
 		CCObject* pObject;
-		CCARRAY_FOREACH(getMonsterArray(),pObject){
+		for(unsigned int monsterIndex=0; monsterIndex<getMonsterArray()->count(); ++monsterIndex){
+						pObject=getMonsterArray()->objectAtIndex(monsterIndex);
 			Monster* mo=(Monster*) pObject;
 			if (strcmp(mo->getCharacter()->getCString(),"Saso")==0){
 				isFound3=true;
@@ -5224,7 +5228,8 @@ void Hero::AI_Chiyo(){
 
 	if(getMonsterArray() && getMonsterArray()->count()>0){
 		CCObject* pObject;
-		CCARRAY_FOREACH(getMonsterArray(),pObject){
+		for(unsigned int monsterIndex=0; monsterIndex<getMonsterArray()->count(); ++monsterIndex){
+						pObject=getMonsterArray()->objectAtIndex(monsterIndex);
 			Monster* mo=(Monster*) pObject;
 			if (strcmp(mo->getCharacter()->getCString(),"Parents")==0){
 				isFound1=true;
@@ -5247,7 +5252,8 @@ void Hero::AI_Chiyo(){
 				
 				CCObject* pObject;
 				int countNum=0;
-				CCARRAY_FOREACH(_delegate->_CharacterArray,pObject){
+				for(unsigned int characterIndex=0; characterIndex<_delegate->_CharacterArray->count(); ++characterIndex){
+						pObject=_delegate->_CharacterArray->objectAtIndex(characterIndex);
 					Hero* tempHero=(Hero*) pObject;
 					if(strcmp(this->getGroup()->getCString(),tempHero->getGroup()->getCString())==0
 						&& (strcmp(tempHero->getRole()->getCString(),"Player")==0 || strcmp(tempHero->getRole()->getCString(),"Com")==0)
@@ -5375,7 +5381,8 @@ void Hero::AI_Kakuzu(){
 			float curDistance=NULL ;
 			Vec2 sp;
 	
-			CCARRAY_FOREACH(this->getDelegate()->_CharacterArray,pObject){
+			for(unsigned int characterIndex=0; characterIndex<this->getDelegate()->_CharacterArray->count(); ++characterIndex){
+				pObject=this->getDelegate()->_CharacterArray->objectAtIndex(characterIndex);
 				NarutoSenki::ActionManager* target=(NarutoSenki::ActionManager*) pObject;
 				if((strcmp(target->getRole()->getCString(),"Player")==0 ||
 					strcmp(target->getRole()->getCString(),"Com")==0) &&
@@ -7324,7 +7331,8 @@ void Hero::AI_Hidan(){
 	bool _isFound=false;
 	if(getMonsterArray() && getMonsterArray()->count()>0){
 		CCObject* pObject;
-		CCARRAY_FOREACH(getMonsterArray(),pObject){
+		for(unsigned int monsterIndex=0; monsterIndex<getMonsterArray()->count(); ++monsterIndex){
+						pObject=getMonsterArray()->objectAtIndex(monsterIndex);
 			Monster* mo=(Monster*) pObject;
 			if (strcmp(mo->getCharacter()->getCString(),"CircleMark")==0){
 				_mainTarget=mo;
@@ -7345,7 +7353,8 @@ void Hero::AI_Hidan(){
 					if(_isBati){
 
 						CCObject* pObject;
-						CCARRAY_FOREACH(_delegate->_CharacterArray,pObject){
+						for(unsigned int characterIndex=0; characterIndex<_delegate->_CharacterArray->count(); ++characterIndex){
+						pObject=_delegate->_CharacterArray->objectAtIndex(characterIndex);
 							NarutoSenki::ActionManager* tempHero=(NarutoSenki::ActionManager*) pObject;
 							if( strcmp(tempHero->getGroup()->getCString(),this->getGroup()->getCString())!=0
 								&& std::atoi(tempHero->getHP()->getCString())<2000
@@ -8419,7 +8428,8 @@ void Hero::AI_Minato(){
 			CCObject* pObject;
 			bool isMark=false;
 			if(this->getMonsterArray() && this->getMonsterArray()->count()>0){
-				CCARRAY_FOREACH(this->getMonsterArray(),pObject){
+				for(unsigned int monsterIndex=0; monsterIndex<this->getMonsterArray()->count(); ++monsterIndex){
+					pObject=this->getMonsterArray()->objectAtIndex(monsterIndex);
 					Monster* mo=(Monster*) pObject;
 					if(strcmp(mo->getCharacter()->getCString(),"HiraishinMark")==0){
 						if(strcmp(this->getGroup()->getCString(),"Konoha")==0 && mo->getPositionX()<this->getPositionX()){
@@ -8491,7 +8501,8 @@ void Hero::AI_Minato(){
 			CCObject* pObject;
 			bool isMark=false;
 			if(this->getMonsterArray() && this->getMonsterArray()->count()>0){
-				CCARRAY_FOREACH(this->getMonsterArray(),pObject){
+				for(unsigned int monsterIndex=0; monsterIndex<this->getMonsterArray()->count(); ++monsterIndex){
+					pObject=this->getMonsterArray()->objectAtIndex(monsterIndex);
 					Monster* mo=(Monster*) pObject;
 					if(strcmp(mo->getCharacter()->getCString(),"HiraishinMark")==0){
 						isMark=true;
@@ -8625,7 +8636,8 @@ void Hero::AI_Minato(){
 			CCObject* pObject;
 			bool isMark=false;
 			if(this->getMonsterArray() && this->getMonsterArray()->count()>0){
-				CCARRAY_FOREACH(this->getMonsterArray(),pObject){
+				for(unsigned int monsterIndex=0; monsterIndex<this->getMonsterArray()->count(); ++monsterIndex){
+					pObject=this->getMonsterArray()->objectAtIndex(monsterIndex);
 					Monster* mo=(Monster*) pObject;
 					if(strcmp(mo->getCharacter()->getCString(),"HiraishinMark")==0){
 						

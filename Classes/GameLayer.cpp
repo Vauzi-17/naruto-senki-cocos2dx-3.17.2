@@ -399,7 +399,8 @@ void GameLayer::initHeros(){
 		int konohaSpawnIndex=0;
 		int akatsukiSpawnIndex=0;
 
-		CCARRAY_FOREACH(Heros,pObject){
+		for(unsigned int heroIndex=0; heroIndex<Heros->count(); ++heroIndex){
+			pObject=Heros->objectAtIndex(heroIndex);
 
 			CCDictionary* tempdict=(CCDictionary *) pObject;
 
@@ -480,7 +481,8 @@ void GameLayer::initHeros(){
 		const float centerSpawnY=108.0f;
 		const float centerSpawnOffsetX=160.0f;
 
-		CCARRAY_FOREACH(Heros,pObject){
+		for(unsigned int heroIndex=0; heroIndex<Heros->count(); ++heroIndex){
+			pObject=Heros->objectAtIndex(heroIndex);
 
 			CCDictionary* tempdict=(CCDictionary *) pObject;
 
@@ -622,7 +624,8 @@ void GameLayer::onGameStart(float dt){
 	}
 
 	Ref* pObject;
-	CCARRAY_FOREACH(this->_CharacterArray,pObject){
+	for(unsigned int characterIndex=0; characterIndex<this->_CharacterArray->count(); ++characterIndex){
+		pObject=this->_CharacterArray->objectAtIndex(characterIndex);
 		NarutoSenki::ActionManager* tempChar=(NarutoSenki::ActionManager*) pObject;
 		if(strcmp(tempChar->getRole()->getCString(),"Com")==0 && !_isTrainingMode){
 			tempChar->doAI();
@@ -980,7 +983,8 @@ void GameLayer::applyDuelTrainStartSetup(){
 	}
 
 	Ref* pObject=NULL;
-	CCARRAY_FOREACH(_CharacterArray,pObject){
+	for(unsigned int characterIndex=0; characterIndex<_CharacterArray->count(); ++characterIndex){
+	pObject=_CharacterArray->objectAtIndex(characterIndex);
 		Hero* hero=(Hero*)pObject;
 		if(!hero){
 			continue;
@@ -1001,7 +1005,8 @@ void GameLayer::applyDuelTrainStartSetup(){
 	}
 
 	if(_isDuelMode && _hudLayer && currentPlayer){
-		CCARRAY_FOREACH(_CharacterArray,pObject){
+		for(unsigned int characterIndex=0; characterIndex<_CharacterArray->count(); ++characterIndex){
+	pObject=_CharacterArray->objectAtIndex(characterIndex);
 			NarutoSenki::ActionManager* hero=(NarutoSenki::ActionManager*)pObject;
 			if(strcmp(hero->getGroup()->getCString(),currentPlayer->getGroup()->getCString())!=0 &&
 				(strcmp(hero->getRole()->getCString(),"Player")==0 || strcmp(hero->getRole()->getCString(),"Com")==0)){
@@ -1043,7 +1048,8 @@ void GameLayer::refreshOugisSkillLocks(){
 
 	unsigned int maxLevel=1;
 	Ref* pObject=NULL;
-	CCARRAY_FOREACH(_CharacterArray,pObject){
+	for(unsigned int characterIndex=0; characterIndex<_CharacterArray->count(); ++characterIndex){
+	pObject=_CharacterArray->objectAtIndex(characterIndex);
 		NarutoSenki::ActionManager* hero=(NarutoSenki::ActionManager*)pObject;
 		if(strcmp(hero->getRole()->getCString(),"Player")==0 ||
 			strcmp(hero->getRole()->getCString(),"Com")==0){
@@ -1073,7 +1079,8 @@ void GameLayer::checkTower(){
 	int akatsukiTowerCount=0;
 	Ref* pObject;
 
-	CCARRAY_FOREACH(_TowerArray,pObject){
+	for(unsigned int towerIndex=0; towerIndex<_TowerArray->count(); ++towerIndex){
+	pObject=_TowerArray->objectAtIndex(towerIndex);
 		Tower* tower=(Tower*) pObject;
 		if(strcmp(tower->getGroup()->getCString(),"Konoha")==0){
 			konohaTowerCount++;
@@ -1105,7 +1112,8 @@ void GameLayer::checkTower(){
 
 
 	//֪ͨս������
-	CCARRAY_FOREACH(_CharacterArray,pObject){
+	for(unsigned int characterIndex=0; characterIndex<_CharacterArray->count(); ++characterIndex){
+	pObject=_CharacterArray->objectAtIndex(characterIndex);
 		NarutoSenki::ActionManager* tmpHero=(NarutoSenki::ActionManager*) pObject;
 
 		if(strcmp(tmpHero->getRole()->getCString(),"Com")!=0){
@@ -1329,7 +1337,8 @@ void GameLayer::onLeft(){
 	}else if(_isRematching && _CharacterArray){
 		rematchHeros=CCArray::create();
 		Ref* heroObject;
-		CCARRAY_FOREACH(_CharacterArray,heroObject){
+		for(unsigned int heroIndex=0; heroIndex<_CharacterArray->count(); ++heroIndex){
+			heroObject=_CharacterArray->objectAtIndex(heroIndex);
 			NarutoSenki::ActionManager* hero=(NarutoSenki::ActionManager*)heroObject;
 			if(strcmp(hero->getRole()->getCString(),"Player")!=0 && strcmp(hero->getRole()->getCString(),"Com")!=0){
 				continue;
@@ -1347,7 +1356,8 @@ void GameLayer::onLeft(){
 
 	const char* path;
 	Ref* pObject;
-	CCARRAY_FOREACH(_CharacterArray,pObject){
+	for(unsigned int characterIndex=0; characterIndex<_CharacterArray->count(); ++characterIndex){
+	pObject=_CharacterArray->objectAtIndex(characterIndex);
 		NarutoSenki::ActionManager* player=(NarutoSenki::ActionManager*) pObject;
 
 		if(strcmp(player->getRole()->getCString(),"Clone")==0 ||
