@@ -322,6 +322,9 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
   `createAnimation(...)` diganti ke iterasi `HASH_ITER` langsung atas
   `DictElement`, sehingga source aktif tidak lagi memakai macro dictionary
   lama tanpa mengubah isi `CCDictionary` parser XML.
+- `ActionManager`: alias sprite lifecycle kecil dibersihkan dari
+  `CCSprite::onEnter`, `CCSprite::onExit`, dan pembuatan heart-effect
+  lokal ke `Sprite` 3.x langsung.
 
 1. **Tutup helper compat kecil yang masih lokal**
    - Target file: `Cocos2dx2Compat.h`, `ActionButton`, `HPBar`, `HudLayer`,
@@ -722,6 +725,8 @@ Catatan progress terbaru:
   sudah diganti ke `HASH_ITER` langsung atas `DictElement`. Ini hanya menutup
   macro iterator dictionary lama; bentuk `CCDictionary` dari parser XML tetap
   dipertahankan untuk potongan berikutnya.
+- Alias sprite lifecycle kecil di `ActionManager` juga dibersihkan:
+  `onEnter`, `onExit`, dan heart-effect lokal memakai `Sprite` 3.x langsung.
 - `ActionManager` juga mulai melepas alias geometry lama: `CCPoint`,
   `CCPointMake`, `CCRect`, dan `CCRectMake` aktif sudah tidak muncul lagi di
   file tersebut. Cleanup helper `ccp*` masih dipisahkan agar perubahan tetap

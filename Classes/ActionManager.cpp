@@ -300,12 +300,12 @@ void NarutoSenki::ActionManager::readDate(CCArray* tmpDate,CCString* &attackType
 };
 
 void NarutoSenki::ActionManager::onEnter(){
-	CCSprite::onEnter();
+	Sprite::onEnter();
 	
 }
 
 void NarutoSenki::ActionManager::onExit(){
-	CCSprite::onExit();
+	Sprite::onExit();
 	
 };
 
@@ -4295,7 +4295,7 @@ void NarutoSenki::ActionManager::changeAction(){
 		strcmp(this->_character->getCString(),"RockLee")==0
 		){
 		if(bamen==0 && !this->_heartEffect){
-			_heartEffect=CCSprite::createWithSpriteFrameName("Bamen_Effect_00.png");
+			_heartEffect=Sprite::createWithSpriteFrameName("Bamen_Effect_00.png");
 			_heartEffect->setPosition(Vec2(this->getContentSize().width+40,60));
 			this->addChild(_heartEffect);
 		}
