@@ -22,7 +22,7 @@ masih memakai API 2.x seperti `CCLayer`, `CCSprite`, `CCMenu`, `CCPoint`,
 
 ## Estimasi Progress Migrasi
 
-Estimasi progress menuju kode full cocos2d-x 3.17.2: **sekitar 96%**.
+Estimasi progress menuju kode full cocos2d-x 3.17.2: **sekitar 96-97%**.
 
 Alasan estimasi:
 
@@ -328,6 +328,9 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
 - `ActionManager` dan `Element`: alias label bitmap lokal `CCLabelBMFont`
   diganti ke `LabelBMFont` 3.x langsung untuk damage/reward display dan
   timer reborn.
+- `ActionManager`: beberapa `CCObject*` lokal di helper animation/sequence,
+  parser action, dan damage display diganti ke `Ref*` tanpa mengubah
+  container `CCArray` lama.
 
 1. **Tutup helper compat kecil yang masih lokal**
    - Target file: `Cocos2dx2Compat.h`, `ActionButton`, `HPBar`, `HudLayer`,
@@ -732,6 +735,9 @@ Catatan progress terbaru:
   `onEnter`, `onExit`, dan heart-effect lokal memakai `Sprite` 3.x langsung.
 - Label bitmap lokal di `ActionManager`/`Element` ikut dilepas dari
   `CCLabelBMFont` ke `LabelBMFont` untuk damage/reward display dan reborn timer.
+- `Ref*` lokal mulai dipakai di helper animation/sequence dan damage display
+  `ActionManager`, menggantikan `CCObject*` yang tidak perlu menjadi kontrak
+  public.
 - `ActionManager` juga mulai melepas alias geometry lama: `CCPoint`,
   `CCPointMake`, `CCRect`, dan `CCRectMake` aktif sudah tidak muncul lagi di
   file tersebut. Cleanup helper `ccp*` masih dipisahkan agar perubahan tetap

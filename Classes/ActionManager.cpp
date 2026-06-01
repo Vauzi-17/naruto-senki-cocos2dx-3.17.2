@@ -23,7 +23,7 @@ namespace
 	Animation* createAnimationFromFrameArray(CCArray* frames, float delay)
 	{
 		Vector<SpriteFrame*> frameVector;
-		CCObject* object = NULL;
+		Ref* object = NULL;
 		for (unsigned int ccIndex = 0; frames && ccIndex < frames->count(); ++ccIndex)
 		{
 			object = frames->objectAtIndex(ccIndex);
@@ -44,7 +44,7 @@ namespace
 		}
 
 		Vector<FiniteTimeAction*> actionVector;
-		CCObject* object = NULL;
+		Ref* object = NULL;
 		for (unsigned int ccIndex = 0; actions && ccIndex < actions->count(); ++ccIndex)
 		{
 			object = actions->objectAtIndex(ccIndex);
@@ -1170,7 +1170,7 @@ void NarutoSenki::ActionManager::acceptAttack(CCObject* object){
 Action* NarutoSenki::ActionManager::createAnimation(CCArray* ationArray,float fps,bool isRepeat,bool isReturn){
 
 
-	CCObject* tObject;
+	Ref* tObject;
 	CCArray* animeFrames=CCArray::create();
 	CCArray* seqArray=CCArray::create();
 	Animation* tempAnimation;
@@ -1884,7 +1884,7 @@ void NarutoSenki::ActionManager::setDamgeDisplay(unsigned int value,const char* 
 
 void NarutoSenki::ActionManager::removeDamageDisplay(){
 	if(_damageArray && _damageArray->count()>0){
-		CCObject* pObject=_damageArray->objectAtIndex(0);
+		Ref* pObject=_damageArray->objectAtIndex(0);
 		LabelBMFont* damageFont=(LabelBMFont*)pObject;
 		damageFont->removeFromParent();
 		_damageArray->removeObjectAtIndex(0);
