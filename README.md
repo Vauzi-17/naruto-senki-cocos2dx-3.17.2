@@ -22,7 +22,7 @@ masih memakai API 2.x seperti `CCLayer`, `CCSprite`, `CCMenu`, `CCPoint`,
 
 ## Estimasi Progress Migrasi
 
-Estimasi progress menuju kode full cocos2d-x 3.17.2: **sekitar 77%**.
+Estimasi progress menuju kode full cocos2d-x 3.17.2: **sekitar 78%**.
 
 Alasan estimasi:
 
@@ -65,6 +65,9 @@ Alasan estimasi:
 - Callback action tanpa payload di `ActionManager` mulai memakai `CallFunc`
   dan lambda/`CC_CALLBACK_0`, sehingga sisa `callfunc_selector` dan
   `callfuncN_selector` aktif hilang dari file tersebut.
+- Alias posisi/hitbox lokal di `ActionManager` mulai dibersihkan: pemakaian
+  `CCPoint`, `CCPointMake`, `CCRect`, dan `CCRectMake` aktif diganti ke
+  `Vec2` dan `Rect`.
 - Audio klik halaman di `NetworkLayer` sudah memakai
   `SimpleAudioEngine::getInstance()` tanpa mengubah flow pemilihan hero.
 - Masih ada sisa API 2.x yang cukup banyak di `ActionManager`, `Element`,
@@ -257,6 +260,10 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
   `setCharFlip`, shadow helper, damage display, dan coin display memakai
   `CallFunc` 3.x. Callback `CCCallFuncND` yang membawa payload XML/void pointer
   sengaja belum dipindah.
+- `ActionManager`: alias `CCPoint`/`CCRect` lokal dibersihkan ke `Vec2`/`Rect`
+  untuk hitbox, posisi, direction, dan helper pencarian target. Helper
+  `ccp(...)`, `ccpSub`, `ccpNormalize`, dan `ccpDistance` masih ditahan untuk
+  potongan berikutnya karena jumlah pemakai aktifnya lebih besar.
 
 1. **Tutup helper compat kecil yang masih lokal**
    - Target file: `Cocos2dx2Compat.h`, `ActionButton`, `HPBar`, `HudLayer`,
@@ -651,6 +658,10 @@ Catatan progress terbaru:
   `callfuncN_selector` sudah tidak muncul lagi di `ActionManager.cpp`.
   Yang tersisa adalah `CCCallFuncND`/`callfuncND_selector` untuk payload lama
   dari parser action XML.
+- `ActionManager` juga mulai melepas alias geometry lama: `CCPoint`,
+  `CCPointMake`, `CCRect`, dan `CCRectMake` aktif sudah tidak muncul lagi di
+  file tersebut. Cleanup helper `ccp*` masih dipisahkan agar perubahan tetap
+  mudah dilacak bila build Android nanti memberi error.
 - `NetworkLayer` tidak lagi memakai `SimpleAudioEngine::sharedEngine()` untuk
   klik tab selector; pemanggilan audio lokal memakai singleton 3.x.
 - Audit menunjukkan `Cocos2dx2Compat.h` masih dipaksa lewat CMake dan project

@@ -394,7 +394,7 @@ void NarutoSenki::ActionManager::update(float dt){
 						int metaHeight=128;
 						int metaX=tower->getPositionX()-metaWidth/2;
 						int metaY=tower->getPositionY()-metaHeight/2;
-						CCRect rect=CCRectMake(metaX,metaY+32,metaWidth,metaHeight-64);
+						Rect rect=Rect(metaX,metaY+32,metaWidth,metaHeight-64);
 
 						if (rect.containsPoint(_desiredPosition)){
 							float anchorYpoint=metaY+metaHeight/2;
@@ -918,7 +918,7 @@ void NarutoSenki::ActionManager::acceptAttack(CCObject* object){
 													
 													if(pianyi){
 														Attacker->_isCatchOne=true;
-														this->setPosition(CCPointMake(Attacker->getPositionX()
+														this->setPosition(Vec2(Attacker->getPositionX()
 															,Attacker->getPositionY()+1));
 														_delegate->reorderChild(this,-this->getPositionY());
 
@@ -939,7 +939,7 @@ void NarutoSenki::ActionManager::acceptAttack(CCObject* object){
 														}
 														if(pianyi){
 															Attacker->_isCatchOne=true;
-															this->setPosition(CCPointMake(Attacker->getPositionX()+2
+															this->setPosition(Vec2(Attacker->getPositionX()+2
 																,Attacker->getPositionY()-2));
 															_delegate->reorderChild(this,-this->getPositionY());
 
@@ -969,7 +969,7 @@ void NarutoSenki::ActionManager::acceptAttack(CCObject* object){
 
 													if(pianyi){
 														Attacker->_isCatchOne=true;
-														this->setPosition(CCPointMake(Attacker->getPositionX()+(Attacker->_isFlipped?-28:28)
+														this->setPosition(Vec2(Attacker->getPositionX()+(Attacker->_isFlipped?-28:28)
 															,Attacker->getPositionY()-1));
 														this->setFlipX(Attacker->_isFlipped?false:true);
 														_delegate->reorderChild(this,-this->getPositionY());
@@ -1409,7 +1409,7 @@ void NarutoSenki::ActionManager::setOugis(){
 }
 
 Rect NarutoSenki::ActionManager::setHalfBox(){
-	CCRect halfbox =CCRectMake(_isFlipped?this->getPositionX()- this->getContentSize().width/2:this->getPositionX(),
+	Rect halfbox =Rect(_isFlipped?this->getPositionX()- this->getContentSize().width/2:this->getPositionX(),
 		this->getPositionY()+this->getContentSize().height/2,
 		this->getContentSize().width/2,
 		this->getContentSize().height/2);
@@ -1417,7 +1417,7 @@ Rect NarutoSenki::ActionManager::setHalfBox(){
 };
 
 Rect NarutoSenki::ActionManager::setHitBox(){
-	CCRect hitbox=this->boundingBox();
+	Rect hitbox=this->boundingBox();
 	return hitbox;
 };
 
@@ -1496,7 +1496,7 @@ void NarutoSenki::ActionManager::setDamage(CCString* effectType,unsigned int att
 					CCARRAY_FOREACH(this->getMonsterArray(),pObject){
 						Monster* mo=(Monster*) pObject;
 						if(strcmp(mo->getCharacter()->getCString(),"Parents")==0 && !mo->_skillChangeBuffValue && mo->getActionState()!=ACTION_STATE_SATTACK){
-							CCPoint	sp=ccpSub(mo->getPosition(),this->getPosition());
+							Vec2	sp=ccpSub(mo->getPosition(),this->getPosition());
 							if(sp.x<=48){
 								jianshang+=0.25;
 							}
@@ -2827,7 +2827,7 @@ void NarutoSenki::ActionManager::setCommand(Node* sender,void* date){
 				&& strcmp(tempHero->_character->getCString(),"Kakuzu")!=0 
 				){
 				
-					CCPoint sp=ccpSub(tempHero->getPosition(),this->getPosition());
+					Vec2 sp=ccpSub(tempHero->getPosition(),this->getPosition());
 					if(abs(sp.x)<=48 && abs(sp.y)<=48){
 						tempHero->hearts-=1;
 						if(strcmp(this->_group->getCString(),tempHero->_group->getCString())!=0){
@@ -3340,7 +3340,7 @@ void NarutoSenki::ActionManager::healBuff(float dt){
 				&& (strcmp(tempHero->_role->getCString(),"Player")==0 || strcmp(tempHero->_role->getCString(),"Com")==0)
 				&& strcmp(tempHero->_character->getCString(),"Chiyo")!=0
 				){
-					CCPoint	sp=ccpSub(tempHero->getPosition(),this->getPosition());
+					Vec2	sp=ccpSub(tempHero->getPosition(),this->getPosition());
 					if(abs(sp.x)<=winSize.width/2){
 
 
@@ -5624,10 +5624,10 @@ void NarutoSenki::ActionManager::setBulletGroup(float dt){
 			bullet->_isFlipped=true;
 		}
 		if(i==0){
-			CCPoint location=ccp(this->getPositionX()+(_isFlipped?-rangeX:rangeX),this->getPositionY()+(this->getHeight()/2+23));
+			Vec2 location=ccp(this->getPositionX()+(_isFlipped?-rangeX:rangeX),this->getPositionY()+(this->getHeight()/2+23));
 			bullet->setPosition(location);
 		}else{
-			CCPoint location=ccp(this->getPositionX()+(_isFlipped?-rangeX:rangeX),this->getPositionY()+(this->getHeight()/2-23));
+			Vec2 location=ccp(this->getPositionX()+(_isFlipped?-rangeX:rangeX),this->getPositionY()+(this->getHeight()/2-23));
 			bullet->setPosition(location);
 		}
 		_delegate->addChild(bullet,currentSkillTag);
@@ -6117,7 +6117,7 @@ void NarutoSenki::ActionManager::setMon(Node* sender,void* date){
 		monster->doAI();
 		
 	}else if( strcmp(monsterType->getCString(),"KageHand")==0){
-		CCPoint dir=CCPointMake(_isFlipped?this->getPositionX()- this->getContentSize().width:this->getPositionX()+ this->getContentSize().width,this->getPositionY());
+		Vec2 dir=Vec2(_isFlipped?this->getPositionX()- this->getContentSize().width:this->getPositionX()+ this->getContentSize().width,this->getPositionY());
 		monster->setPosition(dir);
 		this->stopAllActions();
 		
@@ -6170,7 +6170,7 @@ void NarutoSenki::ActionManager::setMon(Node* sender,void* date){
 	
 		monster->attack(NAttack);	
 		bool isFollow=false;
-		CCPoint moveDirection;
+		Vec2 moveDirection;
 		if(_mainTarget){
 
 			if(_mainTarget->getPositionX()>this->getPositionX()&& !_isFlipped){
@@ -6345,7 +6345,7 @@ void NarutoSenki::ActionManager::setTrap(Node* sender,void* date){
 
 
 		if(strcmp(this->getCharacter()->getCString(),"ImmortalSasuke")==0){
-			CCPoint targetPoint;
+			Vec2 targetPoint;
 			if(_mainTarget){
 				targetPoint=_mainTarget->getPosition();
 			}else{
@@ -7051,7 +7051,7 @@ bool NarutoSenki::ActionManager::hurt(){
 				tempHero->_buffStartTime
 				){
 
-				CCPoint	sp=ccpSub(tempHero->getPosition(),this->getPosition());
+				Vec2	sp=ccpSub(tempHero->getPosition(),this->getPosition());
 				if(abs(sp.x)<=winSize.width/2){
 					return false;
 				}		
@@ -7062,7 +7062,7 @@ bool NarutoSenki::ActionManager::hurt(){
 			CCARRAY_FOREACH(this->getMonsterArray(),pObject){
 				Monster* mo=(Monster*) pObject;
 				if(strcmp(mo->getCharacter()->getCString(),"Parents")==0 && !mo->_skillChangeBuffValue && mo->getActionState()!=ACTION_STATE_SATTACK  && mo->getActionState()!=ACTION_STATE_DEAD){
-					CCPoint	sp=ccpSub(mo->getPosition(),this->getPosition());
+					Vec2	sp=ccpSub(mo->getPosition(),this->getPosition());
 					if(sp.x<=48){
 					
 						return false;
@@ -7121,7 +7121,7 @@ bool NarutoSenki::ActionManager::hardHurt(int delayTime,bool isHurtAction,bool i
 					tempHero->_actionState!=ACTION_STATE_DEAD &&
 					tempHero->_buffStartTime
 					){
-						CCPoint	sp=ccpSub(tempHero->getPosition(),this->getPosition());
+						Vec2	sp=ccpSub(tempHero->getPosition(),this->getPosition());
 						if(abs(sp.x)<=winSize.width/2){
 							return false;
 						}
@@ -7134,7 +7134,7 @@ bool NarutoSenki::ActionManager::hardHurt(int delayTime,bool isHurtAction,bool i
 				CCARRAY_FOREACH(this->getMonsterArray(),pObject){
 					Monster* mo=(Monster*) pObject;
 					if(strcmp(mo->getCharacter()->getCString(),"Parents")==0 && !mo->_skillChangeBuffValue && mo->getActionState()!=ACTION_STATE_SATTACK  && mo->getActionState()!=ACTION_STATE_DEAD){
-						CCPoint	sp=ccpSub(mo->getPosition(),this->getPosition());
+						Vec2	sp=ccpSub(mo->getPosition(),this->getPosition());
 						if(sp.x<=48){
 							if(mo->_isCanSkill3){						
 								mo->attack(SKILL3);
@@ -7275,7 +7275,7 @@ void NarutoSenki::ActionManager::absorb(Vec2 position,bool isImmediate){
 			this->runAction(mv);
 
 		}else{
-			CCPoint direction=ccpSub(this->getPosition(),position);
+			Vec2 direction=ccpSub(this->getPosition(),position);
 			position.x=direction.x>0?this->getPositionX()-16:this->getPositionX()+16;
 			position.y=direction.y>0?this->getPositionY()-8:this->getPositionY()+8;
 			mv=MoveTo::create(0.2f,position) ;
@@ -7316,7 +7316,7 @@ void NarutoSenki::ActionManager::floatUP(float floatHeight, bool isCancelSkill){
 					tempHero->_actionState!=ACTION_STATE_DEAD &&
 					tempHero->_buffStartTime
 					){
-						CCPoint	sp=ccpSub(tempHero->getPosition(),this->getPosition());
+						Vec2	sp=ccpSub(tempHero->getPosition(),this->getPosition());
 						if(abs(sp.x)<=winSize.width/2){
 							return ;
 						}
@@ -7329,7 +7329,7 @@ void NarutoSenki::ActionManager::floatUP(float floatHeight, bool isCancelSkill){
 				CCARRAY_FOREACH(this->getMonsterArray(),pObject){
 					Monster* mo=(Monster*) pObject;
 					if(strcmp(mo->getCharacter()->getCString(),"Parents")==0 && !mo->_skillChangeBuffValue && mo->getActionState()!=ACTION_STATE_SATTACK  && mo->getActionState()!=ACTION_STATE_DEAD){
-						CCPoint	sp=ccpSub(mo->getPosition(),this->getPosition());
+						Vec2	sp=ccpSub(mo->getPosition(),this->getPosition());
 						if(sp.x<=48){
 							if(mo->_isCanSkill3){						
 								mo->attack(SKILL3);
@@ -7685,7 +7685,7 @@ bool NarutoSenki::ActionManager::findEnemy(const char* type,int searchRange,bool
 	CCObject* pObject;
 	float distance;
 	float curDistance=NULL ;
-	CCPoint sp;
+	Vec2 sp;
 	bool findSome=false;
 	CCARRAY_FOREACH(list,pObject){
 		NarutoSenki::ActionManager* target=(NarutoSenki::ActionManager*) pObject;
@@ -7770,7 +7770,7 @@ bool NarutoSenki::ActionManager::findEnemy2(const char* type){
 	CCObject* pObject;
 	float distance;
 	float curDistance=NULL ;
-	CCPoint sp;
+	Vec2 sp;
 	bool findSome=false;
 	
 	enemyCombatPoint=0;
@@ -7931,7 +7931,7 @@ bool NarutoSenki::ActionManager::findTargetEnemy(const char* type,bool isTowerDe
 	CCObject* pObject;
 
 	float curDistance=NULL ;
-	CCPoint sp;
+	Vec2 sp;
 	bool findSome=false;
 
 
@@ -8001,7 +8001,7 @@ bool NarutoSenki::ActionManager::findTargetEnemy(const char* type,bool isTowerDe
 
 void NarutoSenki::ActionManager::stepOn(){
 	
-	CCPoint moveDirection;
+	Vec2 moveDirection;
 
 	if(strcmp("Konoha",_group->getCString())==0){
 		 moveDirection =ccpNormalize(ccp(1,0));
@@ -8068,7 +8068,7 @@ bool NarutoSenki::ActionManager::stepBack(){
 	if(_isControled){
 		return false;
 	}
-	CCPoint moveDirection;
+	Vec2 moveDirection;
 	
 	if(strcmp("Konoha",_group->getCString())==0){
 		 moveDirection =ccpNormalize(ccp(-1,0));
@@ -8090,7 +8090,7 @@ bool NarutoSenki::ActionManager::stepBack2(){
 	if(_isControled){
 		return false;
 	}
-	CCPoint moveDirection;
+	Vec2 moveDirection;
 	
 	srand((int)time(0));
 	int randomDirection=random(10);
@@ -8143,11 +8143,11 @@ bool NarutoSenki::ActionManager::stepBack2(){
 	} 
 	
 	if(strcmp("Konoha",_group->getCString())==0 && this->getPositionX()>=_delegate->currentMap->getTileSize().width*2 ){
-		moveDirection =CCPoint(ccp(-1,_DiretionY));
+		moveDirection =Vec2(ccp(-1,_DiretionY));
 		this->walk(moveDirection);
 		return true;
 	}else if (strcmp("Akatsuki",_group->getCString())==0 && this->getPositionX() <=(_delegate->currentMap->getMapSize().width-2)*_delegate->currentMap->getTileSize().width){
-		moveDirection =CCPoint(ccp(1,_DiretionY));
+		moveDirection =Vec2(ccp(1,_DiretionY));
 		this->walk(moveDirection);
 		return true;
 	}else {
