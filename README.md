@@ -219,6 +219,9 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
 - `StartMenu`: profile/nameplate dibuat lokal/offline. Pembukaan profil tidak
   lagi menunggu request ranking, callback lama distub, dan pilihan nameplate
   disimpan di `UserDefault` sambil tetap memakai biaya coin lokal lama.
+- `StartMenu`: jalur login lama yang sudah tertutup pesan maintenance ikut
+  dibersihkan dari request HTTP; input lokal hanya menyimpan nama/password
+  seperti sebelumnya lalu kembali ke mode offline.
 
 1. **Tutup helper compat kecil yang masih lokal**
    - Target file: `Cocos2dx2Compat.h`, `ActionButton`, `HPBar`, `HudLayer`,

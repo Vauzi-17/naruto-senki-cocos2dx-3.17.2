@@ -2862,79 +2862,32 @@ void  StartMenu::onLoginBtn(Ref* sender){
 void  StartMenu::onLoginOn(Ref* sender){
 
 	if(!isPosting){
-		isPosting=true;
-		std::string data1=usernameInput->getText();
+		isPosting=false;
+		std::string data1=usernameInput ? usernameInput->getText() : "";
 		UserDefault::getInstance()->setStringForKey("userName",data1);
 
-		std::string data2 =pwInput->getText();
+		std::string data2 = pwInput ? pwInput->getText() : "";
 		std::string result;
 
 		if(strcmp(UserDefault::getInstance()->getStringForKey("password").c_str(),data2.c_str())!=0){
 			KTools *tool=new KTools();
 			result=tool->encodeData(data2);
+			delete tool;
 		}else{
 			result=data2;
 		}
 		PWord=result;
 
 		UserDefault::getInstance()->setStringForKey("password",result);
+		UserDefault::getInstance()->flush();
 
-		cocos2d::extension::CCHttpRequest* request = new CCHttpRequest();
-
-
-		std::string Andriodstr="";
-
-//#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-//		JniMethodInfo minfo;
-//		bool isHave = JniHelper::getStaticMethodInfo(minfo,"net/zakume/game/NarutoSenki","getMacAdress", "()Ljava/lang/String;");
-//
-//		if (isHave)
-//		{
-//			jstring jstr=(jstring) minfo.env->CallStaticObjectMethod(minfo.classID, minfo.methodID);
-//			Andriodstr = Andriodstr + JniHelper::jstring2string(jstr);
-//
-//		}
-//#endif
-		std::string Imeistr="";
-
-//#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-//		JniMethodInfo minfo2;
-//		bool isHave2 = JniHelper::getStaticMethodInfo(minfo2,"net/zakume/game/NarutoSenki","getImei", "()Ljava/lang/String;");
-//
-//		if (isHave2)
-//		{
-//			jstring jstr2=(jstring) minfo2.env->CallStaticObjectMethod(minfo2.classID, minfo2.methodID);
-//			Imeistr = Imeistr + JniHelper::jstring2string(jstr2);
-//
-//		}
-//#endif
-		std::string code2=CCString::createWithFormat("&version=%d",CURRENT_VERSION)->getCString();
-		std::string code="name="+data1+"&pw="+result+"&androidID="+Andriodstr+"&Imei="+Imeistr;
-		std::string url=SERVER"nsk/login.php?"+code+code2;
-		request->setUrl(url.c_str());
-		request->setRequestType(CCHttpRequest::kHttpGet);
-		request->setResponseCallback(this, callfuncND_selector(StartMenu::onLoginRequestCompleted));
-		request->setTag("Post_My_Data");
-		cocos2d::extension::CCHttpClient::getInstance()->send(request);
-		request->release();
-
-		//ˢ�°�ť
-		if(!refreshBtn){
-			refreshBtn=Sprite::createWithSpriteFrameName("refresh_btn.png");
-			refreshBtn->setPosition(Vec2(winSize.width/2,winSize.height/2));
-			ActionInterval* rt=RotateBy::create(0.3f,180,180);
-			refreshBtn->runAction(RepeatForever::create(rt));
-			this->addChild(refreshBtn,1000);
-
-
-		}
-
-
+		CCTips *tip=CCTips::create("ServerMainten");
+		this->addChild(tip,5000);
+		this->onInputBoxClose(NULL);
 	}
 
 
 }
-
 void StartMenu::update(float dt){
 
 	if(!noticeLabel){
@@ -2998,106 +2951,15 @@ void StartMenu::onNoticeRequestCompleted(Node *sender ,void *data) {
 	isPosting=false;
 }
 void StartMenu::onLoginRequestCompleted(Node *sender ,void *data) {
-	//AllocConsole();
-	//freopen("CONIN$", "r", stdin);
-	//freopen("CONOUT$", "w", stdout);
-	//freopen("CONOUT$", "w", stderr);
+	(void)sender;
+	(void)data;
 	isPosting=false;
-	//ˢ�°�ť
 	if(refreshBtn){
 		refreshBtn->stopAllActions();
 		refreshBtn->removeFromParent();
 		refreshBtn=NULL;
 	}
-
-
-	cocos2d::extension::CCHttpResponse *response = (cocos2d::extension::CCHttpResponse*)data;
-	if (!response)
-	{
-	return;
-	}
-	if (0 != strlen(response->getHttpRequest()->getTag()))
-	{
-	CCLOG("%s completed", response->getHttpRequest()->getTag());
-	}
-	int statusCode = response->getResponseCode();
-	char statusString[64] = {};
-	sprintf(statusString ,"Http status code:%d ,tag = %s" ,statusCode ,response->getHttpRequest()->getTag());
-	CCLOG("response code:%d" ,statusCode);
-	if (!response->isSucceed())
-	{
-	CCLOG("response failed");
-	CCLOG("error buffer:%s" ,response->getErrorBuffer());
-	CCTips *tip=CCTips::create("ServerError");
-	this->addChild(tip,5000);
-	return;
-	}
-	std::vector<char> *buffer = response->getResponseData();
-	printf("Http response,dump data:");
-
-
-	Document doc;
-	//��vectorת����std::string
-	std::string buf(buffer->begin(),buffer->end());
-	//CCLOG("%s",buf.c_str());
-	const char* json=(char*) buf.c_str();
-	doc.Parse<kParseDefaultFlags>(json);
-	rapidjson::Value &arr=doc;
-
-	int gameVersion;
-	if(arr.IsArray()){
-		for (SizeType i = 0; i < arr.Size(); i++)  {
-
-			rapidjson::Value & node=arr[i];
-
-			//����id
-			rapidjson::Value & idValue= node["id"];
-			std::string idString=idValue.GetString();
-			MemberID=std::atoi(idString.c_str());
-
-			rapidjson::Value & ptValue= node["point"];
-			std::string ptString=ptValue.GetString();
-			CValue=CCString::createWithFormat("%d",std::atoi(ptString.c_str()))->getCString();
-
-			rapidjson::Value & groupValue= node["group_id"];
-			std::string groupString=groupValue.GetString();
-			if(std::atoi(groupString.c_str())!=0){
-					GroupID=std::atoi(groupString.c_str());
-			}
-
-
-		}
-
-		CCTips *tip=CCTips::create("LoginSuccess");
-		this->addChild(tip,5000);
-		this->onInputBoxClose(NULL);
-		if(login_btn){
-			login_btn->removeFromParent();
-			login_btn=NULL;
-		}
-
-
-		this->setOfferWall();
-		//���ù���
-		this->setNotice();
-		this->setProfile();
-		this->setGroup();
-		this->scrollMenu(_pos03);
-
-
-	}else{
-
-		PWord="";
-		CCTips *tip=CCTips::create(buf.c_str());
-		this->addChild(tip,5000);
-
-
-	}
-
-
-
 }
-
 
 void  StartMenu::onIterfaceClose(Ref* sender){
 	if(!isPosting){
