@@ -22,7 +22,7 @@ masih memakai API 2.x seperti `CCLayer`, `CCSprite`, `CCMenu`, `CCPoint`,
 
 ## Estimasi Progress Migrasi
 
-Estimasi progress menuju kode full cocos2d-x 3.17.2: **sekitar 83%**.
+Estimasi progress menuju kode full cocos2d-x 3.17.2: **sekitar 84%**.
 
 Alasan estimasi:
 
@@ -74,7 +74,8 @@ Alasan estimasi:
 - Alias posisi/arah karakter di `Characters.cpp` mulai dibersihkan dari
   `CCPoint`/`ccp(...)` ke `Vec2`, dan jarak lokal sederhana sudah memakai
   `Vec2::getDistance`. Normalisasi arah dari variabel lokal sederhana sudah
-  memakai `Vec2::getNormalized`, sementara helper nested `ccpSub` masih
+  memakai `Vec2::getNormalized`; selisih posisi sederhana target/master/spawn
+  mulai memakai operator `Vec2` langsung, sementara helper nested `ccpSub` masih
   dipisahkan agar perubahan AI karakter tetap mudah dilacak saat build Android
   berikutnya.
 - Audio klik halaman di `NetworkLayer` sudah memakai
@@ -682,8 +683,10 @@ Catatan progress terbaru:
   `Vec2::getDistance`. Konstruktor posisi `ccp(...)` juga sudah dipindahkan ke
   `Vec2(...)`. Pemakaian `ccpNormalize` dengan variabel sederhana seperti `sp`,
   `retreat`, dan `moveDirection` sudah diganti ke `getNormalized()`, sementara
-  helper nested `ccpSub(...)` masih dibiarkan dulu sebagai jembatan kecil agar
-  slice ini tetap berupa geometry cleanup yang mudah dilacak.
+  beberapa `ccpSub(...)` sederhana untuk posisi target/master/spawn sudah
+  diganti ke operator `Vec2` langsung. Helper nested `ccpSub(...)` lain masih
+  dibiarkan dulu sebagai jembatan kecil agar slice ini tetap berupa geometry
+  cleanup yang mudah dilacak.
 - `NetworkLayer` tidak lagi memakai `SimpleAudioEngine::sharedEngine()` untuk
   klik tab selector; pemanggilan audio lokal memakai singleton 3.x.
 - Audit menunjukkan `Cocos2dx2Compat.h` masih dipaksa lewat CMake dan project
