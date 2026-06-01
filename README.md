@@ -207,6 +207,9 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
 - `SkillLayer` dan `GameOver`: sisa parsing/request HTTP yang sudah mati di
   jalur offline dibersihkan. Callback stub tetap dipertahankan, tetapi tidak
   lagi menyimpan akses `CCHttpResponse` atau request upload legacy.
+- `NetworkLayer`: komentar request list hero lama dan parsing response callback
+  yang sudah tidak punya caller aktif dibersihkan; flow pemilihan hero tetap
+  memakai daftar offline statis.
 
 1. **Tutup helper compat kecil yang masih lokal**
    - Target file: `Cocos2dx2Compat.h`, `ActionButton`, `HPBar`, `HudLayer`,
@@ -595,6 +598,9 @@ Catatan progress terbaru:
 - Dead code HTTP di `SkillLayer` dan upload `GameOver` dibersihkan agar jalur
   offline tidak lagi membawa parsing response/request lama yang sudah tidak
   berjalan.
+- Request list hero lama di `NetworkLayer` dibersihkan dari komentar dan callback
+  response-nya dijadikan stub, karena source aktif sudah memakai daftar offline
+  lokal.
 
 ## Cara Kerja Migrasi
 
