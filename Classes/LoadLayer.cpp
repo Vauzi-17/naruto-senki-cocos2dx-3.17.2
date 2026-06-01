@@ -294,31 +294,7 @@ void LoadLayer::preloadIMG(){
 
 
 
-	if(!DLCArray){
-		this->scheduleOnce(CC_SCHEDULE_SELECTOR(LoadLayer::onLoadFinish),3.0f);
-	}else{
-		Ref* tmpObject;
-		int i=0;
-		CCARRAY_FOREACH(DLCArray,tmpObject){
-			CCDictionary* tempdict=(CCDictionary *) tmpObject;
-			CCString* heroString=CCString::create(tempdict->valueForKey("character")->getCString());
-			isPosting=true;
-			cocos2d::extension::CCHttpRequest* request = new  cocos2d::extension::CCHttpRequest();
-			std::string codeFinal;
-			std::string code1=CCString::createWithFormat("code=300&id=%d",MemberID)->getCString();
-			std::string code2=CCString::createWithFormat("&version=%d",CURRENT_VERSION)->getCString();
-			std::string code3=CCString::createWithFormat("&char=%s",heroString->getCString())->getCString();
-			std::string url=SERVER"nsk/list.php?"+code1+code2+"&pw="+PWord+code3;
-
-			request->setUrl(url.c_str());
-			request->setRequestType(CCHttpRequest::kHttpGet);
-			request->setResponseCallback(this, callfuncND_selector(LoadLayer::onHttpRequestCompleted));
-			request->setTag(heroString->getCString());
-			cocos2d::extension::CCHttpClient::getInstance()->send(request);
-			request->release();
-			i++;
-		}
-	}
+	this->scheduleOnce(CC_SCHEDULE_SELECTOR(LoadLayer::onLoadFinish),3.0f);
 
 
 
@@ -330,82 +306,10 @@ void LoadLayer::playBGM(float dt){
 
 
 void LoadLayer::onHttpRequestCompleted(Node *sender ,void *data) {
-	/*AllocConsole();
-	freopen("CONIN$", "r", stdin);
-	freopen("CONOUT$", "w", stdout);
-	freopen("CONOUT$", "w", stderr);*/
+	// Jalur download DLC lama tidak dipakai pada mode offline.
+	(void)sender;
+	(void)data;
 	isPosting=false;
-
-	cocos2d::extension::CCHttpResponse *response = (cocos2d::extension::CCHttpResponse*)data;
-	if (!response)
-	{
-		return;
-	}
-	if (0 != strlen(response->getHttpRequest()->getTag()))
-	{
-		CCLOG("%s completed", response->getHttpRequest()->getTag());
-	}
-	int statusCode = response->getResponseCode();
-	char statusString[64] = {};
-
-	if (!response->isSucceed())
-	{
-		CCLOG("response failed");
-		CCLOG("error buffer:%s" ,response->getErrorBuffer());
-		CCTips *tip=CCTips::create("ServerError");
-		this->addChild(tip,5000);
-		return;
-	}
-
-
-
-
-	std::vector<char> *buffer = response->getResponseData();
-	std::string buf(buffer->begin(),buffer->end());
-
-	/*for (unsigned int i = 0; i < buffer->size(); i ++)
-	{
-	printf("%c" ,(*buffer)[i]);
-	}  */
-
-	std::string foldName=FileUtils::getInstance()->getWritablePath()+"DLC";
-
-#if (CC_TARGET_PLATFORM != CC_PLATFORM_WIN32)
-	mkdir(foldName.c_str(), S_IRWXU | S_IRWXG | S_IRWXO);
-#else
-	_mkdir(foldName.c_str());
-#endif
-
-
-	std::string fileName = CCString::createWithFormat("%s.xml",response->getHttpRequest()->getTag())->getCString();
-	//std::string filePath = FileUtils::getInstance()->getWritablePath()+"DLC" + fileName;
-
-	const char* filePath;
-
-	filePath =CCString::createWithFormat("%s/DLC/%s.xml",FileUtils::getInstance()->getWritablePath().c_str(),response->getHttpRequest()->getTag())->getCString();
-
-	std::ofstream fos(filePath);//�������ļ�
-	if(!fos)std::cerr<<"error";//У���ļ�
-	fos<<buf;//���
-	fos.close();
-	//std::remove(filePath.c_str());
-
-
-	Ref* tmpObject;
-	int i=0;
-	CCARRAY_FOREACH(DLCArray,tmpObject){
-		CCDictionary* tempdict=(CCDictionary *) tmpObject;
-		CCString* heroString=CCString::create(tempdict->valueForKey("character")->getCString());
-		if(strcmp(heroString->getCString(),response->getHttpRequest()->getTag())==0){
-			DLCArray->removeObject(tmpObject);
-		}
-
-	}
-
-	if(DLCArray->count()<=0){
-		this->scheduleOnce(CC_SCHEDULE_SELECTOR(LoadLayer::onLoadFinish),3.0f);
-	}
-
 }
 
 void LoadLayer::preloadAudio(){

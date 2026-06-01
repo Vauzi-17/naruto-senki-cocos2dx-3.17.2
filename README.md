@@ -212,6 +212,8 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
   memakai daftar offline statis.
 - `GameLayer`: heartbeat HTTP lama di `checkPost` dibersihkan menjadi stub
   offline karena scheduler aktifnya sudah lama dikomentari.
+- `LoadLayer`: jalur download DLC XML lama dibersihkan; preload sekarang selalu
+  lanjut ke `onLoadFinish` karena pengisian `DLCArray` aktif sudah tidak ada.
 
 1. **Tutup helper compat kecil yang masih lokal**
    - Target file: `Cocos2dx2Compat.h`, `ActionButton`, `HPBar`, `HudLayer`,
@@ -604,8 +606,10 @@ Catatan progress terbaru:
   response-nya dijadikan stub, karena source aktif sudah memakai daftar offline
   lokal.
 - Heartbeat HTTP lama di `GameLayer::checkPost` dibersihkan dari request/response
-  parsing; sisa HTTP aktif kini terkonsentrasi di `StartMenu` dan jalur DLC
-  legacy `LoadLayer` yang perlu ditangani terpisah.
+  parsing.
+- Request download DLC lama di `LoadLayer` dibersihkan setelah audit menunjukkan
+  `DLCArray` hanya tersisa dari blok komentar legacy; sisa HTTP aktif kini
+  terkonsentrasi di `StartMenu`.
 
 ## Cara Kerja Migrasi
 
