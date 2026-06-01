@@ -40,6 +40,9 @@ Alasan estimasi:
 - Bridge action/animation lokal di `ActionManager` berkurang lagi: pemanggilan
   langsung helper compat untuk pembuatan sequence/animation sudah dipindahkan ke
   helper lokal berbasis `Vector`, sementara input `CCArray` lama tetap dijaga.
+- Adapter container child node di flow ougis/pause-resume mulai dibersihkan:
+  `GameLayer` dan `HudLayer` sekarang mengiterasi `getChildren()` langsung tanpa
+  membuat `CCArray` sementara.
 - Masih ada sisa API 2.x yang cukup banyak di `ActionManager`, `Element`,
   `RankingLayer`, beberapa utility UI, app delegate, dan compatibility bridge.
 - Untuk mencapai 100%, sisa terbesar bukan sekadar rename API, tetapi migrasi
@@ -372,6 +375,7 @@ Commit awal tahap 5:
 - `bb4b45d refactor: migrate action manager local sequences`
 - `1ee962e refactor: migrate action manager local animation helpers`
 - `6d20d1d refactor: migrate screw layer item container`
+- `8a94ef6 refactor: migrate child iteration containers`
 
 Catatan progress terbaru:
 
@@ -434,6 +438,10 @@ Catatan progress terbaru:
   dan mengiterasi item grup sudah ikut dipindahkan ke helper `addItem`,
   `clearItemArray`, dan range-for, sehingga hubungan UI scroll/menu tetap
   tersambung.
+- `GameLayer` dan `HudLayer` tidak lagi membuat `CCArray` sementara dari
+  `getChildren()` untuk pause/resume child pada flow ougis dan cleanup observer
+  saat keluar match. Iterasi sekarang memakai `Vector<Node*>` hasil API 3.x
+  langsung.
 - Setelah commit `ActionManager` lokal ini lulus build Android, langkah
   berikutnya adalah melanjutkan migrasi container yang masih lokal dan mudah
   dipisahkan sebelum masuk kontrak data besar di loader XML, `ActionManager`,
