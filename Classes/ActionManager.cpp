@@ -7,6 +7,44 @@
 using namespace NarutoSenki;
 using namespace CocosDenshion;
 
+namespace
+{
+	Animation* createAnimationFromFrameArray(CCArray* frames, float delay)
+	{
+		Vector<SpriteFrame*> frameVector;
+		CCObject* object = NULL;
+		CCARRAY_FOREACH(frames, object)
+		{
+			SpriteFrame* frame = dynamic_cast<SpriteFrame*>(object);
+			if (frame)
+			{
+				frameVector.pushBack(frame);
+			}
+		}
+		return Animation::createWithSpriteFrames(frameVector, delay);
+	}
+
+	Sequence* createSequenceFromActionArray(CCArray* actions)
+	{
+		if (!actions || actions->count() == 0)
+		{
+			return NULL;
+		}
+
+		Vector<FiniteTimeAction*> actionVector;
+		CCObject* object = NULL;
+		CCARRAY_FOREACH(actions, object)
+		{
+			FiniteTimeAction* action = dynamic_cast<FiniteTimeAction*>(object);
+			if (action)
+			{
+				actionVector.pushBack(action);
+			}
+		}
+		return Sequence::create(actionVector);
+	}
+}
+
 NarutoSenki::ActionManager::ActionManager(void)
 {
 	
@@ -1133,7 +1171,7 @@ Action* NarutoSenki::ActionManager::createAnimation(CCArray* ationArray,float fp
 				}
 
 			}else{
-				tempAnimation=cocos2d::cocos2dx2_compat::createAnimationWithSpriteFrames(animeFrames, float(1.0 / fps));
+				tempAnimation=createAnimationFromFrameArray(animeFrames, float(1.0 / fps));
 				tempAction=Animate::create(tempAnimation);
 			
 				seqArray->addObject(tempAction);
@@ -1280,13 +1318,13 @@ Action* NarutoSenki::ActionManager::createAnimation(CCArray* ationArray,float fp
 		}
 	};
 	if(animeFrames->count()>0){
-		tempAnimation= cocos2d::cocos2dx2_compat::createAnimationWithSpriteFrames(animeFrames, float(1.0 / fps));
+		tempAnimation=createAnimationFromFrameArray(animeFrames, float(1.0 / fps));
 		tempAction=Animate::create(tempAnimation);
 		seqArray->addObject(tempAction);
 	};
 
 	if(isRepeat){
-		seq=RepeatForever::create(cocos2d::cocos2dx2_compat::createSequence(seqArray));
+		seq=RepeatForever::create(createSequenceFromActionArray(seqArray));
 
 	}else{
 		if(isReturn){
@@ -1294,7 +1332,7 @@ Action* NarutoSenki::ActionManager::createAnimation(CCArray* ationArray,float fp
 			seqArray->addObject(call);
 		}
 	
-		seq=cocos2d::cocos2dx2_compat::createSequence(seqArray);
+		seq=createSequenceFromActionArray(seqArray);
 	}
 
 	return seq;
@@ -2831,13 +2869,13 @@ void NarutoSenki::ActionManager::setCommand(CCNode* sender,void* date){
 		
 
 
-		Animation* tempAnimation= cocos2d::cocos2dx2_compat::createAnimationWithSpriteFrames(tempArray, 0.1f);
+		Animation* tempAnimation=createAnimationFromFrameArray(tempArray, 0.1f);
 		CCFiniteTimeAction *call = CCCallFuncN::create(this,callfuncN_selector(NarutoSenki::ActionManager::disableShadow));
 		Action* tempAction=Animate::create(tempAnimation);
 		CCArray* list=CCArray::create();
 		list->addObject(tempAction);
 		list->addObject(call);
-		Action* seq=cocos2d::cocos2dx2_compat::createSequence(list);
+		Action* seq=createSequenceFromActionArray(list);
 
 		CCSprite* tempChar=CCSprite::createWithSpriteFrameName(CCString::createWithFormat("%s_Extern_01.png",this->getCharacter()->getCString())->getCString());
 

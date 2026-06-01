@@ -22,7 +22,7 @@ masih memakai API 2.x seperti `CCLayer`, `CCSprite`, `CCMenu`, `CCPoint`,
 
 ## Estimasi Progress Migrasi
 
-Estimasi progress menuju kode full cocos2d-x 3.17.2: **sekitar 74%**.
+Estimasi progress menuju kode full cocos2d-x 3.17.2: **sekitar 75%**.
 
 Alasan estimasi:
 
@@ -36,6 +36,9 @@ Alasan estimasi:
 - Tahap 5 sudah dimulai secara aman dari area lokal `ActionManager`: sisa alias
   action/animation 2.x di beberapa helper internal dibersihkan tanpa mengubah
   kontrak container besar.
+- Bridge action/animation lokal di `ActionManager` berkurang lagi: pemanggilan
+  langsung helper compat untuk pembuatan sequence/animation sudah dipindahkan ke
+  helper lokal berbasis `Vector`, sementara input `CCArray` lama tetap dijaga.
 - Masih ada sisa API 2.x yang cukup banyak di `ActionManager`, `Element`,
   `RankingLayer`, beberapa utility UI, app delegate, dan compatibility bridge.
 - Untuk mencapai 100%, sisa terbesar bukan sekadar rename API, tetapi migrasi
@@ -416,9 +419,16 @@ Catatan progress terbaru:
   alur feedback hit, coin/damage display, hurt/hardHurt/absorb, float-up, dan
   death/checkActionFinish. Action lama yang masih bertipe umum tetap dicek
   sebagai `FiniteTimeAction` sebelum dimasukkan ke `Sequence::create`.
+- `ActionManager.cpp` dibersihkan lagi dari pemanggilan langsung
+  `cocos2dx2_compat::createAnimationWithSpriteFrames` dan
+  `cocos2dx2_compat::createSequence` pada jalur animation/action parsing lokal.
+  Helper lokal baru mengubah isi `CCArray` lama menjadi `Vector<SpriteFrame*>`
+  dan `Vector<FiniteTimeAction*>` tepat sebelum API 3.x dipanggil, sehingga
+  kontrak data lama belum ikut dimigrasi. Potongan lokal terbaru ini belum
+  build-tested oleh pengguna.
 - Setelah commit `ActionManager` lokal ini lulus build Android, langkah
-  berikutnya adalah lanjut kecil di sisa `ActionManager` yang masih lokal atau
-  mulai audit batas container sebelum masuk migrasi data besar.
+  berikutnya adalah audit batas container sebelum masuk migrasi data besar, atau
+  melanjutkan callback 2.x yang masih membawa payload secara bertahap.
 - Alias HTTP/EditBox/Scale9/Scroll di `Cocos2dx2Compat.h` belum dihapus karena
   masih punya pemakai aktif.
 
