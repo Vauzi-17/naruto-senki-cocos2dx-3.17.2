@@ -433,7 +433,7 @@ namespace NarutoSenki {
 		void				setDamgeEffect(CCString* type);
 		void				setMonAttack(Node* sender, void* date);
 		void				setTransform();
-		void				setOugis(Node* sender);
+		void				setOugis();
 
 		void				setCharFlip();
 
@@ -462,7 +462,7 @@ namespace NarutoSenki {
 		void				setJump(Node* sender, void* date);
 
 
-		void				removeCoinDisplay(Node* sender, void* date);
+		void				removeCoinDisplay(Node* sender);
 
 		Rect				setHalfBox();
 		Rect				setHitBox();

@@ -1222,7 +1222,7 @@ Action* NarutoSenki::ActionManager::createAnimation(CCArray* ationArray,float fp
 					seqArray->addObject(call);
 				}
 				else if(strcmp(key,"setCharge")==0){
-					FiniteTimeAction *call=CCCallFunc::create(this,callfunc_selector(NarutoSenki::ActionManager::getCollider));
+					FiniteTimeAction *call = CallFunc::create(CC_CALLBACK_0(NarutoSenki::ActionManager::getCollider, this));
 					seqArray->addObject(call);
 					int moveLength=dic->valueForKey(key)->intValue();
 					call = CCCallFuncND::create(this,callfuncND_selector(NarutoSenki::ActionManager::setCharge),(void*)moveLength);
@@ -1257,9 +1257,6 @@ Action* NarutoSenki::ActionManager::createAnimation(CCArray* ationArray,float fp
 					} 
 					delete[] str;
 
-					//FiniteTimeAction *call = CCCallFuncND::create(this,callfuncND_selector(NarutoSenki::ActionManager::setFontEffect),(void*)callValue);
-					//seqArray->addObject(call);
-
 				}else if(strcmp(key,"setBuff")==0){
 					int buffValue=dic->valueForKey(key)->intValue();
 					FiniteTimeAction *call = CCCallFuncND::create(this,callfuncND_selector(NarutoSenki::ActionManager::setBuff),(void*)buffValue);
@@ -1292,11 +1289,11 @@ Action* NarutoSenki::ActionManager::createAnimation(CCArray* ationArray,float fp
 				FiniteTimeAction *call = CCCallFuncND::create(this,callfuncND_selector(NarutoSenki::ActionManager::setTrap),(void*)callValue);
 					seqArray->addObject(call);
 				}else if(strcmp(key,"setActionResume")==0){
-					FiniteTimeAction *call=CCCallFunc::create(this,callfunc_selector(NarutoSenki::ActionManager::setActionResume));
+					FiniteTimeAction *call = CallFunc::create(CC_CALLBACK_0(NarutoSenki::ActionManager::setActionResume, this));
 					seqArray->addObject(call);
 				}
 				else if(strcmp(key,"setActionResume2")==0){
-					FiniteTimeAction *call=CCCallFunc::create(this,callfunc_selector(NarutoSenki::ActionManager::setActionResume2));
+					FiniteTimeAction *call = CallFunc::create(CC_CALLBACK_0(NarutoSenki::ActionManager::setActionResume2, this));
 					seqArray->addObject(call);
 				}else if(strcmp(key,"setShadow")==0){
 					callValue = CCDictionary::create(); 
@@ -1306,18 +1303,18 @@ Action* NarutoSenki::ActionManager::createAnimation(CCArray* ationArray,float fp
 					seqArray->addObject(call);
 				}
 				else if(strcmp(key,"setTransform")==0){
-					FiniteTimeAction *call=CCCallFunc::create(this,callfunc_selector(NarutoSenki::ActionManager::setTransform));
+					FiniteTimeAction *call = CallFunc::create(CC_CALLBACK_0(NarutoSenki::ActionManager::setTransform, this));
 					seqArray->addObject(call);
 				}
 				else if(strcmp(key,"setOugis")==0){
-					FiniteTimeAction *call= CCCallFuncN::create(this,callfuncN_selector(NarutoSenki::ActionManager::setOugis));
+					FiniteTimeAction *call = CallFunc::create(CC_CALLBACK_0(NarutoSenki::ActionManager::setOugis, this));
 					seqArray->addObject(call);
 				}else if (strcmp(key,"stopJump")==0){
 					int stopTime=dic->valueForKey(key)->intValue();
 					FiniteTimeAction *call = CCCallFuncND::create(this,callfuncND_selector(NarutoSenki::ActionManager::stopJump),(void*)stopTime);
 					seqArray->addObject(call);
 				}else if (strcmp(key,"setFlipped")==0){
-					FiniteTimeAction *call=CCCallFunc::create(this,callfunc_selector(NarutoSenki::ActionManager::setCharFlip));
+					FiniteTimeAction *call = CallFunc::create(CC_CALLBACK_0(NarutoSenki::ActionManager::setCharFlip, this));
 					seqArray->addObject(call);
 				}
 
@@ -1379,7 +1376,9 @@ void NarutoSenki::ActionManager::setShadow(Node* sender,void* date){
 	charN->setFlipX(_isFlipped);
 	charN->setPosition(this->getPosition());
 	DelayTime* delay=DelayTime::create(0.1f);
-	FiniteTimeAction *call = CCCallFuncN::create(charN,callfuncN_selector(NarutoSenki::ActionManager::enableShadow));
+	FiniteTimeAction *call = CallFunc::create([this, charN]() {
+		this->enableShadow(charN);
+	});
 	charN->runAction(Sequence::createWithTwoActions(delay,call));
 	_delegate->addChild(charN,-this->getPositionY()-1);
 }
@@ -1389,7 +1388,9 @@ void NarutoSenki::ActionManager::enableShadow(Node* sender){
 	Sprite* charN=(Sprite *) sender;
 	charN->setVisible(true);
 	DelayTime* delay=DelayTime::create(0.1f);
-	FiniteTimeAction *call = CCCallFuncN::create(charN,callfuncN_selector(NarutoSenki::ActionManager::disableShadow));
+	FiniteTimeAction *call = CallFunc::create([this, charN]() {
+		this->disableShadow(charN);
+	});
 	charN->runAction(Sequence::createWithTwoActions(delay,call));
 
 }
@@ -1403,7 +1404,7 @@ void NarutoSenki::ActionManager::disableShadow(Node* sender){
 }
 
 
-void NarutoSenki::ActionManager::setOugis(Node* sender){
+void NarutoSenki::ActionManager::setOugis(){
 		_delegate->setOugis(this);
 }
 
@@ -1810,14 +1811,16 @@ void NarutoSenki::ActionManager::setCoinDisplay(int num){
 	
 	ActionInterval*  mv=MoveBy::create(0.5f,ccp(0,12));
 	ActionInterval* fadeOut=FadeOut::create(0.8f);
-	FiniteTimeAction *call=CCCallFuncND::create(coinDisplay,callfuncND_selector(NarutoSenki::ActionManager::removeCoinDisplay),NULL);
+	FiniteTimeAction *call = CallFunc::create([this, coinDisplay]() {
+		this->removeCoinDisplay(coinDisplay);
+	});
 	ActionInterval* sp=Spawn::create(fadeOut,mv,NULL);
 	Action* seq=Sequence::create(sp,call,nullptr);
 	coinDisplay->runAction(seq);
 
 }
 
-void NarutoSenki::ActionManager::removeCoinDisplay(Node* sender,void* date){
+void NarutoSenki::ActionManager::removeCoinDisplay(Node* sender){
 	sender->removeFromParent();
 	sender=NULL;
 }
@@ -1845,7 +1848,7 @@ void NarutoSenki::ActionManager::setDamgeDisplay(unsigned int value,const char* 
 	_damageArray->addObject(damageFont);
 
 	ActionInterval*  sd=ScaleBy::create(0.2f,0.5f);
-	FiniteTimeAction *call=CCCallFunc::create(this,callfunc_selector(NarutoSenki::ActionManager::removeDamageDisplay));
+	FiniteTimeAction *call = CallFunc::create(CC_CALLBACK_0(NarutoSenki::ActionManager::removeDamageDisplay, this));
 
 	ActionInterval*  mv=MoveBy::create(0.4f,ccp(0,12));
 	ActionInterval* fadeOut=FadeOut::create(0.4f);
@@ -2877,14 +2880,15 @@ void NarutoSenki::ActionManager::setCommand(Node* sender,void* date){
 
 
 		Animation* tempAnimation=createAnimationFromFrameArray(tempArray, 0.1f);
-		FiniteTimeAction *call = CCCallFuncN::create(this,callfuncN_selector(NarutoSenki::ActionManager::disableShadow));
 		Action* tempAction=Animate::create(tempAnimation);
+		Sprite* tempChar=Sprite::createWithSpriteFrameName(CCString::createWithFormat("%s_Extern_01.png",this->getCharacter()->getCString())->getCString());
+		FiniteTimeAction *call = CallFunc::create([this, tempChar]() {
+			this->disableShadow(tempChar);
+		});
 		CCArray* list=CCArray::create();
 		list->addObject(tempAction);
 		list->addObject(call);
 		Action* seq=createSequenceFromActionArray(list);
-
-		Sprite* tempChar=Sprite::createWithSpriteFrameName(CCString::createWithFormat("%s_Extern_01.png",this->getCharacter()->getCString())->getCString());
 
 		tempChar->setAnchorPoint(ccp(0.5f,0));
 		tempChar->setPosition(this->getPosition());

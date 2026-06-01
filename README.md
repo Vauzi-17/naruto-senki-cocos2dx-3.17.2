@@ -62,6 +62,9 @@ Alasan estimasi:
 - Tanda tangan callback lokal `ActionManager` mulai lepas dari alias `CCNode*`
   ke `Node*`, dan deklarasi action sementara di jalur parser lokal memakai
   `FiniteTimeAction` langsung.
+- Callback action tanpa payload di `ActionManager` mulai memakai `CallFunc`
+  dan lambda/`CC_CALLBACK_0`, sehingga sisa `callfunc_selector` dan
+  `callfuncN_selector` aktif hilang dari file tersebut.
 - Audio klik halaman di `NetworkLayer` sudah memakai
   `SimpleAudioEngine::getInstance()` tanpa mengubah flow pemilihan hero.
 - Masih ada sisa API 2.x yang cukup banyak di `ActionManager`, `Element`,
@@ -249,6 +252,11 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
   memakai kontrak lama.
 - `Cocos2dx2Compat.h`: belum dihapus walaupun isinya minimal, karena CMake dan
   project Win32 masih memaksa include file ini untuk semua compile unit.
+- `ActionManager`: callback action tanpa payload seperti `getCollider`,
+  `setActionResume`, `setActionResume2`, `setTransform`, `setOugis`,
+  `setCharFlip`, shadow helper, damage display, dan coin display memakai
+  `CallFunc` 3.x. Callback `CCCallFuncND` yang membawa payload XML/void pointer
+  sengaja belum dipindah.
 
 1. **Tutup helper compat kecil yang masih lokal**
    - Target file: `Cocos2dx2Compat.h`, `ActionButton`, `HPBar`, `HudLayer`,
@@ -638,6 +646,11 @@ Catatan progress terbaru:
   `CCFiniteTimeAction` diganti menjadi `FiniteTimeAction`, tetapi factory
   callback lama yang membawa payload `void*` belum dimigrasi agar kontrak XML
   tetap stabil.
+- `ActionManager` lanjut dibersihkan dari callback action tanpa payload:
+  `CCCallFunc::create`, `CCCallFuncN::create`, `callfunc_selector`, dan
+  `callfuncN_selector` sudah tidak muncul lagi di `ActionManager.cpp`.
+  Yang tersisa adalah `CCCallFuncND`/`callfuncND_selector` untuk payload lama
+  dari parser action XML.
 - `NetworkLayer` tidak lagi memakai `SimpleAudioEngine::sharedEngine()` untuk
   klik tab selector; pemanggilan audio lokal memakai singleton 3.x.
 - Audit menunjukkan `Cocos2dx2Compat.h` masih dipaksa lewat CMake dan project
