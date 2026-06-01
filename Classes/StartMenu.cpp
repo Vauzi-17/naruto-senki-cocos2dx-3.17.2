@@ -1,4 +1,5 @@
 #include "StartMenu.h"
+#include <cstdlib>
 using namespace CocosDenshion;
 USING_NS_CC_EXT;
 
@@ -832,7 +833,7 @@ void  StartMenu::onGroupBtn(Ref* sender){
 			menu3->setPosition(Vec2(group_bg->getPositionX()-group_bg->getContentSize().width/2+150,43));
 			group_layer->addChild(menu3,20);
 
-			if(atoi(CValue.c_str()) >= 50*30 +500){
+			if(std::atoi(CValue.c_str()) >= 50*30 +500){
 				MenuItemSprite* create_btn=MenuItemSprite::create(Sprite::createWithSpriteFrameName("createGroup_btn.png"),Sprite::createWithSpriteFrameName("createGroup_btn2.png"),NULL,CC_CALLBACK_1(StartMenu::onCreateBtn, this));
 				Menu* menu2 =Menu::create(create_btn,NULL);
 				menu2->setPosition(Vec2(group_bg->getPositionX()+group_bg->getContentSize().width/2-56,43));
@@ -919,7 +920,7 @@ void StartMenu::onGroupManageRequestCompleted(Node *sender ,void *data){
 
 				rapidjson::Value & leaderidValue= node["leader_id"];
 				std::string leaderidString=leaderidValue.GetString();
-				leaderID=atoi(leaderidString.c_str());
+				leaderID=std::atoi(leaderidString.c_str());
 
 				rapidjson::Value & leadernameValue= node["leader_name"];
 				std::string leadernameString=leadernameValue.GetString();
@@ -1022,7 +1023,7 @@ void StartMenu::onGroupManageRequestCompleted(Node *sender ,void *data){
 
 				rapidjson::Value & idValue= node["id"];
 				std::string idString=idValue.GetString();
-				int userID=atoi(idString.c_str());
+				int userID=std::atoi(idString.c_str());
 
 
 
@@ -1035,7 +1036,7 @@ void StartMenu::onGroupManageRequestCompleted(Node *sender ,void *data){
 
 				rapidjson::Value & pointValue= node["point"];
 				std::string pointString=pointValue.GetString();
-				int point=atoi(pointString.c_str());
+				int point=std::atoi(pointString.c_str());
 
 				if(leaderID==MemberID){
 					Label* user_name=Label::createWithSystemFont(nameString.c_str(),FONT_TYPE,12);
@@ -1168,7 +1169,7 @@ void StartMenu::onQuitComfirm(Ref* sender){
 		std::string tempCost2="EFDDD";
 		tool->decode(tempCost2);
 
-		int tempCoin =cl->intValue()-atoi(tempCost2.c_str());
+		int tempCoin =cl->intValue()-std::atoi(tempCost2.c_str());
 		if(tempCoin>=0){
 
 			std::string code3=CCString::createWithFormat("%d",GroupID)->getCString();
@@ -1259,7 +1260,7 @@ void StartMenu::onQuitGroupRequestCompleted(Node *sender ,void *data) {
 
 			rapidjson::Value & idValue= node["id"];
 			std::string idString=idValue.GetString();
-			int userID=atoi(idString.c_str());
+			int userID=std::atoi(idString.c_str());
 
 
 
@@ -1272,7 +1273,7 @@ void StartMenu::onQuitGroupRequestCompleted(Node *sender ,void *data) {
 
 			rapidjson::Value & pointValue= node["point"];
 			std::string pointString=pointValue.GetString();
-			int point=atoi(pointString.c_str());
+			int point=std::atoi(pointString.c_str());
 
 			if(leaderID==MemberID){
 				Label* user_name=Label::createWithSystemFont(nameString.c_str(),FONT_TYPE,12);
@@ -1354,7 +1355,7 @@ void StartMenu::onQuitGroupRequestCompleted(Node *sender ,void *data) {
 				CCString* cl=tool->readFromSQLite();
 				std::string tempCost2="EFDDD";
 				tool->decode(tempCost2);
-				unsigned int tempCoin =cl->intValue()-atoi(tempCost2.c_str());
+				unsigned int tempCoin =cl->intValue()-std::atoi(tempCost2.c_str());
 
 				CCString* coin= CCString::createWithFormat("%d",tempCoin);
 				tool->saveToSQLite("GameRecord","coin",coin->getCString(),true);
@@ -1751,7 +1752,7 @@ void StartMenu::onGroupRequestCompleted(Node *sender ,void *data){
 
 			rapidjson::Value & idValue= node["group_id"];
 			std::string idString=idValue.GetString();
-			int groupID=atoi(idString.c_str());
+			int groupID=std::atoi(idString.c_str());
 
 			//����name
 			rapidjson::Value & nameValue= node["group_name"];
@@ -1760,7 +1761,7 @@ void StartMenu::onGroupRequestCompleted(Node *sender ,void *data){
 
 			rapidjson::Value & currentValue= node["currentNum"];
 			std::string currentString=currentValue.GetString();
-			int currentNum=atoi(currentString.c_str());
+			int currentNum=std::atoi(currentString.c_str());
 
 
 
@@ -1991,7 +1992,7 @@ void StartMenu::onJoinRequestCompleted(Node *sender ,void *data) {
 		this->addChild(tip,5000);
 	}else{
 
-		GroupID=atoi(result);
+		GroupID=std::atoi(result);
 		CCTips *tip=CCTips::create("GroupAccess");
 		this->addChild(tip,5000);
 
@@ -2089,7 +2090,7 @@ void StartMenu::onSeachRequestCompleted(Node *sender ,void *data) {
 
 			rapidjson::Value & idValue= node["group_id"];
 			std::string idString=idValue.GetString();
-			int groupID=atoi(idString.c_str());
+			int groupID=std::atoi(idString.c_str());
 
 
 			rapidjson::Value & nameValue= node["group_name"];
@@ -2098,7 +2099,7 @@ void StartMenu::onSeachRequestCompleted(Node *sender ,void *data) {
 
 			rapidjson::Value & currentValue= node["currentNum"];
 			std::string currentString=currentValue.GetString();
-			int currentNum=atoi(currentString.c_str());
+			int currentNum=std::atoi(currentString.c_str());
 
 
 			rapidjson::Value & maxValue= node["maxNum"];
@@ -2165,7 +2166,7 @@ void StartMenu::onSeachRequestCompleted(Node *sender ,void *data) {
 
 
 void  StartMenu::onCreateBtn(Ref* sender){
-	if(atoi(CValue.c_str())>=50*30+500){
+	if(std::atoi(CValue.c_str())>=50*30+500){
 
 		if(!input_layer){
 			input_layer=Layer::create();
@@ -2240,7 +2241,7 @@ void StartMenu::onCreateComfirm(Ref* sender){
 	std::string tempCost2="EFDDD";
 	tool->decode(tempCost2);
 
-	int tempCoin =cl->intValue()-atoi(tempCost2.c_str());
+	int tempCoin =cl->intValue()-std::atoi(tempCost2.c_str());
 	if(tempCoin>=0){
 
 		isPosting=true;
@@ -2328,7 +2329,7 @@ void StartMenu::onCreateRequestCompleted(Node *sender ,void *data) {
 		CCTips *tip=CCTips::create("CPError1");
 		this->addChild(tip,5000);
 	}else{
-		GroupID=atoi(result);
+		GroupID=std::atoi(result);
 		CCTips *tip=CCTips::create("GroupSuccessed");
 		this->addChild(tip,5000);
 
@@ -2336,7 +2337,7 @@ void StartMenu::onCreateRequestCompleted(Node *sender ,void *data) {
 		CCString* cl=tool->readFromSQLite();
 		std::string tempCost2="EFDDD";
 		tool->decode(tempCost2);
-		unsigned int tempCoin =cl->intValue()-atoi(tempCost2.c_str());
+		unsigned int tempCoin =cl->intValue()-std::atoi(tempCost2.c_str());
 
 		CCString* coin= CCString::createWithFormat("%d",tempCoin);
 		tool->saveToSQLite("GameRecord","coin",coin->getCString(),true);
@@ -2494,7 +2495,7 @@ void StartMenu::onProfileRequestCompleted(Node *sender ,void *data) {
 
 			rapidjson::Value & pointValue= node["point"];
 			std::string pointString=pointValue.GetString();
-			int point=atoi(pointString.c_str());
+			int point=std::atoi(pointString.c_str());
 			CValue=CCString::createWithFormat("%d",point)->getCString();
 
 
@@ -2549,7 +2550,7 @@ void StartMenu::onProfileRequestCompleted(Node *sender ,void *data) {
 }
 
 void  StartMenu::onNamePlate(Ref* sender){
-	if(atoi(CValue.c_str())<2*1200+600){
+	if(std::atoi(CValue.c_str())<2*1200+600){
 		CCTips *tip=CCTips::create("CPError2");
 		this->addChild(tip,5000);
 		return;
@@ -2589,7 +2590,7 @@ void  StartMenu::onNamePlate(Ref* sender){
 	int np1000=1;
 	int row=1;
 
-	if(atoi(CValue.c_str())>=48000){
+	if(std::atoi(CValue.c_str())>=48000){
 		for(int i=0;i<np1000;i++){
 			CCScrewItem* screwItem=CCScrewItem::create();
 
@@ -2608,7 +2609,7 @@ void  StartMenu::onNamePlate(Ref* sender){
 		}
 	}
 
-	if(atoi(CValue.c_str())>=36000){
+	if(std::atoi(CValue.c_str())>=36000){
 		for(int i=0;i<np900;i++){
 			CCScrewItem* screwItem=CCScrewItem::create();
 
@@ -2626,7 +2627,7 @@ void  StartMenu::onNamePlate(Ref* sender){
 			row++;
 		}
 	}
-	if(atoi(CValue.c_str())>=30000){
+	if(std::atoi(CValue.c_str())>=30000){
 		for(int i=0;i<np800;i++){
 			CCScrewItem* screwItem=CCScrewItem::create();
 
@@ -2647,7 +2648,7 @@ void  StartMenu::onNamePlate(Ref* sender){
 
 
 
-	if(atoi(CValue.c_str())>=24000){
+	if(std::atoi(CValue.c_str())>=24000){
 		for(int i=0;i<np700;i++){
 			CCScrewItem* screwItem=CCScrewItem::create();
 
@@ -2665,7 +2666,7 @@ void  StartMenu::onNamePlate(Ref* sender){
 			row++;
 		}
 	}
-	if(atoi(CValue.c_str())>=20000){
+	if(std::atoi(CValue.c_str())>=20000){
 		for(int i=0;i<np600;i++){
 			CCScrewItem* screwItem=CCScrewItem::create();
 
@@ -2684,7 +2685,7 @@ void  StartMenu::onNamePlate(Ref* sender){
 		}
 	}
 
-	if(atoi(CValue.c_str())>=16000){
+	if(std::atoi(CValue.c_str())>=16000){
 		for(int i=0;i<np500;i++){
 			CCScrewItem* screwItem=CCScrewItem::create();
 
@@ -2702,7 +2703,7 @@ void  StartMenu::onNamePlate(Ref* sender){
 			row++;
 		}
 	}
-	if(atoi(CValue.c_str())>=12000){
+	if(std::atoi(CValue.c_str())>=12000){
 		for(int i=0;i<np400;i++){
 			CCScrewItem* screwItem=CCScrewItem::create();
 
@@ -2721,7 +2722,7 @@ void  StartMenu::onNamePlate(Ref* sender){
 		}
 	}
 
-	if(atoi(CValue.c_str())>=9000){
+	if(std::atoi(CValue.c_str())>=9000){
 		for(int i=0;i<np300;i++){
 			CCScrewItem* screwItem=CCScrewItem::create();
 
@@ -2740,7 +2741,7 @@ void  StartMenu::onNamePlate(Ref* sender){
 		}
 	}
 
-	if(atoi(CValue.c_str())>=6000){
+	if(std::atoi(CValue.c_str())>=6000){
 
 		for(int i=0;i<np200;i++){
 			CCScrewItem* screwItem=CCScrewItem::create();
@@ -2759,7 +2760,7 @@ void  StartMenu::onNamePlate(Ref* sender){
 			row++;
 		}
 	}
-	if(atoi(CValue.c_str())>=3000){
+	if(std::atoi(CValue.c_str())>=3000){
 		for(int i=0;i<np100;i++){
 			CCScrewItem* screwItem=CCScrewItem::create();
 
@@ -2828,7 +2829,7 @@ void  StartMenu::onNamePlateComfrim(Ref* sender){
 	std::string tempCost2="EFDDD";
 	tool->decode(tempCost2);
 
-	int tempCoin =cl->intValue()-atoi(tempCost2.c_str());
+	int tempCoin =cl->intValue()-std::atoi(tempCost2.c_str());
 	if(tempCoin>=0){
 
 	isPosting=true;
@@ -2912,7 +2913,7 @@ void StartMenu::onNamePlateRequestCompleted(Node *sender ,void *data) {
 		CCString* cl=tool->readFromSQLite();
 		std::string tempCost2="EFDDD";
 		tool->decode(tempCost2);
-		unsigned int tempCoin =cl->intValue()-atoi(tempCost2.c_str());
+		unsigned int tempCoin =cl->intValue()-std::atoi(tempCost2.c_str());
 
 		CCString* coin= CCString::createWithFormat("%d",tempCoin);
 		tool->saveToSQLite("GameRecord","coin",coin->getCString(),true);
@@ -3300,16 +3301,16 @@ void StartMenu::onLoginRequestCompleted(Node *sender ,void *data) {
 			//����id
 			rapidjson::Value & idValue= node["id"];
 			std::string idString=idValue.GetString();
-			MemberID=atoi(idString.c_str());
+			MemberID=std::atoi(idString.c_str());
 
 			rapidjson::Value & ptValue= node["point"];
 			std::string ptString=ptValue.GetString();
-			CValue=CCString::createWithFormat("%d",atoi(ptString.c_str()))->getCString();
+			CValue=CCString::createWithFormat("%d",std::atoi(ptString.c_str()))->getCString();
 
 			rapidjson::Value & groupValue= node["group_id"];
 			std::string groupString=groupValue.GetString();
-			if(atoi(groupString.c_str())!=0){
-					GroupID=atoi(groupString.c_str());
+			if(std::atoi(groupString.c_str())!=0){
+					GroupID=std::atoi(groupString.c_str());
 			}
 
 

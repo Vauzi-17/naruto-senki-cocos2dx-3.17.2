@@ -1,4 +1,5 @@
 #include "ActionManager.h"
+#include <cstdlib>
 #include "Characters.h"
 #include "HudLayer.h"
 #include "MyUtils/CCShake.h"
@@ -1517,10 +1518,10 @@ void NarutoSenki::ActionManager::setDamage(CCString* effectType,unsigned int att
 		
 	}
 
-	if (atoi(_hp->getCString())-realValue<0){
+	if (std::atoi(_hp->getCString())-realValue<0){
 		this->setHP(CCString::createWithFormat("%d",0));
 	}else{
-		this->setHP(CCString::createWithFormat("%d",atoi(this->getHP()->getCString())-realValue));
+		this->setHP(CCString::createWithFormat("%d",std::atoi(this->getHP()->getCString())-realValue));
 	}
 	
 	if(strcmp(this->getRole()->getCString(),"Clone")==0){
@@ -1958,14 +1959,14 @@ void NarutoSenki::ActionManager::setItem(abType type){
 	if(_hpBar){
 		
 		int hpRestore=3000+gearRecoverValue;
-		if(atoi(_maxHP->getCString())-atoi(_hp->getCString())<=hpRestore){
+		if(std::atoi(_maxHP->getCString())-std::atoi(_hp->getCString())<=hpRestore){
 			this->setHP(CCString::create(this->getMaxHP()->getCString()));
 			if(_hpBar){
 				_hpBar->loseHP(this->getHpPercent());
 			}
 			
 		}else{
-			this->setHP(CCString::createWithFormat("%d",atoi(_hp->getCString())+hpRestore)) ;
+			this->setHP(CCString::createWithFormat("%d",std::atoi(_hp->getCString())+hpRestore)) ;
 			if(_hpBar){
 			_hpBar->loseHP(this->getHpPercent());
 			}
@@ -1991,7 +1992,7 @@ bool NarutoSenki::ActionManager::setGear(gearType type){
 		gearCost=1000;
 	}
 	
-	if( this->getGearArray()->count()<=2 && atoi(this->getCoin()->getCString())>=gearCost){
+	if( this->getGearArray()->count()<=2 && std::atoi(this->getCoin()->getCString())>=gearCost){
 		CCString* gearItem=CCString::createWithFormat("%d",gearType(type));
 		this->getGearArray()->addObject(gearItem);
 		
@@ -2017,9 +2018,9 @@ bool NarutoSenki::ActionManager::setGear(gearType type){
 		case gear04:
 
 			if(this->gettempAttackValue1()){
-				this->settempAttackValue1(CCString::createWithFormat("%d",atoi(this->gettempAttackValue1()->getCString())+160));
+				this->settempAttackValue1(CCString::createWithFormat("%d",std::atoi(this->gettempAttackValue1()->getCString())+160));
 			}
-			this->setnAttackValue(CCString::createWithFormat("%d",atoi(this->getnAttackValue()->getCString())+160));
+			this->setnAttackValue(CCString::createWithFormat("%d",std::atoi(this->getnAttackValue()->getCString())+160));
 			this->isPofang=true;
 
 			break;
@@ -2052,7 +2053,7 @@ bool NarutoSenki::ActionManager::setGear(gearType type){
 			this->_delegate->getHudLayer()->item1Button->_isColdChanged=true;
 			break;
 		case gear08:
-			int tempMaxHP=atoi(this->getMaxHP()->getCString());
+			int tempMaxHP=std::atoi(this->getMaxHP()->getCString());
 			tempMaxHP+=6000;
 			this->setMaxHP(CCString::createWithFormat("%d",tempMaxHP));
 			if(_hpBar){
@@ -2253,12 +2254,12 @@ void NarutoSenki::ActionManager::enableGear06(float dt){
 
 
 void NarutoSenki::ActionManager::addCoin(int num){
-	this->setCoin(CCString::createWithFormat("%d",atoi(this->getCoin()->getCString())+num));
+	this->setCoin(CCString::createWithFormat("%d",std::atoi(this->getCoin()->getCString())+num));
 }
 
 void NarutoSenki::ActionManager::minusCoin(int num){
-	if( atoi(this->getCoin()->getCString()) > num){
-		this->setCoin(CCString::createWithFormat("%d",atoi(this->getCoin()->getCString())-num));
+	if( std::atoi(this->getCoin()->getCString()) > num){
+		this->setCoin(CCString::createWithFormat("%d",std::atoi(this->getCoin()->getCString())-num));
 	}else{
 		this->setCoin(CCString::createWithFormat("%d",0));
 	}
@@ -2269,11 +2270,11 @@ void NarutoSenki::ActionManager::setRestore(float dt){
 	if(_hpBar){
 
 		
-		if(atoi(_maxHP->getCString())-atoi(_hp->getCString())<=800){
+		if(std::atoi(_maxHP->getCString())-std::atoi(_hp->getCString())<=800){
 			this->setHP(CCString::create(this->getMaxHP()->getCString()));
 			_hpBar->loseHP(this->getHpPercent());
 		}else{
-			this->setHP(CCString::createWithFormat("%d",atoi(_hp->getCString())+800));
+			this->setHP(CCString::createWithFormat("%d",std::atoi(_hp->getCString())+800));
 			_hpBar->loseHP(this->getHpPercent());
 		}
 
@@ -2291,32 +2292,32 @@ void NarutoSenki::ActionManager::setRestore2(float dt){
 	if(_hpBar ){
 		//���ź�Ѫ
 		if(bamen>=8){
-			if(atoi(_hp->getCString())-1000>0){
-				this->setHP(CCString::createWithFormat("%d",atoi(_hp->getCString())-1000));
+			if(std::atoi(_hp->getCString())-1000>0){
+				this->setHP(CCString::createWithFormat("%d",std::atoi(_hp->getCString())-1000));
 				_hpBar->loseHP(this->getHpPercent());
 			}else{
 				this->setHP(CCString::createWithFormat("%d",100));
 				_hpBar->loseHP(this->getHpPercent());
 			}
 		}else if(bamen>=5){
-			if(atoi(_hp->getCString())-200>0){
-				this->setHP(CCString::createWithFormat("%d",atoi(_hp->getCString())-200));
+			if(std::atoi(_hp->getCString())-200>0){
+				this->setHP(CCString::createWithFormat("%d",std::atoi(_hp->getCString())-200));
 				_hpBar->loseHP(this->getHpPercent());
 			}else{
 				this->setHP(CCString::createWithFormat("%d",100));
 				_hpBar->loseHP(this->getHpPercent());
 			}
 		}else if(bamen>=4){
-			if(atoi(_hp->getCString())-150>0){
-				this->setHP(CCString::createWithFormat("%d",atoi(_hp->getCString())-150));
+			if(std::atoi(_hp->getCString())-150>0){
+				this->setHP(CCString::createWithFormat("%d",std::atoi(_hp->getCString())-150));
 				_hpBar->loseHP(this->getHpPercent());
 			}else{
 				this->setHP(CCString::createWithFormat("%d",100));
 				_hpBar->loseHP(this->getHpPercent());
 			}
 		}else if(bamen>=3){
-			if(atoi(_hp->getCString())-100>0){
-				this->setHP(CCString::createWithFormat("%d",atoi(_hp->getCString())-100));
+			if(std::atoi(_hp->getCString())-100>0){
+				this->setHP(CCString::createWithFormat("%d",std::atoi(_hp->getCString())-100));
 				_hpBar->loseHP(this->getHpPercent());
 			}else{
 				this->setHP(CCString::createWithFormat("%d",100));
@@ -2333,8 +2334,8 @@ void NarutoSenki::ActionManager::setRestore2(float dt){
 		}
 		if(isZone){
 
-			if(atoi(_hp->getCString())-1000>0){
-				this->setHP(CCString::createWithFormat("%d",atoi(_hp->getCString())-1000));
+			if(std::atoi(_hp->getCString())-1000>0){
+				this->setHP(CCString::createWithFormat("%d",std::atoi(_hp->getCString())-1000));
 				_hpBar->loseHP(this->getHpPercent());
 			}else{
 				this->setHP(CCString::createWithFormat("%d",100));
@@ -2345,11 +2346,11 @@ void NarutoSenki::ActionManager::setRestore2(float dt){
 
 
 		if(this->getActionState()==ACTION_STATE_IDLE && this->getHpPercent()<1){
-			if(atoi(_maxHP->getCString())-atoi(_hp->getCString())<=300){
+			if(std::atoi(_maxHP->getCString())-std::atoi(_hp->getCString())<=300){
 				this->setHP(CCString::create(this->getMaxHP()->getCString()));
 				_hpBar->loseHP(this->getHpPercent());
 			}else{
-				this->setHP(CCString::createWithFormat("%d",atoi(_hp->getCString())+300));
+				this->setHP(CCString::createWithFormat("%d",std::atoi(_hp->getCString())+300));
 				_hpBar->loseHP(this->getHpPercent());
 			}
 
@@ -2438,11 +2439,11 @@ void NarutoSenki::ActionManager::setAttackBox(CCNode* sender,void* date){
 			strcmp(this->getCharacter()->getCString(),"ImmortalSasuke")==0 || 
 			strcmp(this->getCharacter()->getCString(),"DevaPath")==0 ){
 
-				if(atoi(_maxHP->getCString())-atoi(_hp->getCString())<=260){
+				if(std::atoi(_maxHP->getCString())-std::atoi(_hp->getCString())<=260){
 					this->setHP(CCString::create(this->getMaxHP()->getCString()));
 					_hpBar->loseHP(this->getHpPercent());
 				}else{
-					this->setHP(CCString::createWithFormat("%d",atoi(_hp->getCString())+260));
+					this->setHP(CCString::createWithFormat("%d",std::atoi(_hp->getCString())+260));
 					_hpBar->loseHP(this->getHpPercent());
 				}
 
@@ -2451,7 +2452,7 @@ void NarutoSenki::ActionManager::setAttackBox(CCNode* sender,void* date){
 				}
 
 				_attackType=_spcattackType1;
-				_attackValue=atoi(_spcattackValue1->getCString());
+				_attackValue=std::atoi(_spcattackValue1->getCString());
 				_attackRangeX=_spcattackRangeX1;
 				_attackRangeY=_spcattackRangeY1;
 
@@ -2832,9 +2833,9 @@ void NarutoSenki::ActionManager::setCommand(CCNode* sender,void* date){
 						tempHero->hearts-=1;
 						if(strcmp(this->_group->getCString(),tempHero->_group->getCString())!=0){
 						
-							int tempMaxHP=atoi(this->getMaxHP()->getCString());
+							int tempMaxHP=std::atoi(this->getMaxHP()->getCString());
 							tempMaxHP+=100;
-							this->setnAttackValue(CCString::createWithFormat("%d",atoi(this->_nattackValue->getCString())+5));
+							this->setnAttackValue(CCString::createWithFormat("%d",std::atoi(this->_nattackValue->getCString())+5));
 							this->setMaxHP(CCString::createWithFormat("%d",tempMaxHP));
 
 							if(_hpBar){
@@ -2924,8 +2925,8 @@ void NarutoSenki::ActionManager::setCommand(CCNode* sender,void* date){
 						if(tempHero->_hpBar){
 
 							tempHero->_slayer=this;
-							if(atoi(tempHero->_hp->getCString())<=2000){		
-								tempHero->setDamage(CCString::create("c_hit"),atoi(tempHero->_hp->getCString()),false);
+							if(std::atoi(tempHero->_hp->getCString())<=2000){
+								tempHero->setDamage(CCString::create("c_hit"),std::atoi(tempHero->_hp->getCString()),false);
 
 							}else{
 								tempHero->setDamage(CCString::create("c_hit"),2000,false);
@@ -2946,8 +2947,8 @@ void NarutoSenki::ActionManager::setCommand(CCNode* sender,void* date){
 		}else{
 			if(this->_hpBar){
 				_slayer=this;
-				if(atoi(this->_hp->getCString())<=2000){		
-					this->setDamage(CCString::create("c_hit"),atoi(this->_hp->getCString()),false);
+				if(std::atoi(this->_hp->getCString())<=2000){
+					this->setDamage(CCString::create("c_hit"),std::atoi(this->_hp->getCString()),false);
 				}else{
 					this->setDamage(CCString::create("c_hit"),2000,false);
 				};
@@ -2988,9 +2989,9 @@ void NarutoSenki::ActionManager::setBuff(CCNode* sender,void* date){
 		this->scheduleOnce(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::disableBuff),buffStayTime);
 		this->setBuffEffect(_attackType->getCString());
 		
-		this->setsAttackValue1(CCString::createWithFormat("%d",atoi(this->_sattackValue1->getCString())+_skillUPBuffValue));
-		this->setsAttackValue2(CCString::createWithFormat("%d",atoi(this->_sattackValue2->getCString())+_skillUPBuffValue));
-		this->setsAttackValue3(CCString::createWithFormat("%d",atoi(this->_sattackValue3->getCString())+_skillUPBuffValue));
+		this->setsAttackValue1(CCString::createWithFormat("%d",std::atoi(this->_sattackValue1->getCString())+_skillUPBuffValue));
+		this->setsAttackValue2(CCString::createWithFormat("%d",std::atoi(this->_sattackValue2->getCString())+_skillUPBuffValue));
+		this->setsAttackValue3(CCString::createWithFormat("%d",std::atoi(this->_sattackValue3->getCString())+_skillUPBuffValue));
 		
 
 		if(strcmp(_attackType->getCString(),"hsBuff")==0 ){
@@ -3214,9 +3215,9 @@ void NarutoSenki::ActionManager::removeBuffEffect(const char* type){
 
 void NarutoSenki::ActionManager::disableBuff(float dt){
 	if(_skillUPBuffValue){
-		this->setsAttackValue1(CCString::createWithFormat("%d",atoi(this->_sattackValue1->getCString())-_skillUPBuffValue));
-		this->setsAttackValue2(CCString::createWithFormat("%d",atoi(this->_sattackValue2->getCString())-_skillUPBuffValue));
-		this->setsAttackValue3(CCString::createWithFormat("%d",atoi(this->_sattackValue3->getCString())-_skillUPBuffValue));
+		this->setsAttackValue1(CCString::createWithFormat("%d",std::atoi(this->_sattackValue1->getCString())-_skillUPBuffValue));
+		this->setsAttackValue2(CCString::createWithFormat("%d",std::atoi(this->_sattackValue2->getCString())-_skillUPBuffValue));
+		this->setsAttackValue3(CCString::createWithFormat("%d",std::atoi(this->_sattackValue3->getCString())-_skillUPBuffValue));
 		_skillUPBuffValue=NULL;
 
 		if(strcmp(this->getCharacter()->getCString(),"Neji")==0){
@@ -3292,14 +3293,14 @@ void NarutoSenki::ActionManager::healBuff(float dt){
 					if(abs(distanceX)<=tempRange1 &&
 						abs(tempHero->getPositionY()-this->getPositionY())<=128){
 
-							if(atoi(tempHero->getMaxHP()->getCString())-atoi(tempHero->getHP()->getCString())<=_healBuffValue){
+							if(std::atoi(tempHero->getMaxHP()->getCString())-std::atoi(tempHero->getHP()->getCString())<=_healBuffValue){
 								tempHero->setHP(CCString::create(tempHero->getMaxHP()->getCString()));
 								if(tempHero->_hpBar){
 									tempHero->_hpBar->loseHP(tempHero->getHpPercent());
 								}
 
 							}else{
-								tempHero->setHP(CCString::createWithFormat("%d",atoi(tempHero->getHP()->getCString())+int(_healBuffValue)));
+								tempHero->setHP(CCString::createWithFormat("%d",std::atoi(tempHero->getHP()->getCString())+int(_healBuffValue)));
 								if(tempHero->_hpBar){
 									tempHero->_hpBar->loseHP(tempHero->getHpPercent());
 								}
@@ -3424,14 +3425,14 @@ void NarutoSenki::ActionManager::healBuff(float dt){
 					if(abs(distanceX)<=tempRange1 &&
 						abs(tempHero->getPositionY()-this->getPositionY())<=128){
 
-							if(atoi(tempHero->getMaxHP()->getCString())-atoi(tempHero->getHP()->getCString())<=_healBuffValue){
+							if(std::atoi(tempHero->getMaxHP()->getCString())-std::atoi(tempHero->getHP()->getCString())<=_healBuffValue){
 								tempHero->setHP(CCString::create(tempHero->getMaxHP()->getCString()));
 								if(tempHero->_hpBar){
 									tempHero->_hpBar->loseHP(tempHero->getHpPercent());
 								}
 
 							}else{
-								tempHero->setHP(CCString::createWithFormat("%d",atoi(tempHero->getHP()->getCString())+int(_healBuffValue)));
+								tempHero->setHP(CCString::createWithFormat("%d",std::atoi(tempHero->getHP()->getCString())+int(_healBuffValue)));
 								if(tempHero->_hpBar){
 									tempHero->_hpBar->loseHP(tempHero->getHpPercent());
 								}
@@ -3451,7 +3452,7 @@ void NarutoSenki::ActionManager::healBuff(float dt){
 		){
 
 		//Сӣ����
-		if(atoi(_maxHP->getCString())-atoi(_hp->getCString())<=_healBuffValue){
+		if(std::atoi(_maxHP->getCString())-std::atoi(_hp->getCString())<=_healBuffValue){
 			this->setHP(CCString::create(_maxHP->getCString()));
 			if(_hpBar){
 				_hpBar->loseHP(this->getHpPercent());
@@ -3459,7 +3460,7 @@ void NarutoSenki::ActionManager::healBuff(float dt){
 
 
 		}else{
-			this->setHP(CCString::createWithFormat("%d",atoi(_hp->getCString())+int(_healBuffValue)));
+			this->setHP(CCString::createWithFormat("%d",std::atoi(_hp->getCString())+int(_healBuffValue)));
 			if(_hpBar){
 				_hpBar->loseHP(this->getHpPercent());
 			}
@@ -3500,7 +3501,7 @@ void NarutoSenki::ActionManager::dehealBuff(float dt){
 			_slayer=tempHero;
 		}
 	};
-	if(atoi(_hp->getCString())<=_dehealBuffValue){		
+	if(std::atoi(_hp->getCString())<=_dehealBuffValue){
 		this->setDamage(CCString::create("c_hit"),_dehealBuffValue,false);
 		
 	}else{
@@ -3527,7 +3528,7 @@ void NarutoSenki::ActionManager::lostBlood(float dt){
 		}
 	}
 
-	if(atoi(_hp->getCString())<=lostBloodValue){		
+	if(std::atoi(_hp->getCString())<=lostBloodValue){
 		this->setDamage(CCString::create("c_hit"),lostBloodValue,false);
 
 	}else{
@@ -3566,7 +3567,7 @@ void NarutoSenki::ActionManager::changeAction(){
 			_tempAttackType=_nattackType;
 			_nattackType=_spcattackType3;
 			
-			this->setnAttackValue(CCString::createWithFormat("%d",atoi(this->_nattackValue->getCString())+460));
+			this->setnAttackValue(CCString::createWithFormat("%d",std::atoi(this->_nattackValue->getCString())+460));
 			_nattackRangeX=32;
 			_nattackRangeY=48;
 			this->_isOnlySkillLocked=true;
@@ -3588,7 +3589,7 @@ void NarutoSenki::ActionManager::changeAction(){
 	}else if(strcmp(this->_character->getCString(),"Sakura")==0 ){
 
 		this->setNAttackAction(createAnimation(skillSPC1Array,10.0f,false,true));
-		this->setnAttackValue(CCString::createWithFormat("%d",atoi(this->_nattackValue->getCString())+400));
+		this->setnAttackValue(CCString::createWithFormat("%d",std::atoi(this->_nattackValue->getCString())+400));
 
 	}else if(strcmp(this->_character->getCString(),"Kakuzu")==0 ){	
 
@@ -3643,7 +3644,7 @@ void NarutoSenki::ActionManager::changeAction(){
 		
 		this->_isOnlySkillLocked=true;
 
-		this->settempAttackValue1(CCString::createWithFormat("%d",atoi(_nattackValue->getCString())));	
+		this->settempAttackValue1(CCString::createWithFormat("%d",std::atoi(_nattackValue->getCString())));
 		this->setnAttackValue(CCString::createWithFormat("%d",960));
 		
 	
@@ -3681,7 +3682,7 @@ void NarutoSenki::ActionManager::changeAction(){
 		
 			
 		if(strcmp(this->_character->getCString(),"RikudoNaruto")==0){
-			this->settempAttackValue1(CCString::createWithFormat("%d",atoi(_nattackValue->getCString())));	
+			this->settempAttackValue1(CCString::createWithFormat("%d",std::atoi(_nattackValue->getCString())));
 			this->setnAttackValue(CCString::createWithFormat("%d",560));
 		}
 		
@@ -3702,7 +3703,7 @@ void NarutoSenki::ActionManager::changeAction(){
 		this->_isBati=true;
 
 		_attackType=_spcattackType2;
-		_attackValue=atoi(_spcattackValue2->getCString());
+		_attackValue=std::atoi(_spcattackValue2->getCString());
 		_attackRangeX=_spcattackRangeX2;
 		_attackRangeY=_spcattackRangeY2;
 
@@ -3754,14 +3755,14 @@ void NarutoSenki::ActionManager::changeAction(){
 			};
 
 			this->_powerUPBuffValue=360;
-			this->setnAttackValue(CCString::createWithFormat("%d",atoi(this->_nattackValue->getCString())+_powerUPBuffValue));
+			this->setnAttackValue(CCString::createWithFormat("%d",std::atoi(this->_nattackValue->getCString())+_powerUPBuffValue));
 			this->setNAttackAction(createAnimation(skillSPC4Array,10.0f,false,true));
 
 		}
 
 	}else if(strcmp(this->_character->getCString(),"Akamaru")==0){
 		this->_powerUPBuffValue=360;
-		this->setnAttackValue(CCString::createWithFormat("%d",atoi(this->_nattackValue->getCString())+_powerUPBuffValue));
+		this->setnAttackValue(CCString::createWithFormat("%d",std::atoi(this->_nattackValue->getCString())+_powerUPBuffValue));
 		this->setIdleAction(createAnimation(skillSPC1Array,5.0f,true,false));
 		this->setWalkAction(createAnimation(skillSPC2Array,10.0f,true,false));
 		this->setNAttackAction(createAnimation(skillSPC3Array,10.0f,false,true));
@@ -3827,7 +3828,7 @@ void NarutoSenki::ActionManager::changeAction(){
 
 
 			this->_isOnlySkillLocked=true;
-			this->settempAttackValue1(CCString::createWithFormat("%d",atoi(_nattackValue->getCString())));	
+			this->settempAttackValue1(CCString::createWithFormat("%d",std::atoi(_nattackValue->getCString())));
 			this->setnAttackValue(CCString::createWithFormat("%d",560));
 			
 
@@ -3901,7 +3902,7 @@ void NarutoSenki::ActionManager::changeAction(){
 			this->setWalkSpeed(112);
 			this->_originSpeed=112;
 			
-			this->settempAttackValue1(CCString::createWithFormat("%d",atoi(_nattackValue->getCString())));	
+			this->settempAttackValue1(CCString::createWithFormat("%d",std::atoi(_nattackValue->getCString())));
 			this->setnAttackValue(CCString::createWithFormat("%d",1160));
 		
 			_nattackRangeX=156;
@@ -4003,7 +4004,7 @@ void NarutoSenki::ActionManager::changeAction(){
 
 		this->_isOnlySkillLocked=true;
 
-		this->settempAttackValue1(CCString::createWithFormat("%d",atoi(_nattackValue->getCString())));	
+		this->settempAttackValue1(CCString::createWithFormat("%d",std::atoi(_nattackValue->getCString())));
 		this->setnAttackValue(CCString::createWithFormat("%d",560));
 
 		_nattackRangeX=128;
@@ -4027,7 +4028,7 @@ void NarutoSenki::ActionManager::changeAction(){
 		this->setSkill1Action(createAnimation(skillSPC1Array,10.0f,false,true));
 		this->setSkill2Action(createAnimation(skillSPC2Array,10.0f,false,true));
 		this->setIdleAction(createAnimation(skillSPC3Array,5.0f,true,false));
-		this->settempAttackValue1(CCString::createWithFormat("%d",atoi(_sattackValue1->getCString())));
+		this->settempAttackValue1(CCString::createWithFormat("%d",std::atoi(_sattackValue1->getCString())));
 		this->setsAttackValue1(_spcattackValue1);
 		
 		CCObject* pObject;
@@ -4080,7 +4081,7 @@ void NarutoSenki::ActionManager::changeAction(){
 			_isBati=true;
 			_nattackRangeX=16;
 			_nattackRangeY=48;
-			this->settempAttackValue1(CCString::createWithFormat("%d",atoi(_nattackValue->getCString())));	
+			this->settempAttackValue1(CCString::createWithFormat("%d",std::atoi(_nattackValue->getCString())));
 			this->setnAttackValue(CCString::createWithFormat("%d",560));
 			
 			this->_isOnlySkillLocked=true;
@@ -4102,7 +4103,7 @@ void NarutoSenki::ActionManager::changeAction(){
 
 	}else if(strcmp(this->_character->getCString(),"Suigetsu")==0 ){
 
-		this->settempAttackValue1(CCString::createWithFormat("%d",atoi(_nattackValue->getCString())));	
+		this->settempAttackValue1(CCString::createWithFormat("%d",std::atoi(_nattackValue->getCString())));
 		this->setnAttackValue(CCString::createWithFormat("%d",1960));
 
 		this->_isOnlySkillLocked=true;
@@ -4128,7 +4129,7 @@ void NarutoSenki::ActionManager::changeAction(){
 
 	}else if(strcmp(this->_character->getCString(),"Kisame")==0){
 
-		this->settempAttackValue1(CCString::createWithFormat("%d",atoi(_nattackValue->getCString())));	
+		this->settempAttackValue1(CCString::createWithFormat("%d",std::atoi(_nattackValue->getCString())));
 		this->setnAttackValue(CCString::createWithFormat("%d",660));
 
 		this->_isOnlySkillLocked=true;
@@ -4158,7 +4159,7 @@ void NarutoSenki::ActionManager::changeAction(){
 
 	}else if(strcmp(this->_character->getCString(),"Jugo")==0){
 
-		this->settempAttackValue1(CCString::createWithFormat("%d",atoi(_nattackValue->getCString())));	
+		this->settempAttackValue1(CCString::createWithFormat("%d",std::atoi(_nattackValue->getCString())));
 		this->setnAttackValue(CCString::createWithFormat("%d",1960));
 
 		this->_isOnlySkillLocked=true;
@@ -4188,7 +4189,7 @@ void NarutoSenki::ActionManager::changeAction(){
 
 	}else if(strcmp(this->_character->getCString(),"Parents")==0){
 
-		this->settempAttackValue1(CCString::createWithFormat("%d",atoi(_nattackValue->getCString())));	
+		this->settempAttackValue1(CCString::createWithFormat("%d",std::atoi(_nattackValue->getCString())));
 		this->setnAttackValue(CCString::createWithFormat("%d",2460));
 
 		this->_isOnlySkillLocked=true;
@@ -4242,7 +4243,7 @@ void NarutoSenki::ActionManager::changeAction(){
 
 		}else if(_skillChangeBuffValue==18){
 
-			this->setnAttackValue(CCString::createWithFormat("%d",atoi(this->_nattackValue->getCString())+200));
+			this->setnAttackValue(CCString::createWithFormat("%d",std::atoi(this->_nattackValue->getCString())+200));
 
 			_nattackRangeX=16;
 			_nattackRangeY=48;
@@ -4268,14 +4269,14 @@ void NarutoSenki::ActionManager::changeAction(){
 		}
 		
 		if(bamen ==1){
-			this->setnAttackValue(CCString::createWithFormat("%d",atoi(this->_nattackValue->getCString())+30));
+			this->setnAttackValue(CCString::createWithFormat("%d",std::atoi(this->_nattackValue->getCString())+30));
 			if(strcmp(this->getRole()->getCString(),"Player")==0){
 				if(_delegate->getHudLayer()->skill4Button){
 					_delegate->getHudLayer()->skill4Button->unLock();
 				}
 			}
 		}else if(bamen ==2){
-			this->setsAttackValue2(CCString::createWithFormat("%d",atoi(this->_sattackValue2->getCString())+100));
+			this->setsAttackValue2(CCString::createWithFormat("%d",std::atoi(this->_sattackValue2->getCString())+100));
 		}else if(bamen==3){
 			if(!_skillBuffEffect){
 				this->setBuffEffect("bmBuff");
@@ -4293,20 +4294,20 @@ void NarutoSenki::ActionManager::changeAction(){
 				}
 			}
 		}else if(bamen==4){
-			this->setsAttackValue2(CCString::createWithFormat("%d",atoi(this->_sattackValue2->getCString())+100));
-			this->setsAttackValue3(CCString::createWithFormat("%d",atoi(this->_sattackValue3->getCString())+100));
+			this->setsAttackValue2(CCString::createWithFormat("%d",std::atoi(this->_sattackValue2->getCString())+100));
+			this->setsAttackValue3(CCString::createWithFormat("%d",std::atoi(this->_sattackValue3->getCString())+100));
 		}else if(bamen==5){
 			this->setWalkAction(createAnimation(skillSPC1Array,10.0f,true,false));
 			this->setWalkSpeed(320);
 			_originSpeed=320;
-			this->setsAttackValue2(CCString::createWithFormat("%d",atoi(this->_sattackValue2->getCString())+100));
-			this->setsAttackValue3(CCString::createWithFormat("%d",atoi(this->_sattackValue3->getCString())+100));
-			this->setnAttackValue(CCString::createWithFormat("%d",atoi(this->_nattackValue->getCString())+60));
+			this->setsAttackValue2(CCString::createWithFormat("%d",std::atoi(this->_sattackValue2->getCString())+100));
+			this->setsAttackValue3(CCString::createWithFormat("%d",std::atoi(this->_sattackValue3->getCString())+100));
+			this->setnAttackValue(CCString::createWithFormat("%d",std::atoi(this->_nattackValue->getCString())+60));
 		}
 
 
 	}else if(strcmp(this->_character->getCString(),"Tsunade")==0){
-		this->setnAttackValue(CCString::createWithFormat("%d",atoi(this->_nattackValue->getCString())+250));
+		this->setnAttackValue(CCString::createWithFormat("%d",std::atoi(this->_nattackValue->getCString())+250));
 		this->_isOnlySkillLocked=true;
 		_nattackRangeX=32;
 		_nattackRangeY=48;
@@ -4333,7 +4334,7 @@ void NarutoSenki::ActionManager::changeAction(){
 	}else if(strcmp(this->_character->getCString(),"Roshi")==0 ||
 		strcmp(this->_character->getCString(),"Han")==0 
 		){
-		this->setnAttackValue(CCString::createWithFormat("%d",atoi(this->_nattackValue->getCString())+700));
+		this->setnAttackValue(CCString::createWithFormat("%d",std::atoi(this->_nattackValue->getCString())+700));
 		_nattackRangeX=0;
 		_nattackRangeY=48;
 		_tempAttackType=_nattackType;
@@ -4373,7 +4374,7 @@ void NarutoSenki::ActionManager::changeAction2(){
 
 	if(strcmp(this->_character->getCString(),"Minato")==0){
 
-		_attackValue=atoi(_spcattackValue2->getCString());
+		_attackValue=std::atoi(_spcattackValue2->getCString());
 		this->setAttackType(this->getspcAttack2Type());
 		_attackRangeX=_spcattackRangeX2;
 		_attackRangeY=_spcattackRangeY2;
@@ -4403,7 +4404,7 @@ void NarutoSenki::ActionManager::resumeAction(float dt){
 	}else if(strcmp(this->_character->getCString(),"Choji")==0 ){
 
 	
-			this->setnAttackValue(CCString::createWithFormat("%d",atoi(this->_nattackValue->getCString())-460));
+			this->setnAttackValue(CCString::createWithFormat("%d",std::atoi(this->_nattackValue->getCString())-460));
 			_nattackRangeX=16;
 			_nattackRangeY=48;
 			_nattackType=_tempAttackType;
@@ -4439,7 +4440,7 @@ void NarutoSenki::ActionManager::resumeAction(float dt){
 
 	}else if(strcmp(this->_character->getCString(),"Sakura")==0){
 		this->setNAttackAction(createAnimation(nattackArray,10.0f,false,true));
-		this->setnAttackValue(CCString::createWithFormat("%d",atoi(this->_nattackValue->getCString())-400));
+		this->setnAttackValue(CCString::createWithFormat("%d",std::atoi(this->_nattackValue->getCString())-400));
 
 	}else if(strcmp(this->_character->getCString(),"Sai")==0 ||
 		strcmp(this->_character->getCString(),"Deidara")==0
@@ -4561,7 +4562,7 @@ void NarutoSenki::ActionManager::resumeAction(float dt){
 		
 		_originSpeed=224;
 		if(_tempAttackValue1){
-				this->setnAttackValue(CCString::createWithFormat("%d",atoi(this->_tempAttackValue1->getCString())));
+				this->setnAttackValue(CCString::createWithFormat("%d",std::atoi(this->_tempAttackValue1->getCString())));
 				_tempAttackValue1=NULL;
 		}
 		isPofang=false;
@@ -4622,7 +4623,7 @@ void NarutoSenki::ActionManager::resumeAction(float dt){
 		}
 		
 		if(_tempAttackValue1){
-			this->setnAttackValue(CCString::createWithFormat("%d",atoi(this->_tempAttackValue1->getCString())));
+			this->setnAttackValue(CCString::createWithFormat("%d",std::atoi(this->_tempAttackValue1->getCString())));
 			_tempAttackValue1=NULL;
 		}
 
@@ -4632,7 +4633,7 @@ void NarutoSenki::ActionManager::resumeAction(float dt){
 		this->setSkill1Action(createAnimation(skill1Array,10.0f,false,true));
 		this->setSkill2Action(createAnimation(skill2Array,10.0f,false,true));
 		
-		this->setsAttackValue1(CCString::createWithFormat("%d",atoi(_tempAttackValue1->getCString())));
+		this->setsAttackValue1(CCString::createWithFormat("%d",std::atoi(_tempAttackValue1->getCString())));
 
 
 		if(strcmp(this->_role->getCString(),"Player")==0){
@@ -4667,7 +4668,7 @@ void NarutoSenki::ActionManager::resumeAction(float dt){
 		
 		_originSpeed=224;
 		if(_tempAttackValue1){
-		this->setnAttackValue(CCString::createWithFormat("%d",atoi(this->_tempAttackValue1->getCString())));
+		this->setnAttackValue(CCString::createWithFormat("%d",std::atoi(this->_tempAttackValue1->getCString())));
 		_tempAttackValue1=NULL;
 		}
 		_nattackRangeX=16;
@@ -4696,7 +4697,7 @@ void NarutoSenki::ActionManager::resumeAction(float dt){
 	}else if(strcmp(this->_character->getCString(),"Kiba")==0){
 
 			if(_powerUPBuffValue){
-				this->setnAttackValue(CCString::createWithFormat("%d",atoi(this->_nattackValue->getCString())-_powerUPBuffValue));
+				this->setnAttackValue(CCString::createWithFormat("%d",std::atoi(this->_nattackValue->getCString())-_powerUPBuffValue));
 				this->setNAttackAction(createAnimation(skillSPC3Array,10.0f,false,true));
 				_powerUPBuffValue=NULL;
 			}
@@ -4712,7 +4713,7 @@ void NarutoSenki::ActionManager::resumeAction(float dt){
 	}else if(strcmp(this->_character->getCString(),"Akamaru")==0){
 	
 		if(_powerUPBuffValue){
-			this->setnAttackValue(CCString::createWithFormat("%d",atoi(this->_nattackValue->getCString())-_powerUPBuffValue));
+			this->setnAttackValue(CCString::createWithFormat("%d",std::atoi(this->_nattackValue->getCString())-_powerUPBuffValue));
 			this->setIdleAction(createAnimation(idleArray,5.0f,true,false));
 			this->setWalkAction(createAnimation(walkArray,10.0f,true,false));
 			this->setNAttackAction(createAnimation(nattackArray,10.0f,false,true));
@@ -4730,7 +4731,7 @@ void NarutoSenki::ActionManager::resumeAction(float dt){
 	}else if(strcmp(this->_character->getCString(),"Minato")==0){
 
 	
-		this->setnAttackValue(CCString::createWithFormat("%d",atoi(this->_nattackValue->getCString())-200));
+		this->setnAttackValue(CCString::createWithFormat("%d",std::atoi(this->_nattackValue->getCString())-200));
 		_nattackRangeX=16;
 		_nattackRangeY=48;
 		this->setNAttackAction(createAnimation(nattackArray,10.0f,false,true));
@@ -4766,7 +4767,7 @@ void NarutoSenki::ActionManager::resumeAction(float dt){
 		
 		_originSpeed=224;
 		if(_tempAttackValue1){
-		this->setnAttackValue(CCString::createWithFormat("%d",atoi(this->_tempAttackValue1->getCString())));
+		this->setnAttackValue(CCString::createWithFormat("%d",std::atoi(this->_tempAttackValue1->getCString())));
 		_tempAttackValue1=NULL;
 		}
 		_nattackRangeX=16;
@@ -4806,7 +4807,7 @@ void NarutoSenki::ActionManager::resumeAction(float dt){
 		
 		_originSpeed=224;
 		if(_tempAttackValue1){
-		this->setnAttackValue(CCString::createWithFormat("%d",atoi(this->_tempAttackValue1->getCString())));
+		this->setnAttackValue(CCString::createWithFormat("%d",std::atoi(this->_tempAttackValue1->getCString())));
 		_tempAttackValue1=NULL;
 		}
 		_gardValue-=5000;
@@ -4851,7 +4852,7 @@ void NarutoSenki::ActionManager::resumeAction(float dt){
 			}
 
 	}else if(strcmp(this->_character->getCString(),"Tsunade")==0){
-		this->setnAttackValue(CCString::createWithFormat("%d",atoi(this->_nattackValue->getCString())-250));
+		this->setnAttackValue(CCString::createWithFormat("%d",std::atoi(this->_nattackValue->getCString())-250));
 		_nattackRangeX=16;
 		_nattackRangeY=48;
 		_nattackType=_tempAttackType;
@@ -4961,7 +4962,7 @@ void NarutoSenki::ActionManager::setActionResume(){
 
 			this->_isBati=false;
 			if(_tempAttackValue1){
-			this->setnAttackValue(CCString::createWithFormat("%d",atoi(this->_tempAttackValue1->getCString())));
+			this->setnAttackValue(CCString::createWithFormat("%d",std::atoi(this->_tempAttackValue1->getCString())));
 			_tempAttackValue1=NULL;
 			}
 			_isOnlySkillLocked=false;
@@ -4994,7 +4995,7 @@ void NarutoSenki::ActionManager::setActionResume(){
 
 			
 			if(_tempAttackValue1){
-				this->setnAttackValue(CCString::createWithFormat("%d",atoi(this->_tempAttackValue1->getCString())));
+				this->setnAttackValue(CCString::createWithFormat("%d",std::atoi(this->_tempAttackValue1->getCString())));
 				_tempAttackValue1=NULL;
 			}
 			_isOnlySkillLocked=false;
@@ -5032,7 +5033,7 @@ void NarutoSenki::ActionManager::setActionResume(){
 
 
 			if(_tempAttackValue1){
-				this->setnAttackValue(CCString::createWithFormat("%d",atoi(this->_tempAttackValue1->getCString())));
+				this->setnAttackValue(CCString::createWithFormat("%d",std::atoi(this->_tempAttackValue1->getCString())));
 				_tempAttackValue1=NULL;
 			}
 			_isOnlySkillLocked=false;
@@ -5070,7 +5071,7 @@ void NarutoSenki::ActionManager::setActionResume(){
 
 
 			if(_tempAttackValue1){
-				this->setnAttackValue(CCString::createWithFormat("%d",atoi(this->_tempAttackValue1->getCString())));
+				this->setnAttackValue(CCString::createWithFormat("%d",std::atoi(this->_tempAttackValue1->getCString())));
 				_tempAttackValue1=NULL;
 			}
 			_isOnlySkillLocked=false;
@@ -5125,7 +5126,7 @@ void NarutoSenki::ActionManager::setActionResume(){
 
 		if(_powerUPBuffValue){
 			this->unschedule(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::resumeAction));
-			this->setnAttackValue(CCString::createWithFormat("%d",atoi(this->_nattackValue->getCString())-_powerUPBuffValue));
+			this->setnAttackValue(CCString::createWithFormat("%d",std::atoi(this->_nattackValue->getCString())-_powerUPBuffValue));
 			_powerUPBuffValue=NULL;
 		}
 		_isBati=true;		
@@ -5158,7 +5159,7 @@ void NarutoSenki::ActionManager::setActionResume(){
 		_isBati=false;
 		_isOnlySkillLocked=false;
 		if(_tempAttackValue1){
-			this->setnAttackValue(CCString::createWithFormat("%d",atoi(this->_tempAttackValue1->getCString())));
+			this->setnAttackValue(CCString::createWithFormat("%d",std::atoi(this->_tempAttackValue1->getCString())));
 			_tempAttackValue1=NULL;
 		}
 		this->setIdleAction(createAnimation(idleArray,5.0f,true,false));
@@ -5228,7 +5229,7 @@ void NarutoSenki::ActionManager::setActionResume(){
 			
 			_originSpeed=224;
 			if(_tempAttackValue1){
-				this->setnAttackValue(CCString::createWithFormat("%d",atoi(this->_tempAttackValue1->getCString())));
+				this->setnAttackValue(CCString::createWithFormat("%d",std::atoi(this->_tempAttackValue1->getCString())));
 				_tempAttackValue1=NULL;
 			
 			}	
@@ -5267,7 +5268,7 @@ void NarutoSenki::ActionManager::setActionResume(){
 			
 			_originSpeed=224;
 			if(_tempAttackValue1){
-			this->setnAttackValue(CCString::createWithFormat("%d",atoi(this->_tempAttackValue1->getCString())));		
+			this->setnAttackValue(CCString::createWithFormat("%d",std::atoi(this->_tempAttackValue1->getCString())));
 			_tempAttackValue1=NULL;
 			}
 			_nattackRangeX=16;
@@ -5284,7 +5285,7 @@ void NarutoSenki::ActionManager::setActionResume(){
 
 		this->unschedule(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::resumeAction));
 
-		this->setnAttackValue(CCString::createWithFormat("%d",atoi(this->_nattackValue->getCString())-460));
+		this->setnAttackValue(CCString::createWithFormat("%d",std::atoi(this->_nattackValue->getCString())-460));
 		_nattackRangeX=16;
 		_nattackRangeY=48;
 		_nattackType=_tempAttackType;
@@ -5551,7 +5552,7 @@ void NarutoSenki::ActionManager::setBullet(CCNode* sender,void* date){
 		bullet->setPosition(ccp(this->getPositionX()+(this->_isFlipped?-rangeX:rangeX),
 			this->getPositionY()+this->getHeight()/2));
 		if(this->_skillUPBuffValue){
-			bullet->setnAttackValue(CCString::createWithFormat("%d",atoi(bullet->_nattackValue->getCString())+this->_skillUPBuffValue));
+			bullet->setnAttackValue(CCString::createWithFormat("%d",std::atoi(bullet->_nattackValue->getCString())+this->_skillUPBuffValue));
 
 		}
 
@@ -5632,7 +5633,7 @@ void NarutoSenki::ActionManager::setBulletGroup(float dt){
 		_delegate->addChild(bullet,currentSkillTag);
 		bullet->idle();
 		if(this->_skillUPBuffValue){
-			bullet->setnAttackValue(CCString::createWithFormat("%d",atoi(bullet->_nattackValue->getCString())+this->_skillUPBuffValue));
+			bullet->setnAttackValue(CCString::createWithFormat("%d",std::atoi(bullet->_nattackValue->getCString())+this->_skillUPBuffValue));
 		}
 
 		bullet->scheduleOnce(CC_SCHEDULE_SELECTOR(Bullet::setAttack),0.5f);
@@ -5841,7 +5842,7 @@ void NarutoSenki::ActionManager::setClone(CCNode* sender,void* date){
 
 	clone->setMaxHP(CCString::create(this->getMaxHP()->getCString()));
 	clone->_exp=this->_exp;
-	clone->setnAttackValue(CCString::createWithFormat("%d",atoi(this->getnAttackValue()->getCString())));
+	clone->setnAttackValue(CCString::createWithFormat("%d",std::atoi(this->getnAttackValue()->getCString())));
 	clone->_gardValue=this->_gardValue;
 	clone->_level=this->_level;
 	clone->setHPbar();
@@ -6578,9 +6579,9 @@ void NarutoSenki::ActionManager::setTransform(){
 	}
 	
 
-	int tempMaxHP=atoi(this->getMaxHP()->getCString());
+	int tempMaxHP=std::atoi(this->getMaxHP()->getCString());
 	
-	int tempHP=atoi(this->getHP()->getCString());
+	int tempHP=std::atoi(this->getHP()->getCString());
 	CCString* tempAttackValue=CCString::createWithFormat("%s",this->getnAttackValue()->getCString());
 	const char* charName;
 	if(strcmp(_character->getCString(),"Naruto")==0){
@@ -6673,7 +6674,7 @@ void NarutoSenki::ActionManager::setTransform(){
 
 float NarutoSenki::ActionManager::getHpPercent(){
 
-	float p=float(atoi(_hp->getCString()))/float(atoi(_maxHP->getCString()));
+	float p=float(std::atoi(_hp->getCString()))/float(std::atoi(_maxHP->getCString()));
 	return  p;
 }
 
@@ -6689,7 +6690,7 @@ void NarutoSenki::ActionManager::attack(abType type){
 
 	switch(type){
 	case NAttack:
-		_attackValue=atoi(this->getnAttackValue()->getCString());
+		_attackValue=std::atoi(this->getnAttackValue()->getCString());
 		_attackType=_nattackType;
 		_attackRangeX=_nattackRangeX;
 		_attackRangeY=_nattackRangeY;
@@ -6702,7 +6703,7 @@ void NarutoSenki::ActionManager::attack(abType type){
 			if(_isControled)
 				_delegate->getHudLayer()->skill1Button->click();	
 		}
-		_attackValue=atoi(_sattackValue1->getCString());
+		_attackValue=std::atoi(_sattackValue1->getCString());
 		_attackType=_sattackType1;
 		_attackRangeX=_sattackRangeX1;
 		_attackRangeY=_sattackRangeY1;
@@ -6716,7 +6717,7 @@ void NarutoSenki::ActionManager::attack(abType type){
 			if(_isControled)
 			_delegate->getHudLayer()->skill2Button->click();	
 		}
-		_attackValue=atoi(_sattackValue2->getCString());
+		_attackValue=std::atoi(_sattackValue2->getCString());
 		_attackType=_sattackType2;
 		_attackRangeX=_sattackRangeX2;
 		_attackRangeY=_sattackRangeY2;
@@ -6729,7 +6730,7 @@ void NarutoSenki::ActionManager::attack(abType type){
 			if(_isControled)
 				_delegate->getHudLayer()->skill3Button->click();	
 		}
-		_attackValue=atoi(_sattackValue3->getCString());
+		_attackValue=std::atoi(_sattackValue3->getCString());
 		_attackType=_sattackType3;
 		_attackRangeX=_sattackRangeX3;
 		_attackRangeY=_sattackRangeY3;
@@ -6751,7 +6752,7 @@ void NarutoSenki::ActionManager::attack(abType type){
 			_delegate->fillCKRToMax(this);
 		}
 
-		_attackValue=atoi(_sattackValue4->getCString());
+		_attackValue=std::atoi(_sattackValue4->getCString());
 		_attackType=_sattackType4;
 		_attackRangeX=_sattackRangeX4;
 		_attackRangeY=_sattackRangeY4;
@@ -6773,7 +6774,7 @@ void NarutoSenki::ActionManager::attack(abType type){
 			_delegate->fillCKRToMax(this);
 		}
 
-		_attackValue=atoi(_sattackValue5->getCString());
+		_attackValue=std::atoi(_sattackValue5->getCString());
 		_attackType=_sattackType5;
 		_attackRangeX=_sattackRangeX5;
 		_attackRangeY=_sattackRangeY5;
@@ -7468,7 +7469,7 @@ void NarutoSenki::ActionManager::dead(){
 
 			if(strcmp(this->_role->getCString(),"Player")==0){
 				const char* dl=_delegate->getHudLayer()->deadLabel->getString().c_str();
-				int deads=atoi(dl)+1;
+				int deads=std::atoi(dl)+1;
 				_delegate->getHudLayer()->deadLabel->setString(CCString::createWithFormat("%d",deads)->getCString());
 			}
 		}
@@ -7529,12 +7530,12 @@ void NarutoSenki::ActionManager::dead(){
 				this->setWalkSpeed(224);
 				_originSpeed=224;
 				this->setWalkAction(createAnimation(walkArray,10.0f,true,false));
-				this->setsAttackValue3(CCString::createWithFormat("%d",atoi(this->_sattackValue3->getCString())-100));
-				this->setsAttackValue2(CCString::createWithFormat("%d",atoi(this->_sattackValue2->getCString())-100));
-				this->setnAttackValue(CCString::createWithFormat("%d",atoi(this->_nattackValue->getCString())-60));
+				this->setsAttackValue3(CCString::createWithFormat("%d",std::atoi(this->_sattackValue3->getCString())-100));
+				this->setsAttackValue2(CCString::createWithFormat("%d",std::atoi(this->_sattackValue2->getCString())-100));
+				this->setnAttackValue(CCString::createWithFormat("%d",std::atoi(this->_nattackValue->getCString())-60));
 			}else if(bamen==4){
-				this->setsAttackValue3(CCString::createWithFormat("%d",atoi(this->_sattackValue3->getCString())-100));
-				this->setsAttackValue2(CCString::createWithFormat("%d",atoi(this->_sattackValue2->getCString())-100));
+				this->setsAttackValue3(CCString::createWithFormat("%d",std::atoi(this->_sattackValue3->getCString())-100));
+				this->setsAttackValue2(CCString::createWithFormat("%d",std::atoi(this->_sattackValue2->getCString())-100));
 			}else if(bamen==3){
 				this->setTransform();
 
@@ -7550,14 +7551,14 @@ void NarutoSenki::ActionManager::dead(){
 				}
 
 			}else if(bamen==2){
-				this->setsAttackValue2(CCString::createWithFormat("%d",atoi(this->_sattackValue2->getCString())-100));
+				this->setsAttackValue2(CCString::createWithFormat("%d",std::atoi(this->_sattackValue2->getCString())-100));
 			}else if(bamen==1){
 				if(strcmp(this->getRole()->getCString(),"Player")==0){
 					if(_delegate->getHudLayer()->skill4Button){
 						_delegate->getHudLayer()->skill4Button->setLock();
 					}
 				}
-				this->setnAttackValue(CCString::createWithFormat("%d",atoi(this->_nattackValue->getCString())-30));
+				this->setnAttackValue(CCString::createWithFormat("%d",std::atoi(this->_nattackValue->getCString())-30));
 			}
 			bamen-=1;
 			if(bamen==0){
@@ -7811,7 +7812,7 @@ bool NarutoSenki::ActionManager::findEnemy2(const char* type){
 							if(strcmp(target->_character->getCString(),"Roshi")!=0
 								&& strcmp(target->_character->getCString(),"Han")!=0){
 
-									friendCombatPoint+=baseSkillCombatPoint+ atoi(target->getHP()->getCString())+
+									friendCombatPoint+=baseSkillCombatPoint+ std::atoi(target->getHP()->getCString())+
 										(atof(target->getCKR()->getCString())/15000)*target->_sattackCombatPoint4+ (atof(target->getCKR2()->getCString())/25000)*target->_sattackCombatPoint5;
 
 							}
@@ -7823,7 +7824,7 @@ bool NarutoSenki::ActionManager::findEnemy2(const char* type){
 
 						if(strcmp(target->_character->getCString(),"Roshi")!=0
 							&& strcmp(target->_character->getCString(),"Han")!=0){
-						enemyCombatPoint+=baseSkillCombatPoint+atoi(target->getHP()->getCString())
+						enemyCombatPoint+=baseSkillCombatPoint+std::atoi(target->getHP()->getCString())
 							+(atof(target->getCKR()->getCString())/15000)*target->_sattackCombatPoint4+ (atof(target->getCKR2()->getCString())/25000)*target->_sattackCombatPoint5;				
 						}
 
@@ -8012,30 +8013,30 @@ void NarutoSenki::ActionManager::stepOn(){
 
 }
 bool NarutoSenki::ActionManager::checkRetri(){
-	if(_isCanItem1 &&atoi(this->getCoin()->getCString())>=50){
+	if(_isCanItem1 &&std::atoi(this->getCoin()->getCString())>=50){
 		if(_delegate->_isHardCoreGame){
 			if(battleCondiction>=0){
 				if(!_isHealling){
-					if(atoi(this->getMaxHP()->getCString())- atoi(this->getHP()->getCString())>=3000+gearRecoverValue  && this->getGearArray()->count()>1){
+					if(std::atoi(this->getMaxHP()->getCString())- std::atoi(this->getHP()->getCString())>=3000+gearRecoverValue  && this->getGearArray()->count()>1){
 						this->setItem(Item1);					
-					}else if(atoi(this->getHP()->getCString())<5000 && this->getGearArray()->count()>0){
+					}else if(std::atoi(this->getHP()->getCString())<5000 && this->getGearArray()->count()>0){
 						this->setItem(Item1);					
-					}else if(atoi(this->getHP()->getCString())<1500){
+					}else if(std::atoi(this->getHP()->getCString())<1500){
 						this->setItem(Item1);
 					}
 				}
 			}else{	
-				if(atoi(this->getMaxHP()->getCString())- atoi(this->getHP()->getCString())>=3000+gearRecoverValue && !_isHealling && this->getGearArray()->count()>0){
+				if(std::atoi(this->getMaxHP()->getCString())- std::atoi(this->getHP()->getCString())>=3000+gearRecoverValue && !_isHealling && this->getGearArray()->count()>0){
 					this->setItem(Item1);					
-				}else if(atoi(this->getHP()->getCString())<3000){
+				}else if(std::atoi(this->getHP()->getCString())<3000){
 					this->setItem(Item1);	
 				}
 			}
 		}else{
-			if(atoi(this->getHP()->getCString())<1500 && strcmp(this->getGroup()->getCString(),"Konoha")==0){
+			if(std::atoi(this->getHP()->getCString())<1500 && strcmp(this->getGroup()->getCString(),"Konoha")==0){
 				this->setItem(Item1);
 			}
-			if(atoi(this->getHP()->getCString())<500 && strcmp(this->getGroup()->getCString(),"Akatsuki")==0){
+			if(std::atoi(this->getHP()->getCString())<500 && strcmp(this->getGroup()->getCString(),"Akatsuki")==0){
 				this->setItem(Item1);
 			}
 
@@ -8056,7 +8057,7 @@ bool NarutoSenki::ActionManager::checkRetri(){
 		}
 	}
 	
-	if(atoi(this->getHP()->getCString())<1500 && !_isControled ){
+	if(std::atoi(this->getHP()->getCString())<1500 && !_isControled ){
 		return true;
 	}
 	return false;

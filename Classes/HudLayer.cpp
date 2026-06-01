@@ -1,4 +1,5 @@
 #include "HudLayer.h"
+#include <cstdlib>
 #include "MyUtils/CCShake.h"
 #include "MyUtils/KTools.h"
 
@@ -761,7 +762,7 @@ void HudLayer::setHPLose(float percent){
 	CCRotateTo* ra=CCRotateTo::create(0.2f,-((1-percent)*180),-((1-percent)*180));
 	status_hpbar->runAction(ra);
 
-	int hp=atoi(_delegate->currentPlayer->getHP()->getCString());
+	int hp=std::atoi(_delegate->currentPlayer->getHP()->getCString());
 	hpLabel->setString(CCString::createWithFormat("%d",int(hp))->getCString());
 
 }
@@ -779,7 +780,7 @@ void HudLayer::setEnemyHPLose(float percent){
 		if(strcmp(tempHero->getGroup()->getCString(),_delegate->currentPlayer->getGroup()->getCString())!=0 &&
 			(strcmp(tempHero->getRole()->getCString(),"Player")==0 || strcmp(tempHero->getRole()->getCString(),"Com")==0)){
 			if(enemyHpLabel){
-				enemyHpLabel->setString(CCString::createWithFormat("%d",atoi(tempHero->getHP()->getCString()))->getCString());
+				enemyHpLabel->setString(CCString::createWithFormat("%d",std::atoi(tempHero->getHP()->getCString()))->getCString());
 			}
 			return;
 		}
@@ -865,8 +866,8 @@ void HudLayer::setTowerState(unsigned int charNO){
 void HudLayer::setCoin(const char* value){
 
 	std::string cl=coinLabel->getString();
-	int tempCoin=atoi(cl);
-	tempCoin+=atoi(value);
+	int tempCoin=std::atoi(cl);
+	tempCoin+=std::atoi(value);
 	CCString* realCoin=CCString::createWithFormat("%d",tempCoin);
 	coinLabel->setString(realCoin->getCString());
 
@@ -875,12 +876,12 @@ void HudLayer::setCoin(const char* value){
 bool HudLayer::offCoin(const char* value){
 
 	std::string cl=coinLabel->getString();
-	int tempCoin=atoi(cl);
-	if(tempCoin-atoi(value)>=0){
-		tempCoin-=atoi(value);
+	int tempCoin=std::atoi(cl);
+	if(tempCoin-std::atoi(value)>=0){
+		tempCoin-=std::atoi(value);
 		CCString* realCoin=CCString::createWithFormat("%d",tempCoin);
 		coinLabel->setString(realCoin->getCString());
-		_delegate->currentPlayer->minusCoin(atoi(value));
+		_delegate->currentPlayer->minusCoin(std::atoi(value));
 		return true;
 	}else {
 		return false;
@@ -980,8 +981,8 @@ void HudLayer::setBuffDisplay(const char* buffName, float buffStayTime){
 void HudLayer::updateBuffDisplay(float dt){
 
 	if(bcdLabel1){
-		if( atoi(bcdLabel1->getString()) >0){
-			bcdLabel1->setString(CCString::createWithFormat("%d",atoi(bcdLabel1->getString())-1)->getCString());
+		if( std::atoi(bcdLabel1->getString()) >0){
+			bcdLabel1->setString(CCString::createWithFormat("%d",std::atoi(bcdLabel1->getString())-1)->getCString());
 		}else{
 			bcdLabel1->removeFromParentAndCleanup(true);
 			bcdLabel1=nullptr;
@@ -1002,8 +1003,8 @@ void HudLayer::updateBuffDisplay2(float dt){
 
 
 	if(bcdLabel2){
-		if( atoi(bcdLabel2->getString()) >0){
-			bcdLabel2->setString(CCString::createWithFormat("%d",atoi(bcdLabel2->getString())-1)->getCString());
+		if( std::atoi(bcdLabel2->getString()) >0){
+			bcdLabel2->setString(CCString::createWithFormat("%d",std::atoi(bcdLabel2->getString())-1)->getCString());
 
 		}else{
 			bcdLabel2->removeFromParentAndCleanup(true);
@@ -1178,19 +1179,19 @@ Sprite* HudLayer::createSPCReport(const char* killNum,int num){
 
 	if(num==1){
 
-		if(atoi(killNum)<10){
+		if(std::atoi(killNum)<10){
 			reportSPCSprite=Sprite::createWithSpriteFrameName("DoubleKill_rpf.png");
 			if(isBrocast)
 			KTools::playEffectOptimized("Audio/Menu/kill2_1.mp3", 20, 2);
-		}else if(atoi(killNum)<20){
+		}else if(std::atoi(killNum)<20){
 			reportSPCSprite=Sprite::createWithSpriteFrameName("KillingSpree_rpf.png");
 			if(isBrocast)
 			KTools::playEffectOptimized("Audio/Menu/kill2_2.mp3", 20, 2);
-		}else if(atoi(killNum)<30){
+		}else if(std::atoi(killNum)<30){
 			reportSPCSprite=Sprite::createWithSpriteFrameName("Unstoppable_rpf.png");
 			if(isBrocast)
 			KTools::playEffectOptimized("Audio/Menu/kill2_3.mp3", 20, 2);
-		}else if(atoi(killNum)>=30){
+		}else if(std::atoi(killNum)>=30){
 			reportSPCSprite=Sprite::createWithSpriteFrameName("Godlike_rpf.png");
 			if(isBrocast)
 			KTools::playEffectOptimized("Audio/Menu/kill2_4.mp3", 20, 2);
@@ -1199,20 +1200,20 @@ Sprite* HudLayer::createSPCReport(const char* killNum,int num){
 
 	}else if(num==2){
 
-		if(atoi(killNum)<10){
+		if(std::atoi(killNum)<10){
 			reportSPCSprite=Sprite::createWithSpriteFrameName("TripeKill_rpf.png");
 			if(isBrocast)
 			KTools::playEffectOptimized("Audio/Menu/kill3_1.mp3", 20, 2);
 
-		}else if(atoi(killNum)<20){
+		}else if(std::atoi(killNum)<20){
 			reportSPCSprite=Sprite::createWithSpriteFrameName("Domination_rpf.png");
 			if(isBrocast)
 			KTools::playEffectOptimized("Audio/Menu/kill3_2.mp3", 20, 2);
-		}else if(atoi(killNum)<30){
+		}else if(std::atoi(killNum)<30){
 			reportSPCSprite=Sprite::createWithSpriteFrameName("Rampage_rpf.png");
 			if(isBrocast)
 			KTools::playEffectOptimized("Audio/Menu/kill3_3.mp3", 20, 2);
-		}else if(atoi(killNum)>=30){
+		}else if(std::atoi(killNum)>=30){
 			reportSPCSprite=Sprite::createWithSpriteFrameName("Holyshit_rpf.png");
 			if(isBrocast)
 			KTools::playEffectOptimized("Audio/Menu/kill3_4.mp3", 20, 2);

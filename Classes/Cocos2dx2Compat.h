@@ -7,27 +7,6 @@
 #include "network/HttpRequest.h"
 #include "network/HttpResponse.h"
 
-#include <cstdlib>
-#include <string>
-
-NS_CC_BEGIN
-
-namespace cocos2dx2_compat
-{
-    inline int atoi(const char* value)
-    {
-        return ::atoi(value);
-    }
-
-    inline int atoi(const std::string& value)
-    {
-        return ::atoi(value.c_str());
-    }
-
-}
-
-NS_CC_END
-
 NS_CC_EXT_BEGIN
 
 class CCHttpRequest : public cocos2d::network::HttpRequest
@@ -44,8 +23,6 @@ typedef cocos2d::network::HttpClient CCHttpClient;
 typedef cocos2d::network::HttpResponse CCHttpResponse;
 
 NS_CC_EXT_END
-
-#define atoi cocos2d::cocos2dx2_compat::atoi
 
 #endif
 

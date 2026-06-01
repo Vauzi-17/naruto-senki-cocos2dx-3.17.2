@@ -1,4 +1,5 @@
 #include "Characters.h"
+#include <cstdlib>
 #include "HudLayer.h"
 USING_NS_CC;
 
@@ -224,7 +225,7 @@ void HPBar::loseHP(float percent){
 
 				if(strcmp(currentSlayer->getRole()->getCString(),"Player")==0){
 					 if(_delegate->getDelegate()->_isHardCoreGame){
-						 if(atoi(this->_delegate->getMaxHP()->getCString()) >40000){
+						 if(std::atoi(this->_delegate->getMaxHP()->getCString()) >40000){
 							 _delegate->getDelegate()->setCoin("1000");
 							 _delegate->setCoinDisplay(1000);
 						 }else{
@@ -241,7 +242,7 @@ void HPBar::loseHP(float percent){
 				}
 
 				if(_delegate->getDelegate()->_isHardCoreGame){
-					if(atoi(this->_delegate->getMaxHP()->getCString()) >40000){
+					if(std::atoi(this->_delegate->getMaxHP()->getCString()) >40000){
 						currentSlayer->addCoin(1000);
 					}else{
 						currentSlayer->addCoin(500);
@@ -273,7 +274,7 @@ void HPBar::loseHP(float percent){
 						if (strcmp(otherSlayer->getRole()->getCString(),"Player")==0){
 
 							if(_delegate->getDelegate()->_isHardCoreGame){
-								if(atoi(this->_delegate->getMaxHP()->getCString()) >40000){
+								if(std::atoi(this->_delegate->getMaxHP()->getCString()) >40000){
 									_delegate->getDelegate()->setCoin("850");
 									_delegate->setCoinDisplay(850);
 								}else{
@@ -292,7 +293,7 @@ void HPBar::loseHP(float percent){
 
 
 						if(_delegate->getDelegate()->_isHardCoreGame){
-							if(atoi(this->_delegate->getMaxHP()->getCString()) >40000){
+							if(std::atoi(this->_delegate->getMaxHP()->getCString()) >40000){
 								  otherSlayer->addCoin(850);
 							}else{
 								  otherSlayer->addCoin(350);
@@ -439,7 +440,7 @@ void HPBar::loseHP(float percent){
 
 				if(strcmp(currentSlayer->getRole()->getCString(),"Flog")!=0){
 
-					int realKillNum=atoi(currentSlayer->getKillNum()->getCString())+1;
+					int realKillNum=std::atoi(currentSlayer->getKillNum()->getCString())+1;
 					currentSlayer->setKillNum(CCString::createWithFormat("%d",realKillNum));
 					_delegate->getDelegate()->setReport(currentSlayer->getCharacter()->getCString(),_delegate->getCharacter()->getCString(),currentSlayer->getKillNum());
 
@@ -453,10 +454,10 @@ void HPBar::loseHP(float percent){
 					}
 
 					if(strcmp(currentSlayer->getGroup()->getCString(),currentTeam)==0){
-						int teamKills=atoi(_delegate->getDelegate()->getHudLayer()->KonoLabel->getString())+1;
+						int teamKills=std::atoi(_delegate->getDelegate()->getHudLayer()->KonoLabel->getString())+1;
 						_delegate->getDelegate()->getHudLayer()->KonoLabel->setString(CCString::createWithFormat("%d",teamKills)->getCString());
 					}else{
-						int teamKills=atoi(_delegate->getDelegate()->getHudLayer()->AkaLabel->getString())+1;
+						int teamKills=std::atoi(_delegate->getDelegate()->getHudLayer()->AkaLabel->getString())+1;
 						_delegate->getDelegate()->getHudLayer()->AkaLabel->setString(CCString::createWithFormat("%d",teamKills)->getCString());
 					}
 					if(_delegate->getDelegate()->_isDuelMode &&
@@ -469,7 +470,7 @@ void HPBar::loseHP(float percent){
 					if(strcmp(currentSlayer->getCharacter()->getCString(),"Han")!=0 &&
 						strcmp(currentSlayer->getCharacter()->getCString(),"Roshi")!=0
 						){
-							int newValue=atoi(_delegate->getDelegate()->getTotalKills()->getCString())+1;
+							int newValue=std::atoi(_delegate->getDelegate()->getTotalKills()->getCString())+1;
 							_delegate->getDelegate()->setTotalKills(CCString::createWithFormat("%d",newValue));
 					}
 
@@ -516,7 +517,7 @@ void HPBar::loseHP(float percent){
 
 						_delegate->getDelegate()->getHudLayer()->setEXPLose(NULL);
 						std::string kl=_delegate->getDelegate()->getHudLayer()->killLabel->getString();
-						int kills=atoi(kl)+1;
+						int kills=std::atoi(kl)+1;
 						_delegate->getDelegate()->getHudLayer()->killLabel->setString(CCString::createWithFormat("%d",kills)->getCString());
 					}
 

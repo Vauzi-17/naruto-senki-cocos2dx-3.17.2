@@ -1,4 +1,5 @@
 #include "Characters.h"
+#include <cstdlib>
 USING_NS_CC;
 
 
@@ -1485,7 +1486,7 @@ void Hero::AI_Naruto(){
 	this->findEnemy2("Hero");
 
 	//ÈÌ¾ß¹ºÂò
-	if(atoi(this->getCoin()->getCString())>=500 && !_isControled && _delegate->_isHardCoreGame){
+	if(std::atoi(this->getCoin()->getCString())>=500 && !_isControled && _delegate->_isHardCoreGame){
 		if(this->getGearArray()->count()==0){
 			this->setGear(gear03);
 		}else if(this->getGearArray()->count()==1){
@@ -1651,7 +1652,7 @@ void Hero::AI_SageNaruto(){
 	this->findEnemy2("Hero");
 
 	//ÈÌ¾ß¹ºÂò
-	if(atoi(this->getCoin()->getCString())>=500 && !_isControled && _delegate->_isHardCoreGame){
+	if(std::atoi(this->getCoin()->getCString())>=500 && !_isControled && _delegate->_isHardCoreGame){
 		if(this->getGearArray()->count()==0){
 			this->setGear(gear03);
 		}else if(this->getGearArray()->count()==1){
@@ -1819,7 +1820,7 @@ void Hero::AI_RikudoNaruto(){
 	this->findEnemy2("Hero");
 
 	//ÈÌ¾ß¹ºÂò
-	if(atoi(this->getCoin()->getCString())>=500 && !_isControled && _delegate->_isHardCoreGame){
+	if(std::atoi(this->getCoin()->getCString())>=500 && !_isControled && _delegate->_isHardCoreGame){
 		if(this->getGearArray()->count()==0){
 			this->setGear(gear03);
 		}else if(this->getGearArray()->count()==1){
@@ -2000,7 +2001,7 @@ void Hero::AI_Asuma(){
 		}
 	}
 	//ÈÌ¾ß¹ºÂò
-	if(atoi(this->getCoin()->getCString())>=500 && !_isControled && _delegate->_isHardCoreGame){
+	if(std::atoi(this->getCoin()->getCString())>=500 && !_isControled && _delegate->_isHardCoreGame){
 		if(this->getGearArray()->count()==0){
 			this->setGear(gear06);
 		}else if(this->getGearArray()->count()==1){
@@ -2189,7 +2190,7 @@ void Hero::AI_Kakashi(){
 		}
 	}
 	//ÈÌ¾ß¹ºÂò
-	if(atoi(this->getCoin()->getCString())>=500 && !_isControled && _delegate->_isHardCoreGame){
+	if(std::atoi(this->getCoin()->getCString())>=500 && !_isControled && _delegate->_isHardCoreGame){
 		if(this->getGearArray()->count()==0){
 			this->setGear(gear06);
 		}else if(this->getGearArray()->count()==1){
@@ -2356,7 +2357,7 @@ void Hero::AI_Konan(){
 
 
 	//ÈÌ¾ß¹ºÂò
-	if(atoi(this->getCoin()->getCString())>=500 && !_isControled && _delegate->_isHardCoreGame){
+	if(std::atoi(this->getCoin()->getCString())>=500 && !_isControled && _delegate->_isHardCoreGame){
 		if(this->getGearArray()->count()==0){
 			this->setGear(gear03);
 		}else if(this->getGearArray()->count()==1){
@@ -2573,7 +2574,7 @@ void Hero::AI_Deidara(){
 	this->findEnemy2("Hero");
 
 	//ÈÌ¾ß¹ºÂò
-	if(atoi(this->getCoin()->getCString())>=500 && !_isControled && _delegate->_isHardCoreGame){
+	if(std::atoi(this->getCoin()->getCString())>=500 && !_isControled && _delegate->_isHardCoreGame){
 		if(this->getGearArray()->count()==0){
 			this->setGear(gear00);
 		}else if(this->getGearArray()->count()==1){
@@ -2789,7 +2790,7 @@ void Hero::AI_Ino(){
 	}
 
 	//ÈÌ¾ß¹ºÂò
-	if(atoi(this->getCoin()->getCString())>=500 && !_isControled && _delegate->_isHardCoreGame){
+	if(std::atoi(this->getCoin()->getCString())>=500 && !_isControled && _delegate->_isHardCoreGame){
 		if(this->getGearArray()->count()==0){
 			this->setGear(gear06);
 		}else if(this->getGearArray()->count()==1){
@@ -2834,8 +2835,8 @@ void Hero::AI_Ino(){
 
 	}
 
-	if(atoi(this->getMaxHP()->getCString())- atoi(this->getHP()->getCString())>=3000 && 
-		atoi(this->getCoin()->getCString())>=50 && !_isHealling && _isCanItem1 && _isBati){
+	if(std::atoi(this->getMaxHP()->getCString())- std::atoi(this->getHP()->getCString())>=3000 &&
+		std::atoi(this->getCoin()->getCString())>=50 && !_isHealling && _isCanItem1 && _isBati){
 			this->setItem(Item1);
 
 	}
@@ -2981,7 +2982,7 @@ void Hero::AI_Sai(){
 	}
 
 	//ÈÌ¾ß¹ºÂò
-	if(atoi(this->getCoin()->getCString())>=500 && !_isControled && _delegate->_isHardCoreGame){
+	if(std::atoi(this->getCoin()->getCString())>=500 && !_isControled && _delegate->_isHardCoreGame){
 		if(this->getGearArray()->count()==0){
 			this->setGear(gear06);
 		}else if(this->getGearArray()->count()==1){
@@ -3181,7 +3182,7 @@ void Hero::AI_Sakura(){
 
 	
 	//ÈÌ¾ß¹ºÂò
-	if(atoi(this->getCoin()->getCString())>=500 && !_isControled && _delegate->_isHardCoreGame){
+	if(std::atoi(this->getCoin()->getCString())>=500 && !_isControled && _delegate->_isHardCoreGame){
 		if(this->getGearArray()->count()==0){
 			this->setGear(gear00);
 		}else if(this->getGearArray()->count()==1){
@@ -3446,7 +3447,7 @@ void Hero::AI_Tenten(){
 	this->findEnemy2("Hero");
 
 	//ÈÌ¾ß¹ºÂò
-	if(atoi(this->getCoin()->getCString())>=500 && !_isControled && _delegate->_isHardCoreGame){
+	if(std::atoi(this->getCoin()->getCString())>=500 && !_isControled && _delegate->_isHardCoreGame){
 		if(this->getGearArray()->count()==0){
 			this->setGear(gear00);
 		}else if(this->getGearArray()->count()==1){
@@ -3657,7 +3658,7 @@ void Hero::AI_Itachi(){
 		}
 	}
 	//ÈÌ¾ß¹ºÂò
-	if(atoi(this->getCoin()->getCString())>=500 && !_isControled && _delegate->_isHardCoreGame){
+	if(std::atoi(this->getCoin()->getCString())>=500 && !_isControled && _delegate->_isHardCoreGame){
 		if(this->getGearArray()->count()==0){
 			this->setGear(gear06);
 		}else if(this->getGearArray()->count()==1){
@@ -3857,7 +3858,7 @@ void Hero::AI_Jiraiya(){
 	}
 
 	//ÈÌ¾ß¹ºÂò
-	if(atoi(this->getCoin()->getCString())>=500 && !_isControled && _delegate->_isHardCoreGame){
+	if(std::atoi(this->getCoin()->getCString())>=500 && !_isControled && _delegate->_isHardCoreGame){
 		if(this->getGearArray()->count()==0){
 			this->setGear(gear06);
 		}else if(this->getGearArray()->count()==1){
@@ -4032,7 +4033,7 @@ void Hero::AI_SageJiraiya(){
 	}
 
 	//ÈÌ¾ß¹ºÂò
-	if(atoi(this->getCoin()->getCString())>=500 && !_isControled && _delegate->_isHardCoreGame){
+	if(std::atoi(this->getCoin()->getCString())>=500 && !_isControled && _delegate->_isHardCoreGame){
 		if(this->getGearArray()->count()==0){
 			this->setGear(gear06);
 		}else if(this->getGearArray()->count()==1){
@@ -4212,7 +4213,7 @@ void Hero::AI_Suigetsu(){
 
 
 	//ÈÌ¾ß¹ºÂò
-	if(atoi(this->getCoin()->getCString())>=500 && !_isControled && _delegate->_isHardCoreGame){
+	if(std::atoi(this->getCoin()->getCString())>=500 && !_isControled && _delegate->_isHardCoreGame){
 		if(this->getGearArray()->count()==0){
 			this->setGear(gear00);
 		}else if(this->getGearArray()->count()==1){
@@ -4411,7 +4412,7 @@ void Hero::AI_Tsunade(){
 	this->findEnemy2("Hero");
 
 	//ÈÌ¾ß¹ºÂò
-	if(atoi(this->getCoin()->getCString())>=500 && !_isControled && _delegate->_isHardCoreGame){
+	if(std::atoi(this->getCoin()->getCString())>=500 && !_isControled && _delegate->_isHardCoreGame){
 		if(this->getGearArray()->count()==0){
 			this->setGear(gear03);
 		}else if(this->getGearArray()->count()==1){
@@ -4605,7 +4606,7 @@ void Hero::AI_Sasuke(){
 	}
 
 	//ÈÌ¾ß¹ºÂò
-	if(atoi(this->getCoin()->getCString())>=500 && !_isControled && _delegate->_isHardCoreGame){
+	if(std::atoi(this->getCoin()->getCString())>=500 && !_isControled && _delegate->_isHardCoreGame){
 		if(this->getGearArray()->count()==0){
 			this->setGear(gear06);
 		}else if(this->getGearArray()->count()==1){
@@ -4794,7 +4795,7 @@ void Hero::AI_ImmortalSasuke(){
 	}
 
 	//ÈÌ¾ß¹ºÂò
-	if(atoi(this->getCoin()->getCString())>=500 && !_isControled && _delegate->_isHardCoreGame){
+	if(std::atoi(this->getCoin()->getCString())>=500 && !_isControled && _delegate->_isHardCoreGame){
 		if(this->getGearArray()->count()==0){
 			this->setGear(gear06);
 		}else if(this->getGearArray()->count()==1){
@@ -4988,7 +4989,7 @@ void Hero::AI_Kankuro(){
 		}
 	}
 	//ÈÌ¾ß¹ºÂò
-	if(atoi(this->getCoin()->getCString())>=500 && !_isControled && _delegate->_isHardCoreGame){
+	if(std::atoi(this->getCoin()->getCString())>=500 && !_isControled && _delegate->_isHardCoreGame){
 		if(this->getGearArray()->count()==0){
 			this->setGear(gear06);
 		}else if(this->getGearArray()->count()==1){
@@ -5180,7 +5181,7 @@ void Hero::AI_Chiyo(){
 		}
 	}
 	//ÈÌ¾ß¹ºÂò
-	if(atoi(this->getCoin()->getCString())>=500 && !_isControled && _delegate->_isHardCoreGame){
+	if(std::atoi(this->getCoin()->getCString())>=500 && !_isControled && _delegate->_isHardCoreGame){
 		if(this->getGearArray()->count()==0){
 			this->setGear(gear06);
 		}else if(this->getGearArray()->count()==1){
@@ -5434,7 +5435,7 @@ void Hero::AI_Kakuzu(){
 
 	
 	//ÈÌ¾ß¹ºÂò
-	if(atoi(this->getCoin()->getCString())>=500 && !_isControled && _delegate->_isHardCoreGame){
+	if(std::atoi(this->getCoin()->getCString())>=500 && !_isControled && _delegate->_isHardCoreGame){
 		if(this->getGearArray()->count()==0){
 			this->setGear(gear03);
 		}else if(this->getGearArray()->count()==1){
@@ -5606,7 +5607,7 @@ void Hero::AI_Shikamaru(){
 
 
 	//ÈÌ¾ß¹ºÂò
-	if(atoi(this->getCoin()->getCString())>=500 && !_isControled && _delegate->_isHardCoreGame){
+	if(std::atoi(this->getCoin()->getCString())>=500 && !_isControled && _delegate->_isHardCoreGame){
 		if(this->getGearArray()->count()==0){
 			this->setGear(gear00);
 		}else if(this->getGearArray()->count()==1){
@@ -5817,7 +5818,7 @@ void Hero::AI_Gaara(){
 	}
 
 	//ÈÌ¾ß¹ºÂò
-	if(atoi(this->getCoin()->getCString())>=500 && !_isControled && _delegate->_isHardCoreGame){
+	if(std::atoi(this->getCoin()->getCString())>=500 && !_isControled && _delegate->_isHardCoreGame){
 		if(this->getGearArray()->count()==0){
 			this->setGear(gear06);
 		}else if(this->getGearArray()->count()==1){
@@ -5980,7 +5981,7 @@ void Hero::AI_Tobirama(){
 		}
 	}
 	//ÈÌ¾ß¹ºÂò
-	if(atoi(this->getCoin()->getCString())>=500 && !_isControled && _delegate->_isHardCoreGame){
+	if(std::atoi(this->getCoin()->getCString())>=500 && !_isControled && _delegate->_isHardCoreGame){
 		if(this->getGearArray()->count()==0){
 			this->setGear(gear06);
 		}else if(this->getGearArray()->count()==1){
@@ -6170,7 +6171,7 @@ void Hero::AI_Choji(){
 	}
 
 	//ÈÌ¾ß¹ºÂò
-	if(atoi(this->getCoin()->getCString())>=500 && !_isControled && _delegate->_isHardCoreGame){
+	if(std::atoi(this->getCoin()->getCString())>=500 && !_isControled && _delegate->_isHardCoreGame){
 		if(this->getGearArray()->count()==0){
 			this->setGear(gear06);
 		}else if(this->getGearArray()->count()==1){
@@ -6366,7 +6367,7 @@ void Hero::AI_Karin(){
 		}
 	}
 	//ÈÌ¾ß¹ºÂò
-	if(atoi(this->getCoin()->getCString())>=500 && !_isControled && _delegate->_isHardCoreGame){
+	if(std::atoi(this->getCoin()->getCString())>=500 && !_isControled && _delegate->_isHardCoreGame){
 		if(this->getGearArray()->count()==0){
 			this->setGear(gear06);
 		}else if(this->getGearArray()->count()==1){
@@ -6562,7 +6563,7 @@ void Hero::AI_Lee(){
 		}
 	}
 	//ÈÌ¾ß¹ºÂò
-	if(atoi(this->getCoin()->getCString())>=500 && !_isControled && _delegate->_isHardCoreGame){
+	if(std::atoi(this->getCoin()->getCString())>=500 && !_isControled && _delegate->_isHardCoreGame){
 		if(this->getGearArray()->count()==0){
 			this->setGear(gear06);
 		}else if(this->getGearArray()->count()==1){
@@ -6728,7 +6729,7 @@ void Hero::AI_RockLee(){
 		}
 	}
 	//ÈÌ¾ß¹ºÂò
-	if(atoi(this->getCoin()->getCString())>=500 && !_isControled && _delegate->_isHardCoreGame){
+	if(std::atoi(this->getCoin()->getCString())>=500 && !_isControled && _delegate->_isHardCoreGame){
 		if(this->getGearArray()->count()==0){
 			this->setGear(gear06);
 		}else if(this->getGearArray()->count()==1){
@@ -6922,7 +6923,7 @@ void Hero::AI_Jugo(){
 	}
 
 	//ÈÌ¾ß¹ºÂò
-	if(atoi(this->getCoin()->getCString())>=500 && !_isControled && _delegate->_isHardCoreGame){
+	if(std::atoi(this->getCoin()->getCString())>=500 && !_isControled && _delegate->_isHardCoreGame){
 		if(this->getGearArray()->count()==0){
 			this->setGear(gear06);
 		}else if(this->getGearArray()->count()==1){
@@ -7115,7 +7116,7 @@ void Hero::AI_Kisame(){
 
 
 	//ÈÌ¾ß¹ºÂò
-	if(atoi(this->getCoin()->getCString())>=500 && !_isControled && _delegate->_isHardCoreGame){
+	if(std::atoi(this->getCoin()->getCString())>=500 && !_isControled && _delegate->_isHardCoreGame){
 		if(this->getGearArray()->count()==0){
 			this->setGear(gear00);
 		}else if(this->getGearArray()->count()==1){
@@ -7351,7 +7352,7 @@ void Hero::AI_Hidan(){
 						CCARRAY_FOREACH(_delegate->_CharacterArray,pObject){
 							NarutoSenki::ActionManager* tempHero=(NarutoSenki::ActionManager*) pObject;
 							if( strcmp(tempHero->getGroup()->getCString(),this->getGroup()->getCString())!=0
-								&& atoi(tempHero->getHP()->getCString())<2000
+								&& std::atoi(tempHero->getHP()->getCString())<2000
 								&& tempHero->getActionState()!=ACTION_STATE_DEAD
 								&& (strcmp(tempHero->getRole()->getCString(),"Player")==0 ||
 								strcmp(tempHero->getRole()->getCString(),"Com")==0
@@ -7390,7 +7391,7 @@ void Hero::AI_Hidan(){
 		}
 	}
 	//ÈÌ¾ß¹ºÂò
-	if(atoi(this->getCoin()->getCString())>=500 && !_isControled && _delegate->_isHardCoreGame){
+	if(std::atoi(this->getCoin()->getCString())>=500 && !_isControled && _delegate->_isHardCoreGame){
 		if(this->getGearArray()->count()==0){
 			this->setGear(gear06);
 		}else if(this->getGearArray()->count()==1){
@@ -7582,7 +7583,7 @@ void Hero::AI_Tobi(){
 
 
 	//ÈÌ¾ß¹ºÂò
-	if(atoi(this->getCoin()->getCString())>=500 && !_isControled && _delegate->_isHardCoreGame){
+	if(std::atoi(this->getCoin()->getCString())>=500 && !_isControled && _delegate->_isHardCoreGame){
 		if(this->getGearArray()->count()==0){
 			this->setGear(gear03);
 		}else if(this->getGearArray()->count()==1){
@@ -7782,7 +7783,7 @@ void Hero::AI_Shino(){
 	this->findEnemy2("Hero");
 
 	//ÈÌ¾ß¹ºÂò
-	if(atoi(this->getCoin()->getCString())>=500 && !_isControled && _delegate->_isHardCoreGame){
+	if(std::atoi(this->getCoin()->getCString())>=500 && !_isControled && _delegate->_isHardCoreGame){
 		if(this->getGearArray()->count()==0){
 			this->setGear(gear00);
 		}else if(this->getGearArray()->count()==1){
@@ -7922,8 +7923,8 @@ void Hero::AI_Shino(){
 				this->attack(SKILL1);
 				return;
 			}else if(abs(sp.x)<128){ 
-				if(atoi(this->getMaxHP()->getCString())- atoi(this->getHP()->getCString())>=3000 && 
-					atoi(this->getCoin()->getCString())>=50 && !_isHealling && _isCanItem1){
+				if(std::atoi(this->getMaxHP()->getCString())- std::atoi(this->getHP()->getCString())>=3000 &&
+					std::atoi(this->getCoin()->getCString())>=50 && !_isHealling && _isCanItem1){
 						this->setItem(Item1);					
 				}
 
@@ -8009,7 +8010,7 @@ void Hero::AI_Hiruzen(){
 
 	
 	//ÈÌ¾ß¹ºÂò
-	if(atoi(this->getCoin()->getCString())>=500 && !_isControled && _delegate->_isHardCoreGame){
+	if(std::atoi(this->getCoin()->getCString())>=500 && !_isControled && _delegate->_isHardCoreGame){
 		if(this->getGearArray()->count()==0){
 			this->setGear(gear00);
 		}else if(this->getGearArray()->count()==1){
@@ -8073,7 +8074,7 @@ void Hero::AI_Hiruzen(){
 
 			if(_isCanOugis2 && !_isControled && _delegate->_isOugis2Game 
 				&&!_isBati 
-				&& atoi(_mainTarget->getHP()->getCString())<10000
+				&& std::atoi(_mainTarget->getHP()->getCString())<10000
 				&& !_mainTarget->_isCanGear06
 				){
 					if(abs(sp.x)<32){
@@ -8223,7 +8224,7 @@ void Hero::AI_Kiba(){
 
 
 	//ÈÌ¾ß¹ºÂò
-	if(atoi(this->getCoin()->getCString())>=500 && !_isControled && _delegate->_isHardCoreGame){
+	if(std::atoi(this->getCoin()->getCString())>=500 && !_isControled && _delegate->_isHardCoreGame){
 		if(this->getGearArray()->count()==0){
 			this->setGear(gear00);
 		}else if(this->getGearArray()->count()==1){
@@ -8406,7 +8407,7 @@ void Hero::AI_Minato(){
 		}
 	}
 	//ÈÌ¾ß¹ºÂò
-	if(atoi(this->getCoin()->getCString())>=500 && !_isControled && _delegate->_isHardCoreGame){
+	if(std::atoi(this->getCoin()->getCString())>=500 && !_isControled && _delegate->_isHardCoreGame){
 		if(this->getGearArray()->count()==0){
 			this->setGear(gear06);
 		}else if(this->getGearArray()->count()==1){
@@ -8564,7 +8565,7 @@ void Hero::AI_Minato(){
 					this->walk(moveDirection);
 					return;
 
-				}else if((abs(sp.x)> 32 || abs(sp.y)>32 ) && atoi(this->getnAttackValue()->getCString())<260){
+				}else if((abs(sp.x)> 32 || abs(sp.y)>32 ) && std::atoi(this->getnAttackValue()->getCString())<260){
 
 					moveDirection =ccpNormalize(sp);
 					this->walk(moveDirection);
@@ -8664,7 +8665,7 @@ void Hero::AI_Hinata(){
 	
 
 	//ÈÌ¾ß¹ºÂò
-	if(atoi(this->getCoin()->getCString())>=500 && !_isControled && _delegate->_isHardCoreGame){
+	if(std::atoi(this->getCoin()->getCString())>=500 && !_isControled && _delegate->_isHardCoreGame){
 		if(this->getGearArray()->count()==0){
 			this->setGear(gear00);
 		}else if(this->getGearArray()->count()==1){
@@ -8880,7 +8881,7 @@ void Hero::AI_Neji(){
 
 	
 	//ÈÌ¾ß¹ºÂò
-	if(atoi(this->getCoin()->getCString())>=500 && !_isControled && _delegate->_isHardCoreGame){
+	if(std::atoi(this->getCoin()->getCString())>=500 && !_isControled && _delegate->_isHardCoreGame){
 		if(this->getGearArray()->count()==0){
 			this->setGear(gear00);
 		}else if(this->getGearArray()->count()==1){

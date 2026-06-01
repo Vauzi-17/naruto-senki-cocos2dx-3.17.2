@@ -1,4 +1,5 @@
 #include "SkillLayer.h"
+#include <cstdlib>
 #include "Defines.h"
 #include "SelectLayer.h"
 #include "NetworkLayer.h"
@@ -470,15 +471,15 @@ void SkillLayer::initInterface(){
 
 
 
-		if(atoi(cl->getCString())>=99999){
+		if(std::atoi(cl->getCString())>=99999){
 		bonds->setPercentage(100);
-		}else if(atoi(cl->getCString())>=80000){
+		}else if(std::atoi(cl->getCString())>=80000){
 		bonds->setPercentage(80);
-		}else if(atoi(cl->getCString())>=60000){
+		}else if(std::atoi(cl->getCString())>=60000){
 		bonds->setPercentage(60);
-		}else if(atoi(cl->getCString())>=40000){
+		}else if(std::atoi(cl->getCString())>=40000){
 		bonds->setPercentage(40);
-		}else if(atoi(cl->getCString())>=20000){
+		}else if(std::atoi(cl->getCString())>=20000){
 		bonds->setPercentage(20);
 		}
 
@@ -498,22 +499,22 @@ void SkillLayer::initInterface(){
 
 		char* rank_src;
 		bool isBlink=false;
-		if(atoi(bondString.c_str())>=300){
+		if(std::atoi(bondString.c_str())>=300){
 			skillbg_src="skill_bg6.png";
 			rank_src="rank_sss.png";
 			isBlink=true;
-		}else if(atoi(bondString.c_str())>=200){
+		}else if(std::atoi(bondString.c_str())>=200){
 			skillbg_src="skill_bg5.png";
 			rank_src="rank_ss.png";
 			isBlink=true;
-		}else if(atoi(bondString.c_str())>=100){
+		}else if(std::atoi(bondString.c_str())>=100){
 			skillbg_src="skill_bg4.png";
 			rank_src="rank_s.png";
 			isBlink=true;
-		}else if(atoi(bondString.c_str())>=50){
+		}else if(std::atoi(bondString.c_str())>=50){
 			skillbg_src="skill_bg3.png";
 			rank_src="rank_a.png";
-		}else if(atoi(bondString.c_str())>=25){
+		}else if(std::atoi(bondString.c_str())>=25){
 			skillbg_src="skill_bg2.png";
 			rank_src="rank_b.png";
 		}else{
@@ -535,7 +536,7 @@ void SkillLayer::initInterface(){
 			strcmp(selectHero,"Tenten")==0 ||
 			strcmp(selectHero,"Konan")==0 ||
 			strcmp(selectHero,"Karin")==0
-			) && atoi(bondString.c_str())>=100){
+			) && std::atoi(bondString.c_str())>=100){
 				imgPath=CCString::createWithFormat("%s_full2.png",selectHero);
 		}else{
 			imgPath=CCString::createWithFormat("%s_full.png",selectHero);
@@ -784,15 +785,15 @@ void SkillLayer::onSkillRequestCompleted(Node *sender ,void *data){
 			bonds->setBarChangeRate(Vec2(0, 1));
 
 
-			if(atoi(cl->getCString())>=99999){
+			if(std::atoi(cl->getCString())>=99999){
 				bonds->setPercentage(100);
-			}else if(atoi(cl->getCString())>=80000){
+			}else if(std::atoi(cl->getCString())>=80000){
 				bonds->setPercentage(80);
-			}else if(atoi(cl->getCString())>=60000){
+			}else if(std::atoi(cl->getCString())>=60000){
 				bonds->setPercentage(60);
-			}else if(atoi(cl->getCString())>=40000){
+			}else if(std::atoi(cl->getCString())>=40000){
 				bonds->setPercentage(40);
-			}else if(atoi(cl->getCString())>=20000){
+			}else if(std::atoi(cl->getCString())>=20000){
 				bonds->setPercentage(20);
 			}
 

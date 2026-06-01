@@ -1,4 +1,5 @@
 #include "RankingLayer.h"
+#include <cstdlib>
 #include "NetworkLayer.h"
 USING_NS_CC_EXT;
 using namespace CocosDenshion;
@@ -532,7 +533,7 @@ void RakingLayer::postRequest(int code,CCString* useChar/* =NULL */){
 
 				rapidjson::Value & idValue= node["id"];
 				std::string idString=idValue.GetString();
-				int memberID=atoi(idString.c_str());
+				int memberID=std::atoi(idString.c_str());
 
 
 				rapidjson::Value & nameValue= node["name"];
@@ -552,7 +553,7 @@ void RakingLayer::postRequest(int code,CCString* useChar/* =NULL */){
 					if(postingCode==400 || postingCode==500){
 						rapidjson::Value & gidValue= node["group_id"];
 						std::string groupString=gidValue.GetString();
-						groupID=atoi(groupString.c_str());
+						groupID=std::atoi(groupString.c_str());
 					}
 
 

@@ -1,4 +1,5 @@
 #include "GameOver.h"
+#include <cstdlib>
 #include "GameLayer.h"
 #include "Characters.h"
 
@@ -187,10 +188,10 @@ void GameOver::listResult(){
 
 	float _totalSecond=_delegate->_minute*60+_delegate->_second;
 	float resultScore=0;
-	int killDead=atoi(_delegate->currentPlayer->getKillNum()->getCString())-_delegate->currentPlayer->_deadNum;
+	int killDead=std::atoi(_delegate->currentPlayer->getKillNum()->getCString())-_delegate->currentPlayer->_deadNum;
 
 
-	if(!_delegate->_isDuelMode && !_delegate->_isTrainingMode && _totalSecond != atoi(_delegate->getTotalTM()->getCString())){
+	if(!_delegate->_isDuelMode && !_delegate->_isTrainingMode && _totalSecond != std::atoi(_delegate->getTotalTM()->getCString())){
 		SimpleAudioEngine::getInstance()->stopBackgroundMusic();
 		Director::getInstance()->end();
 		return;
@@ -297,7 +298,7 @@ void GameOver::listResult(){
 
 
 
-		int realKillNum=atoi(hero->getKillNum()->getCString());
+		int realKillNum=std::atoi(hero->getKillNum()->getCString());
 
 		if(strcmp(hero->getGroup()->getCString(),"Konoha")==0){
 			konohaKill+=realKillNum;
@@ -342,7 +343,7 @@ void GameOver::listResult(){
 			int i=0;
 			CCARRAY_FOREACH(hero->getGearArray(),pObject){
 				CCString* tmpGear=(CCString*) pObject;
-				Sprite* gearIcon=Sprite::createWithSpriteFrameName(CCString::createWithFormat("gear_%02d.png",atoi(tmpGear->getCString()))->getCString());
+				Sprite* gearIcon=Sprite::createWithSpriteFrameName(CCString::createWithFormat("gear_%02d.png",std::atoi(tmpGear->getCString()))->getCString());
 				gearIcon->setPosition(Vec2(flogNum->getPositionX()+22+i*gearGap,flogNum->getPositionY()-1));
 				gearIcon->setScale(gearScale);
 				this->addChild(gearIcon,7);
@@ -376,13 +377,13 @@ void GameOver::listResult(){
 
 	if(Cheats<=10 && !_delegate->_isDuelMode && !_delegate->_isTrainingMode){
 
-		if(akatsukiKill+konohaKill !=atoi(_delegate->getTotalKills()->getCString())){
+		if(akatsukiKill+konohaKill !=std::atoi(_delegate->getTotalKills()->getCString())){
 			SimpleAudioEngine::getInstance()->stopBackgroundMusic();
 			Director::getInstance()->end();
 			return;
 		}
 
-	int realKillNum=atoi(_delegate->currentPlayer->getKillNum()->getCString());
+	int realKillNum=std::atoi(_delegate->currentPlayer->getKillNum()->getCString());
 
 	std::string tempReward="";
 	if(_delegate->_isHardCoreGame){
@@ -396,7 +397,7 @@ void GameOver::listResult(){
 	CCString* cl=tool->readFromSQLite();
 	int rewardNum;
 	if(_isWin){
-		rewardNum=realKillNum*75+atoi(tempReward.c_str());
+		rewardNum=realKillNum*75+std::atoi(tempReward.c_str());
 	}else{
 		rewardNum=realKillNum*50;
 	}
@@ -418,10 +419,10 @@ void GameOver::listResult(){
 	if(adResult==1 && _isWin ){
 		std::string tempEtra="idd4";
 		tool->decode(tempEtra);
-		tempCoin=rewardNum+atoi(cl->getCString())+atoi(tempEtra.c_str());
+		tempCoin=rewardNum+std::atoi(cl->getCString())+std::atoi(tempEtra.c_str());
 		extraCoin=CCString::createWithFormat("+%d",500);
 	}else{
-		tempCoin=rewardNum+atoi(cl->getCString());
+		tempCoin=rewardNum+std::atoi(cl->getCString());
 		extraCoin=CCString::createWithFormat("+%d",0);
 	}
 
@@ -535,11 +536,11 @@ void GameOver::listResult(){
 				int tempWin=0;
 
 				if(resultScore>=140){
-					tempWin=atoi(winNum->getCString())+3;
+					tempWin=std::atoi(winNum->getCString())+3;
 				}else if(resultScore>=120){
-					tempWin=atoi(winNum->getCString())+2;
+					tempWin=std::atoi(winNum->getCString())+2;
 				}else{
-					tempWin=atoi(winNum->getCString())+1;
+					tempWin=std::atoi(winNum->getCString())+1;
 				}
 
 				CCString* realWin=CCString::createWithFormat("%d",tempWin);
@@ -580,9 +581,9 @@ void GameOver::listResult(){
 							CCString* winNum=tool->readSQLite("CharRecord","name",hero->getCharacter()->getCString(),"column1");
 							int tempWin=0;
 							if(resultScore>=140){
-								tempWin=atoi(winNum->getCString())+2;
+								tempWin=std::atoi(winNum->getCString())+2;
 							}else{
-								tempWin=atoi(winNum->getCString())+1;
+								tempWin=std::atoi(winNum->getCString())+1;
 							}
 
 							CCString* realWin=CCString::createWithFormat("%d",tempWin);
@@ -609,14 +610,14 @@ void GameOver::listResult(){
 					std::string recordMinute=bestTime.substr(3,2);
 					std::string recordSecond=bestTime.substr(6,2);
 					bool isNewRecord=false;
-					if(atoi(recordHour.c_str())>_hour){
+					if(std::atoi(recordHour.c_str())>_hour){
 						isNewRecord=true;
-					}else if(atoi(recordHour.c_str())==_hour){
+					}else if(std::atoi(recordHour.c_str())==_hour){
 
-						if(atoi(recordMinute.c_str())>_minute){
+						if(std::atoi(recordMinute.c_str())>_minute){
 							isNewRecord=true;
-						}else if(atoi(recordMinute.c_str())==_minute){
-							if(atoi(recordSecond.c_str())>_delegate->_second){
+						}else if(std::atoi(recordMinute.c_str())==_minute){
+							if(std::atoi(recordSecond.c_str())>_delegate->_second){
 								isNewRecord=true;
 							}else{
 								isNewRecord=false;
@@ -644,7 +645,7 @@ void GameOver::listResult(){
 			}/*else{
 
 			 CCString* loseNum=tool->readSQLite("Achievement","name",resultChar->getCString(),"column2");
-			 int tempLose=atoi(loseNum->getCString())+1;
+			 int tempLose=std::atoi(loseNum->getCString())+1;
 			 CCString* realLose=CCString::createWithFormat("%d",tempLose);
 			 if(CError!=1){
 			 tool->saveSQLite("Achievement","name",resultChar->getCString(),"column2",(char*) realLose->getCString(),false);

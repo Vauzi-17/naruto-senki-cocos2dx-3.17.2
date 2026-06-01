@@ -1,4 +1,5 @@
 #include "GearLayer.h"
+#include <cstdlib>
 #include "GameLayer.h"
 #include "HudLayer.h"
 #include "Characters.h"
@@ -456,7 +457,7 @@ void GearLayer::updatePlayerGear(){
 		CCARRAY_FOREACH(_delegate->currentPlayer->getGearArray(),pObject){
 			CCString* tmpGear=(CCString*) pObject;
 			GearButton* btn=GearButton::create("");
-			btn->setBtnType(gearType(atoi(tmpGear->getCString())),gearbtnType(1),false);
+			btn->setBtnType(gearType(std::atoi(tmpGear->getCString())),gearbtnType(1),false);
 			btn->setPositionX(13+i*34);
 			btn->setDelegate(this);
 			currentGear_layer->addChild(btn);
@@ -467,7 +468,7 @@ void GearLayer::updatePlayerGear(){
 	}
 
 
-	coinLabel->setString(CCString::createWithFormat("%d",atoi(_delegate->currentPlayer->getCoin()->getCString()))->getCString());
+	coinLabel->setString(CCString::createWithFormat("%d",std::atoi(_delegate->currentPlayer->getCoin()->getCString()))->getCString());
 	this->updateGearList();
 
 };
@@ -501,7 +502,7 @@ void GearLayer::updateGearList(){
 				Ref* pObject;
 				CCARRAY_FOREACH(_delegate->currentPlayer->getGearArray(),pObject){
 					CCString* tmpGear=(CCString*) pObject;
-					if (atoi(tmpGear->getCString())== i){
+					if (std::atoi(tmpGear->getCString())== i){
 						isBuyed=true;
 					}
 				}

@@ -1,4 +1,5 @@
 #include "KTools.h"
+#include <cstdlib>
 #include "SelectLayer.h"
 #include "NetworkLayer.h"
 /*#if (CC_TARGET_PLATFORM==CC_PLATFORM_ANDROID)
@@ -997,7 +998,7 @@ void KTools::initColumeInDB(){
 	
 	std::string str3="uuuuu<";
 	decode(str3);
-	if(atoi(str2.c_str())>atoi(str3.c_str())){
+	if(std::atoi(str2.c_str())>std::atoi(str3.c_str())){
 		CCString* coin=CCString::create("uuuuu<");
 		sql=CCString::createWithFormat("update GameRecord set coin='%s'",coin->getCString());
 		sqlite3_exec(pDB,sql->getCString(),NULL,NULL,&errorMsg);
@@ -1378,7 +1379,7 @@ CCString* KTools::readSQLite(const char* table,const char* column,const char* va
 		if(strcmp(targetColumn,"column3")==0 || strcmp(targetColumn,"column4")==0){
 		    targetValue=CCString::createWithFormat("%s",target.c_str());
 		}else{
-			targetValue=CCString::createWithFormat("%d",atoi(target.c_str()));
+			targetValue=CCString::createWithFormat("%d",std::atoi(target.c_str()));
 		}
 		sqlite3_free_table(result);
 		sqlite3_close(pDB);
@@ -1445,7 +1446,7 @@ void KTools::saveSQLite(const char* table,const char* relatedColumn,const char* 
 			std::string str3="uuuuu<";
 			decode(str3);
 
-			if(atoi(str2.c_str())>atoi(str3.c_str())){
+			if(std::atoi(str2.c_str())>std::atoi(str3.c_str())){
 				CCString* coin=CCString::create("uuuuu<");
 				sql=CCString::createWithFormat("update GameRecord set coin='%s'",coin->getCString());
 				sqlite3_exec(pDB,sql->getCString(),NULL,NULL,&errorMsg);

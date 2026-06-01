@@ -1,4 +1,5 @@
 #include "GameLayer.h"
+#include <cstdlib>
 #include "Characters.h"
 #include "BGLayer.h"
 #include "HudLayer.h"
@@ -843,7 +844,7 @@ void GameLayer::updateGameTime(float dt)
 	CCString* tempTime=CCString::createWithFormat("%02d:%02d",_minute,_second);
 	this->_hudLayer->gameClock->setString(tempTime->getCString());
 
-	int newValue=atoi(this->getTotalTM()->getCString())+1;
+	int newValue=std::atoi(this->getTotalTM()->getCString())+1;
 	this->setTotalTM(CCString::createWithFormat("%d",newValue));
 }
 

@@ -181,9 +181,9 @@ Urutan langkah berikutnya menuju 100%:
 Posisi saat ini: **sedang di langkah 1 menuju langkah 2**. Helper compat kecil
 yang benar-benar lokal sudah mulai ditutup (`visitNode`, `CCTime`/`cc_timeval`,
 `CCDictElement`, sebagian state cooldown `ActionButton`, `CCScale9Sprite`, dan
-`CCScrollView`, serta `CCEditBox`), tetapi langkah 1 belum selesai karena
-`Cocos2dx2Compat.h` masih menampung alias HTTP aktif dan macro `atoi`. Setelah
-sisa helper kecil yang aman selesai, pekerjaan bergeser penuh ke langkah 2 untuk
+`CCScrollView`, `CCEditBox`, dan macro `atoi`), tetapi langkah 1 belum selesai
+karena `Cocos2dx2Compat.h` masih menampung alias HTTP aktif. Setelah sisa helper
+kecil yang aman selesai, pekerjaan bergeser penuh ke langkah 2 untuk
 membersihkan UI/menu lokal.
 
 Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
@@ -201,6 +201,9 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
 - `StartMenu`: field dan pembuatan input box lokal dipindah dari alias
   `CCEditBox`/konstanta `kEditBox*` ke `cocos2d::ui::EditBox` native, lalu
   alias `CCEditBox` dihapus dari `Cocos2dx2Compat.h`.
+- `Cocos2dx2Compat.h`: macro `atoi` dihapus; pemakai source game diganti ke
+  `std::atoi` dengan include `<cstdlib>` eksplisit. File third-party SQLite
+  tidak disentuh.
 
 1. **Tutup helper compat kecil yang masih lokal**
    - Target file: `Cocos2dx2Compat.h`, `ActionButton`, `HPBar`, `HudLayer`,
@@ -261,8 +264,7 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
 
 7. **Hapus compatibility bridge final**
    - Target file: `Cocos2dx2Compat.h` dan semua include/caller tersisa.
-   - Fokus: hapus alias HTTP, macro `atoi`, dan include deprecated yang sudah
-     tidak diperlukan.
+   - Fokus: hapus alias HTTP dan include deprecated yang sudah tidak diperlukan.
    - Syarat lanjut: `rg` untuk pola API 2.x utama harus bersih atau hanya
      menyisakan komentar/third-party yang memang bukan source game.
 
@@ -584,8 +586,9 @@ Catatan progress terbaru:
   dipisahkan sebelum masuk kontrak data besar di loader XML, `ActionManager`,
   `Element`, dan `Characters`.
 - Alias HTTP di `Cocos2dx2Compat.h` belum dihapus karena masih punya pemakai
-  aktif. Alias EditBox/Scale9/Scroll sudah dihapus setelah audit pemakai source
-  menunjukkan hanya tersisa di compat header.
+  aktif. Alias EditBox/Scale9/Scroll dan macro `atoi` sudah dihapus setelah
+  audit pemakai source menunjukkan helper tersebut tidak perlu lagi disimpan di
+  compat header.
 
 ## Cara Kerja Migrasi
 
