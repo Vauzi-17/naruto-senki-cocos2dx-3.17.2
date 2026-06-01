@@ -101,41 +101,41 @@ bool LoadLayer::init(){
 
 void LoadLayer::preloadIMG(){
 
-	Ref* pObject=NULL;
 	int i=0;
 	const char* path;
 	KTools* tool=KTools::create();
 
-	CCARRAY_FOREACH(tempHeros,pObject){
+	for(unsigned int heroIndex=0; heroIndex<tempHeros->count(); ++heroIndex){
+		Ref* pObject=tempHeros->objectAtIndex(heroIndex);
 
 		CCDictionary* tempdict=(CCDictionary *) pObject;
 
-		CCString* player=CCString::create(tempdict->valueForKey("character")->getCString());
+		const char* player=tempdict->valueForKey("character")->getCString();
 
 
 		//���ؼ���ͼ��
 		Image::setPVRImagesHavePremultipliedAlpha(true);
 
-		if (strcmp(player->getCString(),"Kiba")!=0 &&
-			strcmp(player->getCString(),"Kakuzu")!=0
+		if (strcmp(player,"Kiba")!=0 &&
+			strcmp(player,"Kakuzu")!=0
 			){
 
-				path=CCString::createWithFormat("Element/Skills/%s_Skill.plist",player->getCString())->getCString();
+				path=CCString::createWithFormat("Element/Skills/%s_Skill.plist",player)->getCString();
 				SpriteFrameCache::getInstance()->addSpriteFramesWithFile(path);
-				applyPixelArtToTexture(Director::getInstance()->getTextureCache()->textureForKey(CCString::createWithFormat("Element/Skills/%s_Skill.pvr.ccz",player->getCString())->getCString()));
+				applyPixelArtToTexture(Director::getInstance()->getTextureCache()->textureForKey(CCString::createWithFormat("Element/Skills/%s_Skill.pvr.ccz",player)->getCString()));
 		}
 
 		//Ԥ������Ч
-		tool->prepareFileOGG(player->getCString());
+		tool->prepareFileOGG(player);
 
 
 
-		/*	if(strcmp(player->getCString(),"Chiyo")==0 ||
-		strcmp(player->getCString(),"Shikamaru")==0 ||
-		strcmp(player->getCString(),"Kisame")==0
+		/*	if(strcmp(player,"Chiyo")==0 ||
+		strcmp(player,"Shikamaru")==0 ||
+		strcmp(player,"Kisame")==0
 		){
 
-		std::string filePath=FileUtils::getInstance()->getWritablePath()+CCString::createWithFormat("/DLC/%s.xml",player->getCString())->getCString();
+		std::string filePath=FileUtils::getInstance()->getWritablePath()+CCString::createWithFormat("/DLC/%s.xml",player)->getCString();
 		bool isExisted=FileUtils::getInstance()->isFileExist(filePath);
 
 		if(!isExisted){
@@ -150,62 +150,62 @@ void LoadLayer::preloadIMG(){
 
 		}*/
 
-		path=CCString::createWithFormat("Element/%s/%s.plist",player->getCString(),player->getCString())->getCString();
+		path=CCString::createWithFormat("Element/%s/%s.plist",player,player)->getCString();
 		SpriteFrameCache::getInstance()->addSpriteFramesWithFile(path);
-		applyPixelArtToTexture(Director::getInstance()->getTextureCache()->textureForKey(CCString::createWithFormat("Element/%s/%s.pvr.ccz",player->getCString(),player->getCString())->getCString()));
+		applyPixelArtToTexture(Director::getInstance()->getTextureCache()->textureForKey(CCString::createWithFormat("Element/%s/%s.pvr.ccz",player,player)->getCString()));
 
 
 
 		//���ض����ɫ
-		if(strcmp(player->getCString(),"Jiraiya")==0){
+		if(strcmp(player,"Jiraiya")==0){
 			SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Element/SageJiraiya/SageJiraiya.plist");
 			tool->prepareFileOGG("SageJiraiya");
-		}else if(strcmp(player->getCString(),"Kankuro")==0){
+		}else if(strcmp(player,"Kankuro")==0){
 			SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Element/Karasu/Karasu.plist");
 			SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Element/Sanshouuo/Sanshouuo.plist");
 			SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Element/Saso/Saso.plist");
-		}else if(strcmp(player->getCString(),"Chiyo")==0){
+		}else if(strcmp(player,"Chiyo")==0){
 			SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Element/Parents/Parents.plist");
-		}else if(strcmp(player->getCString(),"Kakuzu")==0){
+		}else if(strcmp(player,"Kakuzu")==0){
 			SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Element/MaskRaidon/MaskRaidon.plist");
 			SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Element/MaskFudon/MaskFudon.plist");
 			SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Element/MaskKadon/MaskKadon.plist");
-		}else if(strcmp(player->getCString(),"Naruto")==0){
+		}else if(strcmp(player,"Naruto")==0){
 			SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Element/RikudoNaruto/RikudoNaruto.plist");
 			SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Element/SageNaruto/SageNaruto.plist");
 			SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Element/Kurama/Kurama.plist");
 			tool->prepareFileOGG("SageNaruto");
 			tool->prepareFileOGG("RikudoNaruto");
-		}else if(strcmp(player->getCString(),"Lee")==0){
+		}else if(strcmp(player,"Lee")==0){
 			SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Element/RockLee/RockLee.plist");
-		}else if(strcmp(player->getCString(),"Tsunade")==0){
+		}else if(strcmp(player,"Tsunade")==0){
 			SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Element/Slug/Slug.plist");
-		}else if(strcmp(player->getCString(),"Shisui")==0){
+		}else if(strcmp(player,"Shisui")==0){
 			SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Element/Shisui/Shisui-1.plist");
 			SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Element/Shisui/Shisui-2.plist");
 			SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Element/Shisui/Shisui-3.plist");
 			SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Element/Shisui/Shisui-4.plist");
 			SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Element/Shisui/Shisui-5.plist");
 			SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Element/Shisui/Shisui-6.plist");
-		}else if(strcmp(player->getCString(),"Kakashi")==0){
+		}else if(strcmp(player,"Kakashi")==0){
 			SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Element/DogWall/DogWall.plist");
-		}else if(strcmp(player->getCString(),"Deidara")==0){
+		}else if(strcmp(player,"Deidara")==0){
 			SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Element/Centipede/Centipede.plist");
-		}else if(strcmp(player->getCString(),"Pain")==0){
+		}else if(strcmp(player,"Pain")==0){
 			SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Element/DevaPath/DevaPath.plist");
 			SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Element/AsuraPath/AsuraPath.plist");
 			SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Element/AnimalPath/AnimalPath.plist");
-		}else if(strcmp(player->getCString(),"Sasuke")==0){
+		}else if(strcmp(player,"Sasuke")==0){
 			SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Element/ImmortalSasuke/ImmortalSasuke.plist");
 			tool->prepareFileOGG("ImmortalSasuke");
-		}else if(strcmp(player->getCString(),"Kiba")==0){
+		}else if(strcmp(player,"Kiba")==0){
 			SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Element/Akamaru/Akamaru.plist");
 		}
 
 
 		if(i==0 ||( (i==1 || i==2 ) && _isHardCoreMode) ){
 
-			Sprite* loadingAvator=Sprite::createWithSpriteFrameName(CCString::createWithFormat("%s_Walk_01.png",player->getCString())->getCString());
+			Sprite* loadingAvator=Sprite::createWithSpriteFrameName(CCString::createWithFormat("%s_Walk_01.png",player)->getCString());
 			loadingAvator->setFlipX(true);
 			loadingAvator->setPosition(Vec2(winSize.width-100+i*16,30));
 			loadingAvator->setAnchorPoint(Vec2(0,0));
@@ -213,9 +213,9 @@ void LoadLayer::preloadIMG(){
 			Vector<SpriteFrame*> animeFrames;
 			CCString* str;
 
-			const char* file=CCString::createWithFormat("%s_Walk_",player->getCString())->getCString();
+			const char* file=CCString::createWithFormat("%s_Walk_",player)->getCString();
 			int frameCount;
-			if(strcmp(player->getCString(),"Konan")==0){
+			if(strcmp(player,"Konan")==0){
 				frameCount=1;
 			}else {
 				frameCount=7;

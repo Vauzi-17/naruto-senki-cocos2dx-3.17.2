@@ -5,6 +5,8 @@
 #include "LoadLayer.h"
 #include "SkillLayer.h"
 #include "RankingLayer.h"
+#include <string>
+#include <vector>
 USING_NS_CC;
 
 class NetworkLayer : public Layer{
@@ -29,9 +31,9 @@ public:
 	const char* _playerSelect;
 	const char* _com1Select;
 	const char* _com2Select;
-	CCString* _trainingPlayerPick;
-	CCArray* _trainingTeamPicks;
-	CCArray* _trainingEnemyPicks;
+	std::string _trainingPlayerPick;
+	std::vector<std::string> _trainingTeamPicks;
+	std::vector<std::string> _trainingEnemyPicks;
 	Sprite* _trainingTeamSlots[5];
 	Sprite* _trainingEnemySlots[5];
 

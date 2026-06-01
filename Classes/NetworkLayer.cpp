@@ -1,18 +1,20 @@
 #include "NetworkLayer.h"
 #include "Defines.h"
 #include "StartMenu.h"
+#include <algorithm>
 USING_NS_CC_EXT;
 using namespace CocosDenshion;
 
 #include<time.h>
 
-static bool networkContainsHero(CCArray* used, const char* heroName)
+static bool networkContainsHero(const std::vector<std::string>& used, const char* heroName)
 {
-	Ref* pObject = NULL;
-	CCARRAY_FOREACH(used, pObject)
+	if(!heroName){
+		return false;
+	}
+	for(const std::string& value : used)
 	{
-		CCString* value = (CCString*)pObject;
-		if(strcmp(value->getCString(), heroName) == 0)
+		if(value == heroName)
 		{
 			return true;
 		}
@@ -20,11 +22,11 @@ static bool networkContainsHero(CCArray* used, const char* heroName)
 	return false;
 }
 
-static const char* networkPickHero(CCArray* used, const char** allHeroes, int heroCount, const char** presetList, int presetCount, int presetIndex, bool randomPick)
+static const char* networkPickHero(std::vector<std::string>& used, const char** allHeroes, int heroCount, const char** presetList, int presetCount, int presetIndex, bool randomPick)
 {
 	if(!randomPick && presetIndex < presetCount && !networkContainsHero(used, presetList[presetIndex]))
 	{
-		used->addObject(CCString::create(presetList[presetIndex]));
+		used.push_back(presetList[presetIndex]);
 		return presetList[presetIndex];
 	}
 
@@ -34,7 +36,7 @@ static const char* networkPickHero(CCArray* used, const char** allHeroes, int he
 		const char* heroName=allHeroes[index];
 		if(!networkContainsHero(used, heroName))
 		{
-			used->addObject(CCString::create(heroName));
+			used.push_back(heroName);
 			return heroName;
 		}
 	}
@@ -43,7 +45,7 @@ static const char* networkPickHero(CCArray* used, const char** allHeroes, int he
 	{
 		if(!networkContainsHero(used, allHeroes[i]))
 		{
-			used->addObject(CCString::create(allHeroes[i]));
+			used.push_back(allHeroes[i]);
 			return allHeroes[i];
 		}
 	}
@@ -52,16 +54,13 @@ static const char* networkPickHero(CCArray* used, const char** allHeroes, int he
 }
 
 
-static bool networkArrayHasHero(CCArray* list, const char* heroName)
+static bool networkArrayHasHero(const std::vector<std::string>& list, const char* heroName)
 {
-	if(!list || !heroName){
+	if(!heroName){
 		return false;
 	}
-	Ref* pObject=NULL;
-	CCARRAY_FOREACH(list,pObject)
-	{
-		CCString* value=(CCString*)pObject;
-		if(strcmp(value->getCString(),heroName)==0){
+	for(const std::string& value : list){
+		if(value == heroName){
 			return true;
 		}
 	}
@@ -116,9 +115,6 @@ NetworkLayer::NetworkLayer(void)
 	_playerSelect=NULL;
 	_com1Select=NULL;
 	_com2Select=NULL;
-	_trainingPlayerPick=NULL;
-	_trainingTeamPicks=NULL;
-	_trainingEnemyPicks=NULL;
 	selectArray=NULL;
 
 	_pageLayer1=NULL;
@@ -131,10 +127,6 @@ NetworkLayer::NetworkLayer(void)
 	refreshBtn=NULL;
 
 	_teamSelector=NULL;
-	_trainingTeamPicks=CCArray::create();
-	_trainingTeamPicks->retain();
-	_trainingEnemyPicks=CCArray::create();
-	_trainingEnemyPicks->retain();
 	for(int i=0;i<5;i++){
 		_trainingTeamSlots[i]=NULL;
 		_trainingEnemySlots[i]=NULL;
@@ -145,9 +137,6 @@ NetworkLayer::NetworkLayer(void)
 NetworkLayer::~NetworkLayer(void)
 {
 	CC_SAFE_RELEASE(selectArray);
-	CC_SAFE_RELEASE(_trainingPlayerPick);
-	CC_SAFE_RELEASE(_trainingTeamPicks);
-	CC_SAFE_RELEASE(_trainingEnemyPicks);
 
 }
 
@@ -648,8 +637,8 @@ SelectButton* NetworkLayer::findSelectButton(const char* heroName){
 	if(!heroName || !selectArray){
 		return NULL;
 	}
-	Ref* pObject=NULL;
-	CCARRAY_FOREACH(selectArray,pObject){
+	for(unsigned int selectIndex=0; selectIndex<selectArray->count(); ++selectIndex){
+		Ref* pObject=selectArray->objectAtIndex(selectIndex);
 		SelectButton* btn=(SelectButton*)pObject;
 		if(strcmp(btn->getCharName()->getCString(),heroName)==0){
 			return btn;
@@ -758,9 +747,9 @@ void NetworkLayer::refreshTrainingTeamSlots(){
 			}else if(emptyFrame){
 				_trainingTeamSlots[i]->setSpriteFrame(emptyFrame);
 			}
-		}else if(_trainingTeamPicks && (int)_trainingTeamPicks->count()>=i){
-			CCString* picked=(CCString*)_trainingTeamPicks->objectAtIndex(i-1);
-			SpriteFrame* frame=SpriteFrameCache::getInstance()->spriteFrameByName(CCString::createWithFormat("%s_small.png",picked->getCString())->getCString());
+		}else if((int)_trainingTeamPicks.size()>=i){
+			const std::string& picked=_trainingTeamPicks[i-1];
+			SpriteFrame* frame=SpriteFrameCache::getInstance()->spriteFrameByName(CCString::createWithFormat("%s_small.png",picked.c_str())->getCString());
 			if(frame){
 				_trainingTeamSlots[i]->setSpriteFrame(frame);
 			}
@@ -776,9 +765,9 @@ void NetworkLayer::refreshTrainingEnemySlots(){
 		if(!_trainingEnemySlots[i]){
 			continue;
 		}
-		if(_trainingEnemyPicks && (int)_trainingEnemyPicks->count()>i){
-			CCString* picked=(CCString*)_trainingEnemyPicks->objectAtIndex(i);
-			SpriteFrame* frame=SpriteFrameCache::getInstance()->spriteFrameByName(CCString::createWithFormat("%s_small.png",picked->getCString())->getCString());
+		if((int)_trainingEnemyPicks.size()>i){
+			const std::string& picked=_trainingEnemyPicks[i];
+			SpriteFrame* frame=SpriteFrameCache::getInstance()->spriteFrameByName(CCString::createWithFormat("%s_small.png",picked.c_str())->getCString());
 			if(frame){
 				_trainingEnemySlots[i]->setSpriteFrame(frame);
 			}
@@ -800,8 +789,7 @@ void NetworkLayer::unselectHero(const char* heroName){
 
 	if(_playerSelect && strcmp(_playerSelect,heroName)==0){
 		_playerSelect=NULL;
-		CC_SAFE_RELEASE(_trainingPlayerPick);
-		_trainingPlayerPick=NULL;
+		_trainingPlayerPick.clear();
 		if(!_selectImg && selectArray && selectArray->count()>0){
 			SelectButton* firstBtn=(SelectButton*)selectArray->objectAtIndex(0);
 			_selectImg=Sprite::createWithSpriteFrameName("1p.png");
@@ -816,26 +804,8 @@ void NetworkLayer::unselectHero(const char* heroName){
 	}else if(_com2Select && strcmp(_com2Select,heroName)==0){
 		_com2Select=NULL;
 	}else if(_isTrainingSelect){
-		if(_trainingTeamPicks){
-			Ref* pObject=NULL;
-			CCARRAY_FOREACH(_trainingTeamPicks,pObject){
-				CCString* value=(CCString*)pObject;
-				if(strcmp(value->getCString(),heroName)==0){
-					_trainingTeamPicks->removeObject(value);
-					break;
-				}
-			}
-		}
-		if(_trainingEnemyPicks){
-			Ref* pObject=NULL;
-			CCARRAY_FOREACH(_trainingEnemyPicks,pObject){
-				CCString* value=(CCString*)pObject;
-				if(strcmp(value->getCString(),heroName)==0){
-					_trainingEnemyPicks->removeObject(value);
-					break;
-				}
-			}
-		}
+		_trainingTeamPicks.erase(std::remove(_trainingTeamPicks.begin(), _trainingTeamPicks.end(), heroName), _trainingTeamPicks.end());
+		_trainingEnemyPicks.erase(std::remove(_trainingEnemyPicks.begin(), _trainingEnemyPicks.end(), heroName), _trainingEnemyPicks.end());
 	}
 
 	if(_isTrainingSelect){
@@ -850,15 +820,15 @@ void NetworkLayer::unselectHero(const char* heroName){
 
 void NetworkLayer::unselectAll(){
 	if(!_playerSelect && !_com1Select && !_com2Select
-		&& (!_trainingPlayerPick)
-		&& (!_trainingTeamPicks || _trainingTeamPicks->count()==0)
-		&& (!_trainingEnemyPicks || _trainingEnemyPicks->count()==0)){
+		&& _trainingPlayerPick.empty()
+		&& _trainingTeamPicks.empty()
+		&& _trainingEnemyPicks.empty()){
 		return;
 	}
 
 	if(selectArray){
-		Ref* pObject=NULL;
-		CCARRAY_FOREACH(selectArray,pObject){
+		for(unsigned int selectIndex=0; selectIndex<selectArray->count(); ++selectIndex){
+			Ref* pObject=selectArray->objectAtIndex(selectIndex);
 			SelectButton* btn=(SelectButton*)pObject;
 			btn->spriteResetGrey();
 		}
@@ -867,14 +837,9 @@ void NetworkLayer::unselectAll(){
 	_playerSelect=NULL;
 	_com1Select=NULL;
 	_com2Select=NULL;
-	CC_SAFE_RELEASE(_trainingPlayerPick);
-	_trainingPlayerPick=NULL;
-	if(_trainingTeamPicks){
-		_trainingTeamPicks->removeAllObjects();
-	}
-	if(_trainingEnemyPicks){
-		_trainingEnemyPicks->removeAllObjects();
-	}
+	_trainingPlayerPick.clear();
+	_trainingTeamPicks.clear();
+	_trainingEnemyPicks.clear();
 
 	if(_isTrainingSelect){
 		refreshTrainingTeamSlots();
@@ -924,8 +889,8 @@ void NetworkLayer::setSelected(Ref* sender){
 		if(selectedTeamNeed<0){
 			selectedTeamNeed=0;
 		}
-		bool selectedTeamFull=_trainingRandomTeam || (_trainingTeamPicks && (int)_trainingTeamPicks->count()>=selectedTeamNeed);
-		bool selectedEnemyFull=_trainingRandomEnemy || (_trainingEnemyPicks && (int)_trainingEnemyPicks->count()>=_trainingTeamSize);
+		bool selectedTeamFull=_trainingRandomTeam || (int)_trainingTeamPicks.size()>=selectedTeamNeed;
+		bool selectedEnemyFull=_trainingRandomEnemy || (int)_trainingEnemyPicks.size()>=_trainingTeamSize;
 		if(_playerSelect && selectedTeamFull && selectedEnemyFull && !isHeroConfirmedSelected(_selectHero)){
 			return;
 		}
@@ -961,10 +926,8 @@ void NetworkLayer::setSelected(Ref* sender){
 		}
 
 		if(!_playerSelect){
-			CC_SAFE_RELEASE(_trainingPlayerPick);
-			_trainingPlayerPick=CCString::create(_selectHero);
-			_trainingPlayerPick->retain();
-			_playerSelect=_trainingPlayerPick->getCString();
+			_trainingPlayerPick=_selectHero;
+			_playerSelect=_trainingPlayerPick.c_str();
 			SpriteFrame* frame=SpriteFrameCache::getInstance()->spriteFrameByName(CCString::createWithFormat("%s_small.png",_selectHero)->getCString());
 			if(frame && _trainingTeamSlots[0]){
 				_trainingTeamSlots[0]->setSpriteFrame(frame);
@@ -980,9 +943,9 @@ void NetworkLayer::setSelected(Ref* sender){
 		if(teamNeed<0){
 			teamNeed=0;
 		}
-		if(!_trainingRandomTeam && (int)_trainingTeamPicks->count()<teamNeed){
-			int slotIndex=_trainingTeamPicks->count()+1;
-			_trainingTeamPicks->addObject(CCString::create(_selectHero));
+		if(!_trainingRandomTeam && (int)_trainingTeamPicks.size()<teamNeed){
+			int slotIndex=(int)_trainingTeamPicks.size()+1;
+			_trainingTeamPicks.push_back(_selectHero);
 			SpriteFrame* frame=SpriteFrameCache::getInstance()->spriteFrameByName(CCString::createWithFormat("%s_small.png",_selectHero)->getCString());
 			if(frame && slotIndex<5 && _trainingTeamSlots[slotIndex]){
 				_trainingTeamSlots[slotIndex]->setSpriteFrame(frame);
@@ -990,9 +953,9 @@ void NetworkLayer::setSelected(Ref* sender){
 			return;
 		}
 
-		if(!_trainingRandomEnemy && (int)_trainingEnemyPicks->count()<_trainingTeamSize){
-			int slotIndex=_trainingEnemyPicks->count();
-			_trainingEnemyPicks->addObject(CCString::create(_selectHero));
+		if(!_trainingRandomEnemy && (int)_trainingEnemyPicks.size()<_trainingTeamSize){
+			int slotIndex=(int)_trainingEnemyPicks.size();
+			_trainingEnemyPicks.push_back(_selectHero);
 			SpriteFrame* frame=SpriteFrameCache::getInstance()->spriteFrameByName(CCString::createWithFormat("%s_small.png",_selectHero)->getCString());
 			if(frame && slotIndex<5 && _trainingEnemySlots[slotIndex]){
 				_trainingEnemySlots[slotIndex]->setSpriteFrame(frame);
@@ -1189,42 +1152,40 @@ void NetworkLayer::onGameStart(Ref* sender){
 			}
 
 			CCArray* tempHeros=CCArray::create();
-			CCArray* used=CCArray::create();
-			const char* playerName=_trainingPlayerPick ? _trainingPlayerPick->getCString() : (_playerSelect ? _playerSelect : _selectHero);
+			std::vector<std::string> used;
+			const char* playerName=!_trainingPlayerPick.empty() ? _trainingPlayerPick.c_str() : (_playerSelect ? _playerSelect : _selectHero);
 			if(!playerName || strcmp(playerName,"None")==0){
 				playerName="Naruto";
 			}
-			used->addObject(CCString::create(playerName));
+			used.push_back(playerName);
 			networkAddHero(tempHeros,playerName,"Player","Konoha");
 
 			for(int i=1;i<teamSize;i++){
 				const char* heroName=NULL;
-				if(!_trainingRandomTeam && _trainingTeamPicks && (int)_trainingTeamPicks->count()>=i){
-					CCString* picked=(CCString*)_trainingTeamPicks->objectAtIndex(i-1);
-					heroName=picked->getCString();
+				if(!_trainingRandomTeam && (int)_trainingTeamPicks.size()>=i){
+					heroName=_trainingTeamPicks[i-1].c_str();
 				}else{
 					heroName=networkPickHero(used,(const char**)heroList,num,teamPreset,sizeof(teamPreset)/sizeof(char*),i-1,_trainingRandomTeam);
 				}
 				if(!heroName || networkContainsHero(used,heroName)){
 					heroName=networkPickHero(used,(const char**)heroList,num,teamPreset,sizeof(teamPreset)/sizeof(char*),i-1,true);
 				}else{
-					used->addObject(CCString::create(heroName));
+					used.push_back(heroName);
 				}
 				networkAddHero(tempHeros,heroName,"Com","Konoha");
 			}
 
 			for(int i=0;i<teamSize;i++){
 				const char* heroName=NULL;
-				if(!_trainingRandomEnemy && _trainingEnemyPicks && (int)_trainingEnemyPicks->count()>i){
-					CCString* picked=(CCString*)_trainingEnemyPicks->objectAtIndex(i);
-					heroName=picked->getCString();
+				if(!_trainingRandomEnemy && (int)_trainingEnemyPicks.size()>i){
+					heroName=_trainingEnemyPicks[i].c_str();
 				}else{
 					heroName=networkPickHero(used,(const char**)heroList,num,enemyPreset,sizeof(enemyPreset)/sizeof(char*),i,_trainingRandomEnemy);
 				}
 				if(!heroName || networkContainsHero(used,heroName)){
 					heroName=networkPickHero(used,(const char**)heroList,num,enemyPreset,sizeof(enemyPreset)/sizeof(char*),i,true);
 				}else{
-					used->addObject(CCString::create(heroName));
+					used.push_back(heroName);
 				}
 				networkAddHero(tempHeros,heroName,"Com","Akatsuki");
 			}

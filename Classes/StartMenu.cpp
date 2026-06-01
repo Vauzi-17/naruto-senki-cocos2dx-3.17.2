@@ -1,5 +1,7 @@
 #include "StartMenu.h"
 #include <cstdlib>
+#include <string>
+#include <vector>
 using namespace CocosDenshion;
 USING_NS_CC_EXT;
 
@@ -23,13 +25,14 @@ static const char* gTrainingHeroList[] = {
 	"Hiruzen","Kiba","Jugo","Lee"
 };
 
-static bool trainingContainsHero(CCArray* used, const char* heroName)
+static bool trainingContainsHero(const std::vector<std::string>& used, const char* heroName)
 {
-	Ref* pObject = NULL;
-	CCARRAY_FOREACH(used, pObject)
+	if(!heroName){
+		return false;
+	}
+	for(const std::string& value : used)
 	{
-		CCString* value = (CCString*)pObject;
-		if (strcmp(value->getCString(), heroName) == 0)
+		if (value == heroName)
 		{
 			return true;
 		}
@@ -37,12 +40,12 @@ static bool trainingContainsHero(CCArray* used, const char* heroName)
 	return false;
 }
 
-static const char* trainingPickHero(CCArray* used, const char** presetList, int presetCount, int presetIndex, bool randomPick)
+static const char* trainingPickHero(std::vector<std::string>& used, const char** presetList, int presetCount, int presetIndex, bool randomPick)
 {
 	int heroCount = sizeof(gTrainingHeroList) / sizeof(char*);
 	if (!randomPick && presetIndex < presetCount && !trainingContainsHero(used, presetList[presetIndex]))
 	{
-		used->addObject(CCString::create(presetList[presetIndex]));
+		used.push_back(presetList[presetIndex]);
 		return presetList[presetIndex];
 	}
 
@@ -52,7 +55,7 @@ static const char* trainingPickHero(CCArray* used, const char** presetList, int 
 		const char* heroName = gTrainingHeroList[index];
 		if (!trainingContainsHero(used, heroName))
 		{
-			used->addObject(CCString::create(heroName));
+			used.push_back(heroName);
 			return heroName;
 		}
 	}
@@ -61,7 +64,7 @@ static const char* trainingPickHero(CCArray* used, const char** presetList, int 
 	{
 		if (!trainingContainsHero(used, gTrainingHeroList[i]))
 		{
-			used->addObject(CCString::create(gTrainingHeroList[i]));
+			used.push_back(gTrainingHeroList[i]);
 			return gTrainingHeroList[i];
 		}
 	}
@@ -553,9 +556,9 @@ bool StartMenu::init()
 			menuPosX=150;
 		}
 
-		Ref* pObject=NULL;
 		int menuIntroIndex=0;
-		CCARRAY_FOREACH(_menu_array,pObject){
+		for(unsigned int menuIndex=0; menuIndex<_menu_array->count(); ++menuIndex){
+				Ref* pObject=_menu_array->objectAtIndex(menuIndex);
 			MenuButton* menu=(MenuButton *)pObject;
 			float finalY=menu->getPositionY();
 			menu->setPositionX(menuPosX-36);
@@ -2360,9 +2363,9 @@ void StartMenu::onCreditsCallBack(){
 }
 
 void StartMenu::scrollMenu(int posY){
-		Ref* pObject=NULL;
 		if(posY>_pos02 || (isDrag && isClockwise)){ //˳ʱ��
-			CCARRAY_FOREACH(_menu_array,pObject){
+			for(unsigned int menuIndex=0; menuIndex<_menu_array->count(); ++menuIndex){
+				Ref* pObject=_menu_array->objectAtIndex(menuIndex);
 				MenuButton* menu=(MenuButton *)pObject;
 				if(menu->getPositionY()==_pos01){
 					ActionInterval* spn=MoveTo::create(0.5,Vec2(menu->getPositionX(),_pos02));
@@ -2413,7 +2416,8 @@ void StartMenu::scrollMenu(int posY){
 			};
 
 		}else{ //��ʱ��
-			CCARRAY_FOREACH(_menu_array,pObject){
+			for(unsigned int menuIndex=0; menuIndex<_menu_array->count(); ++menuIndex){
+				Ref* pObject=_menu_array->objectAtIndex(menuIndex);
 				MenuButton* menu=(MenuButton *)pObject;
 				if(menu->getPositionY()==_pos01){
 					FiniteTimeAction* spn=Spawn::create(
@@ -2464,7 +2468,8 @@ void StartMenu::scrollMenu(int posY){
 
 		};
 		std::string src="";
-		CCARRAY_FOREACH(_menu_array,pObject){
+		for(unsigned int menuIndex=0; menuIndex<_menu_array->count(); ++menuIndex){
+				Ref* pObject=_menu_array->objectAtIndex(menuIndex);
 			MenuButton* menu=(MenuButton *)pObject;
 
 			if(menu->_isTop){
