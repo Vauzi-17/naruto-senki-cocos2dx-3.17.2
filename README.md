@@ -214,6 +214,8 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
   offline karena scheduler aktifnya sudah lama dikomentari.
 - `LoadLayer`: jalur download DLC XML lama dibersihkan; preload sekarang selalu
   lanjut ke `onLoadFinish` karena pengisian `DLCArray` aktif sudah tidak ada.
+- `StartMenu`: notice offline dibuat sepenuhnya lokal. Request/comment notice
+  lama dibersihkan, dan konfirmasi notice hanya memperbarui label lokal.
 
 1. **Tutup helper compat kecil yang masih lokal**
    - Target file: `Cocos2dx2Compat.h`, `ActionButton`, `HPBar`, `HudLayer`,
@@ -610,6 +612,9 @@ Catatan progress terbaru:
 - Request download DLC lama di `LoadLayer` dibersihkan setelah audit menunjukkan
   `DLCArray` hanya tersisa dari blok komentar legacy; sisa HTTP aktif kini
   terkonsentrasi di `StartMenu`.
+- Notice `StartMenu` tidak lagi memakai request HTTP; notice tetap muncul dari
+  `Element/strings.xml`, sementara edit notice lokal hanya memperbarui label
+  aktif pada sesi berjalan.
 
 ## Cara Kerja Migrasi
 

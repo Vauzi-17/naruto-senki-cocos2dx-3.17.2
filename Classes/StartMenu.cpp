@@ -1430,31 +1430,13 @@ void StartMenu::onNoticeComfirm(Ref* sender){
 		return;
 	}
 
-	isPosting=true;
-	//ˢ�°�ť
-	if(!refreshBtn){
-		refreshBtn=Sprite::createWithSpriteFrameName("refresh_btn.png");
-		refreshBtn->setPosition(Vec2(winSize.width/2,winSize.height/2));
-		ActionInterval* rt=RotateBy::create(0.3f,180,180);
-		refreshBtn->runAction(RepeatForever::create(rt));
-		this->addChild(refreshBtn,1000);
-
+	if(noticeLabel){
+		noticeLabel->setString(data1.c_str());
 	}
-
-	cocos2d::extension::CCHttpRequest* request = new CCHttpRequest();
-	std::string code2=CCString::createWithFormat("%d",MemberID)->getCString();
-	std::string code3=CCString::createWithFormat("%d",GroupID)->getCString();
-
-	std::string code="code=1000&MemberID="+code2+"&GroupID="+code3+"&Notice="+data1+"&pw="+PWord;
-	std::string url=SERVER"nsk/group.php?"+code;
-	request->setUrl(url.c_str());
-	request->setRequestType(CCHttpRequest::kHttpGet);
-	request->setResponseCallback(this, callfuncND_selector(StartMenu::onNoticeRequestCompleted));
-	request->setTag("Post_My_Data");
-	cocos2d::extension::CCHttpClient::getInstance()->send(request);
-	request->release();
+	CCTips *tip=CCTips::create("UpdateNotice");
+	this->addChild(tip,5000);
+	this->onInputBoxClose(NULL);
 }
-
 void StartMenu::onLockBtn(Ref* sender){
 
 
@@ -3159,91 +3141,17 @@ void StartMenu::setNotice(){
 		const char *reply = ((CCString*)strings->objectForKey("Notice"))->getCString();
 
 		noticeLabel->setString(reply);
-		/*cocos2d::extension::CCHttpRequest* request = new CCHttpRequest();
-		std::string code2=CCString::createWithFormat("?version=%d",CURRENT_VERSION)->getCString();
-		std::string url=SERVER"nsk/notice.php"+code2;
-		request->setUrl(url.c_str());
-		request->setRequestType(CCHttpRequest::kHttpGet);
-		request->setResponseCallback(this, callfuncND_selector(StartMenu::onNoticeRequestCompleted));
-		request->setTag("Post_My_Data");
-		cocos2d::extension::CCHttpClient::getInstance()->send(request);
-		request->release();  */
+
 
 	}
 
 
 }
 void StartMenu::onNoticeRequestCompleted(Node *sender ,void *data) {
-	cocos2d::extension::CCHttpResponse *response = (cocos2d::extension::CCHttpResponse*)data;
-	if (!response)
-	{
-		return;
-	}
-	if (0 != strlen(response->getHttpRequest()->getTag()))
-	{
-		CCLOG("%s completed", response->getHttpRequest()->getTag());
-	}
-	int statusCode = response->getResponseCode();
-	char statusString[64] = {};
-	sprintf(statusString ,"Http status code:%d ,tag = %s" ,statusCode ,response->getHttpRequest()->getTag());
-	CCLOG("response code:%d" ,statusCode);
-	if (!response->isSucceed())
-	{
-		CCLOG("response failed");
-		CCLOG("error buffer:%s" ,response->getErrorBuffer());
-		CCTips *tip=CCTips::create("ServerError");
-		this->addChild(tip,5000);
-		return;
-	}
-	std::vector<char> *buffer = response->getResponseData();
-	printf("Http response,dump data:");
-
-
-	Document doc;
-	//��vectorת����std::string
-	std::string buf(buffer->begin(),buffer->end());
-	//CCLOG("%s",buf.c_str());
-	const char* json=(char*) buf.c_str();
-	doc.Parse<kParseDefaultFlags>(json);
-	rapidjson::Value &arr=doc;
-	std::string noticeString;
-	if(arr.IsArray()){
-		for (SizeType i = 0; i < arr.Size(); i++)  {
-
-			rapidjson::Value & node=arr[i];
-
-				rapidjson::Value & noticeValue= node["notice"];
-				noticeString+= noticeValue.GetString();
-
-
-		}
-		if(noticeLabel){
-			noticeLabel->setString(noticeString.c_str());
-		}
-
-	}else{
-		isPosting=false;
-		//ˢ�°�ť
-		if(refreshBtn){
-			refreshBtn->stopAllActions();
-			refreshBtn->removeFromParent();
-			refreshBtn=NULL;
-		}
-
-
-		CCTips *tip=CCTips::create("UpdateNotice");
-		this->addChild(tip,5000);
-		if(notice_label){
-			notice_label->setString(json);
-		}
-		this->onInputBoxClose(NULL);
-
-
-	}
-
-
-
-
+	// Notice memakai teks lokal dari Element/strings.xml pada mode offline.
+	(void)sender;
+	(void)data;
+	isPosting=false;
 }
 void StartMenu::onLoginRequestCompleted(Node *sender ,void *data) {
 	//AllocConsole();
