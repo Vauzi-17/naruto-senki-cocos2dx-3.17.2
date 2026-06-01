@@ -233,7 +233,8 @@ void GameOver::listResult(){
 	int konohaDisplayCount=0;
 	int akatsukiDisplayCount=0;
 
-	CCARRAY_FOREACH(_delegate->_CharacterArray,pObject){
+	for(unsigned int characterIndex=0; characterIndex<_delegate->_CharacterArray->count(); ++characterIndex){
+		pObject=_delegate->_CharacterArray->objectAtIndex(characterIndex);
 		Hero* countHero=(Hero*)pObject;
 		if(strcmp(countHero->getRole()->getCString(),"Clone")==0 ||
 			strcmp(countHero->getRole()->getCString(),"Summon")==0||
@@ -260,7 +261,8 @@ void GameOver::listResult(){
 	float gearScale=compactResult?0.40f:0.5f;
 	float gearGap=compactResult?15.0f:19.0f;
 
-	CCARRAY_FOREACH(_delegate->_CharacterArray,pObject){
+	for(unsigned int characterIndex=0; characterIndex<_delegate->_CharacterArray->count(); ++characterIndex){
+		pObject=_delegate->_CharacterArray->objectAtIndex(characterIndex);
 
 
 		Hero* hero=(Hero*)pObject;
@@ -341,7 +343,8 @@ void GameOver::listResult(){
 
 			Ref* pObject;
 			int i=0;
-			CCARRAY_FOREACH(hero->getGearArray(),pObject){
+			for(unsigned int gearIndex=0; gearIndex<hero->getGearArray()->count(); ++gearIndex){
+				pObject=hero->getGearArray()->objectAtIndex(gearIndex);
 				CCString* tmpGear=(CCString*) pObject;
 				Sprite* gearIcon=Sprite::createWithSpriteFrameName(CCString::createWithFormat("gear_%02d.png",std::atoi(tmpGear->getCString()))->getCString());
 				gearIcon->setPosition(Vec2(flogNum->getPositionX()+22+i*gearGap,flogNum->getPositionY()-1));
@@ -557,7 +560,8 @@ void GameOver::listResult(){
 					}
 
 
-					CCARRAY_FOREACH(_delegate->_CharacterArray,pObject){
+					for(unsigned int characterIndex=0; characterIndex<_delegate->_CharacterArray->count(); ++characterIndex){
+		pObject=_delegate->_CharacterArray->objectAtIndex(characterIndex);
 
 						Hero* hero=(Hero*)pObject;
 						if(strcmp(hero->getRole()->getCString(),"Clone")==0 ||
@@ -725,7 +729,8 @@ void GameOver::onChangeChar(Ref* sender){
 	}
 	if(!changeEnemyPick){
 		Ref* pObject=nullptr;
-		CCARRAY_FOREACH(_delegate->_CharacterArray,pObject){
+		for(unsigned int characterIndex=0; characterIndex<_delegate->_CharacterArray->count(); ++characterIndex){
+		pObject=_delegate->_CharacterArray->objectAtIndex(characterIndex);
 			NarutoSenki::ActionManager* hero=(NarutoSenki::ActionManager*)pObject;
 			if(strcmp(hero->getRole()->getCString(),"Com")==0 && strcmp(hero->getGroup()->getCString(),_delegate->currentPlayer->getGroup()->getCString())!=0){
 				changeEnemyPick=CCString::create(hero->getCharacter()->getCString());
@@ -861,7 +866,8 @@ void GameOver::onChangeCharConfirm(Ref* sender){
 	}
 	CCArray* rematchHeros=CCArray::create();
 	Ref* pObject=nullptr;
-	CCARRAY_FOREACH(_delegate->_CharacterArray,pObject){
+	for(unsigned int characterIndex=0; characterIndex<_delegate->_CharacterArray->count(); ++characterIndex){
+		pObject=_delegate->_CharacterArray->objectAtIndex(characterIndex);
 		NarutoSenki::ActionManager* hero=(NarutoSenki::ActionManager*)pObject;
 		if(strcmp(hero->getRole()->getCString(),"Player")!=0 && strcmp(hero->getRole()->getCString(),"Com")!=0){
 			continue;

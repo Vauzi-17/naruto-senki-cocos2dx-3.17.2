@@ -452,9 +452,9 @@ void GearLayer::updatePlayerGear(){
 		}
 		currentGear_layer=Layer::create();
 		currentGear_layer->setAnchorPoint(Vec2(0,0));
-		Ref* pObject;
 		int i=0;
-		CCARRAY_FOREACH(_delegate->currentPlayer->getGearArray(),pObject){
+		for(unsigned int gearIndex=0; gearIndex<_delegate->currentPlayer->getGearArray()->count(); ++gearIndex){
+			Ref* pObject=_delegate->currentPlayer->getGearArray()->objectAtIndex(gearIndex);
 			CCString* tmpGear=(CCString*) pObject;
 			GearButton* btn=GearButton::create("");
 			btn->setBtnType(gearType(std::atoi(tmpGear->getCString())),gearbtnType(1),false);
@@ -479,8 +479,8 @@ void GearLayer::updateGearList(){
 			_screwLayer->setGearArray(CCArray::create());
 		}else{
 
-			Ref* pObject;
-			CCARRAY_FOREACH(_screwLayer->getGearArray(),pObject){
+			for(unsigned int gearIndex=0; gearIndex<_screwLayer->getGearArray()->count(); ++gearIndex){
+				Ref* pObject=_screwLayer->getGearArray()->objectAtIndex(gearIndex);
 				GearButton* btn=(GearButton*) pObject;
 				btn->removeFromParentAndCleanup(true);
 			}
@@ -499,8 +499,8 @@ void GearLayer::updateGearList(){
 			}
 			bool isBuyed=false;
 			if(_delegate->currentPlayer->getGearArray() && _delegate->currentPlayer->getGearArray()->count()>0){
-				Ref* pObject;
-				CCARRAY_FOREACH(_delegate->currentPlayer->getGearArray(),pObject){
+				for(unsigned int gearIndex=0; gearIndex<_delegate->currentPlayer->getGearArray()->count(); ++gearIndex){
+					Ref* pObject=_delegate->currentPlayer->getGearArray()->objectAtIndex(gearIndex);
 					CCString* tmpGear=(CCString*) pObject;
 					if (std::atoi(tmpGear->getCString())== i){
 						isBuyed=true;

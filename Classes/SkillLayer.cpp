@@ -95,8 +95,8 @@ void SelectButton::click(){
 			}else if( strcmp(_charName->getCString(),"None")!=0){
 			if(!_isAviable && _delegate2 && _delegate2->isHeroConfirmedSelected(_charName->getCString())){
 				SimpleAudioEngine::getInstance()->stopAllEffects();
-				Ref* pObject;
-				CCARRAY_FOREACH(_delegate2->selectArray,pObject){
+				for(unsigned int selectIndex=0; selectIndex<_delegate2->selectArray->count(); ++selectIndex){
+					Ref* pObject=_delegate2->selectArray->objectAtIndex(selectIndex);
 					SelectButton* selectBtn=(SelectButton*) pObject;
 					if(strcmp(selectBtn->getCharName()->getCString(),this->getCharName()->getCString())!=0){
 						selectBtn->_clickTime=0;
@@ -123,16 +123,16 @@ void SelectButton::click(){
 					if(teamNeed<0){
 						teamNeed=0;
 					}
-					bool teamFull=_delegate2->_trainingRandomTeam || (_delegate2->_trainingTeamPicks && (int)_delegate2->_trainingTeamPicks->count()>=teamNeed);
-					bool enemyFull=_delegate2->_trainingRandomEnemy || (_delegate2->_trainingEnemyPicks && (int)_delegate2->_trainingEnemyPicks->count()>=_delegate2->_trainingTeamSize);
+					bool teamFull=_delegate2->_trainingRandomTeam || (int)_delegate2->_trainingTeamPicks.size()>=teamNeed;
+					bool enemyFull=_delegate2->_trainingRandomEnemy || (int)_delegate2->_trainingEnemyPicks.size()>=_delegate2->_trainingTeamSize;
 					if(_delegate2->_playerSelect && teamFull && enemyFull){
 						if(!_delegate2->isHeroConfirmedSelected(this->getCharName()->getCString())){
 							return;
 						}
 					}
 
-					Ref* pObject;
-					CCARRAY_FOREACH(_delegate2->selectArray,pObject){
+					for(unsigned int selectIndex=0; selectIndex<_delegate2->selectArray->count(); ++selectIndex){
+						Ref* pObject=_delegate2->selectArray->objectAtIndex(selectIndex);
 						SelectButton* selectBtn=(SelectButton*) pObject;
 						if (strcmp(selectBtn->getCharName()->getCString(),this->getCharName()->getCString())!=0){
 							selectBtn->_clickTime=0;
@@ -162,8 +162,8 @@ void SelectButton::click(){
 				}
 				if(!_delegate2->_com2Select || _delegate2->isHeroConfirmedSelected(this->getCharName()->getCString())){
 
-					Ref* pObject;
-					CCARRAY_FOREACH(_delegate2->selectArray,pObject){
+					for(unsigned int selectIndex=0; selectIndex<_delegate2->selectArray->count(); ++selectIndex){
+						Ref* pObject=_delegate2->selectArray->objectAtIndex(selectIndex);
 						SelectButton* selectBtn=(SelectButton*) pObject;
 						if (strcmp(selectBtn->getCharName()->getCString(),this->getCharName()->getCString())!=0){
 							selectBtn->_clickTime=0;

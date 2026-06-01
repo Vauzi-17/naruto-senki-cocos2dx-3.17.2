@@ -1,17 +1,20 @@
 #include "SelectLayer.h"
 #include "Defines.h"
 #include "StartMenu.h"
+#include <string>
+#include <vector>
 USING_NS_CC_EXT;
 using namespace CocosDenshion;
 #include<time.h>
 
-static bool selectContainsHero(CCArray* used, const char* heroName)
+static bool selectContainsHero(const std::vector<std::string>& used, const char* heroName)
 {
-	Ref* pObject = NULL;
-	CCARRAY_FOREACH(used, pObject)
+	if(!heroName){
+		return false;
+	}
+	for(const std::string& value : used)
 	{
-		CCString* value = (CCString*)pObject;
-		if(strcmp(value->getCString(), heroName) == 0)
+		if(value == heroName)
 		{
 			return true;
 		}
@@ -19,11 +22,11 @@ static bool selectContainsHero(CCArray* used, const char* heroName)
 	return false;
 }
 
-static const char* selectPickHero(CCArray* used, const char** allHeroes, int heroCount, const char** presetList, int presetCount, int presetIndex, bool randomPick)
+static const char* selectPickHero(std::vector<std::string>& used, const char** allHeroes, int heroCount, const char** presetList, int presetCount, int presetIndex, bool randomPick)
 {
 	if(!randomPick && presetIndex < presetCount && !selectContainsHero(used, presetList[presetIndex]))
 	{
-		used->addObject(CCString::create(presetList[presetIndex]));
+		used.push_back(presetList[presetIndex]);
 		return presetList[presetIndex];
 	}
 
@@ -33,7 +36,7 @@ static const char* selectPickHero(CCArray* used, const char** allHeroes, int her
 		const char* heroName=allHeroes[index];
 		if(!selectContainsHero(used, heroName))
 		{
-			used->addObject(CCString::create(heroName));
+			used.push_back(heroName);
 			return heroName;
 		}
 	}
@@ -42,7 +45,7 @@ static const char* selectPickHero(CCArray* used, const char** allHeroes, int her
 	{
 		if(!selectContainsHero(used, allHeroes[i]))
 		{
-			used->addObject(CCString::create(allHeroes[i]));
+			used.push_back(allHeroes[i]);
 			return allHeroes[i];
 		}
 	}
@@ -408,8 +411,8 @@ void SelectLayer::onGameStart(Ref* sender){
 			teamSize=5;
 		}
 
-		CCArray* used=CCArray::create();
-		used->addObject(CCString::create(_selectHero));
+		std::vector<std::string> used;
+		used.push_back(_selectHero);
 
 		for(int i=1;i<teamSize;i++){
 			const char* heroName=selectPickHero(used,(const char**)heroList,num,teamPreset,sizeof(teamPreset)/sizeof(char*),i-1,_trainingRandomTeam);
