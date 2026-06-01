@@ -454,10 +454,10 @@ void HPBar::loseHP(float percent){
 					}
 
 					if(strcmp(currentSlayer->getGroup()->getCString(),currentTeam)==0){
-						int teamKills=std::atoi(_delegate->getDelegate()->getHudLayer()->KonoLabel->getString())+1;
+						int teamKills = std::atoi(_delegate->getDelegate()->getHudLayer()->KonoLabel->getString().c_str()) + 1;
 						_delegate->getDelegate()->getHudLayer()->KonoLabel->setString(CCString::createWithFormat("%d",teamKills)->getCString());
 					}else{
-						int teamKills=std::atoi(_delegate->getDelegate()->getHudLayer()->AkaLabel->getString())+1;
+						int teamKills = std::atoi(_delegate->getDelegate()->getHudLayer()->AkaLabel->getString().c_str()) + 1;
 						_delegate->getDelegate()->getHudLayer()->AkaLabel->setString(CCString::createWithFormat("%d",teamKills)->getCString());
 					}
 					if(_delegate->getDelegate()->_isDuelMode &&
@@ -516,8 +516,8 @@ void HPBar::loseHP(float percent){
 						}
 
 						_delegate->getDelegate()->getHudLayer()->setEXPLose(NULL);
-						std::string kl=_delegate->getDelegate()->getHudLayer()->killLabel->getString();
-						int kills=std::atoi(kl)+1;
+						std::string kl = _delegate->getDelegate()->getHudLayer()->killLabel->getString();
+						int kills = std::atoi(kl.c_str()) + 1;
 						_delegate->getDelegate()->getHudLayer()->killLabel->setString(CCString::createWithFormat("%d",kills)->getCString());
 					}
 

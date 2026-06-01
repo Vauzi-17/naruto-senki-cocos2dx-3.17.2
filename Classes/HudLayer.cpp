@@ -865,8 +865,8 @@ void HudLayer::setTowerState(unsigned int charNO){
 
 void HudLayer::setCoin(const char* value){
 
-	std::string cl=coinLabel->getString();
-	int tempCoin=std::atoi(cl);
+	std::string cl = coinLabel->getString();
+	int tempCoin = std::atoi(cl.c_str());
 	tempCoin+=std::atoi(value);
 	CCString* realCoin=CCString::createWithFormat("%d",tempCoin);
 	coinLabel->setString(realCoin->getCString());
@@ -875,8 +875,8 @@ void HudLayer::setCoin(const char* value){
 
 bool HudLayer::offCoin(const char* value){
 
-	std::string cl=coinLabel->getString();
-	int tempCoin=std::atoi(cl);
+	std::string cl = coinLabel->getString();
+	int tempCoin = std::atoi(cl.c_str());
 	if(tempCoin-std::atoi(value)>=0){
 		tempCoin-=std::atoi(value);
 		CCString* realCoin=CCString::createWithFormat("%d",tempCoin);
@@ -981,8 +981,13 @@ void HudLayer::setBuffDisplay(const char* buffName, float buffStayTime){
 void HudLayer::updateBuffDisplay(float dt){
 
 	if(bcdLabel1){
-		if( std::atoi(bcdLabel1->getString()) >0){
-			bcdLabel1->setString(CCString::createWithFormat("%d",std::atoi(bcdLabel1->getString())-1)->getCString());
+		if (std::atoi(bcdLabel1->getString().c_str()) > 0){
+			bcdLabel1->setString(
+				CCString::createWithFormat(
+					"%d",
+					std::atoi(bcdLabel1->getString().c_str()) - 1
+				)->getCString()
+			);
 		}else{
 			bcdLabel1->removeFromParentAndCleanup(true);
 			bcdLabel1=nullptr;
@@ -1003,8 +1008,13 @@ void HudLayer::updateBuffDisplay2(float dt){
 
 
 	if(bcdLabel2){
-		if( std::atoi(bcdLabel2->getString()) >0){
-			bcdLabel2->setString(CCString::createWithFormat("%d",std::atoi(bcdLabel2->getString())-1)->getCString());
+		if (std::atoi(bcdLabel2->getString().c_str()) > 0){
+			bcdLabel2->setString(
+				CCString::createWithFormat(
+					"%d",
+					std::atoi(bcdLabel2->getString().c_str()) - 1
+				)->getCString()
+			);
 
 		}else{
 			bcdLabel2->removeFromParentAndCleanup(true);

@@ -51,7 +51,14 @@ GameLayer::GameLayer(void)
 	currentPlayer=NULL;
 	isPosting=false;
 	postTime=0;
+	_hudLayer = NULL;
 
+	_TowerArray = NULL;
+	bulletBatch = NULL;
+	blend = NULL;
+
+	_isAttackButtonRelease = true;
+	_isSkillFinish = true;
 }
 
 
@@ -920,6 +927,14 @@ void GameLayer::setCoin(const char* value){
 
 }
 void GameLayer::removeOugisMark(int type){
+	CCLOG("removeOugisMark()");
+	CCLOG("_hudLayer=%p", _hudLayer);
+
+	if (!_hudLayer)
+	{
+		CCLOG("HUD NULL");
+		return;
+	}
 	if(type==1){
 		if(this->_hudLayer->skill4Button){
 			if(this->_hudLayer->skill4Button->lockLabel1){
