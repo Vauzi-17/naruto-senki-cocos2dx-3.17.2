@@ -25,6 +25,8 @@ public:
 	bool					_isLock;
 
 	bool					_isColdChanged;
+	int						_coldDown;
+	int						_timeCout;
 
 	virtual bool			init(const char *szImage);
 	static ActionButton*	create(const char *szImage);
@@ -48,9 +50,12 @@ public:
 	CC_SYNTHESIZE(abType,_abType,ABType);
 	gearType				_gearType;
 	
-	CC_SYNTHESIZE_RETAIN(CCString*,_coldDown,CD);
+	void setCD(CCString* value);
+	void setCD(int value);
+	int getCD() const;
 	CC_SYNTHESIZE(bool,_isDoubleSkill,DoubleSkill);
-	CC_SYNTHESIZE_RETAIN(CCString*,_timeCout,TimeCout);
+	void setTimeCout(int value);
+	int getTimeCout() const;
 	
 
 	void			setLock();

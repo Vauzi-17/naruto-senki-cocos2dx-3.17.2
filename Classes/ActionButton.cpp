@@ -23,9 +23,9 @@ ActionButton::ActionButton(void)
 	_clickNum=0;
 	cdLabel=NULL;
 	_isMarkVisable=true;
-	_timeCout=NULL;
+	_timeCout=0;
 	_isLock=false;
-	_coldDown=NULL;
+	_coldDown=0;
 	_isColdChanged=false;
 	_gearType=None;
 
@@ -40,8 +40,6 @@ ActionButton::ActionButton(void)
 
 ActionButton::~ActionButton(void)
 {
-	CC_SAFE_RELEASE(_timeCout);
-	CC_SAFE_RELEASE(_coldDown);
 }
 
 bool ActionButton::init(const char *szImage){
@@ -57,6 +55,26 @@ bool ActionButton::init(const char *szImage){
 
 	return bRet;
 
+}
+
+void ActionButton::setCD(CCString* value){
+	_coldDown = value ? value->intValue() : 0;
+}
+
+void ActionButton::setCD(int value){
+	_coldDown = value;
+}
+
+int ActionButton::getCD() const{
+	return _coldDown;
+}
+
+void ActionButton::setTimeCout(int value){
+	_timeCout = value;
+}
+
+int ActionButton::getTimeCout() const{
+	return _timeCout;
 }
 
 void ActionButton::onEnter(){
@@ -128,7 +146,7 @@ bool ActionButton::isCanClick(){
 
 		if(this->_isDoubleSkill){
 			//double click solution
-				if(_clickNum==0 && _delegate->getSkillFinish() && !_timeCout && !_delegate->ougisLayer ){
+				if(_clickNum==0 && _delegate->getSkillFinish() && _timeCout <= 0 && !_delegate->ougisLayer ){
 					return true;
 				}else if(_clickNum==1 && _delegate->getSkillFinish() && !_delegate->ougisLayer ){
 					return true;
@@ -139,7 +157,7 @@ bool ActionButton::isCanClick(){
 	 // isSkillFinish consider the AttackAction is done or not to prevent the skill invalid release 
 			 if(this->getABType()==Item1 ){
 				
-				 if(!_delegate->ougisLayer &&!_timeCout  && !_isLock &&_delegate->_delegate->currentPlayer->getActionState()!=ACTION_STATE_DEAD){
+				 if(!_delegate->ougisLayer && _timeCout <= 0  && !_isLock &&_delegate->_delegate->currentPlayer->getActionState()!=ACTION_STATE_DEAD){
 					 if(_delegate->offCoin(_cost)){
 						 return true;
 					 }
@@ -154,7 +172,7 @@ bool ActionButton::isCanClick(){
 
 			 }else if(this->_abType==GearItem ){
 
-				 if(!_delegate->ougisLayer &&!_timeCout  && !_isLock){
+				 if(!_delegate->ougisLayer && _timeCout <= 0  && !_isLock){
 					 if(this->_gearType== gear06  && _delegate->_delegate->currentPlayer->getActionState()!=ACTION_STATE_DEAD ){
 						 return true;
 					 }else if(this->_gearType== gear00 && _delegate->getSkillFinish()){
@@ -181,7 +199,7 @@ bool ActionButton::isCanClick(){
 				 }
 				
 			 }else{
-				 if( !_timeCout && _delegate->getSkillFinish() && !_isLock  && !_delegate->ougisLayer){
+				 if( _timeCout <= 0 && _delegate->getSkillFinish() && !_isLock  && !_delegate->ougisLayer){
 					 return true;
 				 }
 			 }
@@ -213,7 +231,7 @@ void ActionButton::beganAnimation(bool isLock){
 		}
 		if(this->getABType()!=Item1){
 			
-			cdLabel=LabelBMFont::create(CCString::createWithFormat("%d",int(this->getCD()->intValue())/1000)->getCString(),"Fonts/1.fnt");
+			cdLabel=LabelBMFont::create(CCString::createWithFormat("%d",this->getCD()/1000)->getCString(),"Fonts/1.fnt");
 			cdLabel->setScale(0.4f);
 			cdLabel->setPosition(Vec2(this->getPositionX()+this->getContentSize().width/2,
 				this->getPositionY()+this->getContentSize().height/2));
@@ -250,16 +268,16 @@ void ActionButton::updateCDLabel(float dt){
 
 	if( !_delegate->ougisLayer){
 
-		if(atoi(this->getTimeCout()->getCString())>1000){
-			int tempCout=atoi(this->getTimeCout()->getCString())-1000;
-			this->setTimeCout(CCString::createWithFormat("%d",tempCout));
+		if(this->getTimeCout()>1000){
+			int tempCout=this->getTimeCout()-1000;
+			this->setTimeCout(tempCout);
 			if(cdLabel){
 				cdLabel->setString(CCString::createWithFormat("%d",tempCout/1000)->getCString());
 			}
 			
 		}else{
 			this->unschedule(CC_SCHEDULE_SELECTOR(ActionButton::updateCDLabel));
-			this->setTimeCout(NULL);
+			this->setTimeCout(0);
 			if(cdLabel){
 			cdLabel->removeFromParent();
 			cdLabel=NULL;
@@ -532,7 +550,7 @@ void ActionButton::createFreezeAnimation(){
 	FiniteTimeAction *to = ProgressTo::create(0, 99.999f);
 	
 	
-	int delay=_coldDown->intValue()/1000;
+	int delay=_coldDown/1000;
 	
 	FiniteTimeAction *to1 = ProgressTo::create(delay, 0);
 
