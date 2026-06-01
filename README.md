@@ -22,7 +22,7 @@ masih memakai API 2.x seperti `CCLayer`, `CCSprite`, `CCMenu`, `CCPoint`,
 
 ## Estimasi Progress Migrasi
 
-Estimasi progress menuju kode full cocos2d-x 3.17.2: **sekitar 86%**.
+Estimasi progress menuju kode full cocos2d-x 3.17.2: **sekitar 88%**.
 
 Alasan estimasi:
 
@@ -80,6 +80,10 @@ Alasan estimasi:
 - Konstruktor point lokal di `ActionManager.cpp` mulai dipindahkan dari
   `ccp(...)` ke `Vec2(...)`; cleanup delta/distance besar di file ini tetap
   dipisahkan dari slice konstruktor.
+- Delta dan jarak target sederhana di `ActionManager.cpp` ikut mulai memakai
+  operator `Vec2` dan `Vec2::getDistance`, sehingga helper `ccpSub` dan
+  `ccpDistance` aktif sudah hilang dari file tersebut. Normalisasi arah konstan
+  juga memakai `Vec2::getNormalized`.
 - Audio klik halaman di `NetworkLayer` sudah memakai
   `SimpleAudioEngine::getInstance()` tanpa mengubah flow pemilihan hero.
 - Masih ada sisa API 2.x yang cukup banyak di `ActionManager`, `Element`,
@@ -689,8 +693,11 @@ Catatan progress terbaru:
   langsung. File ini sekarang sudah lepas dari helper point legacy aktif
   (`CCPoint`, `ccp`, `ccpSub`, `ccpNormalize`, dan `ccpDistance`).
 - `ActionManager.cpp` mulai ikut dibersihkan dari konstruktor point `ccp(...)`
-  ke `Vec2(...)`. Sisa `ccpSub`/`ccpDistance` di file ini belum dimigrasi agar
-  perubahan posisi, knockback, dan jarak target tetap dipisahkan dari slice ini.
+  ke `Vec2(...)`. Delta posisi sederhana untuk attacker/target/monster/player
+  serta distance target sudah memakai operator `Vec2` dan `getDistance()`.
+  Normalisasi arah konstan juga dipindahkan ke `Vec2::getNormalized`, sehingga
+  `ccp(...)`, `ccpSub`, `ccpNormalize`, dan `ccpDistance` aktif tidak muncul
+  lagi di `ActionManager.cpp`.
 - `NetworkLayer` tidak lagi memakai `SimpleAudioEngine::sharedEngine()` untuk
   klik tab selector; pemanggilan audio lokal memakai singleton 3.x.
 - Audit menunjukkan `Cocos2dx2Compat.h` masih dipaksa lewat CMake dan project
