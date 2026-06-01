@@ -737,7 +737,7 @@ void GameOver::onChangeChar(Ref* sender){
 	changeCharLayer=Layer::create();
 	LayerColor* blend=LayerColor::create(Color4B(0,0,0,150),winSize.width,winSize.height);
 	changeCharLayer->addChild(blend,0);
-	CCScale9Sprite* bg=CCScale9Sprite::createWithSpriteFrameName("confirm_bg.png");
+	cocos2d::ui::Scale9Sprite* bg=cocos2d::ui::Scale9Sprite::createWithSpriteFrameName("confirm_bg.png");
 	if(bg){
 		bg->setContentSize(Size(336,236));
 		bg->setPosition(Vec2(winSize.width/2,winSize.height/2));
@@ -806,8 +806,8 @@ void GameOver::onChangeChar(Ref* sender){
 		item->setPosition(Vec2(30+col*cellW,contentH-30-row*cellH));
 		heroMenu->addChild(item);
 	}
-	CCScrollView* heroScroll=CCScrollView::create(viewSize,heroContainer);
-	heroScroll->setDirection(kCCScrollViewDirectionVertical);
+	ScrollView* heroScroll=ScrollView::create(viewSize,heroContainer);
+	heroScroll->setDirection(ScrollView::Direction::VERTICAL);
 	heroScroll->setClippingToBounds(true);
 	heroScroll->setPosition(Vec2(cx-viewSize.width/2,cy-58));
 	heroScroll->setContentOffset(Vec2(0,viewSize.height-contentH));
@@ -938,6 +938,13 @@ void GameOver::onUPloadBtn(Ref* sender){
 }
 
 void GameOver::onHttpRequestCompleted(Node *sender ,void *data) {
+
+	// Jalur upload legacy tidak dipakai (game offline); callback ini dipertahankan
+	// untuk menjaga kontrak lama, tapi tidak menjalankan HTTP parsing lagi.
+	(void)sender;
+	(void)data;
+	isPosting=false;
+	return;
 
 	isPosting=false;
 	//Ë¢ÐÂ°´Å¥

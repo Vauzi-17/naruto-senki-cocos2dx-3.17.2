@@ -50,7 +50,6 @@ public:
 	CC_SYNTHESIZE(abType,_abType,ABType);
 	gearType				_gearType;
 	
-	void setCD(CCString* value);
 	void setCD(int value);
 	int getCD() const;
 	CC_SYNTHESIZE(bool,_isDoubleSkill,DoubleSkill);

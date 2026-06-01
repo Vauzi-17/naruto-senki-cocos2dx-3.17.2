@@ -2033,9 +2033,9 @@ bool NarutoSenki::ActionManager::setGear(gearType type){
 			this->_sattackcoldDown3-=5;
 
 			if(strcmp(this->getRole()->getCString(),"Player")==0){
-				this->_delegate->getHudLayer()->skill1Button->setCD(CCString::createWithFormat("%d",this->_sattackcoldDown1*1000));
-				this->_delegate->getHudLayer()->skill2Button->setCD(CCString::createWithFormat("%d",this->_sattackcoldDown2*1000));
-				this->_delegate->getHudLayer()->skill3Button->setCD(CCString::createWithFormat("%d",this->_sattackcoldDown3*1000));
+				this->_delegate->getHudLayer()->skill1Button->setCD(static_cast<int>(this->_sattackcoldDown1*1000));
+				this->_delegate->getHudLayer()->skill2Button->setCD(static_cast<int>(this->_sattackcoldDown2*1000));
+				this->_delegate->getHudLayer()->skill3Button->setCD(static_cast<int>(this->_sattackcoldDown3*1000));
 				
 				this->_delegate->getHudLayer()->skill1Button->_isColdChanged=true;
 				this->_delegate->getHudLayer()->skill2Button->_isColdChanged=true;
@@ -2048,7 +2048,7 @@ bool NarutoSenki::ActionManager::setGear(gearType type){
 			break;
 		case gear07:
 			gearRecoverValue=3000;
-			this->_delegate->getHudLayer()->item1Button->setCD(CCString::createWithFormat("%d",3000));
+			this->_delegate->getHudLayer()->item1Button->setCD(3000);
 			this->_delegate->getHudLayer()->item1Button->_isColdChanged=true;
 			break;
 		case gear08:
@@ -6628,9 +6628,9 @@ void NarutoSenki::ActionManager::setTransform(){
 		strcmp(this->_character->getCString(),"RockLee")!=0 &&
 		strcmp(this->_character->getCString(),"Lee")!=0
 		){
-		_delegate->getHudLayer()->skill1Button->setCD(CCString::createWithFormat("%d",_sattackcoldDown1*1000));
-		_delegate->getHudLayer()->skill2Button->setCD(CCString::createWithFormat("%d",_sattackcoldDown2*1000));
-		_delegate->getHudLayer()->skill3Button->setCD(CCString::createWithFormat("%d",_sattackcoldDown3*1000));
+		_delegate->getHudLayer()->skill1Button->setCD(static_cast<int>(_sattackcoldDown1*1000));
+		_delegate->getHudLayer()->skill2Button->setCD(static_cast<int>(_sattackcoldDown2*1000));
+		_delegate->getHudLayer()->skill3Button->setCD(static_cast<int>(_sattackcoldDown3*1000));
 
 		this->_delegate->getHudLayer()->skill1Button->_isColdChanged=true;
 		this->_delegate->getHudLayer()->skill2Button->_isColdChanged=true;

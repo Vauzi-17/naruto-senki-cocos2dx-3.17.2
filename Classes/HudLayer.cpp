@@ -450,7 +450,7 @@ void HudLayer::initHeroInterface(){
 
 	skill1Button = ActionButton::create(CCString::createWithFormat("%s_skill1.png",_delegate->currentPlayer->getCharacter()->getCString())->getCString());
 	skill1Button->setPosition(Vec2(winSize.width-skill1Button->getContentSize().width-64,2));
-	skill1Button->setCD(CCString::createWithFormat("%d",_delegate->currentPlayer->_sattackcoldDown1*1000));
+	skill1Button->setCD(static_cast<int>(_delegate->currentPlayer->_sattackcoldDown1*1000));
 	skill1Button->setDelegate(this);
 	skill1Button->setABType(SKILL1);
 	if(_delegate->currentPlayer->_sattack1isDouble){
@@ -463,7 +463,7 @@ void HudLayer::initHeroInterface(){
 
 	skill2Button = ActionButton::create(CCString::createWithFormat("%s_skill2.png",_delegate->currentPlayer->getCharacter()->getCString())->getCString());
 	skill2Button->setPosition(Vec2(winSize.width-95,50));
-	skill2Button->setCD(CCString::createWithFormat("%d",_delegate->currentPlayer->_sattackcoldDown2*1000));
+	skill2Button->setCD(static_cast<int>(_delegate->currentPlayer->_sattackcoldDown2*1000));
 	skill2Button->setDelegate(this);
 	skill2Button->setABType(SKILL2);
 	if(_delegate->currentPlayer->_sattack2isDouble){
@@ -481,7 +481,7 @@ void HudLayer::initHeroInterface(){
 
 	skill3Button = ActionButton::create(CCString::createWithFormat("%s_skill3.png",_delegate->currentPlayer->getCharacter()->getCString())->getCString());
 	skill3Button->setPosition(Vec2(winSize.width-44,8+nAttackButton->getContentSize().height+8));
-	skill3Button->setCD(CCString::createWithFormat("%d",_delegate->currentPlayer->_sattackcoldDown3*1000));
+	skill3Button->setCD(static_cast<int>(_delegate->currentPlayer->_sattackcoldDown3*1000));
 	skill3Button->setDelegate(this);
 	skill3Button->setABType(SKILL3);
 	skill3Button->setMarkSprite("skill_freeze.png");
@@ -522,9 +522,9 @@ void HudLayer::initHeroInterface(){
 	item1Button=ActionButton::create("item1.png");
 	item1Button->setPosition(Vec2(8, skill3Button->getPositionY()+skill3Button->getContentSize().height));
 	if(_delegate->_isHardCoreGame){
-		item1Button->setCD(CCString::createWithFormat("%d",5000));
+		item1Button->setCD(5000);
 	}else{
-		item1Button->setCD(CCString::createWithFormat("%d",3000));
+		item1Button->setCD(3000);
 	}
 
 	item1Button->setDelegate(this);
@@ -537,7 +537,7 @@ void HudLayer::initHeroInterface(){
 	//init Item
 	item2Button=ActionButton::create("item2.png");
 	item2Button->setPosition(Vec2(winSize.width-44, skill3Button->getPositionY()+skill3Button->getContentSize().height+8));
-	item2Button->setCD(CCString::createWithFormat("%d",15000));
+	item2Button->setCD(15000);
 	item2Button->setDelegate(this);
 	item2Button->setABType(GearItem);
 	item2Button->_gearType=None;
@@ -554,7 +554,7 @@ void HudLayer::initHeroInterface(){
 	}else{
 		item3Button->setPosition(Vec2( skill1Button->getPositionX()-skill1Button->getContentSize().width-8,2));
 	}
-	item3Button->setCD(CCString::createWithFormat("%d",15000));
+	item3Button->setCD(15000);
 	item3Button->setDelegate(this);
 	item3Button->setABType(GearItem);
 	item3Button->_gearType=None;
@@ -565,7 +565,7 @@ void HudLayer::initHeroInterface(){
 
 	item4Button=ActionButton::create("item4.png");
 	item4Button->setPosition(Vec2( skill2Button->getPositionX()-skill2Button->getContentSize().width-8,skill2Button->getPositionY()));
-	item4Button->setCD(CCString::createWithFormat("%d",15000));
+	item4Button->setCD(15000);
 	item4Button->setDelegate(this);
 	item4Button->setABType(GearItem);
 	item4Button->_gearType=None;
@@ -681,7 +681,7 @@ void HudLayer::updateGears(){
 		gear1Button=ActionButton::create("gearbg.png");
 		gear1Button->setPosition(Vec2(0,winSize.height-92));
 		gear1Button->setDelegate(this);
-		gear1Button->setCD(CCString::createWithFormat("%d",15000));
+		gear1Button->setCD(15000);
 		gear1Button->setABType(GearBtn);
 
 		gear1Button->setMarkSprite("gear_freeze.png");
@@ -691,7 +691,7 @@ void HudLayer::updateGears(){
 		gear2Button=ActionButton::create("gearbg.png");
 		gear2Button->setPosition(Vec2(35,winSize.height-112));
 		gear2Button->setDelegate(this);
-		gear2Button->setCD(CCString::createWithFormat("%d",15000));
+		gear2Button->setCD(15000);
 		gear2Button->_gearType=None;
 			gear2Button->setABType(GearBtn);
 		gear2Button->setMarkSprite("gear_freeze.png");
@@ -701,7 +701,7 @@ void HudLayer::updateGears(){
 
 		gear3Button=ActionButton::create("gearbg.png");
 		gear3Button->setPosition(Vec2(70,winSize.height-92));
-		gear3Button->setCD(CCString::createWithFormat("%d",15000));
+		gear3Button->setCD(15000);
 		gear3Button->setDelegate(this);
 		gear3Button->_gearType=None;
 

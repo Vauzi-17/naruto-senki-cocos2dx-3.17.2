@@ -812,7 +812,7 @@ void  StartMenu::onGroupBtn(Ref* sender){
 			group_layer->addChild(clipper,20);
 
 
-			CCScale9Sprite * bg01=CCScale9Sprite::createWithSpriteFrameName("input_bg2.png");
+			cocos2d::ui::Scale9Sprite * bg01=cocos2d::ui::Scale9Sprite::createWithSpriteFrameName("input_bg2.png");
 
 			searchInput =CCEditBox::create(Size(114, 20), bg01);
 			CCDictionary *strings = CCDictionary::createWithContentsOfFile("Element/strings.xml");
@@ -1393,7 +1393,7 @@ void StartMenu::onNoticeBtn(Ref* sender){
 
 
 			gpwInput=NULL;
-			CCScale9Sprite * bg01=CCScale9Sprite::createWithSpriteFrameName("input_bg.png");
+			cocos2d::ui::Scale9Sprite * bg01=cocos2d::ui::Scale9Sprite::createWithSpriteFrameName("input_bg.png");
 			gpwInput =CCEditBox::create(Size(115, 25), bg01);
 			gpwInput->setFontColor(Color3B(255,255,255));
 			gpwInput->setPosition(Vec2(winSize.width/2,winSize.height/2+25));
@@ -1497,7 +1497,7 @@ void StartMenu::onLockBtn(Ref* sender){
 				input_layer->addChild(gpwInputTitle,200);
 
 				gpwInput=NULL;
-				CCScale9Sprite * bg01=CCScale9Sprite::createWithSpriteFrameName("input_bg.png");
+				cocos2d::ui::Scale9Sprite * bg01=cocos2d::ui::Scale9Sprite::createWithSpriteFrameName("input_bg.png");
 				gpwInput =CCEditBox::create(Size(115, 25), bg01);
 				gpwInput->setFontColor(Color3B(255,255,255));
 				gpwInput->setPosition(Vec2(winSize.width/2+16,winSize.height/2+25));
@@ -1848,7 +1848,7 @@ void StartMenu::onJoinGroup(Ref* sender){
 					gpwInputTitle->setPosition(Vec2(winSize.width/2-62,winSize.height/2+25));
 					input_layer->addChild(gpwInputTitle,200);
 
-					CCScale9Sprite * bg01=CCScale9Sprite::createWithSpriteFrameName("input_bg.png");
+					cocos2d::ui::Scale9Sprite * bg01=cocos2d::ui::Scale9Sprite::createWithSpriteFrameName("input_bg.png");
 					gpwInput =CCEditBox::create(Size(115, 25), bg01);
 					gpwInput->setFontColor(Color3B(255,255,255));
 					gpwInput->setPosition(Vec2(winSize.width/2+16,winSize.height/2+25));
@@ -2178,7 +2178,7 @@ void  StartMenu::onCreateBtn(Ref* sender){
 			nameInputTitle->setPosition(Vec2(winSize.width/2-62,winSize.height/2+25));
 			input_layer->addChild(nameInputTitle,200);
 
-			CCScale9Sprite * bg01=CCScale9Sprite::createWithSpriteFrameName("input_bg.png");
+			cocos2d::ui::Scale9Sprite * bg01=cocos2d::ui::Scale9Sprite::createWithSpriteFrameName("input_bg.png");
 			nameInput =CCEditBox::create(Size(115, 25), bg01);
 			nameInput->setFontColor(Color3B(255,255,255));
 			nameInput->setPosition(Vec2(winSize.width/2+16,winSize.height/2+25));
@@ -2977,7 +2977,7 @@ void  StartMenu::onLoginBtn(Ref* sender){
 			userInputTitle->setPosition(Vec2(winSize.width/2-62,winSize.height/2+35));
 			input_layer->addChild(userInputTitle,200);
 
-			CCScale9Sprite * bg01=CCScale9Sprite::createWithSpriteFrameName("input_bg.png");
+			cocos2d::ui::Scale9Sprite * bg01=cocos2d::ui::Scale9Sprite::createWithSpriteFrameName("input_bg.png");
 			usernameInput =CCEditBox::create(Size(115, 25), bg01);
 			usernameInput->setFontColor(Color3B(255,255,255));
 			usernameInput->setPosition(Vec2(winSize.width/2+16,winSize.height/2+35));
@@ -2992,7 +2992,7 @@ void  StartMenu::onLoginBtn(Ref* sender){
 			Sprite* pwInputTitle=Sprite::createWithSpriteFrameName("pwInput_title.png");
 			pwInputTitle->setPosition(Vec2(winSize.width/2-60,winSize.height/2));
 			input_layer->addChild(pwInputTitle,200);
-			CCScale9Sprite * bg02=CCScale9Sprite::createWithSpriteFrameName("input_bg.png");
+			cocos2d::ui::Scale9Sprite * bg02=cocos2d::ui::Scale9Sprite::createWithSpriteFrameName("input_bg.png");
 			pwInput =CCEditBox::create(Size(115, 25), bg02);
 			pwInput->setFontColor(Color3B(255,255,255));
 			pwInput->setPosition(Vec2(winSize.width/2+16,winSize.height/2));
@@ -3843,10 +3843,10 @@ void StartMenu::showTrainingOptions()
 	LayerColor* blend = LayerColor::create(Color4B(0, 0, 0, 150), winSize.width, winSize.height);
 	input_layer->addChild(blend, 0);
 
-	CCScale9Sprite* bg = CCScale9Sprite::createWithSpriteFrameName("confirm_bg.png");
+	cocos2d::ui::Scale9Sprite* bg = cocos2d::ui::Scale9Sprite::createWithSpriteFrameName("confirm_bg.png");
 	if(!bg)
 	{
-		bg = CCScale9Sprite::createWithSpriteFrameName("input_bg2.png");
+		bg = cocos2d::ui::Scale9Sprite::createWithSpriteFrameName("input_bg2.png");
 	}
 
 	Size panelSize = Size(305, 242);

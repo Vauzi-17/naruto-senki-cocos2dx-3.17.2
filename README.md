@@ -188,6 +188,17 @@ selesai karena `Cocos2dx2Compat.h` masih menampung alias aktif seperti
 `atoi`. Setelah sisa helper kecil yang aman selesai, pekerjaan bergeser penuh ke
 langkah 2 untuk membersihkan UI/menu lokal.
 
+Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
+
+- `ActionButton`: overload `setCD(CCString*)` dihapus; caller `HudLayer` dan
+  `ActionManager` sekarang memakai `setCD(int)` langsung.
+- `StartMenu`: pemakaian `CCScale9Sprite` di area input panel diganti ke
+  `cocos2d::ui::Scale9Sprite`.
+- `GameOver`: panel change-character tidak lagi memakai `CCScale9Sprite` dan
+  `CCScrollView`; sudah memakai `cocos2d::ui::Scale9Sprite` + `ScrollView`
+  native cocos2d-x 3.x.
+- `SkillLayer`: callback HTTP refresh skill distub (jalur offline).
+
 1. **Tutup helper compat kecil yang masih lokal**
    - Target file: `Cocos2dx2Compat.h`, `ActionButton`, `HPBar`, `HudLayer`,
      `GameLayer`, `GameOver`, `RankingLayer`, `CCStrokeLabel`, dan helper kecil

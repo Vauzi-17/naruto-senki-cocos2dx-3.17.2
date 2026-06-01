@@ -57,10 +57,6 @@ bool ActionButton::init(const char *szImage){
 
 }
 
-void ActionButton::setCD(CCString* value){
-	_coldDown = value ? value->intValue() : 0;
-}
-
 void ActionButton::setCD(int value){
 	_coldDown = value;
 }
@@ -231,7 +227,7 @@ void ActionButton::beganAnimation(bool isLock){
 		}
 		if(this->getABType()!=Item1){
 			
-			cdLabel=LabelBMFont::create(CCString::createWithFormat("%d",this->getCD()/1000)->getCString(),"Fonts/1.fnt");
+			cdLabel=LabelBMFont::create(StringUtils::format("%d", this->getCD()/1000), "Fonts/1.fnt");
 			cdLabel->setScale(0.4f);
 			cdLabel->setPosition(Vec2(this->getPositionX()+this->getContentSize().width/2,
 				this->getPositionY()+this->getContentSize().height/2));
@@ -251,7 +247,9 @@ void ActionButton::beganAnimation(bool isLock){
 
 void ActionButton::setGearType(int tmpGearType){
 
-	Sprite* gearIcon=Sprite::createWithSpriteFrameName(CCString::createWithFormat("gear_%02d.png",gearType(tmpGearType))->getCString());
+	Sprite* gearIcon=Sprite::createWithSpriteFrameName(
+		StringUtils::format("gear_%02d.png", static_cast<int>(gearType(tmpGearType)))
+	);
 	gearIcon->setAnchorPoint(Vec2(0.5f,0.5f));
 	gearIcon->setScale(0.85f);
 	gearIcon->setPosition(Vec2(18,18));
@@ -272,7 +270,7 @@ void ActionButton::updateCDLabel(float dt){
 			int tempCout=this->getTimeCout()-1000;
 			this->setTimeCout(tempCout);
 			if(cdLabel){
-				cdLabel->setString(CCString::createWithFormat("%d",tempCout/1000)->getCString());
+				cdLabel->setString(StringUtils::format("%d", tempCout/1000));
 			}
 			
 		}else{

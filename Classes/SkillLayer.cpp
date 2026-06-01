@@ -670,7 +670,11 @@ void SkillLayer::initInterface(){
 void SkillLayer::onSkillRequestCompleted(Node *sender ,void *data){
 
 
+	// Jalur HTTP untuk refresh skill dimatikan pada mode offline.
+	(void)sender;
+	(void)data;
 	isPosting=false;
+	return;
 	//??????
 	if(refreshBtn){
 		refreshBtn->stopAllActions();
