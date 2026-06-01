@@ -1390,9 +1390,8 @@ void HudLayer::costCKR(int value,bool isCKR2){
 void HudLayer::setOugis(CCString* character,CCString* group){
 
 	if(!ougisLayer){
-		Ref* pObject;
-		CCArray* childArray=cocos2d::cocos2dx2_compat::toCCArray(this->getChildren());
-		CCARRAY_FOREACH(childArray,pObject){
+		const auto& childArray = this->getChildren();
+		for (auto pObject : childArray){
 			Node* object=(Node*) pObject;
 			object->pauseSchedulerAndActions();
 		}
@@ -1520,9 +1519,8 @@ void HudLayer::removeOugis(Node* sender){
 	ougisLayer->removeFromParent();
 	ougisLayer=nullptr;
 
-	Ref* pObject;
-	CCArray* childArray=cocos2d::cocos2dx2_compat::toCCArray(this->getChildren());
-	CCARRAY_FOREACH(childArray,pObject){
+	const auto& childArray = this->getChildren();
+	for (auto pObject : childArray){
 		Node* object=(Node*) pObject;
 		object->resumeSchedulerAndActions();
 	}

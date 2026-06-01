@@ -1290,10 +1290,8 @@ void GameLayer::onGameOver(bool isWin){
 
 void GameLayer::onLeft(){
 
-	CCArray* childArray=cocos2d::cocos2dx2_compat::toCCArray(this->getChildren());
-	Ref* pObject;
-
-	CCARRAY_FOREACH(childArray,pObject){
+	const auto& childArray = this->getChildren();
+	for (auto pObject : childArray){
 		//�������
 		NarutoSenki::ActionManager* ac=(NarutoSenki::ActionManager*) pObject;
 		NotificationCenter::getInstance()->removeObserver(ac,"acceptAttack");
@@ -1553,11 +1551,10 @@ void GameLayer::checkBackgroundMusic(float dt){
 void GameLayer::setOugis(Node* sender){
 
 	if(!this->_hudLayer->ougisLayer){
-		CCArray* childArray=cocos2d::cocos2dx2_compat::toCCArray(this->getChildren());
+		const auto& childArray = this->getChildren();
 		ougisChar=sender;
 		NarutoSenki::ActionManager* Sender=(NarutoSenki::ActionManager*) sender;
-		Ref* pObject;
-		CCARRAY_FOREACH(childArray,pObject){
+		for (auto pObject : childArray){
 
 			Node* object=(Node*) pObject;
 
@@ -1613,9 +1610,8 @@ void GameLayer::removeOugis(){
 	this->stopAllActions();
 	this->setScale(1.0f);
 	*/
-	CCArray* childArray=cocos2d::cocos2dx2_compat::toCCArray(this->getChildren());
-	Ref* pObject;
-	CCARRAY_FOREACH(childArray,pObject){
+	const auto& childArray = this->getChildren();
+	for (auto pObject : childArray){
 		Node* object=(Node*) pObject;
 		object->resumeSchedulerAndActions();
 	}
