@@ -418,31 +418,31 @@ void GameOver::listResult(){
 	adExtra->setPosition(Vec2(coinBG->getPositionX()+70,coinBG->getPositionY()+22));
 	this->addChild(adExtra,7);
 
-	CCString* extraCoin;
+	std::string extraCoin;
 	int tempCoin;
 	if(adResult==1 && _isWin ){
 		std::string tempEtra="idd4";
 		tool->decode(tempEtra);
 		tempCoin=rewardNum+std::atoi(cl->getCString())+std::atoi(tempEtra.c_str());
-		extraCoin=CCString::createWithFormat("+%d",500);
+		extraCoin=cocos2d::StringUtils::format("+%d",500);
 	}else{
 		tempCoin=rewardNum+std::atoi(cl->getCString());
-		extraCoin=CCString::createWithFormat("+%d",0);
+		extraCoin=cocos2d::StringUtils::format("+%d",0);
 	}
 
-	CCString* realCoin=CCString::createWithFormat("%d",tempCoin);
-	tool->saveToSQLite("GameRecord","coin",realCoin->getCString(),false);
+	std::string realCoin=cocos2d::StringUtils::format("%d",tempCoin);
+	tool->saveToSQLite("GameRecord","coin",realCoin.c_str(),false);
 
 
-	LabelBMFont* extraLabel=LabelBMFont::create(extraCoin->getCString(),"Fonts/yellow.fnt");
+	LabelBMFont* extraLabel=LabelBMFont::create(extraCoin.c_str(),"Fonts/yellow.fnt");
 	extraLabel->setScale(0.5f);
 	extraLabel->setAnchorPoint(Vec2(0.5f,0));
 	extraLabel->setPosition(Vec2(coinBG->getPositionX()+68,coinBG->getPositionY()+3));
 	this->addChild(extraLabel,7);
 
 
-	CCString* rewardCoin=CCString::createWithFormat("%d",rewardNum);
-	LabelBMFont* rewardLabel=LabelBMFont::create(rewardCoin->getCString(),"Fonts/yellow.fnt");
+	std::string rewardCoin=cocos2d::StringUtils::format("%d",rewardNum);
+	LabelBMFont* rewardLabel=LabelBMFont::create(rewardCoin.c_str(),"Fonts/yellow.fnt");
 	rewardLabel->setAnchorPoint(Vec2(0.5f,0));
 	rewardLabel->setPosition(Vec2(coinBG->getPositionX()+28,coinBG->getPositionY()+3));
 	rewardLabel->setScale(0.55f);
@@ -497,9 +497,9 @@ void GameOver::listResult(){
 		if(_isWin && adResult==1 &&_delegate->_isHardCoreGame){
 
 			finnalScore=resultScore+float(_delegate->currentPlayer->_flogNum)/100;
-			CCString* recordString=CCString::createWithFormat("%0.2fPts",finnalScore);
+			std::string recordString=cocos2d::StringUtils::format("%0.2fPts",finnalScore);
 
-			LabelBMFont* recordScore=LabelBMFont::create(recordString->getCString(),"Fonts/1.fnt");
+			LabelBMFont* recordScore=LabelBMFont::create(recordString.c_str(),"Fonts/1.fnt");
 			recordScore->setAnchorPoint(Vec2(1,0.5f));
 			recordScore->setPosition(Vec2(recordSprite->getPositionX()+recordSprite->getContentSize().width,recordSprite->getPositionY()-7));
 			recordScore->setScale(0.35f);
