@@ -22,7 +22,7 @@ masih memakai API 2.x seperti `CCLayer`, `CCSprite`, `CCMenu`, `CCPoint`,
 
 ## Estimasi Progress Migrasi
 
-Estimasi progress menuju kode full cocos2d-x 3.17.2: **sekitar 81%**.
+Estimasi progress menuju kode full cocos2d-x 3.17.2: **sekitar 82%**.
 
 Alasan estimasi:
 
@@ -72,10 +72,10 @@ Alasan estimasi:
   arah AI `Flog`/`Monster`, dan marker bullet memakai `Vec2` serta operasi
   vektor 3.x langsung.
 - Alias posisi/arah karakter di `Characters.cpp` mulai dibersihkan dari
-  `CCPoint` ke `Vec2`, dan jarak lokal sederhana sudah memakai
-  `Vec2::getDistance`. Helper arah `ccp*` sengaja belum dimigrasi dalam
-  potongan ini agar perubahan AI karakter tetap mudah dilacak saat build Android
-  berikutnya.
+  `CCPoint`/`ccp(...)` ke `Vec2`, dan jarak lokal sederhana sudah memakai
+  `Vec2::getDistance`. Helper arah `ccpSub`/`ccpNormalize` sengaja belum
+  dimigrasi dalam potongan ini agar perubahan AI karakter tetap mudah dilacak
+  saat build Android berikutnya.
 - Audio klik halaman di `NetworkLayer` sudah memakai
   `SimpleAudioEngine::getInstance()` tanpa mengubah flow pemilihan hero.
 - Masih ada sisa API 2.x yang cukup banyak di `ActionManager`, `Element`,
@@ -678,9 +678,10 @@ Catatan progress terbaru:
   tidak mengubah parser XML atau kontrak container lama.
 - `Characters.cpp` mulai dipindahkan dari alias `CCPoint` ke `Vec2` pada
   deklarasi posisi/arah lokal AI, dan dua pemakaian `ccpDistance` diganti ke
-  `Vec2::getDistance`. Helper `ccp(...)`, `ccpSub`, dan `ccpNormalize` masih
-  dibiarkan dulu sebagai jembatan kecil agar slice ini tetap berupa geometry
-  cleanup yang mudah dilacak.
+  `Vec2::getDistance`. Konstruktor posisi `ccp(...)` juga sudah dipindahkan ke
+  `Vec2(...)`, sementara helper `ccpSub` dan `ccpNormalize` masih dibiarkan dulu
+  sebagai jembatan kecil agar slice ini tetap berupa geometry cleanup yang mudah
+  dilacak.
 - `NetworkLayer` tidak lagi memakai `SimpleAudioEngine::sharedEngine()` untuk
   klik tab selector; pemanggilan audio lokal memakai singleton 3.x.
 - Audit menunjukkan `Cocos2dx2Compat.h` masih dipaksa lewat CMake dan project
