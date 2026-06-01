@@ -22,7 +22,7 @@ masih memakai API 2.x seperti `CCLayer`, `CCSprite`, `CCMenu`, `CCPoint`,
 
 ## Estimasi Progress Migrasi
 
-Estimasi progress menuju kode full cocos2d-x 3.17.2: **sekitar 85%**.
+Estimasi progress menuju kode full cocos2d-x 3.17.2: **sekitar 86%**.
 
 Alasan estimasi:
 
@@ -77,6 +77,9 @@ Alasan estimasi:
   memakai `Vec2::getNormalized`; selisih posisi sederhana target/master/spawn
   serta nested target/origin sudah memakai operator `Vec2` langsung, sehingga
   `Characters.cpp` lepas dari helper `ccpSub`.
+- Konstruktor point lokal di `ActionManager.cpp` mulai dipindahkan dari
+  `ccp(...)` ke `Vec2(...)`; cleanup delta/distance besar di file ini tetap
+  dipisahkan dari slice konstruktor.
 - Audio klik halaman di `NetworkLayer` sudah memakai
   `SimpleAudioEngine::getInstance()` tanpa mengubah flow pemilihan hero.
 - Masih ada sisa API 2.x yang cukup banyak di `ActionManager`, `Element`,
@@ -683,8 +686,11 @@ Catatan progress terbaru:
   `Vec2(...)`. Pemakaian `ccpNormalize` dengan variabel sederhana seperti `sp`,
   `retreat`, dan `moveDirection` sudah diganti ke `getNormalized()`, sementara
   seluruh `ccpSub(...)` aktif di file ini sudah diganti ke operator `Vec2`
-  langsung. Sisa cleanup karakter berikutnya tinggal nested `ccpNormalize(...)`
-  yang langsung membungkus ekspresi.
+  langsung. File ini sekarang sudah lepas dari helper point legacy aktif
+  (`CCPoint`, `ccp`, `ccpSub`, `ccpNormalize`, dan `ccpDistance`).
+- `ActionManager.cpp` mulai ikut dibersihkan dari konstruktor point `ccp(...)`
+  ke `Vec2(...)`. Sisa `ccpSub`/`ccpDistance` di file ini belum dimigrasi agar
+  perubahan posisi, knockback, dan jarak target tetap dipisahkan dari slice ini.
 - `NetworkLayer` tidak lagi memakai `SimpleAudioEngine::sharedEngine()` untuk
   klik tab selector; pemanggilan audio lokal memakai singleton 3.x.
 - Audit menunjukkan `Cocos2dx2Compat.h` masih dipaksa lewat CMake dan project
