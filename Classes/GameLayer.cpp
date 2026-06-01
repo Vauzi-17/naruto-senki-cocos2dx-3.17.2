@@ -1330,6 +1330,7 @@ void GameLayer::onLeft(){
 	}
 
 	const char* path;
+	Ref* pObject;
 	CCARRAY_FOREACH(_CharacterArray,pObject){
 		NarutoSenki::ActionManager* player=(NarutoSenki::ActionManager*) pObject;
 
