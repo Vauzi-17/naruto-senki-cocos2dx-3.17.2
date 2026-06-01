@@ -48,6 +48,8 @@ Alasan estimasi:
 - Helper render lama `cocos2dx2_compat::visitNode` sudah tidak dipakai; snapshot
   pause/gear/game-over dan `CCStrokeLabel` sekarang memanggil `Node::visit`
   API 3.x langsung.
+- Helper waktu lama `CCTime`/`cc_timeval` sudah tidak dipakai; cooldown tombol
+  dan buff timer lokal memakai helper `std::chrono::steady_clock`.
 - Masih ada sisa API 2.x yang cukup banyak di `ActionManager`, `Element`,
   `RankingLayer`, beberapa utility UI, app delegate, dan compatibility bridge.
 - Untuk mencapai 100%, sisa terbesar bukan sekadar rename API, tetapi migrasi
@@ -384,6 +386,7 @@ Commit awal tahap 5:
 - `3e2a623 refactor: migrate map object containers`
 - `66f039f refactor: restore game layer rematch iterator`
 - `115a026 refactor: remove visit node compat helper`
+- `31829c8 refactor: migrate legacy time helper`
 
 Catatan progress terbaru:
 
@@ -462,6 +465,10 @@ Catatan progress terbaru:
   `cocos2dx2_compat::visitNode`; pemanggilan render snapshot/stroke sudah
   memakai `Node::visit(Director::getInstance()->getRenderer(), Mat4::IDENTITY,
   0)` langsung, lalu helper tersebut dihapus dari `Cocos2dx2Compat.h`.
+- `ActionButton` dan `ActionManager` tidak lagi memakai `CCTime`/`cc_timeval`
+  dari compat header. Timer cooldown skill dan buff/debuff lokal memakai helper
+  `std::chrono::steady_clock` berbasis delta waktu kecil, lalu `CCTime` dan
+  `cc_timeval` dihapus dari `Cocos2dx2Compat.h`.
 - Setelah commit `ActionManager` lokal ini lulus build Android, langkah
   berikutnya adalah melanjutkan migrasi container yang masih lokal dan mudah
   dipisahkan sebelum masuk kontrak data besar di loader XML, `ActionManager`,
