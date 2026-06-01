@@ -197,7 +197,7 @@ void Hero::AI_DuelBasic(){
 				continue;
 			}
 
-			float distance=ccpDistance(hero->getPosition(),this->getPosition());
+			float distance=hero->getPosition().getDistance(this->getPosition());
 			if(!target || distance<bestDistance){
 				target=hero;
 				bestDistance=distance;
@@ -211,7 +211,7 @@ void Hero::AI_DuelBasic(){
 		return;
 	}
 
-	CCPoint sp=ccpSub(_mainTarget->getPosition(),this->getPosition());
+	Vec2 sp=ccpSub(_mainTarget->getPosition(),this->getPosition());
 	float absX=sp.x<0?-sp.x:sp.x;
 	float absY=sp.y<0?-sp.y:sp.y;
 	float signX=sp.x>=0?1.0f:-1.0f;
@@ -223,7 +223,7 @@ void Hero::AI_DuelBasic(){
 	this->changeSide(sp);
 
 	if(this->getHpPercent()<0.30f && absX<82 && _mainTarget->getHpPercent()>0.35f){
-		CCPoint retreat=ccp(-signX, absY>normalRangeY ? signY*0.35f : 0);
+		Vec2 retreat=ccp(-signX, absY>normalRangeY ? signY*0.35f : 0);
 		this->walk(ccpNormalize(retreat));
 		return;
 	}
@@ -248,7 +248,7 @@ void Hero::AI_DuelBasic(){
 		return;
 	}
 
-	CCPoint moveDirection;
+	Vec2 moveDirection;
 	if(absX<normalRangeX*0.75f && absY>normalRangeY){
 		moveDirection=ccp(signX*0.18f,signY);
 	}else{
@@ -272,8 +272,8 @@ void Hero::AI_DevaPath(){
 	};
 
 	if(_mainTarget){
-			CCPoint moveDirection;
-			CCPoint sp=ccpSub(_mainTarget->getPosition(),this->getPosition());
+			Vec2 moveDirection;
+			Vec2 sp=ccpSub(_mainTarget->getPosition(),this->getPosition());
 
 			if(strcmp(_mainTarget->getRole()->getCString(),"Tower")==0||
 				strcmp(_mainTarget->getRole()->getCString(),"Flog")==0){
@@ -369,8 +369,8 @@ void Hero::AI_AsuraPath(){
 	};
 
 	if(_mainTarget){
-			CCPoint moveDirection;
-			CCPoint sp=ccpSub(_mainTarget->getPosition(),this->getPosition());
+			Vec2 moveDirection;
+			Vec2 sp=ccpSub(_mainTarget->getPosition(),this->getPosition());
 
 			if(strcmp(_mainTarget->getRole()->getCString(),"Tower")==0||
 				strcmp(_mainTarget->getRole()->getCString(),"Flog")==0){
@@ -450,8 +450,8 @@ void Hero::AI_AnimalPath(){
 	};
 
 	if(_mainTarget){
-			CCPoint moveDirection;
-			CCPoint sp=ccpSub(_mainTarget->getPosition(),this->getPosition());
+			Vec2 moveDirection;
+			Vec2 sp=ccpSub(_mainTarget->getPosition(),this->getPosition());
 
 			if(strcmp(_mainTarget->getRole()->getCString(),"Tower")==0||
 				strcmp(_mainTarget->getRole()->getCString(),"Flog")==0){
@@ -531,7 +531,7 @@ void Hero::AI_Akamaru(){
 	};
 
 
-	CCPoint moveDirection;
+	Vec2 moveDirection;
 
 	if(abs(ccpSub(_master->getPosition(),this->getPosition()).x) >winSize.width/2 -48){
 		if( this->getActionState()==ACTION_STATE_IDLE ||  this->getActionState()==ACTION_STATE_WALK || this->getActionState()==ACTION_STATE_ATTACK){
@@ -543,7 +543,7 @@ void Hero::AI_Akamaru(){
 
 	if(_mainTarget){
 		
-		CCPoint sp;
+		Vec2 sp;
 		if(_mainTarget->_originY){
 			sp=ccpSub(ccp(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
 		}else{
@@ -607,7 +607,7 @@ void Hero::AI_Akamaru(){
 
 	if(abs(ccpSub(_master->getPosition(),this->getPosition()).x) >winSize.width/2 -64){
 
-		CCPoint moveDirection =ccpNormalize(ccpSub(_master->getPosition(),this->getPosition()));	
+		Vec2 moveDirection =ccpNormalize(ccpSub(_master->getPosition(),this->getPosition()));
 		this->walk(moveDirection);
 		return;
 	}else{
@@ -630,7 +630,7 @@ void Hero::AI_Karasu(){
 
 	
 	if(_mainTarget){
-			CCPoint moveDirection;
+			Vec2 moveDirection;
 			if(abs(ccpSub(_master->getPosition(),this->getPosition()).x) >winSize.width/2 -48){
 			    if( this->getActionState()==ACTION_STATE_IDLE ||  this->getActionState()==ACTION_STATE_WALK || this->getActionState()==ACTION_STATE_ATTACK){
 				moveDirection =ccpNormalize(ccpSub(_master->getPosition(),this->getPosition()));	
@@ -638,7 +638,7 @@ void Hero::AI_Karasu(){
 				return;
 				}
 			}
-			CCPoint sp;
+			Vec2 sp;
 			if(_mainTarget->_originY){
 				sp=ccpSub(ccp(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
 			}else{
@@ -725,7 +725,7 @@ void Hero::AI_Karasu(){
 	};
 
 	if(abs(ccpSub(_master->getPosition(),this->getPosition()).x) >winSize.width/2 -64){
-		CCPoint moveDirection =ccpNormalize(ccpSub(_master->getPosition(),this->getPosition()));	
+		Vec2 moveDirection =ccpNormalize(ccpSub(_master->getPosition(),this->getPosition()));
 		this->walk(moveDirection);
 		return;
 	}else{
@@ -758,7 +758,7 @@ void Hero::AI_Saso(){
 		}
 	};
 
-	CCPoint moveDirection;
+	Vec2 moveDirection;
 	if(abs(ccpSub(_master->getPosition(),this->getPosition()).x) >64){
 		if( this->getActionState()==ACTION_STATE_IDLE ||  this->getActionState()==ACTION_STATE_WALK || this->getActionState()==ACTION_STATE_ATTACK){
 			moveDirection =ccpNormalize(ccpSub(_master->getPosition(),this->getPosition()));	
@@ -770,7 +770,7 @@ void Hero::AI_Saso(){
 	if(_mainTarget){
 			
 
-			CCPoint sp=ccpSub(ccp(_mainTarget->getPositionX(),_mainTarget->_originY?_mainTarget->_originY:_mainTarget->getPositionY()),
+			Vec2 sp=ccpSub(ccp(_mainTarget->getPositionX(),_mainTarget->_originY?_mainTarget->_originY:_mainTarget->getPositionY()),
 			ccp(this->getPositionX(),_originY?_originY:this->getPositionY()));
 
 			if(strcmp(_mainTarget->getRole()->getCString(),"Flog")==0){
@@ -835,7 +835,7 @@ void Hero::AI_Saso(){
 	};
 
 	if(abs(ccpSub(_master->getPosition(),this->getPosition()).x) >winSize.width/2 -64){
-		CCPoint moveDirection =ccpNormalize(ccpSub(_master->getPosition(),this->getPosition()));	
+		Vec2 moveDirection =ccpNormalize(ccpSub(_master->getPosition(),this->getPosition()));
 		this->walk(moveDirection);
 		return;
 	}else{
@@ -863,7 +863,7 @@ void Hero::AI_Parents(){
 		}
 	};
 	
-	CCPoint moveDirection;
+	Vec2 moveDirection;
 	
 	if(abs(ccpSub(_master->getPosition(),this->getPosition()).x) >9 && !_skillChangeBuffValue){
 		if( this->getActionState()==ACTION_STATE_IDLE ||  this->getActionState()==ACTION_STATE_WALK || this->getActionState()==ACTION_STATE_ATTACK){
@@ -875,7 +875,7 @@ void Hero::AI_Parents(){
 	if(_mainTarget){
 
 
-		CCPoint sp=ccpSub(ccp(_mainTarget->getPositionX(),_mainTarget->_originY?_mainTarget->_originY:_mainTarget->getPositionY()),
+		Vec2 sp=ccpSub(ccp(_mainTarget->getPositionX(),_mainTarget->_originY?_mainTarget->_originY:_mainTarget->getPositionY()),
 			ccp(this->getPositionX(),_originY?_originY:this->getPositionY()));
 
 		if(strcmp(_mainTarget->getRole()->getCString(),"Flog")==0 || strcmp(_mainTarget->getRole()->getCString(),"Tower")==0 ){
@@ -960,7 +960,7 @@ void Hero::AI_Sanshouuo(){
 	};
 
 	if(_mainTarget){
-			CCPoint moveDirection;
+			Vec2 moveDirection;
 			if(abs(ccpSub(_master->getPosition(),this->getPosition()).x) >winSize.width/2 -64){
 				if(this->getActionState()==ACTION_STATE_IDLE ||  this->getActionState()==ACTION_STATE_WALK || this->getActionState()==ACTION_STATE_ATTACK){
 				moveDirection =ccpNormalize(ccpSub(_master->getPosition(),this->getPosition()));	
@@ -969,7 +969,7 @@ void Hero::AI_Sanshouuo(){
 				}
 			}
 
-			CCPoint sp=ccpSub(ccp(_mainTarget->getPositionX(),_mainTarget->_originY?_mainTarget->_originY:_mainTarget->getPositionY()),
+			Vec2 sp=ccpSub(ccp(_mainTarget->getPositionX(),_mainTarget->_originY?_mainTarget->_originY:_mainTarget->getPositionY()),
 				ccp(this->getPositionX(),_originY?_originY:this->getPositionY()));
 					
 
@@ -1042,7 +1042,7 @@ void Hero::AI_Sanshouuo(){
 	};
 
 	if(abs(ccpSub(_master->getPosition(),this->getPosition()).x) >winSize.width/2 -64){
-		CCPoint moveDirection =ccpNormalize(ccpSub(_master->getPosition(),this->getPosition()));	
+		Vec2 moveDirection =ccpNormalize(ccpSub(_master->getPosition(),this->getPosition()));
 		this->walk(moveDirection);
 		return;
 	}else{
@@ -1078,8 +1078,8 @@ void Hero::AI_NarutoClone(){
 
 	if(_mainTarget){
 
-		CCPoint moveDirection;
-		CCPoint sp;
+		Vec2 moveDirection;
+		Vec2 sp;
 		if(_mainTarget->_originY){
 			sp=ccpSub(ccp(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
 		}else{
@@ -1119,8 +1119,8 @@ void Hero::AI_Kurama(){
 
 	if(_mainTarget){
 
-		CCPoint moveDirection;
-		CCPoint sp;
+		Vec2 moveDirection;
+		Vec2 sp;
 		if(_mainTarget->_originY){
 			sp=ccpSub(ccp(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
 		}else{
@@ -1157,8 +1157,8 @@ void Hero::AI_SageNarutoClone(){
 	};
 
 	if(_mainTarget){
-			CCPoint moveDirection;
-			CCPoint sp;
+			Vec2 moveDirection;
+			Vec2 sp;
 			if(_mainTarget->_originY){
 				sp=ccpSub(ccp(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
 			}else{
@@ -1233,8 +1233,8 @@ void Hero::AI_RikudoNarutoClone(){
 	};
 
 	if(_mainTarget){
-		CCPoint moveDirection;
-		CCPoint sp;
+		Vec2 moveDirection;
+		Vec2 sp;
 		if(_mainTarget->_originY){
 			sp=ccpSub(ccp(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
 		}else{
@@ -1318,8 +1318,8 @@ void Hero::AI_Mask(){
 	
 
 	if(_mainTarget){
-		CCPoint moveDirection;
-		CCPoint sp;
+		Vec2 moveDirection;
+		Vec2 sp;
 		if(_mainTarget->_originY){
 			sp=ccpSub(ccp(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
 		}else{
@@ -1388,8 +1388,8 @@ void Hero::AI_Slug(){
 	
 
 	if(_mainTarget){
-			CCPoint moveDirection;
-			CCPoint sp=ccpSub(_mainTarget->getPosition(),this->getPosition());
+			Vec2 moveDirection;
+			Vec2 sp=ccpSub(_mainTarget->getPosition(),this->getPosition());
 
 			if(strcmp(_mainTarget->getRole()->getCString(),"Tower")==0||
 				strcmp(_mainTarget->getRole()->getCString(),"Flog")==0){
@@ -1445,8 +1445,8 @@ void Hero::AI_Centipede(){
 
 
 	if(_mainTarget){
-		CCPoint moveDirection;
-		CCPoint sp=ccpSub(_mainTarget->getPosition(),this->getPosition());
+		Vec2 moveDirection;
+		Vec2 sp=ccpSub(_mainTarget->getPosition(),this->getPosition());
 
 		if(strcmp(_mainTarget->getRole()->getCString(),"Tower")==0||
 			strcmp(_mainTarget->getRole()->getCString(),"Flog")==0){
@@ -1533,8 +1533,8 @@ void Hero::AI_Naruto(){
 	}
 
 	if(_mainTarget && strcmp(_mainTarget->getRole()->getCString(),"Flog")!=0){
-		CCPoint moveDirection;
-		CCPoint sp;
+		Vec2 moveDirection;
+		Vec2 sp;
 
 		if(_mainTarget->_originY){
 			sp=ccpSub(ccp(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
@@ -1606,8 +1606,8 @@ void Hero::AI_Naruto(){
 
 	if(_mainTarget){
 
-		CCPoint moveDirection;
-		CCPoint sp;
+		Vec2 moveDirection;
+		Vec2 sp;
 
 		if(_mainTarget->_originY){
 			sp=ccpSub(ccp(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
@@ -1700,8 +1700,8 @@ void Hero::AI_SageNaruto(){
 
 
 	if(_mainTarget && strcmp(_mainTarget->getRole()->getCString(),"Flog")!=0){
-		CCPoint moveDirection;
-		CCPoint sp;
+		Vec2 moveDirection;
+		Vec2 sp;
 
 		if(_mainTarget->_originY){
 			sp=ccpSub(ccp(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
@@ -1770,8 +1770,8 @@ void Hero::AI_SageNaruto(){
 
 	if(_mainTarget){
 
-		CCPoint moveDirection;
-		CCPoint sp;
+		Vec2 moveDirection;
+		Vec2 sp;
 
 		if(_mainTarget->_originY){
 			sp=ccpSub(ccp(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
@@ -1870,8 +1870,8 @@ void Hero::AI_RikudoNaruto(){
 
 
 	if(_mainTarget && strcmp(_mainTarget->getRole()->getCString(),"Flog")!=0){
-		CCPoint moveDirection;
-		CCPoint sp;
+		Vec2 moveDirection;
+		Vec2 sp;
 
 		if(_mainTarget->_originY){
 			sp=ccpSub(ccp(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
@@ -1939,8 +1939,8 @@ void Hero::AI_RikudoNaruto(){
 
 	if(_mainTarget){
 
-		CCPoint moveDirection;
-		CCPoint sp;
+		Vec2 moveDirection;
+		Vec2 sp;
 
 		if(_mainTarget->_originY){
 			sp=ccpSub(ccp(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
@@ -2046,8 +2046,8 @@ void Hero::AI_Asuma(){
 	}
 
 	if(_mainTarget && strcmp(_mainTarget->getRole()->getCString(),"Flog")!=0 ){
-		CCPoint moveDirection;
-		CCPoint sp;
+		Vec2 moveDirection;
+		Vec2 sp;
 
 		if(_mainTarget->_originY){
 			sp=ccpSub(ccp(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
@@ -2130,8 +2130,8 @@ void Hero::AI_Asuma(){
 
 	if(_mainTarget){
 
-		CCPoint moveDirection;
-		CCPoint sp;
+		Vec2 moveDirection;
+		Vec2 sp;
 
 		if(_mainTarget->_originY){
 			sp=ccpSub(ccp(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
@@ -2235,8 +2235,8 @@ void Hero::AI_Kakashi(){
 	}
 
 	if(_mainTarget && strcmp(_mainTarget->getRole()->getCString(),"Flog")!=0 ){
-		CCPoint moveDirection;
-		CCPoint sp;
+		Vec2 moveDirection;
+		Vec2 sp;
 
 		if(_mainTarget->_originY){
 			sp=ccpSub(ccp(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
@@ -2304,8 +2304,8 @@ void Hero::AI_Kakashi(){
 
 	if(_mainTarget){
 
-		CCPoint moveDirection;
-		CCPoint sp;
+		Vec2 moveDirection;
+		Vec2 sp;
 
 		if(_mainTarget->_originY){
 			sp=ccpSub(ccp(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
@@ -2403,8 +2403,8 @@ void Hero::AI_Konan(){
 	}
 
 	if(_mainTarget && strcmp(_mainTarget->getRole()->getCString(),"Flog")!=0){
-		CCPoint moveDirection;
-		CCPoint sp;
+		Vec2 moveDirection;
+		Vec2 sp;
 
 		if(_mainTarget->_originY){
 			sp=ccpSub(ccp(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
@@ -2514,8 +2514,8 @@ void Hero::AI_Konan(){
 	
 	if(_mainTarget){
 
-		CCPoint moveDirection;
-		CCPoint sp;
+		Vec2 moveDirection;
+		Vec2 sp;
 
 		if(_mainTarget->_originY){
 			sp=ccpSub(ccp(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
@@ -2606,8 +2606,8 @@ void Hero::AI_Deidara(){
 	
 	if(_mainTarget && (battleCondiction>=0 || _isCanSkill3 ||  _isCanOugis1 || _isBati)){
 	
-		CCPoint moveDirection;
-		CCPoint sp;
+		Vec2 moveDirection;
+		Vec2 sp;
 
 		if(_mainTarget->_originY){
 			sp=ccpSub(ccp(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
@@ -2715,8 +2715,8 @@ void Hero::AI_Deidara(){
 
 	if(_mainTarget){
 
-		CCPoint moveDirection;
-		CCPoint sp;
+		Vec2 moveDirection;
+		Vec2 sp;
 
 		if(_mainTarget->_originY){
 			sp=ccpSub(ccp(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
@@ -2843,8 +2843,8 @@ void Hero::AI_Ino(){
 	
 
 	if(_mainTarget && strcmp(_mainTarget->getRole()->getCString(),"Flog")!=0){
-		CCPoint moveDirection;
-		CCPoint sp;
+		Vec2 moveDirection;
+		Vec2 sp;
 
 		if(_mainTarget->_originY){
 			sp=ccpSub(ccp(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
@@ -2929,8 +2929,8 @@ void Hero::AI_Ino(){
 
 	if(_mainTarget){
 
-		CCPoint moveDirection;
-		CCPoint sp;
+		Vec2 moveDirection;
+		Vec2 sp;
 
 		if(_mainTarget->_originY){
 			sp=ccpSub(ccp(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
@@ -3027,8 +3027,8 @@ void Hero::AI_Sai(){
 	}
 
 	if(_mainTarget && strcmp(_mainTarget->getRole()->getCString(),"Flog")!=0){
-		CCPoint moveDirection;
-		CCPoint sp;
+		Vec2 moveDirection;
+		Vec2 sp;
 
 		if(_mainTarget->_originY){
 			sp=ccpSub(ccp(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
@@ -3132,8 +3132,8 @@ void Hero::AI_Sai(){
 
 	if(_mainTarget){
 
-		CCPoint moveDirection;
-		CCPoint sp;
+		Vec2 moveDirection;
+		Vec2 sp;
 
 		if(_mainTarget->_originY){
 			sp=ccpSub(ccp(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
@@ -3209,8 +3209,8 @@ void Hero::AI_Sakura(){
 	};
 
 	if(_mainTarget && (battleCondiction>=0 || _isCanOugis1 || _isCanOugis2)){
-		CCPoint moveDirection;
-		CCPoint sp;
+		Vec2 moveDirection;
+		Vec2 sp;
 
 		if(_mainTarget->_originY){
 			sp=ccpSub(ccp(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
@@ -3305,8 +3305,8 @@ void Hero::AI_Sakura(){
 
 	if(_mainTarget){
 
-		CCPoint moveDirection;
-		CCPoint sp;
+		Vec2 moveDirection;
+		Vec2 sp;
 
 		if(_mainTarget->_originY){
 			sp=ccpSub(ccp(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
@@ -3368,8 +3368,8 @@ void Hero::AI_Guardian(){
 	
 
 	if(_mainTarget){
-		CCPoint moveDirection;
-		CCPoint sp=ccpSub(_mainTarget->getPosition(),this->getPosition());
+		Vec2 moveDirection;
+		Vec2 sp=ccpSub(_mainTarget->getPosition(),this->getPosition());
 
 
 
@@ -3423,8 +3423,8 @@ void Hero::AI_Guardian(){
 		
 
 	}else{
-		CCPoint moveDirection;
-		CCPoint sp=ccpSub(this->getSpawnPoint(),this->getPosition());
+		Vec2 moveDirection;
+		Vec2 sp=ccpSub(this->getSpawnPoint(),this->getPosition());
 		if(abs(sp.x)> 32 || abs(sp.y)> 32){
 
 			moveDirection =ccpNormalize(sp);
@@ -3500,8 +3500,8 @@ void Hero::AI_Tenten(){
 	}
 
 	if(_mainTarget && strcmp(_mainTarget->getRole()->getCString(),"Flog")!=0){
-		CCPoint moveDirection;
-		CCPoint sp;
+		Vec2 moveDirection;
+		Vec2 sp;
 
 		if(_mainTarget->_originY){
 			sp=ccpSub(ccp(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
@@ -3596,8 +3596,8 @@ void Hero::AI_Tenten(){
 
 	if(_mainTarget){
 
-		CCPoint moveDirection;
-		CCPoint sp;
+		Vec2 moveDirection;
+		Vec2 sp;
 
 		if(_mainTarget->_originY){
 			sp=ccpSub(ccp(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
@@ -3705,8 +3705,8 @@ void Hero::AI_Itachi(){
 	}
 
 	if(_mainTarget && strcmp(_mainTarget->getRole()->getCString(),"Flog")!=0){
-		CCPoint moveDirection;
-		CCPoint sp;
+		Vec2 moveDirection;
+		Vec2 sp;
 
 		if(_mainTarget->_originY){
 			sp=ccpSub(ccp(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
@@ -3792,8 +3792,8 @@ void Hero::AI_Itachi(){
 
 	if(_mainTarget){
 
-		CCPoint moveDirection;
-		CCPoint sp;
+		Vec2 moveDirection;
+		Vec2 sp;
 
 		if(_mainTarget->_originY){
 			sp=ccpSub(ccp(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
@@ -3903,8 +3903,8 @@ void Hero::AI_Jiraiya(){
 	}
 
 	if(_mainTarget && strcmp(_mainTarget->getRole()->getCString(),"Flog")!=0){
-		CCPoint moveDirection;
-		CCPoint sp;
+		Vec2 moveDirection;
+		Vec2 sp;
 
 		if(_mainTarget->_originY){
 			sp=ccpSub(ccp(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
@@ -3973,8 +3973,8 @@ void Hero::AI_Jiraiya(){
 
 	if(_mainTarget){
 
-		CCPoint moveDirection;
-		CCPoint sp;
+		Vec2 moveDirection;
+		Vec2 sp;
 
 		if(_mainTarget->_originY){
 			sp=ccpSub(ccp(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
@@ -4078,8 +4078,8 @@ void Hero::AI_SageJiraiya(){
 	}
 
 	if(_mainTarget && strcmp(_mainTarget->getRole()->getCString(),"Flog")!=0){
-		CCPoint moveDirection;
-		CCPoint sp;
+		Vec2 moveDirection;
+		Vec2 sp;
 
 		if(_mainTarget->_originY){
 			sp=ccpSub(ccp(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
@@ -4161,8 +4161,8 @@ void Hero::AI_SageJiraiya(){
 	
 	if(_mainTarget){
 
-		CCPoint moveDirection;
-		CCPoint sp;
+		Vec2 moveDirection;
+		Vec2 sp;
 
 		if(_mainTarget->_originY){
 			sp=ccpSub(ccp(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
@@ -4266,8 +4266,8 @@ void Hero::AI_Suigetsu(){
 	}
 
 	if(_mainTarget && strcmp(_mainTarget->getRole()->getCString(),"Flog")!=0){
-		CCPoint moveDirection;
-		CCPoint sp;
+		Vec2 moveDirection;
+		Vec2 sp;
 
 		if(_mainTarget->_originY){
 			sp=ccpSub(ccp(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
@@ -4365,8 +4365,8 @@ void Hero::AI_Suigetsu(){
 
 	if(_mainTarget){
 
-		CCPoint moveDirection;
-		CCPoint sp;
+		Vec2 moveDirection;
+		Vec2 sp;
 
 		if(_mainTarget->_originY){
 			sp=ccpSub(ccp(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
@@ -4458,8 +4458,8 @@ void Hero::AI_Tsunade(){
 	}
 
 	if(_mainTarget && strcmp(_mainTarget->getRole()->getCString(),"Flog")!=0){
-		CCPoint moveDirection;
-		CCPoint sp;
+		Vec2 moveDirection;
+		Vec2 sp;
 
 		if(_mainTarget->_originY){
 			sp=ccpSub(ccp(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
@@ -4547,8 +4547,8 @@ void Hero::AI_Tsunade(){
 
 	if(_mainTarget){
 
-		CCPoint moveDirection;
-		CCPoint sp;
+		Vec2 moveDirection;
+		Vec2 sp;
 
 		if(_mainTarget->_originY){
 			sp=ccpSub(ccp(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
@@ -4653,8 +4653,8 @@ void Hero::AI_Sasuke(){
 	}
 
 	if(_mainTarget && strcmp(_mainTarget->getRole()->getCString(),"Flog")!=0){
-		CCPoint moveDirection;
-		CCPoint sp;
+		Vec2 moveDirection;
+		Vec2 sp;
 
 		if(_mainTarget->_originY){
 			sp=ccpSub(ccp(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
@@ -4733,8 +4733,8 @@ void Hero::AI_Sasuke(){
 
 	if(_mainTarget){
 
-		CCPoint moveDirection;
-		CCPoint sp;
+		Vec2 moveDirection;
+		Vec2 sp;
 
 		if(_mainTarget->_originY){
 			sp=ccpSub(ccp(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
@@ -4842,8 +4842,8 @@ void Hero::AI_ImmortalSasuke(){
 	}
 
 	if(_mainTarget && strcmp(_mainTarget->getRole()->getCString(),"Flog")!=0){
-		CCPoint moveDirection;
-		CCPoint sp;
+		Vec2 moveDirection;
+		Vec2 sp;
 
 		if(_mainTarget->_originY){
 			sp=ccpSub(ccp(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
@@ -4931,8 +4931,8 @@ void Hero::AI_ImmortalSasuke(){
 
 	if(_mainTarget){
 
-		CCPoint moveDirection;
-		CCPoint sp;
+		Vec2 moveDirection;
+		Vec2 sp;
 
 		if(_mainTarget->_originY){
 			sp=ccpSub(ccp(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
@@ -5054,8 +5054,8 @@ void Hero::AI_Kankuro(){
 	
 
 	if(_mainTarget && strcmp(_mainTarget->getRole()->getCString(),"Flog")!=0 ){
-		CCPoint moveDirection;
-		CCPoint sp;
+		Vec2 moveDirection;
+		Vec2 sp;
 
 		if(_mainTarget->_originY){
 			sp=ccpSub(ccp(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
@@ -5120,8 +5120,8 @@ void Hero::AI_Kankuro(){
 
 	if(_mainTarget){
 
-		CCPoint moveDirection;
-		CCPoint sp;
+		Vec2 moveDirection;
+		Vec2 sp;
 
 		if(_mainTarget->_originY){
 			sp=ccpSub(ccp(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
@@ -5238,8 +5238,8 @@ void Hero::AI_Chiyo(){
 
 
 	if(_mainTarget && strcmp(_mainTarget->getRole()->getCString(),"Flog")!=0 ){
-		CCPoint moveDirection;
-		CCPoint sp;
+		Vec2 moveDirection;
+		Vec2 sp;
 
 		if(_mainTarget->_originY){
 			sp=ccpSub(ccp(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
@@ -5258,7 +5258,7 @@ void Hero::AI_Chiyo(){
 						&& tempHero->_actionState!=ACTION_STATE_DEAD
 						&& strcmp(tempHero->getCharacter()->getCString(),"Chiyo")!=0
 						){
-							CCPoint	sp=ccpSub(tempHero->getPosition(),this->getPosition());
+							Vec2	sp=ccpSub(tempHero->getPosition(),this->getPosition());
 							if(sp.x<=winSize.width/2){
 								countNum++;
 							}
@@ -5330,8 +5330,8 @@ void Hero::AI_Chiyo(){
 
 	if(_mainTarget){
 
-		CCPoint moveDirection;
-		CCPoint sp;
+		Vec2 moveDirection;
+		Vec2 sp;
 
 		if(_mainTarget->_originY){
 			sp=ccpSub(ccp(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
@@ -5377,7 +5377,7 @@ void Hero::AI_Kakuzu(){
 			CCObject* pObject;
 			float distance;
 			float curDistance=NULL ;
-			CCPoint sp;
+			Vec2 sp;
 	
 			CCARRAY_FOREACH(this->getDelegate()->_CharacterArray,pObject){
 				NarutoSenki::ActionManager* target=(NarutoSenki::ActionManager*) pObject;
@@ -5385,7 +5385,7 @@ void Hero::AI_Kakuzu(){
 					strcmp(target->getRole()->getCString(),"Com")==0) &&
 					target->getActionState()==ACTION_STATE_DEAD
 					){
-						distance=ccpDistance(target->getPosition(),this->getPosition());
+						distance=target->getPosition().getDistance(this->getPosition());
 						sp=ccpSub(target->getPosition(),this->getPosition());
 
 						if(abs(sp.x)<(winSize.width/2)){
@@ -5407,7 +5407,7 @@ void Hero::AI_Kakuzu(){
 			}
 
 			if(_mainTarget){
-				CCPoint moveDirection;
+				Vec2 moveDirection;
 				if(_mainTarget->_originY){
 					sp=ccpSub(ccp(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
 				}else{
@@ -5486,8 +5486,8 @@ void Hero::AI_Kakuzu(){
 
 
 	if(_mainTarget && strcmp(_mainTarget->getRole()->getCString(),"Flog")!=0 ){
-		CCPoint moveDirection;
-		CCPoint sp;
+		Vec2 moveDirection;
+		Vec2 sp;
 
 		if(_mainTarget->_originY){
 			sp=ccpSub(ccp(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
@@ -5559,8 +5559,8 @@ void Hero::AI_Kakuzu(){
 
 	if(_mainTarget){
 
-		CCPoint moveDirection;
-		CCPoint sp;
+		Vec2 moveDirection;
+		Vec2 sp;
 
 		if(_mainTarget->_originY){
 			sp=ccpSub(ccp(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
@@ -5656,8 +5656,8 @@ void Hero::AI_Shikamaru(){
 	}
 
 	if(_mainTarget && strcmp(_mainTarget->getRole()->getCString(),"Flog")!=0 ){
-		CCPoint moveDirection;
-		CCPoint sp;
+		Vec2 moveDirection;
+		Vec2 sp;
 
 		if(_mainTarget->_originY){
 			sp=ccpSub(ccp(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
@@ -5760,8 +5760,8 @@ void Hero::AI_Shikamaru(){
 
 	if(_mainTarget){
 
-		CCPoint moveDirection;
-		CCPoint sp;
+		Vec2 moveDirection;
+		Vec2 sp;
 
 		if(_mainTarget->_originY){
 			sp=ccpSub(ccp(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
@@ -5863,8 +5863,8 @@ void Hero::AI_Gaara(){
 	}
 
 	if(_mainTarget && strcmp(_mainTarget->getRole()->getCString(),"Flog")!=0){
-		CCPoint moveDirection;
-		CCPoint sp;
+		Vec2 moveDirection;
+		Vec2 sp;
 
 		if(_mainTarget->_originY){
 			sp=ccpSub(ccp(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
@@ -5930,8 +5930,8 @@ void Hero::AI_Gaara(){
 
 	if(_mainTarget){
 
-		CCPoint moveDirection;
-		CCPoint sp;
+		Vec2 moveDirection;
+		Vec2 sp;
 
 		if(_mainTarget->_originY){
 			sp=ccpSub(ccp(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
@@ -6026,8 +6026,8 @@ void Hero::AI_Tobirama(){
 	}
 
 	if(_mainTarget && strcmp(_mainTarget->getRole()->getCString(),"Flog")!=0 ){
-		CCPoint moveDirection;
-		CCPoint sp;
+		Vec2 moveDirection;
+		Vec2 sp;
 
 		if(_mainTarget->_originY){
 			sp=ccpSub(ccp(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
@@ -6109,8 +6109,8 @@ void Hero::AI_Tobirama(){
 
 	if(_mainTarget){
 
-		CCPoint moveDirection;
-		CCPoint sp;
+		Vec2 moveDirection;
+		Vec2 sp;
 
 		if(_mainTarget->_originY){
 			sp=ccpSub(ccp(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
@@ -6217,8 +6217,8 @@ void Hero::AI_Choji(){
 	}
 
 	if(_mainTarget && strcmp(_mainTarget->getRole()->getCString(),"Flog")!=0 ){
-		CCPoint moveDirection;
-		CCPoint sp;
+		Vec2 moveDirection;
+		Vec2 sp;
 
 		if(_mainTarget->_originY){
 			sp=ccpSub(ccp(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
@@ -6302,8 +6302,8 @@ void Hero::AI_Choji(){
 
 	if(_mainTarget){
 
-		CCPoint moveDirection;
-		CCPoint sp;
+		Vec2 moveDirection;
+		Vec2 sp;
 
 		if(_mainTarget->_originY){
 			sp=ccpSub(ccp(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
@@ -6412,8 +6412,8 @@ void Hero::AI_Karin(){
 	}
 
 	if(_mainTarget && strcmp(_mainTarget->getRole()->getCString(),"Flog")!=0 ){
-		CCPoint moveDirection;
-		CCPoint sp;
+		Vec2 moveDirection;
+		Vec2 sp;
 
 		if(_mainTarget->_originY){
 			sp=ccpSub(ccp(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
@@ -6505,8 +6505,8 @@ void Hero::AI_Karin(){
 
 	if(_mainTarget){
 
-		CCPoint moveDirection;
-		CCPoint sp;
+		Vec2 moveDirection;
+		Vec2 sp;
 
 		if(_mainTarget->_originY){
 			sp=ccpSub(ccp(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
@@ -6608,8 +6608,8 @@ void Hero::AI_Lee(){
 	}
 
 	if(_mainTarget && strcmp(_mainTarget->getRole()->getCString(),"Flog")!=0 ){
-		CCPoint moveDirection;
-		CCPoint sp;
+		Vec2 moveDirection;
+		Vec2 sp;
 
 		if(_mainTarget->_originY){
 			sp=ccpSub(ccp(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
@@ -6674,8 +6674,8 @@ void Hero::AI_Lee(){
 
 	if(_mainTarget){
 
-		CCPoint moveDirection;
-		CCPoint sp;
+		Vec2 moveDirection;
+		Vec2 sp;
 
 		if(_mainTarget->_originY){
 			sp=ccpSub(ccp(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
@@ -6774,8 +6774,8 @@ void Hero::AI_RockLee(){
 	}
 
 	if(_mainTarget && strcmp(_mainTarget->getRole()->getCString(),"Flog")!=0 ){
-		CCPoint moveDirection;
-		CCPoint sp;
+		Vec2 moveDirection;
+		Vec2 sp;
 
 		if(_mainTarget->_originY){
 			sp=ccpSub(ccp(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
@@ -6861,8 +6861,8 @@ void Hero::AI_RockLee(){
 
 	if(_mainTarget){
 
-		CCPoint moveDirection;
-		CCPoint sp;
+		Vec2 moveDirection;
+		Vec2 sp;
 
 		if(_mainTarget->_originY){
 			sp=ccpSub(ccp(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
@@ -6968,8 +6968,8 @@ void Hero::AI_Jugo(){
 	}
 
 	if(_mainTarget && strcmp(_mainTarget->getRole()->getCString(),"Flog")!=0){
-		CCPoint moveDirection;
-		CCPoint sp;
+		Vec2 moveDirection;
+		Vec2 sp;
 
 		if(_mainTarget->_originY){
 			sp=ccpSub(ccp(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
@@ -7069,8 +7069,8 @@ void Hero::AI_Jugo(){
 
 	if(_mainTarget){
 
-		CCPoint moveDirection;
-		CCPoint sp;
+		Vec2 moveDirection;
+		Vec2 sp;
 
 		if(_mainTarget->_originY){
 			sp=ccpSub(ccp(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
@@ -7165,8 +7165,8 @@ void Hero::AI_Kisame(){
 	}
 
 	if(_mainTarget && strcmp(_mainTarget->getRole()->getCString(),"Flog")!=0 ){
-		CCPoint moveDirection;
-		CCPoint sp;
+		Vec2 moveDirection;
+		Vec2 sp;
 
 		if(_mainTarget->_originY){
 			sp=ccpSub(ccp(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
@@ -7275,8 +7275,8 @@ void Hero::AI_Kisame(){
 
 	if(_mainTarget){
 
-		CCPoint moveDirection;
-		CCPoint sp;
+		Vec2 moveDirection;
+		Vec2 sp;
 
 		if(_mainTarget->_originY){
 			sp=ccpSub(ccp(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
@@ -7333,8 +7333,8 @@ void Hero::AI_Hidan(){
 			if (strcmp(mo->getCharacter()->getCString(),"CircleMark")==0){
 				_mainTarget=mo;
 				_isFound=true;
-				CCPoint moveDirection;
-				CCPoint sp;
+				Vec2 moveDirection;
+				Vec2 sp;
 
 				if(_mainTarget->_originY){
 					sp=ccpSub(ccp(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
@@ -7436,8 +7436,8 @@ void Hero::AI_Hidan(){
 	}
 
 	if(_mainTarget && strcmp(_mainTarget->getRole()->getCString(),"Flog")!=0 ){
-		CCPoint moveDirection;
-		CCPoint sp;
+		Vec2 moveDirection;
+		Vec2 sp;
 
 		if(_mainTarget->_originY){
 			sp=ccpSub(ccp(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
@@ -7526,8 +7526,8 @@ void Hero::AI_Hidan(){
 
 	if(_mainTarget && strcmp(_mainTarget->getRole()->getCString(),"Mon")!=0  && !_isBati ){
 
-		CCPoint moveDirection;
-		CCPoint sp;
+		Vec2 moveDirection;
+		Vec2 sp;
 
 		if(_mainTarget->_originY){
 			sp=ccpSub(ccp(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
@@ -7629,8 +7629,8 @@ void Hero::AI_Tobi(){
 	}
 
 	if(_mainTarget && strcmp(_mainTarget->getRole()->getCString(),"Flog")!=0 ){
-		CCPoint moveDirection;
-		CCPoint sp;
+		Vec2 moveDirection;
+		Vec2 sp;
 
 		if(_mainTarget->_originY){
 			sp=ccpSub(ccp(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
@@ -7728,8 +7728,8 @@ void Hero::AI_Tobi(){
 
 	if(_mainTarget){
 
-		CCPoint moveDirection;
-		CCPoint sp;
+		Vec2 moveDirection;
+		Vec2 sp;
 
 		if(_mainTarget->_originY){
 			sp=ccpSub(ccp(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
@@ -7835,8 +7835,8 @@ void Hero::AI_Shino(){
 	}
 
 	if(_mainTarget && strcmp(_mainTarget->getRole()->getCString(),"Flog")!=0 ){
-		CCPoint moveDirection;
-		CCPoint sp;
+		Vec2 moveDirection;
+		Vec2 sp;
 
 		if(_mainTarget->_originY){
 			sp=ccpSub(ccp(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
@@ -7952,8 +7952,8 @@ void Hero::AI_Shino(){
 
 	if(_mainTarget){
 
-		CCPoint moveDirection;
-		CCPoint sp;
+		Vec2 moveDirection;
+		Vec2 sp;
 
 		if(_mainTarget->_originY){
 			sp=ccpSub(ccp(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
@@ -8061,8 +8061,8 @@ void Hero::AI_Hiruzen(){
 	}
 
 	if(_mainTarget && strcmp(_mainTarget->getRole()->getCString(),"Flog")!=0){
-		CCPoint moveDirection;
-		CCPoint sp;
+		Vec2 moveDirection;
+		Vec2 sp;
 
 		if(_mainTarget->_originY){
 			sp=ccpSub(ccp(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
@@ -8173,8 +8173,8 @@ void Hero::AI_Hiruzen(){
 
 	if(_mainTarget){
 
-		CCPoint moveDirection;
-		CCPoint sp;
+		Vec2 moveDirection;
+		Vec2 sp;
 
 		if(_mainTarget->_originY){
 			sp=ccpSub(ccp(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
@@ -8251,8 +8251,8 @@ void Hero::AI_Kiba(){
 	};
 
 	if(_mainTarget && (battleCondiction>=0 || _isCanOugis1 || _isCanOugis2)){
-		CCPoint moveDirection;
-		CCPoint sp;
+		Vec2 moveDirection;
+		Vec2 sp;
 
 		if(_mainTarget->_originY){
 			sp=ccpSub(ccp(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
@@ -8342,8 +8342,8 @@ void Hero::AI_Kiba(){
 
 	if(_mainTarget){
 
-		CCPoint moveDirection;
-		CCPoint sp;
+		Vec2 moveDirection;
+		Vec2 sp;
 
 		if(_mainTarget->_originY){
 			sp=ccpSub(ccp(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
@@ -8482,8 +8482,8 @@ void Hero::AI_Minato(){
 	}
 
 	if(_mainTarget && strcmp(_mainTarget->getRole()->getCString(),"Flog")!=0 ){
-		CCPoint moveDirection;
-		CCPoint sp;
+		Vec2 moveDirection;
+		Vec2 sp;
 
 		if(_mainTarget->_originY){
 			sp=ccpSub(ccp(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
@@ -8589,8 +8589,8 @@ void Hero::AI_Minato(){
 
 	if(_mainTarget){
 
-		CCPoint moveDirection;
-		CCPoint sp;
+		Vec2 moveDirection;
+		Vec2 sp;
 
 		if(_mainTarget->_originY){
 			sp=ccpSub(ccp(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
@@ -8718,8 +8718,8 @@ void Hero::AI_Hinata(){
 	}
 
 	if(_mainTarget && strcmp(_mainTarget->getRole()->getCString(),"Flog")!=0 ){
-		CCPoint moveDirection;
-		CCPoint sp;
+		Vec2 moveDirection;
+		Vec2 sp;
 
 		if(_mainTarget->_originY){
 			sp=ccpSub(ccp(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
@@ -8826,8 +8826,8 @@ void Hero::AI_Hinata(){
 
 	if(_mainTarget){
 
-		CCPoint moveDirection;
-		CCPoint sp;
+		Vec2 moveDirection;
+		Vec2 sp;
 
 		if(_mainTarget->_originY){
 			sp=ccpSub(ccp(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
@@ -8930,8 +8930,8 @@ void Hero::AI_Neji(){
 	}
 
 	if(_mainTarget && strcmp(_mainTarget->getRole()->getCString(),"Flog")!=0 ){
-		CCPoint moveDirection;
-		CCPoint sp;
+		Vec2 moveDirection;
+		Vec2 sp;
 
 		if(_mainTarget->_originY){
 			sp=ccpSub(ccp(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
@@ -9038,8 +9038,8 @@ void Hero::AI_Neji(){
 
 	if(_mainTarget){
 
-		CCPoint moveDirection;
-		CCPoint sp;
+		Vec2 moveDirection;
+		Vec2 sp;
 
 		if(_mainTarget->_originY){
 			sp=ccpSub(ccp(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
@@ -9101,7 +9101,7 @@ void Hero::AI_Shisui(){
 	}
 
 	if(_mainTarget){
-		CCPoint sp=ccpSub(_mainTarget->getPosition(),this->getPosition());
+		Vec2 sp=ccpSub(_mainTarget->getPosition(),this->getPosition());
 		if(abs(sp.x)>64 || abs(sp.y)>32){
 			this->walk(ccpNormalize(sp));
 		}else if(this->getActionState()==ACTION_STATE_IDLE || this->getActionState()==ACTION_STATE_WALK || this->getActionState()==ACTION_STATE_ATTACK){
