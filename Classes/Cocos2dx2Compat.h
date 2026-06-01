@@ -15,8 +15,6 @@
 
 NS_CC_BEGIN
 
-typedef DictElement CCDictElement;
-
 namespace cocos2dx2_compat
 {
     inline int atoi(const char* value)

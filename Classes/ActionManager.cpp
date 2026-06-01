@@ -1166,7 +1166,7 @@ Action* NarutoSenki::ActionManager::createAnimation(CCArray* ationArray,float fp
 
 	CCARRAY_FOREACH(ationArray,tObject){
 		CCDictionary* dic=(CCDictionary *)tObject;
-		CCDictElement* ele=NULL;
+		DictElement* ele=NULL;
 
 
 		CCDICT_FOREACH(dic,ele){
