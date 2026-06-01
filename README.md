@@ -275,6 +275,9 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
   cocos2d-x 3.x.
 - `ActionManager`: dua helper geometry lama `ccpAdd`/`ccpMult` terakhir
   diganti ke operasi `Vec2` langsung pada update posisi jalan.
+- `StartMenu`, `HudLayer`, dan `SkillLayer`: path frame animasi lokal untuk
+  avatar/start/blink diganti dari `CCString::createWithFormat` ke
+  `cocos2d::StringUtils::format` + `std::string`.
 - `NetworkLayer`: komentar request list hero lama dan parsing response callback
   yang sudah tidak punya caller aktif dibersihkan; flow pemilihan hero tetap
   memakai daftar offline statis.
@@ -352,6 +355,8 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
   menemukan `CCObject`.
 - `ActionManager`: helper `ccpAdd`/`ccpMult` terakhir juga sudah hilang; sisa
   pekerjaan besar tetap di kontrak data `CCArray`/`CCDictionary`/`CCString`.
+- UI helper lokal mulai mengurangi `CCString` untuk format path asset animasi
+  yang tidak menjadi payload gameplay.
 
 1. **Tutup helper compat kecil yang masih lokal**
    - Target file: `Cocos2dx2Compat.h`, `ActionButton`, `HPBar`, `HudLayer`,

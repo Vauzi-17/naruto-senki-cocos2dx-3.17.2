@@ -1,5 +1,6 @@
 #include "SkillLayer.h"
 #include <cstdlib>
+#include <string>
 #include "Defines.h"
 #include "SelectLayer.h"
 #include "NetworkLayer.h"
@@ -563,8 +564,8 @@ void SkillLayer::initInterface(){
 
 			while (i<7)
 			{
-				CCString* path=CCString::createWithFormat("skill_blink%d.png",i);
-				SpriteFrame* frame = SpriteFrameCache::getInstance()->spriteFrameByName(path->getCString());
+				std::string path=cocos2d::StringUtils::format("skill_blink%d.png",i);
+				SpriteFrame* frame = SpriteFrameCache::getInstance()->spriteFrameByName(path);
 				tempArray.pushBack(frame);
 
 

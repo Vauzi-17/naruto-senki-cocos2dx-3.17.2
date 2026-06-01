@@ -589,8 +589,8 @@ bool StartMenu::init()
 
 		while (i<5)
 		{
-			CCString* path=CCString::createWithFormat("avator%d.png",i);
-			SpriteFrame* frame = SpriteFrameCache::getInstance()->spriteFrameByName(path->getCString());
+			std::string path=cocos2d::StringUtils::format("avator%d.png",i);
+			SpriteFrame* frame = SpriteFrameCache::getInstance()->spriteFrameByName(path);
 			tempArray.pushBack(frame);
 			Animation* tempAnimation= Animation::createWithSpriteFrames(tempArray, 0.1f);
 			FiniteTimeAction* tempAction=Animate::create(tempAnimation);

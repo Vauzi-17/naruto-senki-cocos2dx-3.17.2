@@ -1,5 +1,6 @@
 #include "HudLayer.h"
 #include <cstdlib>
+#include <string>
 #include "MyUtils/CCShake.h"
 #include "MyUtils/KTools.h"
 
@@ -211,8 +212,8 @@ void HudLayer::onKaichang(){
 
 	while (i<9)
 	{
-		CCString* path=CCString::createWithFormat("gameStart_00%d.png",i);
-		SpriteFrame* frame = SpriteFrameCache::getInstance()->spriteFrameByName(path->getCString());
+		std::string path=cocos2d::StringUtils::format("gameStart_00%d.png",i);
+		SpriteFrame* frame = SpriteFrameCache::getInstance()->spriteFrameByName(path);
 		tempArray.pushBack(frame);
 		i+=1;
 	}
