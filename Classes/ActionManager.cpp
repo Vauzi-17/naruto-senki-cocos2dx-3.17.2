@@ -4,11 +4,21 @@
 #include "MyUtils/CCShake.h"
 #include "MyUtils/KTools.h"
 
+#include <chrono>
+
 using namespace NarutoSenki;
 using namespace CocosDenshion;
 
 namespace
 {
+	float currentTimeMilliseconds()
+	{
+		using namespace std::chrono;
+		static const auto startTime = steady_clock::now();
+		return static_cast<float>(duration_cast<milliseconds>(
+			steady_clock::now() - startTime).count());
+	}
+
 	Animation* createAnimationFromFrameArray(CCArray* frames, float delay)
 	{
 		Vector<SpriteFrame*> frameVector;
@@ -3250,9 +3260,7 @@ void NarutoSenki::ActionManager::disableDebuff(float dt){
 }
 
 void NarutoSenki::ActionManager::healBuff(float dt){
-	cc_timeval timeVal;
-	CCTime::gettimeofdayCocos2d(&timeVal, 0);
-	float curTime = timeVal.tv_sec * 1000 + timeVal.tv_usec / 1000;
+	float curTime = currentTimeMilliseconds();
 
 	if(!_buffStartTime){
 		_buffStartTime=curTime;	
@@ -3468,9 +3476,7 @@ void NarutoSenki::ActionManager::healBuff(float dt){
 }
 
 void NarutoSenki::ActionManager::dehealBuff(float dt){
-	cc_timeval timeVal;
-	CCTime::gettimeofdayCocos2d(&timeVal, 0);
-	float curTime = timeVal.tv_sec * 1000 + timeVal.tv_usec / 1000;
+	float curTime = currentTimeMilliseconds();
 
 	if(!_debuffStartTime)_debuffStartTime=curTime;	
 	

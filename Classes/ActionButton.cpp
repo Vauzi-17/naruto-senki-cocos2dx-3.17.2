@@ -1,6 +1,19 @@
 #include "ActionButton.h"
 #include "HudLayer.h"
 
+#include <chrono>
+
+namespace
+{
+	float currentTimeMilliseconds()
+	{
+		using namespace std::chrono;
+		static const auto startTime = steady_clock::now();
+		return static_cast<float>(duration_cast<milliseconds>(
+			steady_clock::now() - startTime).count());
+	}
+}
+
 ActionButton::ActionButton(void)
 {
 	_isDoubleSkill=false;
@@ -109,9 +122,7 @@ bool ActionButton::isCanClick(){
 	//recorde current time sec format;
 	
 
-	cc_timeval timeVal;
-	CCTime::gettimeofdayCocos2d(&timeVal, 0);
-	float curTime = timeVal.tv_sec * 1000 + timeVal.tv_usec / 1000;
+	float curTime = currentTimeMilliseconds();
 	
 	 if(this->_abType!=NAttack ){
 
@@ -184,9 +195,7 @@ bool ActionButton::isCanClick(){
 
 void ActionButton::beganAnimation(bool isLock){
 	//record the click time
-	cc_timeval timeVal;
-	CCTime::gettimeofdayCocos2d(&timeVal, 0);
-	_clickTime = timeVal.tv_sec * 1000 + timeVal.tv_usec / 1000;
+	_clickTime = currentTimeMilliseconds();
 
 	if(markSprite && this->getABType()!=OUGIS1 && this->getABType()!=OUGIS2){
 		if(!_freezeAction || _isColdChanged){

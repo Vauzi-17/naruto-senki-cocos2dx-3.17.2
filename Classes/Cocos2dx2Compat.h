@@ -10,36 +10,10 @@
 #include "ui/UIScale9Sprite.h"
 #include "extensions/GUI/CCScrollView/CCScrollView.h"
 
-#include <chrono>
 #include <cstdlib>
 #include <string>
 
 NS_CC_BEGIN
-
-struct cc_timeval
-{
-    long tv_sec;
-    long tv_usec;
-};
-
-class CCTime
-{
-public:
-    static void gettimeofdayCocos2d(cc_timeval* tp, void* tzp)
-    {
-        CC_UNUSED_PARAM(tzp);
-        if (!tp)
-        {
-            return;
-        }
-
-        const auto now = std::chrono::system_clock::now().time_since_epoch();
-        const auto seconds = std::chrono::duration_cast<std::chrono::seconds>(now);
-        const auto micros = std::chrono::duration_cast<std::chrono::microseconds>(now - seconds);
-        tp->tv_sec = static_cast<long>(seconds.count());
-        tp->tv_usec = static_cast<long>(micros.count());
-    }
-};
 
 typedef DictElement CCDictElement;
 
