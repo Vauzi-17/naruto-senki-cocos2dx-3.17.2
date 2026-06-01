@@ -180,6 +180,14 @@ Roadmap menuju 100%:
 
 Urutan langkah berikutnya menuju 100%:
 
+Posisi saat ini: **sedang di langkah 1 menuju langkah 2**. Helper compat kecil
+yang benar-benar lokal sudah mulai ditutup (`visitNode`, `CCTime`/`cc_timeval`,
+`CCDictElement`, sebagian state cooldown `ActionButton`), tetapi langkah 1 belum
+selesai karena `Cocos2dx2Compat.h` masih menampung alias aktif seperti
+`CCHttpRequest`, `CCEditBox`, `CCScale9Sprite`, `CCScrollView`, dan macro
+`atoi`. Setelah sisa helper kecil yang aman selesai, pekerjaan bergeser penuh ke
+langkah 2 untuk membersihkan UI/menu lokal.
+
 1. **Tutup helper compat kecil yang masih lokal**
    - Target file: `Cocos2dx2Compat.h`, `ActionButton`, `HPBar`, `HudLayer`,
      `GameLayer`, `GameOver`, `RankingLayer`, `CCStrokeLabel`, dan helper kecil
