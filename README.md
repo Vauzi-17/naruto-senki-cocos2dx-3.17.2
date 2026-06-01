@@ -331,6 +331,8 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
 - `ActionManager`: beberapa `CCObject*` lokal di helper animation/sequence,
   parser action, dan damage display diganti ke `Ref*` tanpa mengubah
   container `CCArray` lama.
+- `Element`: iterator lokal hasil `objectAtIndex()` di dealloc/AI kecil
+  diganti dari `CCObject*` ke `Ref*`, tetap tanpa mengubah container lama.
 
 1. **Tutup helper compat kecil yang masih lokal**
    - Target file: `Cocos2dx2Compat.h`, `ActionButton`, `HPBar`, `HudLayer`,
@@ -738,6 +740,8 @@ Catatan progress terbaru:
 - `Ref*` lokal mulai dipakai di helper animation/sequence dan damage display
   `ActionManager`, menggantikan `CCObject*` yang tidak perlu menjadi kontrak
   public.
+- `Element` juga mulai mengganti iterator lokal `CCObject*` ke `Ref*` pada
+  alur dealloc/AI kecil yang sudah memakai loop indeks eksplisit.
 - `ActionManager` juga mulai melepas alias geometry lama: `CCPoint`,
   `CCPointMake`, `CCRect`, dan `CCRectMake` aktif sudah tidak muncul lagi di
   file tersebut. Cleanup helper `ccp*` masih dipisahkan agar perubahan tetap

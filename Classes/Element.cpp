@@ -635,7 +635,7 @@ void HeroElement::dealloc(){
 	if(strcmp(this->getCharacter()->getCString(),"Minato")!=0){
 
 		if(this->getMonsterArray() && getMonsterArray()->count()>0){
-			CCObject* pObject;
+			Ref* pObject;
 			for (unsigned int ccIndex = 0; this->getMonsterArray() && ccIndex < this->getMonsterArray()->count(); ++ccIndex){
 				pObject = this->getMonsterArray()->objectAtIndex(ccIndex);
 				NarutoSenki::ActionManager* mo=(NarutoSenki::ActionManager*) pObject;
@@ -753,7 +753,7 @@ void HeroElement::dealloc(){
 				strcmp(this->getCharacter()->getCString(),"Choji")==0
 				){
 
-				CCObject* pObject;
+				Ref* pObject;
 				for (unsigned int ccIndex = 0; _delegate->_CharacterArray && ccIndex < _delegate->_CharacterArray->count(); ++ccIndex){
 					pObject = _delegate->_CharacterArray->objectAtIndex(ccIndex);
 					Hero* tempHero=(Hero*) pObject;
@@ -778,7 +778,7 @@ void HeroElement::dealloc(){
 			if(strcmp(this->getCharacter()->getCString(),"Minato")!=0 ){
 
 				if(this->getMonsterArray() && getMonsterArray()->count()>0){
-					CCObject* pObject;
+					Ref* pObject;
 					for (unsigned int ccIndex = 0; this->getMonsterArray() && ccIndex < this->getMonsterArray()->count(); ++ccIndex){
 						pObject = this->getMonsterArray()->objectAtIndex(ccIndex);
 						NarutoSenki::ActionManager* mo=(NarutoSenki::ActionManager*) pObject;
@@ -1315,7 +1315,7 @@ void Tower::dealloc(){
 	this->setActionState(ACTION_STATE_DEAD);
 	this->stopAllActions();
 
-	CCObject* pObject;
+	Ref* pObject;
 	CCArray* list;
 	for(int i=0;i<2;i++){
 		if(i==0){
@@ -1537,7 +1537,7 @@ void Monster::setAI(float dt){
 
 	if(strcmp(getCharacter()->getCString(),"Kage")==0){
 
-		CCObject* pObject;
+		Ref* pObject;
 		for (unsigned int ccIndex = 0; _delegate->_CharacterArray && ccIndex < _delegate->_CharacterArray->count(); ++ccIndex){
 			pObject = _delegate->_CharacterArray->objectAtIndex(ccIndex);
 			Hero* tempHero=(Hero*) pObject;
@@ -1714,7 +1714,7 @@ void Monster::dealloc(){
 			_delegate->clearDoubleClick();
 		}
 
-		CCObject* pObject;
+		Ref* pObject;
 		for (unsigned int ccIndex = 0; _master->getMonsterArray() && ccIndex < _master->getMonsterArray()->count(); ++ccIndex){
 			pObject = _master->getMonsterArray()->objectAtIndex(ccIndex);
 			Monster* mo=(Monster*) pObject;
