@@ -636,7 +636,8 @@ void HeroElement::dealloc(){
 
 		if(this->getMonsterArray() && getMonsterArray()->count()>0){
 			CCObject* pObject;
-			CCARRAY_FOREACH(this->getMonsterArray(),pObject){
+			for (unsigned int ccIndex = 0; this->getMonsterArray() && ccIndex < this->getMonsterArray()->count(); ++ccIndex){
+				pObject = this->getMonsterArray()->objectAtIndex(ccIndex);
 				NarutoSenki::ActionManager* mo=(NarutoSenki::ActionManager*) pObject;
 
 				//�����ɫ����monter
@@ -753,7 +754,8 @@ void HeroElement::dealloc(){
 				){
 
 				CCObject* pObject;
-				CCARRAY_FOREACH(_delegate->_CharacterArray,pObject){
+				for (unsigned int ccIndex = 0; _delegate->_CharacterArray && ccIndex < _delegate->_CharacterArray->count(); ++ccIndex){
+					pObject = _delegate->_CharacterArray->objectAtIndex(ccIndex);
 					Hero* tempHero=(Hero*) pObject;
 					if(tempHero->_isSticking){
 						if(tempHero->getActionState()!=ACTION_STATE_DEAD){
@@ -777,7 +779,8 @@ void HeroElement::dealloc(){
 
 				if(this->getMonsterArray() && getMonsterArray()->count()>0){
 					CCObject* pObject;
-					CCARRAY_FOREACH(this->getMonsterArray(),pObject){
+					for (unsigned int ccIndex = 0; this->getMonsterArray() && ccIndex < this->getMonsterArray()->count(); ++ccIndex){
+						pObject = this->getMonsterArray()->objectAtIndex(ccIndex);
 						NarutoSenki::ActionManager* mo=(NarutoSenki::ActionManager*) pObject;
 
 						//�����ɫ����monter
@@ -1321,7 +1324,9 @@ void Tower::dealloc(){
 			list=_delegate->_AkatsukiFlogArray;
 		}
 
-		CCARRAY_FOREACH(list,pObject){
+		for (unsigned int ccIndex = 0; list && ccIndex < list->count(); ++ccIndex){
+
+			pObject = list->objectAtIndex(ccIndex);
 			NarutoSenki::ActionManager* tempFlog=(NarutoSenki::ActionManager*) pObject;
 			if(tempFlog->_mainTarget){
 				if(tempFlog->_mainTarget==(NarutoSenki::ActionManager*)this){
@@ -1533,7 +1538,8 @@ void Monster::setAI(float dt){
 	if(strcmp(getCharacter()->getCString(),"Kage")==0){
 
 		CCObject* pObject;
-		CCARRAY_FOREACH(_delegate->_CharacterArray,pObject){
+		for (unsigned int ccIndex = 0; _delegate->_CharacterArray && ccIndex < _delegate->_CharacterArray->count(); ++ccIndex){
+			pObject = _delegate->_CharacterArray->objectAtIndex(ccIndex);
 			Hero* tempHero=(Hero*) pObject;
 			if(strcmp(this->getGroup()->getCString(),tempHero->getGroup()->getCString())!=0 &&
 				tempHero->getActionState()!=ACTION_STATE_DEAD &&
@@ -1709,7 +1715,8 @@ void Monster::dealloc(){
 		}
 
 		CCObject* pObject;
-		CCARRAY_FOREACH(_master->getMonsterArray(),pObject){
+		for (unsigned int ccIndex = 0; _master->getMonsterArray() && ccIndex < _master->getMonsterArray()->count(); ++ccIndex){
+			pObject = _master->getMonsterArray()->objectAtIndex(ccIndex);
 			Monster* mo=(Monster*) pObject;
 
 			if(strcmp(mo->getCharacter()->getCString(),"HiraishinMark")==0){
