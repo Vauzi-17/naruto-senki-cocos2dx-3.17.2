@@ -1,5 +1,6 @@
 #include "GameOver.h"
 #include <cstdlib>
+#include <string>
 #include "GameLayer.h"
 #include "Characters.h"
 
@@ -117,8 +118,8 @@ void GameOver::listResult(){
 		SimpleAudioEngine::getInstance()->playEffect("Audio/Menu/battle_over.ogg");
 	}
 
-	CCString* path=CCString::createWithFormat("%s_half.png",_delegate->currentPlayer->getCharacter()->getCString());
-	Sprite* half=Sprite::createWithSpriteFrameName(path->getCString());
+	std::string path=cocos2d::StringUtils::format("%s_half.png",_delegate->currentPlayer->getCharacter()->getCString());
+	Sprite* half=Sprite::createWithSpriteFrameName(path);
 	if(!half){
 		half=Sprite::createWithSpriteFrameName("Tobirama_half.png");
 	}
@@ -166,18 +167,18 @@ void GameOver::listResult(){
 	this->addChild(timeBG,6);
 
 
-	CCString* tempTime=CCString::createWithFormat("%02d:%02d:%02d",_hour,_minute,_delegate->_second);
+	std::string tempTime=cocos2d::StringUtils::format("%02d:%02d:%02d",_hour,_minute,_delegate->_second);
 
 
-	LabelBMFont* gameClock=LabelBMFont::create(tempTime->getCString(),"Fonts/1.fnt");
+	LabelBMFont* gameClock=LabelBMFont::create(tempTime.c_str(),"Fonts/1.fnt");
 	gameClock->setAnchorPoint(Vec2(0.5f,0));
     gameClock->setPosition(Vec2(timeBG->getPositionX()+timeBG->getContentSize().width/2,timeBG->getPositionY()+3));
 	gameClock->setScale(0.48f);
 	this->addChild(gameClock,7);
 
 	if(_delegate->_isDuelMode){
-		CCString* duelScore=CCString::createWithFormat("DUEL %d:%d",_delegate->_duelPlayerScore,_delegate->_duelEnemyScore);
-		LabelBMFont* duelScoreLabel=LabelBMFont::create(duelScore->getCString(),"Fonts/1.fnt");
+		std::string duelScore=cocos2d::StringUtils::format("DUEL %d:%d",_delegate->_duelPlayerScore,_delegate->_duelEnemyScore);
+		LabelBMFont* duelScoreLabel=LabelBMFont::create(duelScore.c_str(),"Fonts/1.fnt");
 		duelScoreLabel->setAnchorPoint(Vec2(0.5f,0.5f));
 		duelScoreLabel->setPosition(Vec2(result_bg->getPositionX()+12,result_bg->getPositionY()+result_bg->getContentSize().height/2-52));
 		duelScoreLabel->setScale(0.38f);
@@ -287,8 +288,8 @@ void GameOver::listResult(){
 			hero->changeGroup();
 		}
 
-		CCString* path=CCString::createWithFormat(("%s_small.png"),hero->getCharacter()->getCString());
-		Sprite* avator_small=Sprite::createWithSpriteFrameName(path->getCString());
+		std::string path=cocos2d::StringUtils::format("%s_small.png",hero->getCharacter()->getCString());
+		Sprite* avator_small=Sprite::createWithSpriteFrameName(path);
 		if(!avator_small){
 			avator_small=Sprite::createWithSpriteFrameName("error_small.png");
 		}
@@ -308,16 +309,16 @@ void GameOver::listResult(){
 			akatsukiKill+=realKillNum;
 		}
 
-		CCString* knum=CCString::createWithFormat("%d",realKillNum);
-		LabelBMFont* killNum=LabelBMFont::create(knum->getCString(),"Fonts/1.fnt");
+		std::string knum=cocos2d::StringUtils::format("%d",realKillNum);
+		LabelBMFont* killNum=LabelBMFont::create(knum.c_str(),"Fonts/1.fnt");
 		killNum->setScale(labelScale);
 
-		CCString* dnum=CCString::createWithFormat("%d",hero->_deadNum);
-		LabelBMFont* deadNum=LabelBMFont::create(dnum->getCString(),"Fonts/1.fnt");
+		std::string dnum=cocos2d::StringUtils::format("%d",hero->_deadNum);
+		LabelBMFont* deadNum=LabelBMFont::create(dnum.c_str(),"Fonts/1.fnt");
 		deadNum->setScale(labelScale);
 
-		CCString* fnum=CCString::createWithFormat("%d",hero->_flogNum);
-		LabelBMFont* flogNum=LabelBMFont::create(fnum->getCString(),"Fonts/1.fnt");
+		std::string fnum=cocos2d::StringUtils::format("%d",hero->_flogNum);
+		LabelBMFont* flogNum=LabelBMFont::create(fnum.c_str(),"Fonts/1.fnt");
 		flogNum->setScale(labelScale);
 
 

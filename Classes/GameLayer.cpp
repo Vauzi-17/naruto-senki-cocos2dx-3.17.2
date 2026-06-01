@@ -1,5 +1,6 @@
 #include "GameLayer.h"
 #include <cstdlib>
+#include <string>
 #include "Characters.h"
 #include "BGLayer.h"
 #include "HudLayer.h"
@@ -851,8 +852,8 @@ void GameLayer::updateGameTime(float dt)
 		_minute+=1;
 		_second=0;
 	}
-	CCString* tempTime=CCString::createWithFormat("%02d:%02d",_minute,_second);
-	this->_hudLayer->gameClock->setString(tempTime->getCString());
+	std::string tempTime=cocos2d::StringUtils::format("%02d:%02d",_minute,_second);
+	this->_hudLayer->gameClock->setString(tempTime);
 
 	int newValue=std::atoi(this->getTotalTM()->getCString())+1;
 	this->setTotalTM(CCString::createWithFormat("%d",newValue));

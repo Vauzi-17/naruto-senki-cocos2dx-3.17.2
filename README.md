@@ -278,6 +278,9 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
 - `StartMenu`, `HudLayer`, dan `SkillLayer`: path frame animasi lokal untuk
   avatar/start/blink diganti dari `CCString::createWithFormat` ke
   `cocos2d::StringUtils::format` + `std::string`.
+- `HudLayer`, `GameLayer`, `GameOver`, dan `SkillLayer`: format teks/path UI
+  lokal untuk coin, timer, result avatar/stat, dan tombol skill mulai memakai
+  `StringUtils::format`/`std::string` tanpa mengubah payload gameplay.
 - `NetworkLayer`: komentar request list hero lama dan parsing response callback
   yang sudah tidak punya caller aktif dibersihkan; flow pemilihan hero tetap
   memakai daftar offline statis.
@@ -357,6 +360,8 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
   pekerjaan besar tetap di kontrak data `CCArray`/`CCDictionary`/`CCString`.
 - UI helper lokal mulai mengurangi `CCString` untuk format path asset animasi
   yang tidak menjadi payload gameplay.
+- UI result/HUD lokal ikut mengurangi `CCString::createWithFormat` untuk label
+  dan path sekali pakai; kontrak `CCString` gameplay masih ditahan.
 
 1. **Tutup helper compat kecil yang masih lokal**
    - Target file: `Cocos2dx2Compat.h`, `ActionButton`, `HPBar`, `HudLayer`,

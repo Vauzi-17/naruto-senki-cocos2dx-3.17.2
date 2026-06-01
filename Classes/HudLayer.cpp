@@ -876,8 +876,8 @@ void HudLayer::setCoin(const char* value){
 	std::string cl = coinLabel->getString();
 	int tempCoin = std::atoi(cl.c_str());
 	tempCoin+=std::atoi(value);
-	CCString* realCoin=CCString::createWithFormat("%d",tempCoin);
-	coinLabel->setString(realCoin->getCString());
+	std::string realCoin=cocos2d::StringUtils::format("%d",tempCoin);
+	coinLabel->setString(realCoin);
 
 }
 
@@ -887,8 +887,8 @@ bool HudLayer::offCoin(const char* value){
 	int tempCoin = std::atoi(cl.c_str());
 	if(tempCoin-std::atoi(value)>=0){
 		tempCoin-=std::atoi(value);
-		CCString* realCoin=CCString::createWithFormat("%d",tempCoin);
-		coinLabel->setString(realCoin->getCString());
+		std::string realCoin=cocos2d::StringUtils::format("%d",tempCoin);
+		coinLabel->setString(realCoin);
 		_delegate->currentPlayer->minusCoin(std::atoi(value));
 		return true;
 	}else {

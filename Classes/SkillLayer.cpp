@@ -697,8 +697,8 @@ void SkillLayer::updateSkillGroup(){
 
 	for(int i=1;i<=5;i++){
 
-		CCString* path=CCString::createWithFormat("%s_skill%d.png",selectHero,i);
-		SelectButton* skill_btn=SelectButton::create(path->getCString());
+		std::string path=cocos2d::StringUtils::format("%s_skill%d.png",selectHero,i);
+		SelectButton* skill_btn=SelectButton::create(path.c_str());
 
 		if(i==4){
 			skill_btn->_isUnlock=true;
