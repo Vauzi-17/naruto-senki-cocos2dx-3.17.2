@@ -387,7 +387,7 @@ void NarutoSenki::ActionManager::update(float dt){
 
 	if(_actionState == ACTION_STATE_WALK){
 		
-		_desiredPosition=ccpAdd(this->getPosition(), ccpMult(_velocity,dt));
+		_desiredPosition=this->getPosition() + _velocity * dt;
 
 		
 
@@ -413,7 +413,7 @@ void NarutoSenki::ActionManager::update(float dt){
 							}else{
 								_velocity =Vec2(0,-1 * this->_walkSpeed*winSize.width/1280);
 							}
-							_desiredPosition=ccpAdd(this->getPosition(), ccpMult(_velocity,dt));
+							_desiredPosition=this->getPosition() + _velocity * dt;
 						};
 
 					}

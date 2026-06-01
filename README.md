@@ -273,6 +273,8 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
 - `ActionManager`: field `_slayer`/`_sticker` dan callback notification
   `acceptAttack` diganti dari `CCObject*` ke `Ref*`, sesuai callback object
   cocos2d-x 3.x.
+- `ActionManager`: dua helper geometry lama `ccpAdd`/`ccpMult` terakhir
+  diganti ke operasi `Vec2` langsung pada update posisi jalan.
 - `NetworkLayer`: komentar request list hero lama dan parsing response callback
   yang sudah tidak punya caller aktif dibersihkan; flow pemilihan hero tetap
   memakai daftar offline statis.
@@ -348,6 +350,8 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
 - `ActionManager`: kontrak callback/field terakhir yang memakai `CCObject*`
   ikut dipindahkan ke `Ref*`; audit source aktif `Classes` sekarang tidak lagi
   menemukan `CCObject`.
+- `ActionManager`: helper `ccpAdd`/`ccpMult` terakhir juga sudah hilang; sisa
+  pekerjaan besar tetap di kontrak data `CCArray`/`CCDictionary`/`CCString`.
 
 1. **Tutup helper compat kecil yang masih lokal**
    - Target file: `Cocos2dx2Compat.h`, `ActionButton`, `HPBar`, `HudLayer`,
