@@ -325,6 +325,9 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
 - `ActionManager`: alias sprite lifecycle kecil dibersihkan dari
   `CCSprite::onEnter`, `CCSprite::onExit`, dan pembuatan heart-effect
   lokal ke `Sprite` 3.x langsung.
+- `ActionManager` dan `Element`: alias label bitmap lokal `CCLabelBMFont`
+  diganti ke `LabelBMFont` 3.x langsung untuk damage/reward display dan
+  timer reborn.
 
 1. **Tutup helper compat kecil yang masih lokal**
    - Target file: `Cocos2dx2Compat.h`, `ActionButton`, `HPBar`, `HudLayer`,
@@ -727,6 +730,8 @@ Catatan progress terbaru:
   dipertahankan untuk potongan berikutnya.
 - Alias sprite lifecycle kecil di `ActionManager` juga dibersihkan:
   `onEnter`, `onExit`, dan heart-effect lokal memakai `Sprite` 3.x langsung.
+- Label bitmap lokal di `ActionManager`/`Element` ikut dilepas dari
+  `CCLabelBMFont` ke `LabelBMFont` untuk damage/reward display dan reborn timer.
 - `ActionManager` juga mulai melepas alias geometry lama: `CCPoint`,
   `CCPointMake`, `CCRect`, dan `CCRectMake` aktif sudah tidak muncul lagi di
   file tersebut. Cleanup helper `ccp*` masih dipisahkan agar perubahan tetap

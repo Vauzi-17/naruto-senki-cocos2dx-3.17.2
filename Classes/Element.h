@@ -24,7 +24,7 @@ public:
 	
 
 	Sprite* rebornSprite;
-	CCLabelBMFont* rebornLabel;
+	LabelBMFont* rebornLabel;
 	void	reborn(float dt);
 	void	dealloc();
 

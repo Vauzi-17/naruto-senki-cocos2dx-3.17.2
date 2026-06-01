@@ -1820,7 +1820,7 @@ void NarutoSenki::ActionManager::setCoinDisplay(int num){
 	coinDisplay->addChild(coinSprite);
 
 	CCString* label=CCString::createWithFormat("+%d",num);
-	CCLabelBMFont* rewardLabel=CCLabelBMFont::create(label->getCString(),"Fonts/yellow.fnt");
+	LabelBMFont* rewardLabel=LabelBMFont::create(label->getCString(),"Fonts/yellow.fnt");
 	rewardLabel->setPosition(Vec2(0,0));
 	rewardLabel->setScale(0.3f);
 	coinDisplay->addChild(rewardLabel);
@@ -1851,7 +1851,7 @@ void NarutoSenki::ActionManager::setDamgeDisplay(unsigned int value,const char* 
 
 	if(_damageArray->count()<6 ){
 
-	CCLabelBMFont* damageFont=CCLabelBMFont::create(CCString::createWithFormat("%d",value)->getCString(),
+	LabelBMFont* damageFont=LabelBMFont::create(CCString::createWithFormat("%d",value)->getCString(),
 		CCString::createWithFormat("Fonts/%s.fnt",type)->getCString());
 	damageFont->setAnchorPoint(Vec2(0.5,0.5));
 	
@@ -1885,7 +1885,7 @@ void NarutoSenki::ActionManager::setDamgeDisplay(unsigned int value,const char* 
 void NarutoSenki::ActionManager::removeDamageDisplay(){
 	if(_damageArray && _damageArray->count()>0){
 		CCObject* pObject=_damageArray->objectAtIndex(0);
-		CCLabelBMFont* damageFont=(CCLabelBMFont*)pObject;
+		LabelBMFont* damageFont=(LabelBMFont*)pObject;
 		damageFont->removeFromParent();
 		_damageArray->removeObjectAtIndex(0);
 		damageFont=NULL;
