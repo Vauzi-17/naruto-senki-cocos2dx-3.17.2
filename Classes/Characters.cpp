@@ -223,7 +223,7 @@ void Hero::AI_DuelBasic(){
 
 	if(this->getHpPercent()<0.30f && absX<82 && _mainTarget->getHpPercent()>0.35f){
 		Vec2 retreat=Vec2(-signX, absY>normalRangeY ? signY*0.35f : 0);
-		this->walk(ccpNormalize(retreat));
+		this->walk(retreat.getNormalized());
 		return;
 	}
 
@@ -255,7 +255,7 @@ void Hero::AI_DuelBasic(){
 	}
 
 	if(moveDirection.x!=0 || moveDirection.y!=0){
-		this->walk(ccpNormalize(moveDirection));
+		this->walk(moveDirection.getNormalized());
 	}
 }
 
@@ -280,7 +280,7 @@ void Hero::AI_DevaPath(){
 
 					if(abs(sp.x)> 32 || abs(sp.y)>32){
 
-						moveDirection =ccpNormalize(sp);
+						moveDirection =sp.getNormalized();
 						this->walk(moveDirection);
 
 					}else{
@@ -296,13 +296,13 @@ void Hero::AI_DevaPath(){
 
 				if(abs(sp.x)> 256  || abs(sp.y)> 16 ){
 
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 
 				}else if(abs(sp.x)> 32 || abs(sp.y)>32){
 
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 				}else if(this->getActionState()==ACTION_STATE_IDLE ||  this->getActionState()==ACTION_STATE_WALK || this->getActionState()==ACTION_STATE_ATTACK ){
@@ -377,7 +377,7 @@ void Hero::AI_AsuraPath(){
 
 					if(abs(sp.x)> 32 || abs(sp.y)>32){
 
-						moveDirection =ccpNormalize(sp);
+						moveDirection =sp.getNormalized();
 						this->walk(moveDirection);
 
 					}else{
@@ -393,13 +393,13 @@ void Hero::AI_AsuraPath(){
 
 				if(abs(sp.x)> 256  || abs(sp.y)> 32 ){
 
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 
 				}else if((abs(sp.x)> 32 || abs(sp.y)>32) && !_isCanSkill1  ){
 
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 				}else if(this->getActionState()==ACTION_STATE_IDLE ||  this->getActionState()==ACTION_STATE_WALK || this->getActionState()==ACTION_STATE_ATTACK ){
@@ -458,7 +458,7 @@ void Hero::AI_AnimalPath(){
 
 					if(abs(sp.x)> 32 || abs(sp.y)>32){
 
-						moveDirection =ccpNormalize(sp);
+						moveDirection =sp.getNormalized();
 						this->walk(moveDirection);
 
 					}else{
@@ -483,13 +483,13 @@ void Hero::AI_AnimalPath(){
 
 				if(abs(sp.x)> 256  || abs(sp.y)> 32 ){
 
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 
 				}else if(abs(sp.x)> 32 || abs(sp.y)>32){
 
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 				}else if(this->getActionState()==ACTION_STATE_IDLE ||  this->getActionState()==ACTION_STATE_WALK || this->getActionState()==ACTION_STATE_ATTACK){
@@ -552,7 +552,7 @@ void Hero::AI_Akamaru(){
 		if(strcmp(_mainTarget->getRole()->getCString(),"Flog")==0){
 
 			if(abs(sp.x)> 48 || abs(sp.y)> 32 ){		
-				moveDirection =ccpNormalize(sp);
+				moveDirection =sp.getNormalized();
 				this->walk(moveDirection);
 			
 			}else{	
@@ -569,7 +569,7 @@ void Hero::AI_Akamaru(){
 
 			if(abs(sp.x)>  48  || abs(sp.y)> 32 ){
 			 
-				moveDirection =ccpNormalize(sp);
+				moveDirection =sp.getNormalized();
 				this->walk(moveDirection);
 				return;
 				
@@ -657,7 +657,7 @@ void Hero::AI_Karasu(){
 							this->_master->getActionState()== ACTION_STATE_O2ATTACK
 							){
 					
-						moveDirection =ccpNormalize(sp);
+						moveDirection =sp.getNormalized();
 						this->walk(moveDirection);
 						return;
 						}
@@ -683,7 +683,7 @@ void Hero::AI_Karasu(){
 						this->_master->getActionState()== ACTION_STATE_OATTACK||
 						this->_master->getActionState()== ACTION_STATE_O2ATTACK
 						){
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 					}
@@ -783,7 +783,7 @@ void Hero::AI_Saso(){
 						this->_master->getActionState()== ACTION_STATE_O2ATTACK
 						){
 
-							moveDirection =ccpNormalize(sp);
+							moveDirection =sp.getNormalized();
 							this->walk(moveDirection);
 
 					}
@@ -807,7 +807,7 @@ void Hero::AI_Saso(){
 						this->_master->getActionState()== ACTION_STATE_OATTACK||
 						this->_master->getActionState()== ACTION_STATE_O2ATTACK
 						){
-							moveDirection =ccpNormalize(sp);
+							moveDirection =sp.getNormalized();
 							this->walk(moveDirection);
 							return;
 					}
@@ -906,7 +906,7 @@ void Hero::AI_Parents(){
 
 					}else if(abs(sp.x)> 48 || abs(sp.y)> 32  ){
 						if(_skillChangeBuffValue &&  this->getActionState()!=ACTION_STATE_ATTACK){
-							moveDirection =ccpNormalize(sp);
+							moveDirection =sp.getNormalized();
 							this->walk(moveDirection);
 							return;
 						}
@@ -983,7 +983,7 @@ void Hero::AI_Sanshouuo(){
 							this->_master->getActionState()== ACTION_STATE_OATTACK||
 							this->_master->getActionState()== ACTION_STATE_O2ATTACK
 							){
-						moveDirection =ccpNormalize(sp);
+						moveDirection =sp.getNormalized();
 						this->walk(moveDirection);
 						}
 
@@ -1006,7 +1006,7 @@ void Hero::AI_Sanshouuo(){
 						this->_master->getActionState()== ACTION_STATE_OATTACK||
 						this->_master->getActionState()== ACTION_STATE_O2ATTACK
 						){
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 					}
@@ -1017,7 +1017,7 @@ void Hero::AI_Sanshouuo(){
 						this->_master->getActionState()== ACTION_STATE_OATTACK||
 						this->_master->getActionState()== ACTION_STATE_O2ATTACK
 						){
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 					}
@@ -1087,7 +1087,7 @@ void Hero::AI_NarutoClone(){
 
 		if(abs(sp.x)> 32 || abs(sp.y)>32){
 
-			moveDirection =ccpNormalize(sp);
+			moveDirection =sp.getNormalized();
 			this->walk(moveDirection);
 
 		}else{
@@ -1128,7 +1128,7 @@ void Hero::AI_Kurama(){
 
 		if(abs(sp.x)> 156 || abs(sp.y)> 48 ){
 
-			moveDirection =ccpNormalize(sp);
+			moveDirection =sp.getNormalized();
 			this->walk(moveDirection);
 
 		}else{
@@ -1169,7 +1169,7 @@ void Hero::AI_SageNarutoClone(){
 
 					if(abs(sp.x)> 32 || abs(sp.y)>32){
 
-						moveDirection =ccpNormalize(sp);
+						moveDirection =sp.getNormalized();
 						this->walk(moveDirection);
 
 					}else{
@@ -1184,13 +1184,13 @@ void Hero::AI_SageNarutoClone(){
 
 				if(abs(sp.x)> 128 || abs(sp.y)> 16 ){
 
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 
 				}else if((abs(sp.x)> 48  || abs(sp.y)> 8) && !_isCanSkill1 ){
 
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 				}else if(this->getActionState()==ACTION_STATE_IDLE ||  this->getActionState()==ACTION_STATE_WALK || this->getActionState()==ACTION_STATE_ATTACK){
@@ -1245,7 +1245,7 @@ void Hero::AI_RikudoNarutoClone(){
 
 				if(abs(sp.x)> 32 || abs(sp.y)>32){
 
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 
 				}else{
@@ -1260,13 +1260,13 @@ void Hero::AI_RikudoNarutoClone(){
 
 			if(abs(sp.x)> 128 || abs(sp.y)> 16 ){
 
-				moveDirection =ccpNormalize(sp);
+				moveDirection =sp.getNormalized();
 				this->walk(moveDirection);
 				return;
 
 			}else if((abs(sp.x)> 48  || abs(sp.y)> 8) && !_isCanSkill1 ){
 
-				moveDirection =ccpNormalize(sp);
+				moveDirection =sp.getNormalized();
 				this->walk(moveDirection);
 				return;
 			}else if(this->getActionState()==ACTION_STATE_IDLE ||  this->getActionState()==ACTION_STATE_WALK || this->getActionState()==ACTION_STATE_ATTACK){
@@ -1329,7 +1329,7 @@ void Hero::AI_Mask(){
 
 				if(abs(sp.x)> 32 || abs(sp.y)>32){
 
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 
 				}else{
@@ -1344,13 +1344,13 @@ void Hero::AI_Mask(){
 
 			if(abs(sp.x)> 96 || abs(sp.y)> 16 ){
 
-				moveDirection =ccpNormalize(sp);
+				moveDirection =sp.getNormalized();
 				this->walk(moveDirection);
 				return;
 
 			}else if((abs(sp.x)> 48  || abs(sp.y)> 16) && !_isCanSkill1 ){
 
-				moveDirection =ccpNormalize(sp);
+				moveDirection =sp.getNormalized();
 				this->walk(moveDirection);
 				return;
 			}else if(this->getActionState()==ACTION_STATE_IDLE ||  this->getActionState()==ACTION_STATE_WALK || this->getActionState()==ACTION_STATE_ATTACK){
@@ -1396,7 +1396,7 @@ void Hero::AI_Slug(){
 
 					if(abs(sp.x)> 32 || abs(sp.y)>32){
 
-						moveDirection =ccpNormalize(sp);
+						moveDirection =sp.getNormalized();
 						this->walk(moveDirection);
 
 					}else{
@@ -1453,7 +1453,7 @@ void Hero::AI_Centipede(){
 
 				if(abs(sp.x)> 32 || abs(sp.y)>32){
 
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 
 				}else{
@@ -1564,7 +1564,7 @@ void Hero::AI_Naruto(){
 
 				//交战策略
 				if(abs(sp.x)> 96 || abs(sp.y)> 32){
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 				}else if(abs(sp.x)<32 && ( _isCanSkill1 || _isCanOugis1 || _isCanSkill3) ){
@@ -1615,7 +1615,7 @@ void Hero::AI_Naruto(){
 		}
 
 		if(abs(sp.x)> 32 || abs(sp.y)>32){
-			moveDirection =ccpNormalize(sp);
+			moveDirection =sp.getNormalized();
 			this->walk(moveDirection);
 			return;
 		}
@@ -1735,7 +1735,7 @@ void Hero::AI_SageNaruto(){
 
 				//交战策略
 				if(abs(sp.x)> 96 || abs(sp.y)> 32){				
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 				}else if(abs(sp.x)<32 && _isCanSkill1){
@@ -1779,7 +1779,7 @@ void Hero::AI_SageNaruto(){
 		}
 
 		if(abs(sp.x)> 32 || abs(sp.y)>32){
-			moveDirection =ccpNormalize(sp);
+			moveDirection =sp.getNormalized();
 			this->walk(moveDirection);
 			return;
 		}
@@ -1912,7 +1912,7 @@ void Hero::AI_RikudoNaruto(){
 
 				//交战策略
 				if(abs(sp.x)> 32 || abs(sp.y)> 32){	
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 				}
@@ -1948,7 +1948,7 @@ void Hero::AI_RikudoNaruto(){
 		}
 
 		if(abs(sp.x)> 32 || abs(sp.y)>32){
-			moveDirection =ccpNormalize(sp);
+			moveDirection =sp.getNormalized();
 			this->walk(moveDirection);
 			return;
 		}
@@ -2062,7 +2062,7 @@ void Hero::AI_Asuma(){
 			}else if(_isCanSkill3 && _mainTarget->getGP()<5000){
 				//先手无视战斗力
 				if((abs(sp.x)> 96 || abs(sp.y)> 32) ){
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 				}
@@ -2072,7 +2072,7 @@ void Hero::AI_Asuma(){
 			}else if(_isCanSkill2 && _mainTarget->getGP()<5000){
 				//先手无视战斗力
 				if((abs(sp.x)> 96 || abs(sp.y)> 32) ){
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 				}
@@ -2092,11 +2092,11 @@ void Hero::AI_Asuma(){
 
 				//交战策略
 				if(abs(sp.x)> 96 || abs(sp.y)> 32){
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 				}else if((abs(sp.x)> 32 || abs(sp.y)>32) && !_isCanSkill2 ){
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 				}
@@ -2139,7 +2139,7 @@ void Hero::AI_Asuma(){
 		}
 
 		if(abs(sp.x)> 32 || abs(sp.y)>32){
-			moveDirection =ccpNormalize(sp);
+			moveDirection =sp.getNormalized();
 			this->walk(moveDirection);
 			return;
 		}
@@ -2267,7 +2267,7 @@ void Hero::AI_Kakashi(){
 	
 				//交战策略
 				if((abs(sp.x)> 64 || abs(sp.y)> 32 ) ){
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 				}
@@ -2313,7 +2313,7 @@ void Hero::AI_Kakashi(){
 		}
 
 		if(abs(sp.x)> 32 || abs(sp.y)>32){
-			moveDirection =ccpNormalize(sp);
+			moveDirection =sp.getNormalized();
 			this->walk(moveDirection);
 			return;
 		}
@@ -2424,7 +2424,7 @@ void Hero::AI_Konan(){
 				&& !_isBati
 				){
 					if((abs(sp.x)> 48 || abs(sp.y)> 16)){
-						moveDirection =ccpNormalize(sp);
+						moveDirection =sp.getNormalized();
 						this->walk(moveDirection);
 						return;
 					}
@@ -2440,7 +2440,7 @@ void Hero::AI_Konan(){
 				//先手无视战斗力
 			
 				if((abs(sp.x)> 128 || abs(sp.y)> 16)){
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 				}else if(abs(sp.x) < 96){
@@ -2471,11 +2471,11 @@ void Hero::AI_Konan(){
 
 				//交战策略
 				if((abs(sp.x)> 8 || abs(sp.y)> 8) && _isBati){
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 				}else if((abs(sp.x)> 48 || abs(sp.y)>32 )){
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 				}else if(abs(sp.x)<32 && !_isBati){
@@ -2523,11 +2523,11 @@ void Hero::AI_Konan(){
 		}
 
 		if((abs(sp.x)> 8 || abs(sp.y)> 8) && _isBati){
-			moveDirection =ccpNormalize(sp);
+			moveDirection =sp.getNormalized();
 			this->walk(moveDirection);
 			return;
 		}else if(abs(sp.x)> 32 || abs(sp.y)>32){
-			moveDirection =ccpNormalize(sp);
+			moveDirection =sp.getNormalized();
 			this->walk(moveDirection);
 			return;
 		}
@@ -2623,7 +2623,7 @@ void Hero::AI_Deidara(){
 					if(_isCanGear00){
 						this->useGear(gear00);
 					};
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 
@@ -2641,7 +2641,7 @@ void Hero::AI_Deidara(){
 					if(_isCanGear00){
 						this->useGear(gear00);
 					};
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 				}
@@ -2679,11 +2679,11 @@ void Hero::AI_Deidara(){
 
 				//交战策略
 				if( (abs(sp.x)> 8  || abs(sp.y)> 8) && _isBati){
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 				}else if((abs(sp.x)> 32 || abs(sp.y)>32) && !_isCanSkill1 && !_skillChangeBuffValue){
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 				}
@@ -2724,7 +2724,7 @@ void Hero::AI_Deidara(){
 		}
 
 		if(abs(sp.x)> 32 || abs(sp.y)>32){
-			moveDirection =ccpNormalize(sp);
+			moveDirection =sp.getNormalized();
 			this->walk(moveDirection);
 			return;
 		}
@@ -2855,7 +2855,7 @@ void Hero::AI_Ino(){
 
 			if(_isCanOugis2 && !_isControled && _delegate->_isOugis2Game){
 				if(abs(sp.x)> 96 || abs(sp.y)> 16){
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 				}else{
@@ -2869,7 +2869,7 @@ void Hero::AI_Ino(){
 				//先手无视战斗力
 
 				if(abs(sp.x)> 96  || abs(sp.y)> 16){
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 				}
@@ -2896,7 +2896,7 @@ void Hero::AI_Ino(){
 
 				//交战策略
 			    if(abs(sp.x)> 32  || abs(sp.y)> 32 ){
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 				}
@@ -2938,7 +2938,7 @@ void Hero::AI_Ino(){
 		}
 
 		if(abs(sp.x)> 32 || abs(sp.y)>32){
-			moveDirection =ccpNormalize(sp);
+			moveDirection =sp.getNormalized();
 			this->walk(moveDirection);
 			return;
 		}
@@ -3044,7 +3044,7 @@ void Hero::AI_Sai(){
 			&& !_mainTarget->_isSticking
 			){
 				if(abs(sp.x)> 48 || abs(sp.y)> 16){
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 				}else{
@@ -3057,7 +3057,7 @@ void Hero::AI_Sai(){
 				//先手无视战斗力
 		
 				if(abs(sp.x)> 64  || abs(sp.y)> 16){
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 				}else{
@@ -3103,11 +3103,11 @@ void Hero::AI_Sai(){
 
 				//交战策略			
 				if( (abs(sp.x)> 8  || abs(sp.y)> 8) && _isBati){
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 				}else if((abs(sp.x)> 32  || abs(sp.y)> 32 )  && !_isCanSkill1 && !_skillChangeBuffValue){
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 				}
@@ -3141,7 +3141,7 @@ void Hero::AI_Sai(){
 		}
 
 		if(abs(sp.x)> 32 || abs(sp.y)>32){
-			moveDirection =ccpNormalize(sp);
+			moveDirection =sp.getNormalized();
 			this->walk(moveDirection);
 			return;
 		}
@@ -3228,7 +3228,7 @@ void Hero::AI_Sakura(){
 					if(_isCanGear00){
 						this->useGear(gear00);
 					};
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 				}
@@ -3241,7 +3241,7 @@ void Hero::AI_Sakura(){
 					if(_isCanGear00){
 						this->useGear(gear00);
 					};
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 				}
@@ -3266,11 +3266,11 @@ void Hero::AI_Sakura(){
 
 				//交战策略
 				if((abs(sp.x)> 64 || abs(sp.y)> 32) && (!_isCanSkill2 ||  _mainTarget->getGP()<5000) ){
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 				}else if(abs(sp.x)> 32 || abs(sp.y)>32 ){			
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 				}
@@ -3314,7 +3314,7 @@ void Hero::AI_Sakura(){
 		}
 
 		if(abs(sp.x)> 32 || abs(sp.y)>32){
-			moveDirection =ccpNormalize(sp);
+			moveDirection =sp.getNormalized();
 			this->walk(moveDirection);
 			return;
 		}
@@ -3374,13 +3374,13 @@ void Hero::AI_Guardian(){
 
 		if(abs(sp.x)> 128 || abs(sp.y)> 16 ){
 
-			moveDirection =ccpNormalize(sp);
+			moveDirection =sp.getNormalized();
 			this->walk(moveDirection);
 			return;
 
 		}else if( abs(sp.x)> 32 || abs(sp.y)>32 ){
 
-			moveDirection =ccpNormalize(sp);
+			moveDirection =sp.getNormalized();
 			this->walk(moveDirection);
 			return;
 
@@ -3426,7 +3426,7 @@ void Hero::AI_Guardian(){
 		Vec2 sp=ccpSub(this->getSpawnPoint(),this->getPosition());
 		if(abs(sp.x)> 32 || abs(sp.y)> 32){
 
-			moveDirection =ccpNormalize(sp);
+			moveDirection =sp.getNormalized();
 			this->walk(moveDirection);
 			return;
 		}else{
@@ -3518,7 +3518,7 @@ void Hero::AI_Tenten(){
 					if(_isCanGear00){
 						this->useGear(gear00);
 					};
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 				}
@@ -3532,7 +3532,7 @@ void Hero::AI_Tenten(){
 					if(_isCanGear00){
 						this->useGear(gear00);
 					};
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 				}
@@ -3556,7 +3556,7 @@ void Hero::AI_Tenten(){
 				//交战策略
 
 				if((abs(sp.x)> 96  || abs(sp.y)> 16) && !_skillChangeBuffValue  ) {
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 				}
@@ -3571,7 +3571,7 @@ void Hero::AI_Tenten(){
 				}else{				
 					
 					if ((abs(sp.x)> 32  || abs(sp.y)> 32 )&& !_skillChangeBuffValue ){
-						moveDirection =ccpNormalize(sp);
+						moveDirection =sp.getNormalized();
 						this->walk(moveDirection);
 						return;
 					}else{
@@ -3605,7 +3605,7 @@ void Hero::AI_Tenten(){
 		}
 
 		if(abs(sp.x)> 32 || abs(sp.y)>32){
-			moveDirection =ccpNormalize(sp);
+			moveDirection =sp.getNormalized();
 			this->walk(moveDirection);
 			return;
 		}
@@ -3717,7 +3717,7 @@ void Hero::AI_Itachi(){
 			if(_isCanOugis2 && !_isControled && _delegate->_isOugis2Game  &&  !_isBati){
 				
 				if(abs(sp.x)> 48 || abs(sp.y)> 32){
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 				}
@@ -3754,11 +3754,11 @@ void Hero::AI_Itachi(){
 
 				//交战策略
 				 if( abs(sp.x)> 196 || abs(sp.y)> 64){
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 				}else if((abs(sp.x)> 56 || abs(sp.y)> 32) && !_isBati){
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 				 }
@@ -3801,7 +3801,7 @@ void Hero::AI_Itachi(){
 		}
 
 		if(abs(sp.x)> 32 || abs(sp.y)>32){
-			moveDirection =ccpNormalize(sp);
+			moveDirection =sp.getNormalized();
 			this->walk(moveDirection);
 			return;
 		}
@@ -3939,7 +3939,7 @@ void Hero::AI_Jiraiya(){
 
 				//交战策略
 				if(abs(sp.x)> 32 || abs(sp.y)>32){
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 				}
@@ -3982,7 +3982,7 @@ void Hero::AI_Jiraiya(){
 		}
 
 		if(abs(sp.x)> 32 || abs(sp.y)>32){
-			moveDirection =ccpNormalize(sp);
+			moveDirection =sp.getNormalized();
 			this->walk(moveDirection);
 			return;
 		}
@@ -4104,12 +4104,12 @@ void Hero::AI_SageJiraiya(){
 			}else if(abs(sp.x)<128){
 				//交战策略	
 				if(abs(sp.x)> 96 || abs(sp.y)> 32 ){
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 				}else if((abs(sp.x)> 32 || abs(sp.y)>32)  && !_isCanOugis2){
 
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 				}
@@ -4136,7 +4136,7 @@ void Hero::AI_SageJiraiya(){
 				}else{
 
 					if(abs(sp.x)> 32 || abs(sp.y)>32){
-						moveDirection =ccpNormalize(sp);
+						moveDirection =sp.getNormalized();
 						this->walk(moveDirection);
 						return;
 					}else{
@@ -4170,7 +4170,7 @@ void Hero::AI_SageJiraiya(){
 		}
 
 		if(abs(sp.x)> 32 || abs(sp.y)>32){
-			moveDirection =ccpNormalize(sp);
+			moveDirection =sp.getNormalized();
 			this->walk(moveDirection);
 			return;
 		}
@@ -4286,7 +4286,7 @@ void Hero::AI_Suigetsu(){
 						if(_isCanGear00){
 							this->useGear(gear00);
 						};
-						moveDirection =ccpNormalize(sp);
+						moveDirection =sp.getNormalized();
 						this->walk(moveDirection);
 						return;
 					}
@@ -4299,7 +4299,7 @@ void Hero::AI_Suigetsu(){
 					if(_isCanGear00){
 						this->useGear(gear00);
 					};
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 				}
@@ -4329,11 +4329,11 @@ void Hero::AI_Suigetsu(){
 
 				//交战策略
 				if(abs(sp.x)> 96  || abs(sp.y)> 32){
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 				}else if((abs(sp.x)> 32 || abs(sp.y)>32) && !_isBati){
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 				}
@@ -4374,7 +4374,7 @@ void Hero::AI_Suigetsu(){
 		}
 
 		if(abs(sp.x)> 32 || abs(sp.y)>32){
-			moveDirection =ccpNormalize(sp);
+			moveDirection =sp.getNormalized();
 			this->walk(moveDirection);
 			return;
 		}
@@ -4470,7 +4470,7 @@ void Hero::AI_Tsunade(){
 			if(_isCanOugis2 && !_isControled && _delegate->_isOugis2Game && _mainTarget->getGP()<5000  &&!_isBati){
 
 				if(abs(sp.x)> 64  || abs(sp.y)> 16){
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 
@@ -4505,11 +4505,11 @@ void Hero::AI_Tsunade(){
 				//交战策略
 
 				if( abs(sp.x)> 64  || abs(sp.y)> 32){
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 				}else if(abs(sp.x)> 32 || abs(sp.y)>32  && !_isCanSkill2  &&!_isBati && !_isCanOugis1){
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 				}
@@ -4556,7 +4556,7 @@ void Hero::AI_Tsunade(){
 		}
 
 		if(abs(sp.x)> 32 || abs(sp.y)>32){
-			moveDirection =ccpNormalize(sp);
+			moveDirection =sp.getNormalized();
 			this->walk(moveDirection);
 			return;
 		}
@@ -4687,18 +4687,18 @@ void Hero::AI_Sasuke(){
 				//交战策略
 
 				if(abs(sp.x)> 96 || abs(sp.y)> 32){
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 				}else if((abs(sp.x)> 32 || abs(sp.y)>32) && !_isCanSkill1 && !_isCanSkill2){
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 				}
 
 				if(_isCanOugis1  && !_isControled  && _mainTarget->getGP()<5000 && !_isBati){			
 					if(abs(sp.x)> 32 || abs(sp.y)>32){
-						moveDirection =ccpNormalize(sp);
+						moveDirection =sp.getNormalized();
 						this->walk(moveDirection);
 						return;
 					}
@@ -4742,7 +4742,7 @@ void Hero::AI_Sasuke(){
 		}
 
 		if(abs(sp.x)> 32 || abs(sp.y)>32){
-			moveDirection =ccpNormalize(sp);
+			moveDirection =sp.getNormalized();
 			this->walk(moveDirection);
 			return;
 		}
@@ -4860,7 +4860,7 @@ void Hero::AI_ImmortalSasuke(){
 			}else if(_isCanOugis2 && !_isControled && _delegate->_isOugis2Game  &&  !_isBati){
 
 				if(abs(sp.x)> 48 || abs(sp.y)> 32){
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 				}	
@@ -4890,15 +4890,15 @@ void Hero::AI_ImmortalSasuke(){
 				
 				//交战策略
 				if( abs(sp.x)> 196 || abs(sp.y)> 64){
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 				}else if((abs(sp.x)> 96 || abs(sp.y)> 32) && !_isBati ){
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 				}else if((abs(sp.x)> 32 || abs(sp.y)> 32) && !_isCanSkill1 && !_isCanSkill2 ){
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 				}
@@ -4940,7 +4940,7 @@ void Hero::AI_ImmortalSasuke(){
 		}
 
 		if(abs(sp.x)> 32 || abs(sp.y)>32){
-			moveDirection =ccpNormalize(sp);
+			moveDirection =sp.getNormalized();
 			this->walk(moveDirection);
 			return;
 		}
@@ -5096,7 +5096,7 @@ void Hero::AI_Kankuro(){
 				//交战策略
 
 				if(abs(sp.x)> 32 || abs(sp.y)>32){
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 				}else{
@@ -5129,7 +5129,7 @@ void Hero::AI_Kankuro(){
 		}
 
 		if(abs(sp.x)> 32 || abs(sp.y)>32){
-			moveDirection =ccpNormalize(sp);
+			moveDirection =sp.getNormalized();
 			this->walk(moveDirection);
 			return;
 		}
@@ -5277,7 +5277,7 @@ void Hero::AI_Chiyo(){
 				&& !_mainTarget->_isSticking){
 
 					if(abs(sp.x)> 96 || abs(sp.y)>32){
-						moveDirection =ccpNormalize(sp);
+						moveDirection =sp.getNormalized();
 						this->walk(moveDirection);
 						return;
 					}else if(abs(sp.x)<48){
@@ -5306,7 +5306,7 @@ void Hero::AI_Chiyo(){
 				//交战策略
 
 				if(abs(sp.x)> 32 || abs(sp.y)>32){
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 				}else{
@@ -5339,7 +5339,7 @@ void Hero::AI_Chiyo(){
 		}
 
 		if(abs(sp.x)> 32 || abs(sp.y)>32){
-			moveDirection =ccpNormalize(sp);
+			moveDirection =sp.getNormalized();
 			this->walk(moveDirection);
 			return;
 		}
@@ -5414,7 +5414,7 @@ void Hero::AI_Kakuzu(){
 				}
 
 				if(abs(sp.x)> 32 || abs(sp.y)>32){
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 				}else{
@@ -5507,7 +5507,7 @@ void Hero::AI_Kakuzu(){
 			}else if(_isCanSkill2){
 
 				if(abs(sp.x)> 96 || abs(sp.y)> 32 ){
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 				}
@@ -5534,7 +5534,7 @@ void Hero::AI_Kakuzu(){
 				
 				//交战策略	
 				if(abs(sp.x)> 32 || abs(sp.y)> 32){
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 				}else{
@@ -5568,7 +5568,7 @@ void Hero::AI_Kakuzu(){
 		}
 
 		if(abs(sp.x)> 32 || abs(sp.y)>32){
-			moveDirection =ccpNormalize(sp);
+			moveDirection =sp.getNormalized();
 			this->walk(moveDirection);
 			return;
 		}
@@ -5682,7 +5682,7 @@ void Hero::AI_Shikamaru(){
 					if(_isCanGear00 ){
 						this->useGear(gear00);
 					};
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 				}
@@ -5716,7 +5716,7 @@ void Hero::AI_Shikamaru(){
 						this->useGear(gear00);
 					};
 
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 				}else if( abs(sp.x)<32){
@@ -5735,7 +5735,7 @@ void Hero::AI_Shikamaru(){
 				//交战策略
 				if(abs(sp.x)> 32 || abs(sp.y)>32 ){
 
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 				}
@@ -5769,7 +5769,7 @@ void Hero::AI_Shikamaru(){
 		}
 
 		if(abs(sp.x)> 32 || abs(sp.y)>32){
-			moveDirection =ccpNormalize(sp);
+			moveDirection =sp.getNormalized();
 			this->walk(moveDirection);
 			return;
 		}
@@ -5903,7 +5903,7 @@ void Hero::AI_Gaara(){
 
 				//交战策略
 				if(abs(sp.x)> 32 || abs(sp.y)> 32){
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 				}
@@ -5939,7 +5939,7 @@ void Hero::AI_Gaara(){
 		}
 
 		if(abs(sp.x)> 32 || abs(sp.y)>32){
-			moveDirection =ccpNormalize(sp);
+			moveDirection =sp.getNormalized();
 			this->walk(moveDirection);
 			return;
 		}
@@ -6052,7 +6052,7 @@ void Hero::AI_Tobirama(){
 			}else if(_isCanSkill2 && _mainTarget->getGP()<5000){
 
 				if((abs(sp.x)> 64 || abs(sp.y)> 16) ){
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 				}
@@ -6077,7 +6077,7 @@ void Hero::AI_Tobirama(){
 				//交战策略
 
 				if(abs(sp.x)> 48 || abs(sp.y)> 32){
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 				}
@@ -6118,7 +6118,7 @@ void Hero::AI_Tobirama(){
 		}
 
 		if(abs(sp.x)> 32 || abs(sp.y)>32){
-			moveDirection =ccpNormalize(sp);
+			moveDirection =sp.getNormalized();
 			this->walk(moveDirection);
 			return;
 		}
@@ -6234,7 +6234,7 @@ void Hero::AI_Choji(){
 			}else if(_isCanSkill3 && _mainTarget->getGP()<5000 && !_isBati){
 
 				if(abs(sp.x)> 96 || abs(sp.y)> 16){
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 				}
@@ -6258,7 +6258,7 @@ void Hero::AI_Choji(){
 
 				//交战策略
 				if(abs(sp.x)> 32 || abs(sp.y)>32){				
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 				}
@@ -6311,7 +6311,7 @@ void Hero::AI_Choji(){
 		}
 
 		if(abs(sp.x)> 32 || abs(sp.y)>32){
-			moveDirection =ccpNormalize(sp);
+			moveDirection =sp.getNormalized();
 			this->walk(moveDirection);
 			return;
 		}
@@ -6428,7 +6428,7 @@ void Hero::AI_Karin(){
 				){
 					if(abs(sp.x)> 96 || abs(sp.y)> 16){
 
-						moveDirection =ccpNormalize(sp);
+						moveDirection =sp.getNormalized();
 						this->walk(moveDirection);
 						return;
 					}
@@ -6443,7 +6443,7 @@ void Hero::AI_Karin(){
 			}else if(_isCanSkill3 && _mainTarget->getGP()<5000){
 				//先手无视战斗力
 				if((abs(sp.x)> 128 || abs(sp.y)> 16) ){
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 				}
@@ -6468,7 +6468,7 @@ void Hero::AI_Karin(){
 				//交战策略
 
 				if(abs(sp.x)> 96 || abs(sp.y)> 32){
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 				}	
@@ -6482,7 +6482,7 @@ void Hero::AI_Karin(){
 				}else{
 
 					if(abs(sp.x)> 32 || abs(sp.y)>32){
-						moveDirection =ccpNormalize(sp);
+						moveDirection =sp.getNormalized();
 						this->walk(moveDirection);
 						return;
 					}
@@ -6514,7 +6514,7 @@ void Hero::AI_Karin(){
 		}
 
 		if(abs(sp.x)> 32 || abs(sp.y)>32){
-			moveDirection =ccpNormalize(sp);
+			moveDirection =sp.getNormalized();
 			this->walk(moveDirection);
 			return;
 		}
@@ -6637,7 +6637,7 @@ void Hero::AI_Lee(){
 
 				//交战策略
 				if(abs(sp.x)> 48 || abs(sp.y)> 32 ){
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 				}
@@ -6683,7 +6683,7 @@ void Hero::AI_Lee(){
 		}
 
 		if(abs(sp.x)> 32 || abs(sp.y)>32){
-			moveDirection =ccpNormalize(sp);
+			moveDirection =sp.getNormalized();
 			this->walk(moveDirection);
 			return;
 		}
@@ -6817,7 +6817,7 @@ void Hero::AI_RockLee(){
 
 				if(abs(sp.x)> 46 || abs(sp.y)> 32){
 
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 				}
@@ -6870,7 +6870,7 @@ void Hero::AI_RockLee(){
 		}
 
 		if(abs(sp.x)> 32 || abs(sp.y)>32){
-			moveDirection =ccpNormalize(sp);
+			moveDirection =sp.getNormalized();
 			this->walk(moveDirection);
 			return;
 		}
@@ -6999,7 +6999,7 @@ void Hero::AI_Jugo(){
 				//交战策略
 
 				if(abs(sp.x)> 96  || abs(sp.y)> 32){
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 				}
@@ -7012,7 +7012,7 @@ void Hero::AI_Jugo(){
 					){
 
 						if(abs(sp.x)> 32 || abs(sp.y)>32){
-							moveDirection =ccpNormalize(sp);
+							moveDirection =sp.getNormalized();
 							this->walk(moveDirection);
 							return;
 						}
@@ -7022,7 +7022,7 @@ void Hero::AI_Jugo(){
 				}else if(_isCanOugis1  && !_isControled  && _mainTarget->getGP()<5000  && !_skillChangeBuffValue){
 
 					if(abs(sp.x)> 32 || abs(sp.y)>32){
-						moveDirection =ccpNormalize(sp);
+						moveDirection =sp.getNormalized();
 						this->walk(moveDirection);
 						return;
 					}
@@ -7044,7 +7044,7 @@ void Hero::AI_Jugo(){
 				}else{
 
 					if(abs(sp.x)> 48 || abs(sp.y)>32){
-						moveDirection =ccpNormalize(sp);
+						moveDirection =sp.getNormalized();
 						this->walk(moveDirection);
 						return;
 					}else{
@@ -7078,7 +7078,7 @@ void Hero::AI_Jugo(){
 		}
 
 		if(abs(sp.x)> 32 || abs(sp.y)>32){
-			moveDirection =ccpNormalize(sp);
+			moveDirection =sp.getNormalized();
 			this->walk(moveDirection);
 			return;
 		}
@@ -7183,7 +7183,7 @@ void Hero::AI_Kisame(){
 						if(_isCanGear00 ){
 							this->useGear(gear00);
 						};
-						moveDirection =ccpNormalize(sp);
+						moveDirection =sp.getNormalized();
 						this->walk(moveDirection);
 						return;
 					}
@@ -7198,7 +7198,7 @@ void Hero::AI_Kisame(){
 					if(_isCanGear00 ){
 						this->useGear(gear00);
 					};
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 				}
@@ -7221,7 +7221,7 @@ void Hero::AI_Kisame(){
 
 			}else if(_isCanSkill3 && !_skillChangeBuffValue){
 				if(abs(sp.x)> 96 || abs(sp.y)> 32 ){
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 				}
@@ -7232,7 +7232,7 @@ void Hero::AI_Kisame(){
 			}else if(_isCanSkill2 && _mainTarget->getGP()<5000 && !_skillChangeBuffValue){
 
 				if(abs(sp.x)> 96 || abs(sp.y)> 32 ){
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 				}
@@ -7247,7 +7247,7 @@ void Hero::AI_Kisame(){
 				//交战策略
 				if(abs(sp.x)> 64 || abs(sp.y)>32 ){
 
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 				}
@@ -7284,7 +7284,7 @@ void Hero::AI_Kisame(){
 		}
 
 		if(abs(sp.x)> 32 || abs(sp.y)>32){
-			moveDirection =ccpNormalize(sp);
+			moveDirection =sp.getNormalized();
 			this->walk(moveDirection);
 			return;
 		}
@@ -7341,7 +7341,7 @@ void Hero::AI_Hidan(){
 					sp=ccpSub(_mainTarget->getPosition(),this->getPosition());
 				}
 				if((abs(sp.x)> 8|| abs(sp.y)> 8)){
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 				}else{
@@ -7447,7 +7447,7 @@ void Hero::AI_Hidan(){
 
 			if(_isCanOugis2 && !_isControled && _delegate->_isOugis2Game  && !_isBati){
 				if(abs(sp.x)> 48 || abs(sp.y)> 32){
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 				}
@@ -7463,7 +7463,7 @@ void Hero::AI_Hidan(){
 				//先手无视战斗力
 				
 				if(abs(sp.x)> 56 || abs(sp.y)> 32){
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 				}
@@ -7488,7 +7488,7 @@ void Hero::AI_Hidan(){
 
 				//交战策略
 				if((abs(sp.x)> 48 || abs(sp.y)> 32) && !_isBati){
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 				}
@@ -7535,7 +7535,7 @@ void Hero::AI_Hidan(){
 		}
 
 		if(abs(sp.x)> 32 || abs(sp.y)>32){
-			moveDirection =ccpNormalize(sp);
+			moveDirection =sp.getNormalized();
 			this->walk(moveDirection);
 			return;
 		}
@@ -7645,7 +7645,7 @@ void Hero::AI_Tobi(){
 
 					if(abs(sp.x)> 48 || abs(sp.y)> 16 ){
 
-						moveDirection =ccpNormalize(sp);
+						moveDirection =sp.getNormalized();
 						this->walk(moveDirection);
 						return;
 					}
@@ -7680,7 +7680,7 @@ void Hero::AI_Tobi(){
 
 				if(abs(sp.x)> 64 || abs(sp.y)> 32 ){
 					
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 				}else if(abs(sp.x)<32 && (_isCanSkill2 && _mainTarget->getHpPercent()<0.5f) ){
@@ -7700,7 +7700,7 @@ void Hero::AI_Tobi(){
 				}else{
 
 					if(abs(sp.x)> 32 || abs(sp.y)>32 ){
-						moveDirection =ccpNormalize(sp);
+						moveDirection =sp.getNormalized();
 						this->walk(moveDirection);
 						return;
 					}
@@ -7737,7 +7737,7 @@ void Hero::AI_Tobi(){
 		}
 
 		if(abs(sp.x)> 32 || abs(sp.y)>32){
-			moveDirection =ccpNormalize(sp);
+			moveDirection =sp.getNormalized();
 			this->walk(moveDirection);
 			return;
 		}
@@ -7853,7 +7853,7 @@ void Hero::AI_Shino(){
 						if(_isCanGear00 ){
 							this->useGear(gear00);
 						};
-						moveDirection =ccpNormalize(sp);
+						moveDirection =sp.getNormalized();
 						this->walk(moveDirection);
 						return;
 					}
@@ -7868,7 +7868,7 @@ void Hero::AI_Shino(){
 					if(_isCanGear00 ){
 						this->useGear(gear00);
 					};
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 
 					return;
@@ -7890,7 +7890,7 @@ void Hero::AI_Shino(){
 					if(_isCanGear00 ){
 						this->useGear(gear00);
 					};
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 				}else{
@@ -7929,7 +7929,7 @@ void Hero::AI_Shino(){
 
 				//交战策略
 				if( (abs(sp.x)> 32 || abs(sp.y)>32 ) && !_skillChangeBuffValue){	
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 				}
@@ -7961,7 +7961,7 @@ void Hero::AI_Shino(){
 		}
 
 		if(abs(sp.x)> 32 || abs(sp.y)>32){
-			moveDirection =ccpNormalize(sp);
+			moveDirection =sp.getNormalized();
 			this->walk(moveDirection);
 			return;
 		}
@@ -8083,7 +8083,7 @@ void Hero::AI_Hiruzen(){
 						if(_isCanGear00){
 							this->useGear(gear00);
 						};
-						moveDirection =ccpNormalize(sp);
+						moveDirection =sp.getNormalized();
 						this->walk(moveDirection);
 						return;
 					}
@@ -8096,7 +8096,7 @@ void Hero::AI_Hiruzen(){
 					if(_isCanGear00){
 						this->useGear(gear00);
 					};
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 				}
@@ -8124,7 +8124,7 @@ void Hero::AI_Hiruzen(){
 
 				//交战策略
 				if(abs(sp.x)> 96  || abs(sp.y)> 32){		
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 				}
@@ -8132,7 +8132,7 @@ void Hero::AI_Hiruzen(){
 				if(_isCanSkill1  && _mainTarget->getGP()<5000 &&!_isBati){
 					if((abs(sp.x)> 32 || abs(sp.y)>32)){
 						
-						moveDirection =ccpNormalize(sp);
+						moveDirection =sp.getNormalized();
 						this->walk(moveDirection);
 						return;
 					}
@@ -8148,7 +8148,7 @@ void Hero::AI_Hiruzen(){
 				}else{
 
 					if(abs(sp.x)> 32 || abs(sp.y)>32){
-						moveDirection =ccpNormalize(sp);
+						moveDirection =sp.getNormalized();
 						this->walk(moveDirection);
 						return;
 					}else{
@@ -8182,7 +8182,7 @@ void Hero::AI_Hiruzen(){
 		}
 
 		if(abs(sp.x)> 32 || abs(sp.y)>32){
-			moveDirection =ccpNormalize(sp);
+			moveDirection =sp.getNormalized();
 			this->walk(moveDirection);
 			return;
 		}
@@ -8270,7 +8270,7 @@ void Hero::AI_Kiba(){
 						if(_isCanGear00){
 							this->useGear(gear00);
 						};
-						moveDirection =ccpNormalize(sp);
+						moveDirection =sp.getNormalized();
 						this->walk(moveDirection);
 						return;
 					}
@@ -8306,7 +8306,7 @@ void Hero::AI_Kiba(){
 					if(_isCanGear00){
 						this->useGear(gear00);
 					};
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 				}
@@ -8351,7 +8351,7 @@ void Hero::AI_Kiba(){
 		}
 
 		if(abs(sp.x)> 32 || abs(sp.y)>32){
-			moveDirection =ccpNormalize(sp);
+			moveDirection =sp.getNormalized();
 			this->walk(moveDirection);
 			return;
 		}
@@ -8508,7 +8508,7 @@ void Hero::AI_Minato(){
 			}else if(_isCanOugis2 && !_isControled && _delegate->_isOugis2Game 
 				&& _mainTarget->getGP()<5000){
 					if(abs(sp.x)> 64  || abs(sp.y)> 16){
-						moveDirection =ccpNormalize(sp);
+						moveDirection =sp.getNormalized();
 						this->walk(moveDirection);
 						return;
 
@@ -8521,7 +8521,7 @@ void Hero::AI_Minato(){
 
 			}else if(_isCanOugis1  && !_isControled  && _mainTarget->getGP()<5000){
 				if(abs(sp.x)> 64  || abs(sp.y)> 16){
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 
@@ -8532,7 +8532,7 @@ void Hero::AI_Minato(){
 			}else if(_isCanSkill2 && _mainTarget->getGP()<5000){
 				//先手无视战斗力
 				if(abs(sp.y)> 16){
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 				}
@@ -8560,13 +8560,13 @@ void Hero::AI_Minato(){
 
 				//交战策略
 				if(abs(sp.x)> 352  || abs(sp.y)> 128){
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 
 				}else if((abs(sp.x)> 32 || abs(sp.y)>32 ) && std::atoi(this->getnAttackValue()->getCString())<260){
 
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 				}else{
@@ -8598,7 +8598,7 @@ void Hero::AI_Minato(){
 		}
 
 		if(abs(sp.x)> 32 || abs(sp.y)>32){
-			moveDirection =ccpNormalize(sp);
+			moveDirection =sp.getNormalized();
 			this->walk(moveDirection);
 			return;
 		}
@@ -8736,7 +8736,7 @@ void Hero::AI_Hinata(){
 						if(_isCanGear00 ){
 							this->useGear(gear00);
 						};
-						moveDirection =ccpNormalize(sp);
+						moveDirection =sp.getNormalized();
 						this->walk(moveDirection);
 						return;
 					}
@@ -8751,7 +8751,7 @@ void Hero::AI_Hinata(){
 					if(_isCanGear00 ){
 						this->useGear(gear00);
 					};
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 				}
@@ -8768,7 +8768,7 @@ void Hero::AI_Hinata(){
 					if(_isCanGear00 ){
 						this->useGear(gear00);
 					};
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 				}
@@ -8803,7 +8803,7 @@ void Hero::AI_Hinata(){
 
 				//交战策略
 				if(abs(sp.x)> 32 || abs(sp.y)>32 ){
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 				}else{
@@ -8835,7 +8835,7 @@ void Hero::AI_Hinata(){
 		}
 
 		if(abs(sp.x)> 32 || abs(sp.y)>32){
-			moveDirection =ccpNormalize(sp);
+			moveDirection =sp.getNormalized();
 			this->walk(moveDirection);
 			return;
 		}
@@ -8948,7 +8948,7 @@ void Hero::AI_Neji(){
 						if(_isCanGear00 ){
 							this->useGear(gear00);
 						};
-						moveDirection =ccpNormalize(sp);
+						moveDirection =sp.getNormalized();
 						this->walk(moveDirection);
 						return;
 					}
@@ -8963,7 +8963,7 @@ void Hero::AI_Neji(){
 					if(_isCanGear00 ){
 						this->useGear(gear00);
 					};
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 				}
@@ -8995,7 +8995,7 @@ void Hero::AI_Neji(){
 					if(_isCanGear00 ){
 						this->useGear(gear00);
 					};
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 				}
@@ -9010,7 +9010,7 @@ void Hero::AI_Neji(){
 				//交战策略
 				if(abs(sp.x)> 32 || abs(sp.y)>32 ){
 					
-					moveDirection =ccpNormalize(sp);
+					moveDirection =sp.getNormalized();
 					this->walk(moveDirection);
 					return;
 				}
@@ -9047,7 +9047,7 @@ void Hero::AI_Neji(){
 		}
 
 		if(abs(sp.x)> 32 || abs(sp.y)>32){
-			moveDirection =ccpNormalize(sp);
+			moveDirection =sp.getNormalized();
 			this->walk(moveDirection);
 			return;
 		}
@@ -9102,7 +9102,7 @@ void Hero::AI_Shisui(){
 	if(_mainTarget){
 		Vec2 sp=ccpSub(_mainTarget->getPosition(),this->getPosition());
 		if(abs(sp.x)>64 || abs(sp.y)>32){
-			this->walk(ccpNormalize(sp));
+			this->walk(sp.getNormalized());
 		}else if(this->getActionState()==ACTION_STATE_IDLE || this->getActionState()==ACTION_STATE_WALK || this->getActionState()==ACTION_STATE_ATTACK){
 			this->changeSide(sp);
 			this->attack(NAttack);
