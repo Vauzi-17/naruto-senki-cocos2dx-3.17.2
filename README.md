@@ -178,6 +178,83 @@ Roadmap menuju 100%:
 - Sekitar 97-100%: hapus alias/helper yang sudah tidak dipakai dari
   `Cocos2dx2Compat.h`, lalu lakukan build Android dan Windows final.
 
+Urutan langkah berikutnya menuju 100%:
+
+1. **Tutup helper compat kecil yang masih lokal**
+   - Target file: `Cocos2dx2Compat.h`, `ActionButton`, `HPBar`, `HudLayer`,
+     `GameLayer`, `GameOver`, `RankingLayer`, `CCStrokeLabel`, dan helper kecil
+     di `MyUtils`.
+   - Fokus: hapus alias/helper yang callernya sedikit atau sudah jelas
+     penggantinya, seperti alias dictionary/time/render yang tersisa, tanpa
+     menyentuh kontrak XML/gameplay besar.
+   - Syarat lanjut: Android build pengguna tetap hijau setelah tiap potongan.
+
+2. **Bersihkan UI dan menu yang kontraknya relatif lokal**
+   - Target file: `ActionButton`, `HPBar`, `GearLayer`, `GameOver`,
+     `RankingLayer`, `SelectLayer`, `SkillLayer`, dan bagian offline/dekoratif
+     di `StartMenu`.
+   - Fokus: migrasi sisa `CCString`, `CCArray`, `CCDictionary`, `CCScale9Sprite`,
+     `CCScrollView`, dan callback HTTP lama yang tidak lagi dibutuhkan oleh game
+     offline.
+   - Batas aman: jangan mengubah payload hero/team yang masih dikirim ke
+     `LoadLayer`, `GameLayer`, `Element`, atau `ActionManager` sebelum kontrak
+     data gameplay disiapkan.
+
+3. **Pisahkan jalur online legacy dari jalur offline aktif**
+   - Target file: `StartMenu`, `GameOver`, `LoadLayer`, `SkillLayer`,
+     `NetworkLayer`, dan alias HTTP di `Cocos2dx2Compat.h`.
+   - Fokus: nonaktifkan atau ubah menjadi stub lokal untuk request lama yang
+     sudah tidak dipakai, lalu hapus `CCHttpRequest`, `CCHttpClient`, dan
+     `CCHttpResponse` setelah caller aktif hilang.
+   - Batas aman: ranking/dekorasi dan flow masuk game harus tetap muncul
+     seperti biasa meskipun request online lama dibersihkan.
+
+4. **Migrasi kontrak scene awal ke data 3.x**
+   - Target file: `StartMenu`, `NetworkLayer`, `SkillLayer`, `SelectLayer`,
+     `LoadLayer`, `GameLayer`.
+   - Fokus: ganti hero/team list dari `CCArray`/`CCDictionary`/`CCString` ke
+     `Vector`, `ValueVector`, `ValueMap`, `std::vector`, atau struct kecil
+     sesuai batas modul.
+   - Batas aman: lakukan per flow, misalnya training, 5v5, rematch, lalu loader;
+     jangan mengubah semua handoff sekaligus.
+
+5. **Migrasi parser XML karakter**
+   - Target file: `MyUtils/KTools.h`, `MyUtils/KTools.cpp`, `Element.cpp`,
+     `ActionManager.h`, `ActionManager.cpp`.
+   - Fokus: ubah output `readXMLToArray` dari container lama menjadi struktur
+     action/frame 3.x yang eksplisit, lalu sesuaikan pembaca di `Element` dan
+     `ActionManager`.
+   - Batas aman: pertahankan urutan action lama, key XML lama, dan behavior
+     callback skill; ini harus dipecah sangat kecil karena menyentuh semua
+     karakter.
+
+6. **Migrasi gameplay core data**
+   - Target file: `ActionManager.h`, `ActionManager.cpp`, `Element.h`,
+     `Element.cpp`, `Characters.cpp`, `GameLayer.h`, `HudLayer.h`.
+   - Fokus: ganti sisa `CCArray`, `CCDictionary`, `CCString`, `CCObject`,
+     `CCARRAY_FOREACH`, callback `CCCallFunc*`, `ccp`, `CCRect`, dan `CCPoint`
+     yang masih hidup di core.
+   - Batas aman: mulai dari field yang paling lokal seperti cooldown, gear,
+     damage list, monster list, lalu baru identitas hero/stat/skill yang
+     dipakai lintas class.
+
+7. **Hapus compatibility bridge final**
+   - Target file: `Cocos2dx2Compat.h` dan semua include/caller tersisa.
+   - Fokus: hapus alias `CCEditBox`, `CCScale9Sprite`, `CCScrollView`, HTTP,
+     macro `atoi`, dan include deprecated yang sudah tidak diperlukan.
+   - Syarat lanjut: `rg` untuk pola API 2.x utama harus bersih atau hanya
+     menyisakan komentar/third-party yang memang bukan source game.
+
+8. **Validasi akhir 100%**
+   - Target area: Android `armeabi-v7a`, Windows build bila masih ditargetkan,
+     dan smoke test gameplay.
+   - Fokus uji: start menu, character select, training, 5v5, normal match,
+     rematch/change, monster/summon/clone, ougis, pause/gear, game over, dan
+     ranking/dekorasi offline.
+   - Selesai bila: tidak ada pemakai aktif API 2.x di source game, compat header
+     sudah minimal atau hilang, Android build hijau, dan gameplay utama lolos
+     uji pengguna.
+
 ## Tahap Berikutnya
 
 ### Tahap 3: Gameplay Core
