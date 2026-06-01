@@ -270,6 +270,9 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
   `objectAtIndex()` diganti ke `Ref*`, tanpa mengubah kontrak `CCArray` lama.
 - `HPBar`: iterator lokal share/reward team hasil `objectAtIndex()` ikut
   diganti ke `Ref*`, tetap mempertahankan `CCArray` lama dari gameplay.
+- `ActionManager`: field `_slayer`/`_sticker` dan callback notification
+  `acceptAttack` diganti dari `CCObject*` ke `Ref*`, sesuai callback object
+  cocos2d-x 3.x.
 - `NetworkLayer`: komentar request list hero lama dan parsing response callback
   yang sudah tidak punya caller aktif dibersihkan; flow pemilihan hero tetap
   memakai daftar offline statis.
@@ -342,6 +345,9 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
   mempertahankan `CCArray`.
 - `HPBar`: iterator lokal team reward/share juga sudah memakai `Ref*`, sehingga
   sisa `CCObject*` aktif tinggal kontrak callback/field `ActionManager`.
+- `ActionManager`: kontrak callback/field terakhir yang memakai `CCObject*`
+  ikut dipindahkan ke `Ref*`; audit source aktif `Classes` sekarang tidak lagi
+  menemukan `CCObject`.
 
 1. **Tutup helper compat kecil yang masih lokal**
    - Target file: `Cocos2dx2Compat.h`, `ActionButton`, `HPBar`, `HudLayer`,

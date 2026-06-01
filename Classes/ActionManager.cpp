@@ -440,7 +440,7 @@ void NarutoSenki::ActionManager::update(float dt){
 };
 
 
-void NarutoSenki::ActionManager::acceptAttack(CCObject* object){
+void NarutoSenki::ActionManager::acceptAttack(Ref* object){
 
 	if(strcmp(this->getCharacter()->getCString(),"Tobi")==0){
 

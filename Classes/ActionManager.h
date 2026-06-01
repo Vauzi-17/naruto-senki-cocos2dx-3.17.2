@@ -49,8 +49,8 @@ namespace NarutoSenki {
 		CC_SYNTHESIZE_RETAIN(CCString*, _coin, Coin);
 
 
-		CCObject* _slayer;
-		CCObject* _sticker;
+		Ref* _slayer;
+		Ref* _sticker;
 
 
 
@@ -298,7 +298,7 @@ namespace NarutoSenki {
 
 
 		void				update(float dt);
-		void				acceptAttack(CCObject* object);
+		void				acceptAttack(Ref* object);
 
 
 		float				getHpPercent();
