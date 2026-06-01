@@ -33,9 +33,10 @@ Alasan estimasi:
   game di HP tanpa crash.
 - Area gameplay core sudah mulai distabilkan lewat migrasi callback/action/frame
   tanpa mengubah kontrak data lama secara paksa.
-- Tahap 5 sudah dimulai secara aman dari area lokal `ActionManager`: sisa alias
-  action/animation 2.x di beberapa helper internal dibersihkan tanpa mengubah
-  kontrak container besar.
+- Tahap 5 sudah dimulai secara aman dari area lokal `ActionManager` dan helper
+  UI lokal: sisa alias action/animation 2.x di beberapa helper internal
+  dibersihkan, lalu container item `CCScrewLayer` mulai dipindah dari `CCArray`
+  ke `Vector` tanpa mengubah kontrak gameplay besar.
 - Bridge action/animation lokal di `ActionManager` berkurang lagi: pemanggilan
   langsung helper compat untuk pembuatan sequence/animation sudah dipindahkan ke
   helper lokal berbasis `Vector`, sementara input `CCArray` lama tetap dijaga.
@@ -369,6 +370,8 @@ Commit awal tahap 5:
 - `859af1f refactor: migrate start menu sequence helpers`
 - `5eb669c refactor: migrate element local sequence helpers`
 - `bb4b45d refactor: migrate action manager local sequences`
+- `1ee962e refactor: migrate action manager local animation helpers`
+- `6d20d1d refactor: migrate screw layer item container`
 
 Catatan progress terbaru:
 
@@ -426,9 +429,15 @@ Catatan progress terbaru:
   dan `Vector<FiniteTimeAction*>` tepat sebelum API 3.x dipanggil, sehingga
   kontrak data lama belum ikut dimigrasi. Potongan lokal terbaru ini belum
   build-tested oleh pengguna.
+- `CCScrewLayer` mulai dimigrasi dari container item `CCArray*` ke
+  `Vector<Node*>`. Pemakai di `StartMenu` yang menambah item, membersihkan list,
+  dan mengiterasi item grup sudah ikut dipindahkan ke helper `addItem`,
+  `clearItemArray`, dan range-for, sehingga hubungan UI scroll/menu tetap
+  tersambung.
 - Setelah commit `ActionManager` lokal ini lulus build Android, langkah
-  berikutnya adalah audit batas container sebelum masuk migrasi data besar, atau
-  melanjutkan callback 2.x yang masih membawa payload secara bertahap.
+  berikutnya adalah melanjutkan migrasi container yang masih lokal dan mudah
+  dipisahkan sebelum masuk kontrak data besar di loader XML, `ActionManager`,
+  `Element`, dan `Characters`.
 - Alias HTTP/EditBox/Scale9/Scroll di `Cocos2dx2Compat.h` belum dihapus karena
   masih punya pemakai aktif.
 
