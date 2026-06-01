@@ -210,6 +210,8 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
 - `NetworkLayer`: komentar request list hero lama dan parsing response callback
   yang sudah tidak punya caller aktif dibersihkan; flow pemilihan hero tetap
   memakai daftar offline statis.
+- `GameLayer`: heartbeat HTTP lama di `checkPost` dibersihkan menjadi stub
+  offline karena scheduler aktifnya sudah lama dikomentari.
 
 1. **Tutup helper compat kecil yang masih lokal**
    - Target file: `Cocos2dx2Compat.h`, `ActionButton`, `HPBar`, `HudLayer`,
@@ -601,6 +603,9 @@ Catatan progress terbaru:
 - Request list hero lama di `NetworkLayer` dibersihkan dari komentar dan callback
   response-nya dijadikan stub, karena source aktif sudah memakai daftar offline
   lokal.
+- Heartbeat HTTP lama di `GameLayer::checkPost` dibersihkan dari request/response
+  parsing; sisa HTTP aktif kini terkonsentrasi di `StartMenu` dan jalur DLC
+  legacy `LoadLayer` yang perlu ditangani terpisah.
 
 ## Cara Kerja Migrasi
 
