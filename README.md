@@ -50,6 +50,9 @@ Alasan estimasi:
   API 3.x langsung.
 - Helper waktu lama `CCTime`/`cc_timeval` sudah tidak dipakai; cooldown tombol
   dan buff timer lokal memakai helper `std::chrono::steady_clock`.
+- State cooldown internal `ActionButton` mulai lepas dari retained `CCString`;
+  nilai cooldown/countdown disimpan sebagai integer lokal sambil API `setCD`
+  lama tetap tersedia untuk caller.
 - Masih ada sisa API 2.x yang cukup banyak di `ActionManager`, `Element`,
   `RankingLayer`, beberapa utility UI, app delegate, dan compatibility bridge.
 - Untuk mencapai 100%, sisa terbesar bukan sekadar rename API, tetapi migrasi
@@ -387,6 +390,8 @@ Commit awal tahap 5:
 - `66f039f refactor: restore game layer rematch iterator`
 - `115a026 refactor: remove visit node compat helper`
 - `31829c8 refactor: migrate legacy time helper`
+- `732a705 refactor: remove dict element compat alias`
+- `64f8937 refactor: migrate action button cooldown state`
 
 Catatan progress terbaru:
 
@@ -469,6 +474,12 @@ Catatan progress terbaru:
   dari compat header. Timer cooldown skill dan buff/debuff lokal memakai helper
   `std::chrono::steady_clock` berbasis delta waktu kecil, lalu `CCTime` dan
   `cc_timeval` dihapus dari `Cocos2dx2Compat.h`.
+- Alias compat `CCDictElement` dihapus; parser action `ActionManager` sekarang
+  memakai `DictElement` langsung untuk iterasi dictionary.
+- `ActionButton` tidak lagi menyimpan `_coldDown` dan `_timeCout` sebagai
+  retained `CCString*`. State cooldown lokal dipindahkan ke integer, sementara
+  `setCD(CCString*)` masih dipertahankan sebagai jembatan caller lama di
+  `HudLayer` dan `ActionManager`.
 - Setelah commit `ActionManager` lokal ini lulus build Android, langkah
   berikutnya adalah melanjutkan migrasi container yang masih lokal dan mudah
   dipisahkan sebelum masuk kontrak data besar di loader XML, `ActionManager`,
