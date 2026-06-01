@@ -1183,10 +1183,10 @@ Action* NarutoSenki::ActionManager::createAnimation(CCArray* ationArray,float fp
 
 		tObject = ationArray->objectAtIndex(ccIndex);
 		CCDictionary* dic=(CCDictionary *)tObject;
-		DictElement* ele=NULL;
+		DictElement* ele = NULL;
+		DictElement* tmpEle = NULL;
 
-
-		CCDICT_FOREACH(dic,ele){
+		if (dic) HASH_ITER(hh, dic->_elements, ele, tmpEle){
 			const char* key=CCString::create(ele->getStrKey())->getCString();
 			const char* keyValue=dic->valueForKey(key)->getCString();
 			if(strcmp(key,"frameName")==0){

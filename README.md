@@ -318,6 +318,10 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
   `callfuncND_selector` diganti ke helper lokal `createPayloadCall(...)`
   berbasis `CallFunc` lambda. Payload `void*` dan dictionary lama tetap
   dipertahankan agar kontrak parser XML belum berubah.
+- `ActionManager`: macro dictionary parser `CCDICT_FOREACH` di
+  `createAnimation(...)` diganti ke iterasi `HASH_ITER` langsung atas
+  `DictElement`, sehingga source aktif tidak lagi memakai macro dictionary
+  lama tanpa mengubah isi `CCDictionary` parser XML.
 
 1. **Tutup helper compat kecil yang masih lokal**
    - Target file: `Cocos2dx2Compat.h`, `ActionButton`, `HPBar`, `HudLayer`,
@@ -714,6 +718,10 @@ Catatan progress terbaru:
   ke helper lokal `createPayloadCall(...)` berbasis `CallFunc` lambda.
   Payload `void*` dari parser action XML sengaja tetap dipertahankan agar
   kontrak XML belum berubah besar.
+- Macro dictionary parser `CCDICT_FOREACH` di `ActionManager::createAnimation(...)`
+  sudah diganti ke `HASH_ITER` langsung atas `DictElement`. Ini hanya menutup
+  macro iterator dictionary lama; bentuk `CCDictionary` dari parser XML tetap
+  dipertahankan untuk potongan berikutnya.
 - `ActionManager` juga mulai melepas alias geometry lama: `CCPoint`,
   `CCPointMake`, `CCRect`, dan `CCRectMake` aktif sudah tidak muncul lagi di
   file tersebut. Cleanup helper `ccp*` masih dipisahkan agar perubahan tetap
@@ -771,9 +779,10 @@ Catatan progress terbaru:
 - Audit menunjukkan `Cocos2dx2Compat.h` masih dipaksa lewat CMake dan project
   Win32, jadi penghapusan file/forced include ditunda sampai sisa alias legacy
   di source lebih kecil dan bisa diuji sebagai potongan final.
-- Setelah commit iterator core terbaru ini lulus build Android pengguna, langkah
-  berikutnya adalah masuk bertahap ke kontrak data besar di loader XML,
-  ranking/string XML, `ActionManager`, `Element`, dan parser XML.
+- Setelah commit payload callback dan macro dictionary parser terbaru ini lulus
+  build Android/Win32 pengguna, langkah berikutnya adalah masuk bertahap ke
+  kontrak data besar di loader XML, ranking/string XML, `ActionManager`,
+  `Element`, dan parser XML.
 - Alias HTTP, EditBox, Scale9, Scroll, macro `atoi`, dan beberapa helper compat
   lokal sudah dihapus setelah audit pemakai source menunjukkan helper tersebut
   tidak perlu lagi disimpan di compat header. `Cocos2dx2Compat.h` tetap ada
