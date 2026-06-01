@@ -16,7 +16,7 @@ masih memakai API 2.x seperti `CCLayer`, `CCSprite`, `CCMenu`, `CCPoint`,
 | Engine/runtime | cocos2d-x 3.17.2 |
 | Branch kerja | `migrate` |
 | Android build | Berhasil menurut uji pengguna setelah ranking offline/dekoratif |
-| Windows build | Pernah berjalan sebelum migrasi tahap ini, perlu uji ulang berkala |
+| Windows build | Win32 Debug VS2022 berhasil menurut uji pengguna sebelum commit `929720f`; perlu uji ulang setelah commit terbaru |
 | Push remote | Tidak dilakukan |
 | Build oleh Codex | Tidak dilakukan |
 
@@ -243,7 +243,7 @@ yang benar-benar lokal sudah mulai ditutup (`visitNode`, `CCTime`/`cc_timeval`,
 `CCScrollView`, `CCEditBox`, macro `atoi`, dan alias HTTP `CCHttp*`). Area
 UI/menu dan HUD lokal juga sudah banyak lepas dari `CCARRAY_FOREACH`; pekerjaan
 berikutnya bergeser ke kontrak data lebih besar seperti parser XML, ranking
-string/XML, payload callback `CCCallFuncND`, dan kontrak data `ActionManager`/`Element`.
+string/XML, dan kontrak data `ActionManager`/`Element`.
 
 Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
 
@@ -301,8 +301,8 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
 - `ActionManager`: callback action tanpa payload seperti `getCollider`,
   `setActionResume`, `setActionResume2`, `setTransform`, `setOugis`,
   `setCharFlip`, shadow helper, damage display, dan coin display memakai
-  `CallFunc` 3.x. Callback `CCCallFuncND` yang membawa payload XML/void pointer
-  sengaja belum dipindah.
+  `CallFunc` 3.x. Callback payload XML/void pointer lama sekarang juga
+  memakai helper `createPayloadCall(...)` berbasis `CallFunc` lambda.
 - `ActionManager`: alias `CCPoint`/`CCRect` lokal dibersihkan ke `Vec2`/`Rect`
   untuk hitbox, posisi, direction, dan helper pencarian target. Helper
   `ccp(...)`, `ccpSub`, `ccpNormalize`, dan `ccpDistance` masih ditahan untuk
@@ -314,6 +314,10 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
   loop indeks eksplisit berbasis `CCArray::count()` / `objectAtIndex(...)`.
   Source game aktif sekarang tidak lagi memiliki macro iterator tersebut, tetapi
   container `CCArray` lama tetap dipertahankan sebagai kontrak gameplay.
+- `ActionManager`: factory callback payload lama `CCCallFuncND` /
+  `callfuncND_selector` diganti ke helper lokal `createPayloadCall(...)`
+  berbasis `CallFunc` lambda. Payload `void*` dan dictionary lama tetap
+  dipertahankan agar kontrak parser XML belum berubah.
 
 1. **Tutup helper compat kecil yang masih lokal**
    - Target file: `Cocos2dx2Compat.h`, `ActionButton`, `HPBar`, `HudLayer`,
@@ -704,15 +708,12 @@ Catatan progress terbaru:
   helper shadow/voice/coin display. Potongan ini belum build-tested oleh
   pengguna.
 - Callback payload/action lokal `ActionManager` dibersihkan satu tahap lagi:
-  deklarasi `CCNode*` diganti menjadi `Node*` dan deklarasi sementara
-  `CCFiniteTimeAction` diganti menjadi `FiniteTimeAction`, tetapi factory
-  callback lama yang membawa payload `void*` belum dimigrasi agar kontrak XML
-  tetap stabil.
-- `ActionManager` lanjut dibersihkan dari callback action tanpa payload:
-  `CCCallFunc::create`, `CCCallFuncN::create`, `callfunc_selector`, dan
-  `callfuncN_selector` sudah tidak muncul lagi di `ActionManager.cpp`.
-  Yang tersisa adalah `CCCallFuncND`/`callfuncND_selector` untuk payload lama
-  dari parser action XML.
+  deklarasi `CCNode*` diganti menjadi `Node*`, deklarasi sementara
+  `CCFiniteTimeAction` diganti menjadi `FiniteTimeAction`, dan factory
+  callback payload `CCCallFuncND` / `callfuncND_selector` sudah dipindahkan
+  ke helper lokal `createPayloadCall(...)` berbasis `CallFunc` lambda.
+  Payload `void*` dari parser action XML sengaja tetap dipertahankan agar
+  kontrak XML belum berubah besar.
 - `ActionManager` juga mulai melepas alias geometry lama: `CCPoint`,
   `CCPointMake`, `CCRect`, dan `CCRectMake` aktif sudah tidak muncul lagi di
   file tersebut. Cleanup helper `ccp*` masih dipisahkan agar perubahan tetap
@@ -772,8 +773,7 @@ Catatan progress terbaru:
   di source lebih kecil dan bisa diuji sebagai potongan final.
 - Setelah commit iterator core terbaru ini lulus build Android pengguna, langkah
   berikutnya adalah masuk bertahap ke kontrak data besar di loader XML,
-  ranking/string XML, payload callback `CCCallFuncND`, `ActionManager`,
-  `Element`, dan parser XML.
+  ranking/string XML, `ActionManager`, `Element`, dan parser XML.
 - Alias HTTP, EditBox, Scale9, Scroll, macro `atoi`, dan beberapa helper compat
   lokal sudah dihapus setelah audit pemakai source menunjukkan helper tersebut
   tidak perlu lagi disimpan di compat header. `Cocos2dx2Compat.h` tetap ada
