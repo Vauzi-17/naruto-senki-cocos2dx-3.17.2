@@ -537,6 +537,57 @@ void NetworkLayer::onListRequestCompleted(Node *sender ,void *data){
 	}
 }
 
+void NetworkLayer::onPage1Btn(cocos2d::Ref* sender)
+{
+	SimpleAudioEngine::sharedEngine()->playEffect(SELECT_SOUND);
+
+	page2_btn->unselected();
+	page3_btn->unselected();
+	page1_btn->selected();
+
+	_pageLayer1->setVisible(true);
+	_pageLayer2->setVisible(false);
+	_pageLayer3->setVisible(false);
+
+	_pageLayer1->setPositionY(0);
+	_pageLayer2->setPositionY(2000);
+	_pageLayer3->setPositionY(2000);
+}
+
+void NetworkLayer::onPage2Btn(cocos2d::Ref* sender)
+{
+	SimpleAudioEngine::sharedEngine()->playEffect(SELECT_SOUND);
+
+	page1_btn->unselected();
+	page3_btn->unselected();
+	page2_btn->selected();
+
+	_pageLayer2->setVisible(true);
+	_pageLayer1->setVisible(false);
+	_pageLayer3->setVisible(false);
+
+	_pageLayer2->setPositionY(0);
+	_pageLayer1->setPositionY(2000);
+	_pageLayer3->setPositionY(2000);
+}
+
+void NetworkLayer::onPage3Btn(cocos2d::Ref* sender)
+{
+	SimpleAudioEngine::sharedEngine()->playEffect(SELECT_SOUND);
+
+	page1_btn->unselected();
+	page2_btn->unselected();
+	page3_btn->selected();
+
+	_pageLayer3->setVisible(true);
+	_pageLayer1->setVisible(false);
+	_pageLayer2->setVisible(false);
+
+	_pageLayer3->setPositionY(0);
+	_pageLayer1->setPositionY(2000);
+	_pageLayer2->setPositionY(2000);
+}
+
 void NetworkLayer::onMapBtn(Ref* sender){
 	SimpleAudioEngine::getInstance()->playEffect(SELECT_SOUND);
 	_selectedMap++;
