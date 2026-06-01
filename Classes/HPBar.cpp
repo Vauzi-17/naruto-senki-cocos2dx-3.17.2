@@ -256,7 +256,8 @@ void HPBar::loseHP(float percent){
 
 			//同队分享
 			CCObject* pObject;
-			CCARRAY_FOREACH(_delegate->getDelegate()->_CharacterArray,pObject){
+			for(unsigned int characterIndex=0; characterIndex<_delegate->getDelegate()->_CharacterArray->count(); ++characterIndex){
+				pObject=_delegate->getDelegate()->_CharacterArray->objectAtIndex(characterIndex);
 				Hero* otherSlayer=(Hero*) pObject;
 				if(strcmp(currentSlayer->getGroup()->getCString(),otherSlayer->getGroup()->getCString())==0 &&
 					strcmp(currentSlayer->getCharacter()->getCString(),otherSlayer->getCharacter()->getCString())!=0
@@ -544,7 +545,8 @@ void HPBar::loseHP(float percent){
 
 				//同队分享
 				CCObject* pObject;
-				CCARRAY_FOREACH(_delegate->getDelegate()->_CharacterArray,pObject){
+				for(unsigned int characterIndex=0; characterIndex<_delegate->getDelegate()->_CharacterArray->count(); ++characterIndex){
+				pObject=_delegate->getDelegate()->_CharacterArray->objectAtIndex(characterIndex);
 					Hero* otherSlayer=(Hero*) pObject;
 					if(strcmp(currentSlayer->getGroup()->getCString(),otherSlayer->getGroup()->getCString())==0 &&
 						strcmp(currentSlayer->getCharacter()->getCString(),otherSlayer->getCharacter()->getCString())!=0

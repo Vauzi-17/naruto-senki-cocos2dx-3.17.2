@@ -267,7 +267,8 @@ void HudLayer::initHeroInterface(){
 	if(_delegate->_isDuelMode){
 		NarutoSenki::ActionManager* enemy=nullptr;
 		Ref* enemyObject=nullptr;
-		CCARRAY_FOREACH(_delegate->_CharacterArray,enemyObject){
+		for(unsigned int characterIndex=0; characterIndex<_delegate->_CharacterArray->count(); ++characterIndex){
+			enemyObject=_delegate->_CharacterArray->objectAtIndex(characterIndex);
 			NarutoSenki::ActionManager* tempHero=(NarutoSenki::ActionManager*)enemyObject;
 			if(strcmp(tempHero->getGroup()->getCString(),_delegate->currentPlayer->getGroup()->getCString())!=0 &&
 				(strcmp(tempHero->getRole()->getCString(),"Player")==0 || strcmp(tempHero->getRole()->getCString(),"Com")==0)){
@@ -589,7 +590,8 @@ void HudLayer::initHeroInterface(){
 
 	//���ӵ�ͼicon
 	Ref* pObject;
-	CCARRAY_FOREACH(_delegate->_TowerArray,pObject){
+	for(unsigned int towerIndex=0; towerIndex<_delegate->_TowerArray->count(); ++towerIndex){
+		pObject=_delegate->_TowerArray->objectAtIndex(towerIndex);
 		NarutoSenki::ActionManager* player=(NarutoSenki::ActionManager*) pObject;
 		const char* path="";
 		MiniIcon* mi;
@@ -616,7 +618,8 @@ void HudLayer::initHeroInterface(){
 
 	//�������icon
 
-	CCARRAY_FOREACH(_delegate->_CharacterArray,pObject){
+	for(unsigned int characterIndex=0; characterIndex<_delegate->_CharacterArray->count(); ++characterIndex){
+		pObject=_delegate->_CharacterArray->objectAtIndex(characterIndex);
 		NarutoSenki::ActionManager* player=(NarutoSenki::ActionManager*) pObject;
 		if(strcmp(player->getRole()->getCString(),"Player")==0 ||
 			strcmp(player->getRole()->getCString(),"Com")==0
@@ -659,7 +662,8 @@ void HudLayer::initHeroInterface(){
 void HudLayer::addMapIcon(){
 
 	Ref* pObject;
-	CCARRAY_FOREACH(_delegate->_CharacterArray,pObject){
+	for(unsigned int characterIndex=0; characterIndex<_delegate->_CharacterArray->count(); ++characterIndex){
+		pObject=_delegate->_CharacterArray->objectAtIndex(characterIndex);
 		NarutoSenki::ActionManager* player=(NarutoSenki::ActionManager*) pObject;
 		if(strcmp(player->getCharacter()->getCString(),"Han")==0 ||
 			strcmp(player->getCharacter()->getCString(),"Roshi")==0){
@@ -717,7 +721,8 @@ void HudLayer::updateGears(){
 	if(_delegate->currentPlayer->getGearArray() && _delegate->currentPlayer->getGearArray()->count()>0){
 		Ref* pObject;
 		int i=0;
-		CCARRAY_FOREACH(_delegate->currentPlayer->getGearArray(),pObject){
+		for(unsigned int gearIndex=0; gearIndex<_delegate->currentPlayer->getGearArray()->count(); ++gearIndex){
+			pObject=_delegate->currentPlayer->getGearArray()->objectAtIndex(gearIndex);
 			CCString* tmpGear=(CCString*) pObject;
 			if(tmpGear->intValue()!=gear1Button->_gearType && i==0){
 				gear1Button->setGearType(tmpGear->intValue());
@@ -775,7 +780,8 @@ void HudLayer::setEnemyHPLose(float percent){
 	enemy_status_hpbar->runAction(ra);
 
 	Ref* pObject=nullptr;
-	CCARRAY_FOREACH(_delegate->_CharacterArray,pObject){
+	for(unsigned int characterIndex=0; characterIndex<_delegate->_CharacterArray->count(); ++characterIndex){
+		pObject=_delegate->_CharacterArray->objectAtIndex(characterIndex);
 		NarutoSenki::ActionManager* tempHero=(NarutoSenki::ActionManager*)pObject;
 		if(strcmp(tempHero->getGroup()->getCString(),_delegate->currentPlayer->getGroup()->getCString())!=0 &&
 			(strcmp(tempHero->getRole()->getCString(),"Player")==0 || strcmp(tempHero->getRole()->getCString(),"Com")==0)){
@@ -853,7 +859,8 @@ void HudLayer::setEXPLose(float percent){
 
 void HudLayer::setTowerState(unsigned int charNO){
 	Ref* pObject;
-	CCARRAY_FOREACH(_towerIconArray,pObject){
+	for(unsigned int towerIconIndex=0; towerIconIndex<_towerIconArray->count(); ++towerIconIndex){
+	pObject=_towerIconArray->objectAtIndex(towerIconIndex);
 		MiniIcon* mi=(MiniIcon *) pObject;
 		if(mi->getCharNO()==charNO){
 			mi->updateState();
@@ -1082,7 +1089,8 @@ void HudLayer::setReportCache(){
 	reportSprite->removeFromParent();
 	Ref* pObject;
 
-	CCARRAY_FOREACH(_reportListArray,pObject){
+	for(unsigned int reportIndex=0; reportIndex<_reportListArray->count(); ++reportIndex){
+		pObject=_reportListArray->objectAtIndex(reportIndex);
 		CCDictionary* tempdict=(CCDictionary *) pObject;
 		CCString* isDisplay=CCString::create(tempdict->valueForKey("isDisplay")->getCString());
 
@@ -1109,7 +1117,8 @@ void HudLayer::setReportCache(){
 			if(strcmp(name2->getCString(),"Tower")!=0){
 				Ref* pObject2;
 				int num2=0;
-				CCARRAY_FOREACH(_reportListArray,pObject2){
+				for(unsigned int reportIndex2=0; reportIndex2<_reportListArray->count(); ++reportIndex2){
+					pObject2=_reportListArray->objectAtIndex(reportIndex2);
 					CCDictionary* tempdict2=(CCDictionary *) pObject2;
 					CCString* tempName=CCString::create(tempdict2->valueForKey("name1")->getCString());
 					CCString* tempName2=CCString::create(tempdict2->valueForKey("name2")->getCString());
