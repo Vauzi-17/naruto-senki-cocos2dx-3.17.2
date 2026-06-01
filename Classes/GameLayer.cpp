@@ -379,7 +379,7 @@ void GameLayer::initHeros(){
 
 
 	TMXObjectGroup* group = currentMap->objectGroupNamed("object");
-	CCArray* objectArray = cocos2d::cocos2dx2_compat::toCCArray(group->getObjects());
+	const auto& objectArray = group->getObjects();
 
 	_isOugis2Game=true;
 	//4v4
@@ -414,10 +414,9 @@ void GameLayer::initHeros(){
 				mapPos=konohaSpawnMap[spawnIndex];
 			}
 
-			Ref* mapObject = objectArray->objectAtIndex(mapPos);
-			CCDictionary* mapdict=(CCDictionary *) mapObject;
-			int x=((CCString*)mapdict->objectForKey("x"))->intValue();
-			int y=((CCString*)mapdict->objectForKey("y"))->intValue();
+				const auto& mapdict = objectArray.at(mapPos).asValueMap();
+				int x=mapdict.at("x").asInt();
+				int y=mapdict.at("y").asInt();
 			spawnPoint=Vec2(x,y);
 
 			if(i==0){
@@ -500,10 +499,9 @@ void GameLayer::initHeros(){
 					}
 				}
 
-				Ref* mapObject = objectArray->objectAtIndex(mapPos);
-				CCDictionary* mapdict=(CCDictionary *) mapObject;
-				int x=((CCString*)mapdict->objectForKey("x"))->intValue();
-				int y=((CCString*)mapdict->objectForKey("y"))->intValue();
+				const auto& mapdict = objectArray.at(mapPos).asValueMap();
+				int x=mapdict.at("x").asInt();
+				int y=mapdict.at("y").asInt();
 				spawnPoint=Vec2(x,y);
 			}
 
@@ -763,24 +761,20 @@ void GameLayer::initTower(){
 
 
 	TMXObjectGroup* metaGroup = currentMap->objectGroupNamed("meta");
-	CCArray* metaArray= cocos2d::cocos2dx2_compat::toCCArray(metaGroup->getObjects());
+	const auto& metaArray = metaGroup->getObjects();
 
 	_TowerArray=CCArray::create();
 
-	Ref *pObject;
 	int i=0;
 
-	CCARRAY_FOREACH(metaArray,pObject){
+	for (const auto& metaValue : metaArray){
 
-		CCDictionary* dict=(CCDictionary *)pObject;
-
-		int metaX=((CCString*)dict->objectForKey("x"))->intValue();
-		int metaY=((CCString*)dict->objectForKey("y"))->intValue();
-
-		int metaWidth=((CCString*)dict->objectForKey("width"))->intValue();
-		int metaHeight=((CCString*)dict->objectForKey("height"))->intValue();
-
-		CCString* name=(CCString*)dict->objectForKey("name");
+		const auto& dict = metaValue.asValueMap();
+		int metaX=dict.at("x").asInt();
+		int metaY=dict.at("y").asInt();
+		int metaWidth=dict.at("width").asInt();
+		int metaHeight=dict.at("height").asInt();
+		CCString* name=CCString::create(dict.at("name").asString().c_str());
 
 
 		Tower* tower=Tower::create();
