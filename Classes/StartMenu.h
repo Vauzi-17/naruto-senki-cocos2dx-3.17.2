@@ -14,7 +14,6 @@
 
 
 USING_NS_CC;
-using namespace rapidjson;
 
 
 // declare menuButton

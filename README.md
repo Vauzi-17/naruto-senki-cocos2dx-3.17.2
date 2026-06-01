@@ -22,7 +22,7 @@ masih memakai API 2.x seperti `CCLayer`, `CCSprite`, `CCMenu`, `CCPoint`,
 
 ## Estimasi Progress Migrasi
 
-Estimasi progress menuju kode full cocos2d-x 3.17.2: **sekitar 75%**.
+Estimasi progress menuju kode full cocos2d-x 3.17.2: **sekitar 76%**.
 
 Alasan estimasi:
 
@@ -180,11 +180,10 @@ Urutan langkah berikutnya menuju 100%:
 
 Posisi saat ini: **sedang di langkah 1 menuju langkah 2**. Helper compat kecil
 yang benar-benar lokal sudah mulai ditutup (`visitNode`, `CCTime`/`cc_timeval`,
-`CCDictElement`, sebagian state cooldown `ActionButton`, `CCScale9Sprite`, dan
-`CCScrollView`, `CCEditBox`, dan macro `atoi`), tetapi langkah 1 belum selesai
-karena `Cocos2dx2Compat.h` masih menampung alias HTTP aktif. Setelah sisa helper
-kecil yang aman selesai, pekerjaan bergeser penuh ke langkah 2 untuk
-membersihkan UI/menu lokal.
+`CCDictElement`, sebagian state cooldown `ActionButton`, `CCScale9Sprite`,
+`CCScrollView`, `CCEditBox`, macro `atoi`, dan alias HTTP `CCHttp*`). Setelah
+sisa helper kecil yang aman selesai, pekerjaan bergeser penuh ke langkah 2
+untuk membersihkan UI/menu lokal.
 
 Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
 
@@ -222,6 +221,9 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
 - `StartMenu`: jalur login lama yang sudah tertutup pesan maintenance ikut
   dibersihkan dari request HTTP; input lokal hanya menyimpan nama/password
   seperti sebelumnya lalu kembali ke mode offline.
+- `StartMenu`: fitur group online lama ditutup sebagai stub offline karena
+  state login online sudah tidak mengaktifkannya; sisa `CCHttp*` hilang dari
+  source game dan alias HTTP lama di `Cocos2dx2Compat.h` dihapus.
 
 1. **Tutup helper compat kecil yang masih lokal**
    - Target file: `Cocos2dx2Compat.h`, `ActionButton`, `HPBar`, `HudLayer`,

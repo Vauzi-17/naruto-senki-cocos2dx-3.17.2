@@ -721,395 +721,20 @@ void StartMenu::setGroup(){
 
 }
 void  StartMenu::onGroupBtn(Ref* sender){
-
 	if(!group_layer && !profile_layer){
-
-		//ˢ�°�ť
-		if(!refreshBtn){
-			refreshBtn=Sprite::createWithSpriteFrameName("refresh_btn.png");
-			refreshBtn->setPosition(Vec2(winSize.width/2,winSize.height/2));
-			ActionInterval* rt=RotateBy::create(0.3f,180,180);
-			refreshBtn->runAction(RepeatForever::create(rt));
-			this->addChild(refreshBtn,1000);
-
-		}
-		group_layer=Layer::create();
-		Sprite* group_bg=Sprite::createWithSpriteFrameName("group_bg.png");
-		group_bg->setPosition(Vec2(winSize.width/2,winSize.height/2));
-
-		group_layer->addChild(group_bg);
-
-		//�ر�
-		MenuItemSprite* close_btn=MenuItemSprite::create(Sprite::createWithSpriteFrameName("profile_closeBtn.png"),NULL,NULL,CC_CALLBACK_1(StartMenu::onIterfaceClose, this));
-		Menu* menu =Menu::create( close_btn,NULL);
-		menu->setPosition(Vec2(group_bg->getPositionX()+group_bg->getContentSize().width/2,group_bg->getPositionY()+group_bg->getContentSize().height/2-30));
-		group_layer->addChild(menu);
-
-		isPosting=true;
-
-
-		if(GroupID){
-			Sprite* group_content=Sprite::createWithSpriteFrameName("group_content2.png");
-			group_content->setPosition(Vec2(winSize.width/2,winSize.height/2-8));
-
-			group_layer->addChild(group_content);
-
-			//��������
-
-			CCClippingNode* clipper = CCClippingNode::create();
-			Node *stencil = Sprite::createWithSpriteFrameName("groupMask2.png");
-			stencil->setAnchorPoint(Vec2(0,0));
-			clipper->setStencil(stencil);
-
-
-			_screwLayer1=CCScrewLayer::create();
-			_screwLayer1->setAnchorPoint(Vec2(0,0));
-			_screwLayer1->setPositionY(116);
-			_screwLayer1->minY=116;
-
-			clipper->setPosition(Vec2(group_bg->getPositionX()-group_bg->getContentSize().width/2,64));
-			clipper->addChild(_screwLayer1,5);
-
-			group_layer->addChild(clipper,20);
-
-			this->addChild(group_layer,500);
-
-
-			cocos2d::extension::CCHttpRequest* request = new CCHttpRequest();
-			std::string code2=CCString::createWithFormat("%d",MemberID)->getCString();
-			std::string code3=CCString::createWithFormat("%d",GroupID)->getCString();
-			std::string code="code=500&MemberID="+code2+"&GroupID="+code3;
-			std::string url=SERVER"nsk/group.php?"+code;
-			request->setUrl(url.c_str());
-			request->setRequestType(CCHttpRequest::kHttpGet);
-			request->setResponseCallback(this, callfuncND_selector(StartMenu::onGroupManageRequestCompleted));
-			request->setTag("Post_My_Data");
-			cocos2d::extension::CCHttpClient::getInstance()->send(request);
-			request->release();
-
-		}else{
-
-			Sprite* group_content=Sprite::createWithSpriteFrameName("group_content1.png");
-			group_content->setPosition(Vec2(winSize.width/2,winSize.height/2));
-
-			group_layer->addChild(group_content);
-
-			//��������
-
-			CCClippingNode* clipper = CCClippingNode::create();
-			Node *stencil = Sprite::createWithSpriteFrameName("groupMask1.png");
-			stencil->setAnchorPoint(Vec2(0,0));
-			clipper->setStencil(stencil);
-
-
-			_screwLayer1=CCScrewLayer::create();
-			_screwLayer1->setAnchorPoint(Vec2(0,0));
-			_screwLayer1->setPositionY(100);
-			_screwLayer1->minY=100;
-
-			clipper->setPosition(Vec2(group_bg->getPositionX()-group_bg->getContentSize().width/2,62));
-			clipper->addChild(_screwLayer1,5);
-
-			group_layer->addChild(clipper,20);
-
-
-			cocos2d::ui::Scale9Sprite * bg01=cocos2d::ui::Scale9Sprite::createWithSpriteFrameName("input_bg2.png");
-
-			searchInput = cocos2d::ui::EditBox::create(Size(114, 20), bg01);
-			CCDictionary *strings = CCDictionary::createWithContentsOfFile("Element/strings.xml");
-			const char *reply = ((CCString*)strings->objectForKey("SeachTips"))->getCString();
-			searchInput->setPlaceHolder(reply);
-			searchInput->setFontColor(Color3B(255,255,255));
-			searchInput->setPosition(Vec2(group_bg->getPositionX()-group_bg->getContentSize().width/2+74,43));
-			searchInput->setInputMode(cocos2d::ui::EditBox::InputMode::NUMERIC);
-			searchInput->setReturnType(cocos2d::ui::EditBox::KeyboardReturnType::DEFAULT);
-			group_layer->addChild(searchInput,20);
-
-
-
-			//��ѯ��ť
-			MenuItemSprite* search_btn=MenuItemSprite::create(Sprite::createWithSpriteFrameName("search_btn.png"),Sprite::createWithSpriteFrameName("search_btn2.png"),NULL,CC_CALLBACK_1(StartMenu::onSearchBtn, this));
-			Menu* menu3 =Menu::create(search_btn,NULL);
-			menu3->setPosition(Vec2(group_bg->getPositionX()-group_bg->getContentSize().width/2+150,43));
-			group_layer->addChild(menu3,20);
-
-			if(std::atoi(CValue.c_str()) >= 50*30 +500){
-				MenuItemSprite* create_btn=MenuItemSprite::create(Sprite::createWithSpriteFrameName("createGroup_btn.png"),Sprite::createWithSpriteFrameName("createGroup_btn2.png"),NULL,CC_CALLBACK_1(StartMenu::onCreateBtn, this));
-				Menu* menu2 =Menu::create(create_btn,NULL);
-				menu2->setPosition(Vec2(group_bg->getPositionX()+group_bg->getContentSize().width/2-56,43));
-				group_layer->addChild(menu2,20);
-
-			}else{
-				MenuItemSprite* create_btn=MenuItemSprite::create(Sprite::createWithSpriteFrameName("createGroup_btn3.png"),NULL,NULL,CC_CALLBACK_1(StartMenu::onCreateBtn, this));
-				Menu* menu2 =Menu::create(create_btn,NULL);
-				menu2->setPosition(Vec2(group_bg->getPositionX()+group_bg->getContentSize().width/2-56,43));
-				group_layer->addChild(menu2,20);
-			}
-			this->addChild(group_layer,500);
-
-			cocos2d::extension::CCHttpRequest* request = new CCHttpRequest();
-			std::string code2=CCString::createWithFormat("%d",MemberID)->getCString();
-			std::string code="code=100&MemberID="+code2;
-			std::string url=SERVER"nsk/group.php?"+code;
-			request->setUrl(url.c_str());
-			request->setRequestType(CCHttpRequest::kHttpGet);
-			request->setResponseCallback(this, callfuncND_selector(StartMenu::onGroupRequestCompleted));
-			request->setTag("Post_My_Data");
-			cocos2d::extension::CCHttpClient::getInstance()->send(request);
-			request->release();
-
-		}
+		CCTips *tip=CCTips::create("ServerMainten");
+		this->addChild(tip,5000);
 	}
-
 }
 void StartMenu::onGroupManageRequestCompleted(Node *sender ,void *data){
-
+	(void)sender;
+	(void)data;
 	isPosting=false;
-	//ˢ�°�ť
 	if(refreshBtn){
 		refreshBtn->stopAllActions();
 		refreshBtn->removeFromParent();
 		refreshBtn=NULL;
 	}
-
-	cocos2d::extension::CCHttpResponse *response = (cocos2d::extension::CCHttpResponse*)data;
-	if (!response)
-	{
-		return;
-	}
-	if (0 != strlen(response->getHttpRequest()->getTag()))
-	{
-		CCLOG("%s completed", response->getHttpRequest()->getTag());
-	}
-	int statusCode = response->getResponseCode();
-	char statusString[64] = {};
-	sprintf(statusString ,"Http status code:%d ,tag = %s" ,statusCode ,response->getHttpRequest()->getTag());
-	CCLOG("response code:%d" ,statusCode);
-	if (!response->isSucceed())
-	{
-		CCLOG("response failed");
-		CCLOG("error buffer:%s" ,response->getErrorBuffer());
-		CCTips *tip=CCTips::create("ServerError");
-		this->addChild(tip,5000);
-		return;
-	}
-	std::vector<char> *buffer = response->getResponseData();
-	printf("Http response,dump data:");
-
-
-
-	Document doc;
-	std::string buf(buffer->begin(),buffer->end());
-	const char* json=(char*) buf.c_str();
-	doc.Parse<kParseDefaultFlags>(json);
-	rapidjson::Value &arr=doc;
-	int countRow=0;
-
-	if(arr.IsArray()){
-
-		for (SizeType i = 0; i < arr.Size(); i++)  {
-			if(i==0){
-
-
-				rapidjson::Value & node=arr[i];
-				rapidjson::Value & nameValue= node["group_name"];
-				std::string nameString=nameValue.GetString();
-
-
-
-
-				rapidjson::Value & leaderidValue= node["leader_id"];
-				std::string leaderidString=leaderidValue.GetString();
-				leaderID=std::atoi(leaderidString.c_str());
-
-				rapidjson::Value & leadernameValue= node["leader_name"];
-				std::string leadernameString=leadernameValue.GetString();
-
-				rapidjson::Value & noticeValue= node["group_notice"];
-				std::string noticeString=noticeValue.GetString();
-
-
-				rapidjson::Value & maxValue= node["maxNum"];
-				 maxGroupNum=maxValue.GetInt();
-
-				 rapidjson::Value & pointValue= node["pointNO"];
-				 int pointNO =pointValue.GetInt();
-
-				 rapidjson::Value & battleValue= node["battleNO"];
-				 int battleNO =battleValue.GetInt();
-
-				 rapidjson::Value & pwValue= node["pw"];
-				 std::string pwString=pwValue.GetString();
-
-
-
-				 MenuItem*  notice_btn=MenuItemSprite::create(Sprite::createWithSpriteFrameName("notice_btn.png"),NULL,NULL,CC_CALLBACK_1(StartMenu::onNoticeBtn, this));
-				 notice_btn->setTag(leaderID);
-				 Menu* menu2 =Menu::create( notice_btn,NULL);
-				 menu2->setPosition(Vec2(winSize.width/2+122,winSize.height/2+4));
-				 group_layer->addChild(menu2);
-
-
-				 notice_label=Label::createWithSystemFont(noticeString.c_str(),FONT_TYPE,10);
-
-				 notice_label->setDimensions(70, 0);
-				  notice_label->setAnchorPoint(Vec2(0,1));
-				 notice_label->setPosition(Vec2(winSize.width/2+85,winSize.height/2+36));
-				 group_layer->addChild( notice_label);
-
-
-				 MenuItem*  quit_btn;
-				 if(leaderID==MemberID){
-					 quit_btn=MenuItemSprite::create(Sprite::createWithSpriteFrameName("dissolve_btn.png"),Sprite::createWithSpriteFrameName("dissolve_btn2.png"),NULL,CC_CALLBACK_1(StartMenu::onQuitBtn, this));
-
-				 }else{
-					 quit_btn=MenuItemSprite::create(Sprite::createWithSpriteFrameName("quit_btn.png"),Sprite::createWithSpriteFrameName("quit_btn2.png"),NULL,CC_CALLBACK_1(StartMenu::onQuitBtn, this));
-				 }
-
-				 quit_btn->setTag(leaderID);
-				 Menu* menu3 =Menu::create(quit_btn,NULL);
-				 menu3->setPosition(Vec2(winSize.width/2+124,winSize.height/2-80));
-				 group_layer->addChild(menu3);
-
-				 lock_btn=MenuItemSprite::create(Sprite::createWithSpriteFrameName("lock_btn2.png"),Sprite::createWithSpriteFrameName("lock_btn.png"),NULL,CC_CALLBACK_1(StartMenu::onLockBtn, this));
-				 lock_btn->setTag(leaderID);
-				 Menu* menu =Menu::create(lock_btn,NULL);
-				 menu->setPosition(Vec2(winSize.width/2+140,winSize.height/2+84));
-				 group_layer->addChild(menu);
-
-				 if(strcmp(pwString.c_str(),"")!=0){
-					 lock_btn->selected();
-					  isLock=true;
-				 }else{
-					 lock_btn->unselected();
-					  isLock=false;
-				 }
-
-
-
-				Label* group_name=Label::createWithSystemFont(nameString.c_str(),FONT_TYPE,12);
-				group_name->setPosition(Vec2(winSize.width/2-2,winSize.height/2+84));
-				group_layer->addChild(group_name);
-
-
-				Label* group_id=Label::createWithSystemFont(CCString::createWithFormat("%d",GroupID)->getCString(),FONT_TYPE,12);
-				 group_id->setPosition(Vec2(winSize.width/2-106,winSize.height/2+87));
-				 group_layer->addChild(group_id);
-
-
-				Label* leader_name=Label::createWithSystemFont(leadernameString.c_str(),FONT_TYPE,12);
-				leader_name->setPosition(Vec2(winSize.width/2-79,winSize.height/2-115));
-				group_layer->addChild(leader_name);
-
-				Label* point_no=Label::createWithSystemFont(CCString::createWithFormat("No.%d",pointNO)->getCString(),FONT_TYPE,12);
-				point_no->setColor(Color3B(34,254,6));
-
-				point_no->setPosition(Vec2(winSize.width/2+40,winSize.height/2-115));
-				group_layer->addChild(point_no);
-
-
-				Label* battle_no=Label::createWithSystemFont(CCString::createWithFormat("No.%d",battleNO)->getCString(),FONT_TYPE,12);
-				battle_no->setColor(Color3B(0,246,255));
-				battle_no->setPosition(Vec2(winSize.width/2+134,winSize.height/2-115));
-				group_layer->addChild(battle_no);
-
-
-
-			}else{
-				CCScrewItem* screwItem=CCScrewItem::create();
-
-				rapidjson::Value & node=arr[i];
-
-
-				rapidjson::Value & idValue= node["id"];
-				std::string idString=idValue.GetString();
-				int userID=std::atoi(idString.c_str());
-
-
-
-				rapidjson::Value & nameValue= node["name"];
-				std::string nameString=nameValue.GetString();
-
-				rapidjson::Value & battleValue= node["battle_point"];
-				std::string battleString=battleValue.GetString();
-				int battlePoint=atof(battleString.c_str())*100;
-
-				rapidjson::Value & pointValue= node["point"];
-				std::string pointString=pointValue.GetString();
-				int point=std::atoi(pointString.c_str());
-
-				if(leaderID==MemberID){
-					Label* user_name=Label::createWithSystemFont(nameString.c_str(),FONT_TYPE,12);
-					MenuItemLabel* item=MenuItemLabel::create(user_name, CC_CALLBACK_1(StartMenu::onSelectGroupBtn, this));
-					item->setTag(userID);
-					Menu* pMenu = Menu::create(item, NULL);
-					pMenu ->setPosition(Vec2(61,5));
-					item ->setAnchorPoint(Vec2(0.5f,0));
-					screwItem->addChild(pMenu);
-
-				}else{
-					Label* user_name=Label::createWithSystemFont(nameString.c_str(),FONT_TYPE,12);
-
-					user_name ->setPosition(Vec2(61,5));
-					user_name ->setAnchorPoint(Vec2(0.5f,0));
-					screwItem->addChild(user_name);
-				}
-
-
-
-
-				Label* user_point=Label::createWithSystemFont(CCString::createWithFormat("%d", point)->getCString(),FONT_TYPE,10);
-				user_point->setPosition(Vec2(134,5));
-				user_point->setAnchorPoint(Vec2(0.5f,0));
-				screwItem->addChild(user_point);
-
-
-
-				Label* battle_point=Label::createWithSystemFont(CCString::createWithFormat("%d", battlePoint)->getCString(),FONT_TYPE,10);
-				battle_point->setPosition(Vec2(184,5));
-				battle_point->setAnchorPoint(Vec2(0.5f,0));
-				screwItem->addChild(battle_point);
-
-				if(leaderID==MemberID  && MemberID!=userID){
-					MenuItem* kick_btn=MenuItemSprite::create(Sprite::createWithSpriteFrameName("kick_btn.png"),Sprite::createWithSpriteFrameName("kick_btn2.png"),NULL,CC_CALLBACK_1(StartMenu::onKickBtn, this));
-
-					kick_btn->setTag(userID);
-					screwItem->linemenu=Menu::create(kick_btn,NULL);
-					screwItem->linemenu->setPosition(Vec2(230,12));
-					screwItem->linemenu->setAnchorPoint(Vec2(0.5f,0));
-					screwItem->addChild(screwItem->linemenu);
-					screwItem->linemenu->setVisible(false);
-				}
-
-
-				int row=i;
-				screwItem->setPosition(Vec2(0,-row*26+26));
-				screwItem->setAnchorPoint(Vec2(0,0));
-				screwItem->setDelegate(_screwLayer1);
-				_screwLayer1->addChild(screwItem,10);
-
-				_screwLayer1->addItem(screwItem);
-				screwItem->setTag(userID);
-				countRow++;
-			}
-
-
-		}
-		_screwLayer1->totalRow=countRow;
-
-		totalGroupNum=Label::createWithSystemFont(CCString::createWithFormat("%d/%d",countRow,maxGroupNum)->getCString(),FONT_TYPE,10);
-		totalGroupNum->setPosition(Vec2(winSize.width/2+54,winSize.height/2+52));
-		group_layer->addChild(totalGroupNum);
-
-	}else{
-		CCTips *tip=CCTips::create("GroupNotExist");
-		this->addChild(tip,5000);
-		GroupID=0;
-		this->onIterfaceClose(NULL);
-		this->onInputBoxClose(NULL);
-
-	}
-
 }
 void StartMenu::onQuitBtn(Ref* sender){
 
@@ -1154,233 +779,21 @@ void StartMenu::onQuitBtn(Ref* sender){
 
 }
 void StartMenu::onQuitComfirm(Ref* sender){
-
-	MenuItem* item=(MenuItem*) sender;
-
-
-	isPosting=true;
-
-	cocos2d::extension::CCHttpRequest* request = new CCHttpRequest();
-	std::string code2=CCString::createWithFormat("%d",MemberID)->getCString();
-	std::string code;
-	if(MemberID==item->getTag()){
-		KTools* tool=KTools::create();
-		CCString* cl=tool->readFromSQLite();
-		std::string tempCost2="EFDDD";
-		tool->decode(tempCost2);
-
-		int tempCoin =cl->intValue()-std::atoi(tempCost2.c_str());
-		if(tempCoin>=0){
-
-			std::string code3=CCString::createWithFormat("%d",GroupID)->getCString();
-			code="code=700&MemberID="+code2+"&GroupID="+code3+"&pw="+PWord;
-
-		}else{
-			CCTips *tip=CCTips::create("CoinError2");
-			this->addChild(tip,5000);
-			request->release();
-			return;
-		}
-
-
-	}else{
-		code="code=600&MemberID="+code2+"&pw="+PWord;
-	}
-
-
-
-	std::string url=SERVER"nsk/group.php?"+code;
-	request->setUrl(url.c_str());
-	request->setRequestType(CCHttpRequest::kHttpGet);
-	request->setResponseCallback(this, callfuncND_selector(StartMenu::onQuitGroupRequestCompleted));
-	request->setTag("Post_My_Data");
-	cocos2d::extension::CCHttpClient::getInstance()->send(request);
-	request->release();
+	CCTips *tip=CCTips::create("ServerMainten");
+	this->addChild(tip,5000);
+	this->onInputBoxClose(NULL);
 }
 
-
 void StartMenu::onQuitGroupRequestCompleted(Node *sender ,void *data) {
+	(void)sender;
+	(void)data;
 	isPosting=false;
-	//ˢ�°�ť
 	if(refreshBtn){
 		refreshBtn->stopAllActions();
 		refreshBtn->removeFromParent();
 		refreshBtn=NULL;
 	}
-
-	cocos2d::extension::CCHttpResponse *response = (cocos2d::extension::CCHttpResponse*)data;
-	if (!response)
-	{
-		return;
-	}
-	if (0 != strlen(response->getHttpRequest()->getTag()))
-	{
-		CCLOG("%s completed", response->getHttpRequest()->getTag());
-	}
-	int statusCode = response->getResponseCode();
-	char statusString[64] = {};
-	sprintf(statusString ,"Http status code:%d ,tag = %s" ,statusCode ,response->getHttpRequest()->getTag());
-	CCLOG("response code:%d" ,statusCode);
-	if (!response->isSucceed())
-	{
-		CCLOG("response failed");
-		CCLOG("error buffer:%s" ,response->getErrorBuffer());
-		CCTips *tip=CCTips::create("ServerError");
-		this->addChild(tip,5000);
-		return;
-	}
-	std::vector<char> *buffer = response->getResponseData();
-	printf("Http response,dump data:");
-
-
-	Document doc;
-	std::string buf(buffer->begin(),buffer->end());
-	const char* result=(char*) buf.c_str();
-
-	doc.Parse<kParseDefaultFlags>(result);
-	rapidjson::Value &arr=doc;
-	int countRow=0;
-
-	if(arr.IsArray()){
-
-		CCTips *tip=CCTips::create("KickSuccessed");
-		this->addChild(tip,5000);
-
-		this->onInputBoxClose(NULL);
-		_screwLayer1->removeAllChildren();
-		_screwLayer1->clearItemArray();
-		_screwLayer1->setPositionY(_screwLayer1->minY);
-
-		for (SizeType i = 0; i < arr.Size(); i++)  {
-
-			CCScrewItem* screwItem=CCScrewItem::create();
-
-			rapidjson::Value & node=arr[i];
-
-
-			rapidjson::Value & idValue= node["id"];
-			std::string idString=idValue.GetString();
-			int userID=std::atoi(idString.c_str());
-
-
-
-			rapidjson::Value & nameValue= node["name"];
-			std::string nameString=nameValue.GetString();
-
-			rapidjson::Value & battleValue= node["battle_point"];
-			std::string battleString=battleValue.GetString();
-			int battlePoint=atof(battleString.c_str())*100;
-
-			rapidjson::Value & pointValue= node["point"];
-			std::string pointString=pointValue.GetString();
-			int point=std::atoi(pointString.c_str());
-
-			if(leaderID==MemberID){
-				Label* user_name=Label::createWithSystemFont(nameString.c_str(),FONT_TYPE,12);
-				MenuItemLabel* item=MenuItemLabel::create(user_name, CC_CALLBACK_1(StartMenu::onSelectGroupBtn, this));
-				item->setTag(userID);
-				Menu* pMenu = Menu::create(item, NULL);
-				pMenu ->setPosition(Vec2(61,5));
-				item ->setAnchorPoint(Vec2(0.5f,0));
-				screwItem->addChild(pMenu);
-
-			}else{
-				Label* user_name=Label::createWithSystemFont(nameString.c_str(),FONT_TYPE,12);
-
-				user_name ->setPosition(Vec2(61,5));
-				user_name ->setAnchorPoint(Vec2(0.5f,0));
-				screwItem->addChild(user_name);
-			}
-
-
-
-
-			Label* user_point=Label::createWithSystemFont(CCString::createWithFormat("%d", point)->getCString(),FONT_TYPE,10);
-			user_point->setPosition(Vec2(134,5));
-			user_point->setAnchorPoint(Vec2(0.5f,0));
-			screwItem->addChild(user_point);
-
-
-
-			Label* battle_point=Label::createWithSystemFont(CCString::createWithFormat("%d", battlePoint)->getCString(),FONT_TYPE,10);
-			battle_point->setPosition(Vec2(184,5));
-			battle_point->setAnchorPoint(Vec2(0.5f,0));
-			screwItem->addChild(battle_point);
-
-			if(leaderID==MemberID  && MemberID!=userID){
-				MenuItem* kick_btn=MenuItemSprite::create(Sprite::createWithSpriteFrameName("kick_btn.png"),Sprite::createWithSpriteFrameName("kick_btn2.png"),NULL,CC_CALLBACK_1(StartMenu::onKickBtn, this));
-
-				kick_btn->setTag(userID);
-				screwItem->linemenu=Menu::create(kick_btn,NULL);
-				screwItem->linemenu->setPosition(Vec2(230,12));
-				screwItem->linemenu->setAnchorPoint(Vec2(0.5f,0));
-				screwItem->addChild(screwItem->linemenu);
-				screwItem->linemenu->setVisible(false);
-			}
-
-
-			int row=i;
-			screwItem->setPosition(Vec2(0,-row*26));
-			screwItem->setAnchorPoint(Vec2(0,0));
-			screwItem->setDelegate(_screwLayer1);
-			_screwLayer1->addChild(screwItem,10);
-
-			_screwLayer1->addItem(screwItem);
-			screwItem->setTag(userID);
-			countRow++;
-		}
-
-
-			_screwLayer1->totalRow=countRow;
-
-			if(totalGroupNum){
-				totalGroupNum->setString(CCString::createWithFormat("%d/%d",countRow,maxGroupNum)->getCString());
-
-			}
-
-		}else{
-			if(strcmp(result,"QuitSuccessed")==0){
-				CCTips *tip=CCTips::create("QuitSuccessed");
-				this->addChild(tip,5000);
-
-				this->onIterfaceClose(NULL);
-				this->onInputBoxClose(NULL);
-				GroupID=0;
-
-			}else if (strcmp(result,"DissovleSuccessed")==0){
-				CCTips *tip=CCTips::create("DissovleSuccessed");
-				this->addChild(tip,5000);
-
-				KTools* tool=KTools::create();
-				CCString* cl=tool->readFromSQLite();
-				std::string tempCost2="EFDDD";
-				tool->decode(tempCost2);
-				unsigned int tempCoin =cl->intValue()-std::atoi(tempCost2.c_str());
-
-				CCString* coin= CCString::createWithFormat("%d",tempCoin);
-				tool->saveToSQLite("GameRecord","coin",coin->getCString(),true);
-
-
-				this->onIterfaceClose(NULL);
-				this->onInputBoxClose(NULL);
-				GroupID=0;
-
-
-
-			}else if (strcmp(result,"KickFailed")==0){
-				CCTips *tip=CCTips::create("KickFailed");
-				this->addChild(tip,5000);
-
-			}else{
-				CCTips *tip=CCTips::create("ManagementFailed");
-
-				this->addChild(tip,5000);
-			}
-	}
-
-
 }
-
 void StartMenu::onNoticeBtn(Ref* sender){
 	if(leaderID==MemberID){
 
@@ -1438,183 +851,25 @@ void StartMenu::onNoticeComfirm(Ref* sender){
 	this->onInputBoxClose(NULL);
 }
 void StartMenu::onLockBtn(Ref* sender){
-
-
-	if(MemberID==leaderID){
-		if(isLock){
-			isPosting=true;
-			//ˢ�°�ť
-			if(!refreshBtn){
-				refreshBtn=Sprite::createWithSpriteFrameName("refresh_btn.png");
-				refreshBtn->setPosition(Vec2(winSize.width/2,winSize.height/2));
-				ActionInterval* rt=RotateBy::create(0.3f,180,180);
-				refreshBtn->runAction(RepeatForever::create(rt));
-				this->addChild(refreshBtn,1000);
-
-			}
-
-			cocos2d::extension::CCHttpRequest* request = new CCHttpRequest();
-			std::string code2=CCString::createWithFormat("%d",MemberID)->getCString();
-			std::string code3=CCString::createWithFormat("%d",GroupID)->getCString();
-			std::string code="code=900&MemberID="+code2+"&GroupID="+code3+"&pw="+PWord ;
-			std::string url=SERVER"nsk/group.php?"+code;
-			request->setUrl(url.c_str());
-			request->setRequestType(CCHttpRequest::kHttpGet);
-			request->setResponseCallback(this, callfuncND_selector(StartMenu::onGPWRequestCompleted));
-			request->setTag("Post_My_Data");
-			cocos2d::extension::CCHttpClient::getInstance()->send(request);
-			request->release();
-
-
-		}else{
-
-			if(!input_layer){
-				input_layer=Layer::create();
-
-				Sprite* pw_bg=Sprite::createWithSpriteFrameName("confirm_bg.png");
-				pw_bg->setPosition(Vec2(winSize.width/2,winSize.height/2));
-
-
-				Sprite* gpwInputTitle=Sprite::createWithSpriteFrameName("pwInput_title.png");
-				gpwInputTitle->setPosition(Vec2(winSize.width/2-62,winSize.height/2+25));
-				input_layer->addChild(gpwInputTitle,200);
-
-				gpwInput=NULL;
-				cocos2d::ui::Scale9Sprite * bg01=cocos2d::ui::Scale9Sprite::createWithSpriteFrameName("input_bg.png");
-				gpwInput = cocos2d::ui::EditBox::create(Size(115, 25), bg01);
-				gpwInput->setFontColor(Color3B(255,255,255));
-				gpwInput->setPosition(Vec2(winSize.width/2+16,winSize.height/2+25));
-				gpwInput->setInputMode(cocos2d::ui::EditBox::InputMode::NUMERIC);
-				gpwInput->setReturnType(cocos2d::ui::EditBox::KeyboardReturnType::DEFAULT);
-				input_layer->addChild(gpwInput,200);
-
-				Sprite* pw_tip=Sprite::createWithSpriteFrameName("gpw_tip.png");
-				pw_tip->setPosition(Vec2(winSize.width/2,winSize.height/2));
-				input_layer->addChild(pw_tip,200);
-
-				MenuItem* yes_btn=MenuItemSprite::create(Sprite::createWithSpriteFrameName("yes_btn1.png"),Sprite::createWithSpriteFrameName("yes_btn2.png"),CC_CALLBACK_1(StartMenu::onGPWComfirm, this));
-				MenuItem* no_btn=MenuItemSprite::create(Sprite::createWithSpriteFrameName("no_btn1.png"),Sprite::createWithSpriteFrameName("no_btn2.png"),CC_CALLBACK_1(StartMenu::onInputBoxClose, this));
-
-				Menu* confirm_menu = Menu::create(yes_btn,no_btn,NULL);
-				confirm_menu->alignItemsHorizontallyWithPadding(16);
-				confirm_menu->setPosition(Vec2(winSize.width/2,winSize.height/2-35));
-				input_layer->addChild(confirm_menu,500);
-
-				input_layer->addChild(pw_bg,100);
-				this->addChild(input_layer,500);
-			}
-		}
-
-	}
+	CCTips *tip=CCTips::create("ServerMainten");
+	this->addChild(tip,5000);
 }
 void StartMenu::onGPWComfirm(Ref* sender){
-
-	std::string data1=gpwInput->getText();
-	if(strcmp(data1.c_str(),"")==0){
-		CCTips *tip=CCTips::create("InputEmpty");
-		this->addChild(tip,5000);
-		return;
-
-	}
-
-	isPosting=true;
-	//ˢ�°�ť
-	if(!refreshBtn){
-		refreshBtn=Sprite::createWithSpriteFrameName("refresh_btn.png");
-		refreshBtn->setPosition(Vec2(winSize.width/2,winSize.height/2));
-		ActionInterval* rt=RotateBy::create(0.3f,180,180);
-		refreshBtn->runAction(RepeatForever::create(rt));
-		this->addChild(refreshBtn,1000);
-
-	}
-
-	cocos2d::extension::CCHttpRequest* request = new CCHttpRequest();
-	std::string code2=CCString::createWithFormat("%d",MemberID)->getCString();
-	std::string code3=CCString::createWithFormat("%d",GroupID)->getCString();
-	std::string code4=CCString::createWithFormat("%s", data1.c_str())->getCString();
-
-
-
-	std::string code="code=900&MemberID="+code2+"&GroupID="+code3+"&gpw="+code4+"&pw="+PWord;
-	std::string url=SERVER"nsk/group.php?"+code;
-	request->setUrl(url.c_str());
-	request->setRequestType(CCHttpRequest::kHttpGet);
-	request->setResponseCallback(this, callfuncND_selector(StartMenu::onGPWRequestCompleted));
-	request->setTag("Post_My_Data");
-	cocos2d::extension::CCHttpClient::getInstance()->send(request);
-	request->release();
+	CCTips *tip=CCTips::create("ServerMainten");
+	this->addChild(tip,5000);
+	this->onInputBoxClose(NULL);
 }
 
-
 void StartMenu::onGPWRequestCompleted(Node *sender ,void *data) {
-
-
-
-
+	(void)sender;
+	(void)data;
 	isPosting=false;
-	//ˢ�°�ť
 	if(refreshBtn){
 		refreshBtn->stopAllActions();
 		refreshBtn->removeFromParent();
 		refreshBtn=NULL;
 	}
-
-	cocos2d::extension::CCHttpResponse *response = (cocos2d::extension::CCHttpResponse*)data;
-	if (!response)
-	{
-		return;
-	}
-	if (0 != strlen(response->getHttpRequest()->getTag()))
-	{
-		CCLOG("%s completed", response->getHttpRequest()->getTag());
-	}
-	int statusCode = response->getResponseCode();
-	char statusString[64] = {};
-	sprintf(statusString ,"Http status code:%d ,tag = %s" ,statusCode ,response->getHttpRequest()->getTag());
-	CCLOG("response code:%d" ,statusCode);
-	if (!response->isSucceed())
-	{
-		CCLOG("response failed");
-		CCLOG("error buffer:%s" ,response->getErrorBuffer());
-		CCTips *tip=CCTips::create("ServerError");
-		this->addChild(tip,5000);
-		return;
-	}
-	std::vector<char> *buffer = response->getResponseData();
-	printf("Http response,dump data:");
-
-
-	Document doc;
-	std::string buf(buffer->begin(),buffer->end());
-	const char* result=(char*) buf.c_str();
-
-	if(strcmp(result,"EmptyGPW")==0){
-		CCTips *tip=CCTips::create("EmptyGPW");
-		this->addChild(tip,5000);
-		lock_btn->unselected();
-		isLock=false;
-	}else if (strcmp(result,"UpdateGPW")==0){
-		lock_btn->selected();
-		isLock=true;
-		this->onInputBoxClose(NULL);
-		CCTips *tip=CCTips::create("UpdateGPW");
-		this->addChild(tip,5000);
-	}else{
-		if(isLock){
-			if(lock_btn){
-				lock_btn->selected();
-			}
-		}else{
-			if(lock_btn){
-				lock_btn->unselected();
-			}
-		}
-		CCTips *tip=CCTips::create("ManagementFailed");
-		this->addChild(tip,5000);
-	}
-
 }
-
 void StartMenu::onKickBtn(Ref* sender){
 
 	MenuItem* item=(MenuItem*) sender;
@@ -1651,500 +906,60 @@ void StartMenu::onKickBtn(Ref* sender){
 }
 
 void StartMenu::onKickComfirm(Ref* sender){
-
-	MenuItem* item=(MenuItem*) sender;
-
-	isPosting=true;
-	//ˢ�°�ť
-	if(!refreshBtn){
-		refreshBtn=Sprite::createWithSpriteFrameName("refresh_btn.png");
-		refreshBtn->setPosition(Vec2(winSize.width/2,winSize.height/2));
-		ActionInterval* rt=RotateBy::create(0.3f,180,180);
-		refreshBtn->runAction(RepeatForever::create(rt));
-		this->addChild(refreshBtn,1000);
-
-	}
-
-	cocos2d::extension::CCHttpRequest* request = new CCHttpRequest();
-	std::string code2=CCString::createWithFormat("%d",MemberID)->getCString();
-	std::string code3=CCString::createWithFormat("%d",GroupID)->getCString();
-	std::string code4=CCString::createWithFormat("%d",item->getTag())->getCString();
-	std::string code="code=800&MemberID="+code2+"&GroupID="+code3+"&KickID="+code4+"&pw="+PWord;
-	std::string url=SERVER"nsk/group.php?"+code;
-	request->setUrl(url.c_str());
-	request->setRequestType(CCHttpRequest::kHttpGet);
-	request->setResponseCallback(this, callfuncND_selector(StartMenu::onQuitGroupRequestCompleted));
-	request->setTag("Post_My_Data");
-	cocos2d::extension::CCHttpClient::getInstance()->send(request);
-	request->release();
-};
-
+	CCTips *tip=CCTips::create("ServerMainten");
+	this->addChild(tip,5000);
+	this->onInputBoxClose(NULL);
+}
 void StartMenu::onGroupRequestCompleted(Node *sender ,void *data){
-
+	(void)sender;
+	(void)data;
 	isPosting=false;
-	//ˢ�°�ť
 	if(refreshBtn){
 		refreshBtn->stopAllActions();
 		refreshBtn->removeFromParent();
 		refreshBtn=NULL;
 	}
-
-	cocos2d::extension::CCHttpResponse *response = (cocos2d::extension::CCHttpResponse*)data;
-	if (!response)
-	{
-		return;
-	}
-	if (0 != strlen(response->getHttpRequest()->getTag()))
-	{
-		CCLOG("%s completed", response->getHttpRequest()->getTag());
-	}
-	int statusCode = response->getResponseCode();
-	char statusString[64] = {};
-	sprintf(statusString ,"Http status code:%d ,tag = %s" ,statusCode ,response->getHttpRequest()->getTag());
-	CCLOG("response code:%d" ,statusCode);
-	if (!response->isSucceed())
-	{
-		CCLOG("response failed");
-		CCLOG("error buffer:%s" ,response->getErrorBuffer());
-		CCTips *tip=CCTips::create("ServerError");
-		this->addChild(tip,5000);
-		return;
-	}
-	std::vector<char> *buffer = response->getResponseData();
-	printf("Http response,dump data:");
-
-
-
-
-
-	Document doc;
-	std::string buf(buffer->begin(),buffer->end());
-	const char* json=(char*) buf.c_str();
-	doc.Parse<kParseDefaultFlags>(json);
-	rapidjson::Value &arr=doc;
-	int countRow=0;
-	if(arr.IsArray()){
-
-
-		for (SizeType i = 0; i < arr.Size(); i++)  {
-			CCScrewItem* screwItem=CCScrewItem::create();
-
-			rapidjson::Value & node=arr[i];
-
-
-			rapidjson::Value & idValue= node["group_id"];
-			std::string idString=idValue.GetString();
-			int groupID=std::atoi(idString.c_str());
-
-			//����name
-			rapidjson::Value & nameValue= node["group_name"];
-			std::string nameString=nameValue.GetString();
-
-
-			rapidjson::Value & currentValue= node["currentNum"];
-			std::string currentString=currentValue.GetString();
-			int currentNum=std::atoi(currentString.c_str());
-
-
-
-
-			rapidjson::Value & maxValue= node["maxNum"];
-
-			int maxNum=maxValue.GetInt();
-
-
-			rapidjson::Value & pwValue= node["pw"];
-			std::string pwString=pwValue.GetString();
-
-
-			Label* group_name=Label::createWithSystemFont(nameString.c_str(),FONT_TYPE,12);
-			MenuItemLabel* item=MenuItemLabel::create(group_name, CC_CALLBACK_1(StartMenu::onSelectGroupBtn, this));
-			item->setTag(groupID);
-			Menu* pMenu = Menu::create(item, NULL);
-			pMenu ->setPosition(Vec2(78,5));
-			item ->setAnchorPoint(Vec2(0.5f,0));
-			screwItem->addChild(pMenu);
-
-
-
-			Label* group_id=Label::createWithSystemFont(CCString::createWithFormat("%d", groupID)->getCString(),FONT_TYPE,10);
-			group_id->setPosition(Vec2(160,5));
-			group_id->setAnchorPoint(Vec2(0.5f,0));
-			screwItem->addChild(group_id);
-
-
-
-			Label* memberNum=Label::createWithSystemFont(CCString::createWithFormat("%d/%d", currentNum,maxNum)->getCString(),FONT_TYPE,10);
-			memberNum->setPosition(Vec2(218,5));
-			memberNum->setAnchorPoint(Vec2(0.5f,0));
-			screwItem->addChild(memberNum);
-
-			if(strcmp(pwString.c_str(),"")!=0){
-				screwItem->lockItem=Sprite::createWithSpriteFrameName("lock_icon.png");
-				screwItem->lockItem->setPosition(Vec2(234,7));
-				screwItem->lockItem->setAnchorPoint(Vec2(0.5f,0));
-				screwItem->addChild(screwItem->lockItem);
-			}
-
-			MenuItem* join_btn=MenuItemSprite::create(Sprite::createWithSpriteFrameName("join_btn.png"),Sprite::createWithSpriteFrameName("join_btn2.png"),NULL,CC_CALLBACK_1(StartMenu::onJoinGroup, this));
-			join_btn->setTag(groupID);
-			screwItem->linemenu =Menu::create(join_btn,NULL);
-			screwItem->linemenu->setPosition(Vec2(274,14));
-			screwItem->linemenu->setAnchorPoint(Vec2(0.5f,0));
-			screwItem->addChild(screwItem->linemenu);
-			screwItem->linemenu->setVisible(false);
-
-			int row=i;
-			screwItem->setPosition(Vec2(0,-row*26+26));
-			screwItem->setAnchorPoint(Vec2(0,0));
-			screwItem->setDelegate(_screwLayer1);
-			_screwLayer1->addChild(screwItem,10);
-
-			_screwLayer1->addItem(screwItem);
-			screwItem->setTag(groupID);
-			countRow++;
-		}
-		_screwLayer1->totalRow=countRow;
-
-	}
-
 }
-
-
-
 void StartMenu::onJoinGroup(Ref* sender){
-	MenuItem* item=(MenuItem*) sender;
-
-	for (auto screwNode : _screwLayer1->getItemArray()){
-		CCScrewItem* screwItem=(CCScrewItem*) screwNode;
-		if(screwItem->getTag()==item->getTag()){
-			if(screwItem->lockItem){
-
-				if(!input_layer){
-					input_layer=Layer::create();
-
-					Sprite* pw_bg=Sprite::createWithSpriteFrameName("confirm_bg.png");
-					pw_bg->setPosition(Vec2(winSize.width/2,winSize.height/2));
-
-
-					Sprite* gpwInputTitle=Sprite::createWithSpriteFrameName("pwInput_title.png");
-					gpwInputTitle->setPosition(Vec2(winSize.width/2-62,winSize.height/2+25));
-					input_layer->addChild(gpwInputTitle,200);
-
-					cocos2d::ui::Scale9Sprite * bg01=cocos2d::ui::Scale9Sprite::createWithSpriteFrameName("input_bg.png");
-					gpwInput = cocos2d::ui::EditBox::create(Size(115, 25), bg01);
-					gpwInput->setFontColor(Color3B(255,255,255));
-					gpwInput->setPosition(Vec2(winSize.width/2+16,winSize.height/2+25));
-					gpwInput->setInputMode(cocos2d::ui::EditBox::InputMode::NUMERIC);
-					gpwInput->setReturnType(cocos2d::ui::EditBox::KeyboardReturnType::DEFAULT);
-					input_layer->addChild(gpwInput,200);
-
-					Sprite* pw_tip=Sprite::createWithSpriteFrameName("gpw_tip.png");
-					pw_tip->setPosition(Vec2(winSize.width/2,winSize.height/2));
-					input_layer->addChild(pw_tip,200);
-
-					MenuItem* yes_btn=MenuItemSprite::create(Sprite::createWithSpriteFrameName("yes_btn1.png"),Sprite::createWithSpriteFrameName("yes_btn2.png"),CC_CALLBACK_1(StartMenu::onJoinComfirm, this));
-					yes_btn->setTag(item->getTag());
-					MenuItem* no_btn=MenuItemSprite::create(Sprite::createWithSpriteFrameName("no_btn1.png"),Sprite::createWithSpriteFrameName("no_btn2.png"),CC_CALLBACK_1(StartMenu::onInputBoxClose, this));
-
-					Menu* confirm_menu = Menu::create(yes_btn,no_btn,NULL);
-					confirm_menu->alignItemsHorizontallyWithPadding(16);
-					confirm_menu->setPosition(Vec2(winSize.width/2,winSize.height/2-35));
-					input_layer->addChild(confirm_menu,500);
-
-					input_layer->addChild(pw_bg,100);
-					this->addChild(input_layer,500);
-				}
-
-			}else{
-
-				isPosting=true;
-
-				cocos2d::extension::CCHttpRequest* request = new CCHttpRequest();
-				std::string code3=CCString::createWithFormat("%d",MemberID)->getCString();
-				std::string code4=CCString::createWithFormat("%d",item->getTag())->getCString();
-				std::string code="code=300&MemberID="+code3+"&gpw="+"&GroupID="+code4+"&pw="+PWord;
-				std::string url=SERVER"nsk/group.php?"+code;
-				request->setUrl(url.c_str());
-				request->setRequestType(CCHttpRequest::kHttpGet);
-				request->setResponseCallback(this, callfuncND_selector(StartMenu::onJoinRequestCompleted));
-				request->setTag("Post_My_Data");
-				cocos2d::extension::CCHttpClient::getInstance()->send(request);
-				request->release();
-
-				//ˢ�°�ť
-				if(!refreshBtn){
-					refreshBtn=Sprite::createWithSpriteFrameName("refresh_btn.png");
-					refreshBtn->setPosition(Vec2(winSize.width/2,winSize.height/2));
-					ActionInterval* rt=RotateBy::create(0.3f,180,180);
-					refreshBtn->runAction(RepeatForever::create(rt));
-					this->addChild(refreshBtn,1000);
-
-				}
-			}
-
-
-		}
-	}
-
+	CCTips *tip=CCTips::create("ServerMainten");
+	this->addChild(tip,5000);
 }
 void StartMenu::onJoinComfirm(Ref* sender){
-	MenuItemLabel* item=(MenuItemLabel*) sender;
-
-
-	std::string data1=gpwInput->getText();
-	if(strcmp(data1.c_str(),"")==0){
-		CCTips *tip=CCTips::create("InputEmpty");
-		this->addChild(tip,5000);
-		return;
-
-	}
-	isPosting=true;
-
-	cocos2d::extension::CCHttpRequest* request = new CCHttpRequest();
-	std::string code2=CCString::createWithFormat("%s",data1.c_str())->getCString();
-	std::string code3=CCString::createWithFormat("%d",MemberID)->getCString();
-	std::string code4=CCString::createWithFormat("%d",item->getTag())->getCString();
-	std::string code="code=300&gpw="+code2+"&MemberID="+code3+"&GroupID="+code4+"&pw="+PWord;
-	std::string url=SERVER"nsk/group.php?"+code;
-	request->setUrl(url.c_str());
-	request->setRequestType(CCHttpRequest::kHttpGet);
-	request->setResponseCallback(this, callfuncND_selector(StartMenu::onJoinRequestCompleted));
-	request->setTag("Post_My_Data");
-	cocos2d::extension::CCHttpClient::getInstance()->send(request);
-	request->release();
-
-	//ˢ�°�ť
-	if(!refreshBtn){
-		refreshBtn=Sprite::createWithSpriteFrameName("refresh_btn.png");
-		refreshBtn->setPosition(Vec2(winSize.width/2,winSize.height/2));
-		ActionInterval* rt=RotateBy::create(0.3f,180,180);
-		refreshBtn->runAction(RepeatForever::create(rt));
-		this->addChild(refreshBtn,1000);
-
-	}
-
+	CCTips *tip=CCTips::create("ServerMainten");
+	this->addChild(tip,5000);
+	this->onInputBoxClose(NULL);
 }
 
-
 void StartMenu::onJoinRequestCompleted(Node *sender ,void *data) {
+	(void)sender;
+	(void)data;
 	isPosting=false;
-	//ˢ�°�ť
 	if(refreshBtn){
 		refreshBtn->stopAllActions();
 		refreshBtn->removeFromParent();
 		refreshBtn=NULL;
 	}
-
-	cocos2d::extension::CCHttpResponse *response = (cocos2d::extension::CCHttpResponse*)data;
-	if (!response)
-	{
-		return;
-	}
-	if (0 != strlen(response->getHttpRequest()->getTag()))
-	{
-		CCLOG("%s completed", response->getHttpRequest()->getTag());
-	}
-	int statusCode = response->getResponseCode();
-	char statusString[64] = {};
-	sprintf(statusString ,"Http status code:%d ,tag = %s" ,statusCode ,response->getHttpRequest()->getTag());
-	CCLOG("response code:%d" ,statusCode);
-	if (!response->isSucceed())
-	{
-		CCLOG("response failed");
-		CCLOG("error buffer:%s" ,response->getErrorBuffer());
-		CCTips *tip=CCTips::create("ServerError");
-		this->addChild(tip,5000);
-		return;
-	}
-	std::vector<char> *buffer = response->getResponseData();
-	printf("Http response,dump data:");
-
-
-	Document doc;
-	std::string buf(buffer->begin(),buffer->end());
-	const char* result=(char*) buf.c_str();
-
-	if(strcmp(result,"GroupFull")==0){
-		CCTips *tip=CCTips::create("GroupFull");
-		this->addChild(tip,5000);
-
-	}else if (strcmp(result,"GPWError")==0){
-		CCTips *tip=CCTips::create("GPWError");
-		this->addChild(tip,5000);
-	}else{
-
-		GroupID=std::atoi(result);
-		CCTips *tip=CCTips::create("GroupAccess");
-		this->addChild(tip,5000);
-
-		this->onIterfaceClose(NULL);
-		this->onInputBoxClose(NULL);
-	}
-
 }
-
 
 void StartMenu::onSearchBtn(Ref* sender){
-	if(!isPosting){
-		isPosting=true;
-		std::string data1=searchInput->getText();
-
-		cocos2d::extension::CCHttpRequest* request = new CCHttpRequest();
-		std::string code2=CCString::createWithFormat("%s",data1.c_str())->getCString();
-		std::string code="code=200&GroupID="+code2;
-		std::string url=SERVER"nsk/group.php?"+code;
-		request->setUrl(url.c_str());
-		request->setRequestType(CCHttpRequest::kHttpGet);
-		request->setResponseCallback(this, callfuncND_selector(StartMenu::onSeachRequestCompleted));
-		request->setTag("Post_My_Data");
-		cocos2d::extension::CCHttpClient::getInstance()->send(request);
-		request->release();
-
-
-		if(!refreshBtn){
-			refreshBtn=Sprite::createWithSpriteFrameName("refresh_btn.png");
-			refreshBtn->setPosition(Vec2(winSize.width/2,winSize.height/2));
-			ActionInterval* rt=RotateBy::create(0.3f,180,180);
-			refreshBtn->runAction(RepeatForever::create(rt));
-			this->addChild(refreshBtn,1000);
-
-		}
-
-	}
+	CCTips *tip=CCTips::create("ServerMainten");
+	this->addChild(tip,5000);
 }
-
 
 
 void StartMenu::onSeachRequestCompleted(Node *sender ,void *data) {
-
+	(void)sender;
+	(void)data;
 	isPosting=false;
-	//ˢ�°�ť
 	if(refreshBtn){
 		refreshBtn->stopAllActions();
 		refreshBtn->removeFromParent();
 		refreshBtn=NULL;
 	}
-
-	searchInput->setText("");
-
-	_screwLayer1->removeAllChildren();
-	_screwLayer1->setPositionY(_screwLayer1->minY);
-	_screwLayer1->clearItemArray();
-
-	cocos2d::extension::CCHttpResponse *response = (cocos2d::extension::CCHttpResponse*)data;
-	if (!response)
-	{
-		return;
+	if(searchInput){
+		searchInput->setText("");
 	}
-	if (0 != strlen(response->getHttpRequest()->getTag()))
-	{
-		CCLOG("%s completed", response->getHttpRequest()->getTag());
-	}
-	int statusCode = response->getResponseCode();
-	char statusString[64] = {};
-	sprintf(statusString ,"Http status code:%d ,tag = %s" ,statusCode ,response->getHttpRequest()->getTag());
-	CCLOG("response code:%d" ,statusCode);
-	if (!response->isSucceed())
-	{
-		CCLOG("response failed");
-		CCLOG("error buffer:%s" ,response->getErrorBuffer());
-		CCTips *tip=CCTips::create("ServerError");
-		this->addChild(tip,5000);
-		return;
-	}
-	std::vector<char> *buffer = response->getResponseData();
-	printf("Http response,dump data:");
-
-
-	Document doc;
-	std::string buf(buffer->begin(),buffer->end());
-	const char* json=(char*) buf.c_str();
-	doc.Parse<kParseDefaultFlags>(json);
-	rapidjson::Value &arr=doc;
-	int countRow=0;
-	if(arr.IsArray()){
-		for (SizeType i = 0; i < arr.Size(); i++)  {
-			CCScrewItem* screwItem=CCScrewItem::create();
-
-			rapidjson::Value & node=arr[i];
-
-
-			rapidjson::Value & idValue= node["group_id"];
-			std::string idString=idValue.GetString();
-			int groupID=std::atoi(idString.c_str());
-
-
-			rapidjson::Value & nameValue= node["group_name"];
-			std::string nameString=nameValue.GetString();
-
-
-			rapidjson::Value & currentValue= node["currentNum"];
-			std::string currentString=currentValue.GetString();
-			int currentNum=std::atoi(currentString.c_str());
-
-
-			rapidjson::Value & maxValue= node["maxNum"];
-
-			int maxNum=maxValue.GetInt();
-
-			rapidjson::Value & pwValue= node["pw"];
-			std::string pwString=pwValue.GetString();
-
-
-			Label* group_name=Label::createWithSystemFont(nameString.c_str(),FONT_TYPE,12);
-			MenuItemLabel* item=MenuItemLabel::create(group_name, CC_CALLBACK_1(StartMenu::onSelectGroupBtn, this));
-			item->setTag(groupID);
-			Menu* pMenu = Menu::create(item, NULL);
-			pMenu ->setPosition(Vec2(78,5));
-			item ->setAnchorPoint(Vec2(0.5f,0));
-			screwItem->addChild(pMenu);
-
-
-
-			Label* group_id=Label::createWithSystemFont(CCString::createWithFormat("%d", groupID)->getCString(),FONT_TYPE,10);
-			group_id->setPosition(Vec2(160,5));
-			group_id->setAnchorPoint(Vec2(0.5f,0));
-			screwItem->addChild(group_id);
-
-
-
-			Label* memberNum=Label::createWithSystemFont(CCString::createWithFormat("%d/%d", currentNum,maxNum)->getCString(),FONT_TYPE,10);
-			memberNum->setPosition(Vec2(218,5));
-			memberNum->setAnchorPoint(Vec2(0.5f,0));
-			screwItem->addChild(memberNum);
-
-			if(strcmp(pwString.c_str(),"")!=0){
-				screwItem->lockItem=Sprite::createWithSpriteFrameName("lock_icon.png");
-				screwItem->lockItem->setPosition(Vec2(234,7));
-				screwItem->lockItem->setAnchorPoint(Vec2(0.5f,0));
-				screwItem->addChild(screwItem->lockItem);
-			}
-
-			MenuItem* join_btn=MenuItemSprite::create(Sprite::createWithSpriteFrameName("join_btn.png"),Sprite::createWithSpriteFrameName("join_btn2.png"),NULL,CC_CALLBACK_1(StartMenu::onJoinGroup, this));
-			join_btn->setTag(groupID);
-			screwItem->linemenu =Menu::create(join_btn,NULL);
-			screwItem->linemenu->setPosition(Vec2(274,14));
-			screwItem->linemenu->setAnchorPoint(Vec2(0.5f,0));
-			screwItem->addChild(screwItem->linemenu);
-			screwItem->linemenu->setVisible(false);
-
-			int row=i;
-			screwItem->setPosition(Vec2(0,-row*26+26));
-			screwItem->setAnchorPoint(Vec2(0,0));
-			screwItem->setDelegate(_screwLayer1);
-			_screwLayer1->addChild(screwItem,10);
-
-			_screwLayer1->addItem(screwItem);
-			screwItem->setTag(groupID);
-			countRow++;
-		}
-		_screwLayer1->totalRow=countRow;
-
-	}
-
 }
-
 
 
 void  StartMenu::onCreateBtn(Ref* sender){
@@ -2194,141 +1009,20 @@ void  StartMenu::onCreateBtn(Ref* sender){
 }
 
 void StartMenu::onCreateComfirm(Ref* sender){
-
-
-	std::string data1=nameInput->getText();
-	if(strcmp(data1.c_str(),"")==0){
-		CCTips *tip=CCTips::create("InputEmpty");
-		this->addChild(tip,5000);
-		return;
-
-
-
-	}
-
-
-	for (size_t i=0;i<data1.size();++i)
-	{
-		if (data1[i] == ' ' )
-		{
-			CCTips *tip=CCTips::create("GroupNameError");
-			this->addChild(tip,5000);
-			return;
-		}
-	}
-
-
-	KTools* tool=KTools::create();
-	CCString* cl=tool->readFromSQLite();
-	std::string tempCost2="EFDDD";
-	tool->decode(tempCost2);
-
-	int tempCoin =cl->intValue()-std::atoi(tempCost2.c_str());
-	if(tempCoin>=0){
-
-		isPosting=true;
-
-		cocos2d::extension::CCHttpRequest* request = new CCHttpRequest();
-		std::string code2=CCString::createWithFormat("%s",data1.c_str())->getCString();
-		std::string code3=CCString::createWithFormat("%d",MemberID)->getCString();
-		std::string code="code=400&MemberID="+code3+"&GroupName="+code2+"&pw="+PWord;;
-		std::string url=SERVER"nsk/group.php?"+code;
-		request->setUrl(url.c_str());
-		request->setRequestType(CCHttpRequest::kHttpGet);
-		request->setResponseCallback(this, callfuncND_selector(StartMenu::onCreateRequestCompleted));
-		request->setTag("Post_My_Data");
-		cocos2d::extension::CCHttpClient::getInstance()->send(request);
-		request->release();
-
-		if(!refreshBtn){
-			refreshBtn=Sprite::createWithSpriteFrameName("refresh_btn.png");
-			refreshBtn->setPosition(Vec2(winSize.width/2,winSize.height/2));
-			ActionInterval* rt=RotateBy::create(0.3f,180,180);
-			refreshBtn->runAction(RepeatForever::create(rt));
-			this->addChild(refreshBtn,1000);
-
-		}
-
-	}else{
-		CCTips *tip=CCTips::create("CoinError2");
-		this->addChild(tip,5000);
-	}
-
-
-
+	CCTips *tip=CCTips::create("ServerMainten");
+	this->addChild(tip,5000);
+	this->onInputBoxClose(NULL);
 }
 
-
 void StartMenu::onCreateRequestCompleted(Node *sender ,void *data) {
+	(void)sender;
+	(void)data;
 	isPosting=false;
-	//ˢ�°�ť
 	if(refreshBtn){
 		refreshBtn->stopAllActions();
 		refreshBtn->removeFromParent();
 		refreshBtn=NULL;
 	}
-
-	cocos2d::extension::CCHttpResponse *response = (cocos2d::extension::CCHttpResponse*)data;
-	if (!response)
-	{
-		return;
-	}
-	if (0 != strlen(response->getHttpRequest()->getTag()))
-	{
-		CCLOG("%s completed", response->getHttpRequest()->getTag());
-	}
-	int statusCode = response->getResponseCode();
-	char statusString[64] = {};
-	sprintf(statusString ,"Http status code:%d ,tag = %s" ,statusCode ,response->getHttpRequest()->getTag());
-	CCLOG("response code:%d" ,statusCode);
-	if (!response->isSucceed())
-	{
-		CCLOG("response failed");
-		CCLOG("error buffer:%s" ,response->getErrorBuffer());
-		CCTips *tip=CCTips::create("ServerError");
-		this->addChild(tip,5000);
-		return;
-	}
-	std::vector<char> *buffer = response->getResponseData();
-	printf("Http response,dump data:");
-
-
-	Document doc;
-	std::string buf(buffer->begin(),buffer->end());
-	const char* result=(char*) buf.c_str();
-
-	if(strcmp(result,"GroupDuplicate")==0){
-		CCTips *tip=CCTips::create("GroupDuplicate");
-		this->addChild(tip,5000);
-
-	}else if (strcmp(result,"GroupNameLength")==0){
-		CCTips *tip=CCTips::create("GroupNameLength");
-		this->addChild(tip,5000);
-	}else if (strcmp(result,"GroupNameError")==0){
-		CCTips *tip=CCTips::create("GroupNameError");
-		this->addChild(tip,5000);
-	}else if (strcmp(result,"CPError1")==0){
-		CCTips *tip=CCTips::create("CPError1");
-		this->addChild(tip,5000);
-	}else{
-		GroupID=std::atoi(result);
-		CCTips *tip=CCTips::create("GroupSuccessed");
-		this->addChild(tip,5000);
-
-		KTools* tool=KTools::create();
-		CCString* cl=tool->readFromSQLite();
-		std::string tempCost2="EFDDD";
-		tool->decode(tempCost2);
-		unsigned int tempCoin =cl->intValue()-std::atoi(tempCost2.c_str());
-
-		CCString* coin= CCString::createWithFormat("%d",tempCoin);
-		tool->saveToSQLite("GameRecord","coin",coin->getCString(),true);
-
-
-		this->onIterfaceClose(NULL);
-		this->onInputBoxClose(NULL);
-	}
-
 }
 
 
