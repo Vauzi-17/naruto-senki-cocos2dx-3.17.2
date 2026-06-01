@@ -22,7 +22,7 @@ masih memakai API 2.x seperti `CCLayer`, `CCSprite`, `CCMenu`, `CCPoint`,
 
 ## Estimasi Progress Migrasi
 
-Estimasi progress menuju kode full cocos2d-x 3.17.2: **sekitar 91%**.
+Estimasi progress menuju kode full cocos2d-x 3.17.2: **sekitar 93%**.
 
 Alasan estimasi:
 
@@ -93,6 +93,12 @@ Alasan estimasi:
   spawn hero awal, start setup duel/training, cek tower, rematch handoff, dan
   cleanup frame karakter sekarang memakai loop indeks eksplisit tanpa mengubah
   kontrak `CCArray` lama.
+- Scene awal yang diminta dicek ikut dibersihkan: `StartMenu`, `LoadLayer`, dan
+  `NetworkLayer` sekarang tidak lagi memakai `CCARRAY_FOREACH` aktif.
+- State pilihan training lokal di `NetworkLayer` sudah lepas dari retained
+  `CCString*`/`CCArray*` dan memakai `std::string` serta
+  `std::vector<std::string>`, sementara payload `tempHeros` ke `LoadLayer`
+  tetap `CCArray` agar kontrak gameplay lama belum berubah besar.
 - Masih ada sisa API 2.x yang cukup banyak di `ActionManager`, `Element`,
   `RankingLayer`, beberapa utility UI, app delegate, dan compatibility bridge.
 - Untuk mencapai 100%, sisa terbesar bukan sekadar rename API, tetapi migrasi
@@ -210,7 +216,7 @@ Roadmap menuju 100%:
   pengurangan compatibility shim yang tidak menyentuh kontrak data besar.
 - Sekitar 75-88%: migrasi sisa node/action/vector/frame di `RankingLayer`,
   `ActionManager`, `Element`, dan helper yang masih memakai API 2.x langsung.
-- Sekitar 91-97%: migrasi container/data lama (`CCArray`, `CCDictionary`,
+- Sekitar 93-97%: migrasi container/data lama (`CCArray`, `CCDictionary`,
   `CCString`) per batas modul, dimulai dari area paling lokal lalu baru kontrak
   antar-scene seperti loader, XML parser, dan gameplay core.
 - Sekitar 97-100%: hapus alias/helper yang sudah tidak dipakai dari
@@ -541,8 +547,8 @@ Catatan progress terbaru:
 Status: **berjalan; commit `ActionManager`, `Effect`, `HudLayer`, dekoratif UI,
 scene/loading, dan `StartMenu` sudah build-tested oleh pengguna di Android,
 commit `Element` terbaru sudah build-tested oleh pengguna di Android, commit
-`ActionManager` lokal dan loop `Characters`/`GameLayer` terbaru belum
-build-tested**.
+`ActionManager` lokal, loop `Characters`/`GameLayer`, dan scene selection
+container terbaru belum build-tested**.
 
 Prioritas:
 
@@ -581,6 +587,7 @@ Commit awal tahap 5:
 - `732a705 refactor: remove dict element compat alias`
 - `64f8937 refactor: migrate action button cooldown state`
 - `6decb79 refactor: migrate core iterator loops`
+- `56e7128 refactor: migrate scene selection containers`
 
 Catatan progress terbaru:
 
@@ -717,13 +724,22 @@ Catatan progress terbaru:
   refresh lock ougis, cek tower, dan cleanup/rematch. Kontrak `Heros`,
   `_CharacterArray`, dan `_TowerArray` tetap `CCArray` untuk menjaga handoff
   gameplay lama.
+- `StartMenu.cpp`, `LoadLayer.cpp`, dan `NetworkLayer.cpp` ikut dibersihkan
+  dari `CCARRAY_FOREACH` aktif. Loop menu, preload loader, select button, dan
+  pilihan training sekarang memakai loop indeks atau container STL lokal.
+- `NetworkLayer` tidak lagi menyimpan state training manual sebagai retained
+  `CCString*`/`CCArray*`; `_trainingPlayerPick`, `_trainingTeamPicks`, dan
+  `_trainingEnemyPicks` memakai `std::string`/`std::vector<std::string>`.
+  Handoff `tempHeros` ke `LoadLayer` tetap `CCArray`/`CCDictionary` karena
+  masih menjadi kontrak dengan `GameLayer`.
 - Audit menunjukkan `Cocos2dx2Compat.h` masih dipaksa lewat CMake dan project
   Win32, jadi penghapusan file/forced include ditunda sampai sisa alias legacy
   di source lebih kecil dan bisa diuji sebagai potongan final.
-- Setelah commit `ActionManager` lokal serta loop `Characters`/`GameLayer`
-  terbaru ini lulus build Android, langkah berikutnya adalah melanjutkan sisa
-  loop/container yang masih lokal dan mudah dipisahkan sebelum masuk kontrak
-  data besar di loader XML, `ActionManager`, `Element`, dan parser XML.
+- Setelah commit `ActionManager` lokal, loop `Characters`/`GameLayer`, dan
+  scene selection container terbaru ini lulus build Android, langkah berikutnya
+  adalah melanjutkan sisa loop/container yang masih lokal dan mudah dipisahkan
+  sebelum masuk kontrak data besar di loader XML, `ActionManager`, `Element`,
+  dan parser XML.
 - Alias HTTP di `Cocos2dx2Compat.h` belum dihapus karena masih punya pemakai
   aktif. Alias EditBox/Scale9/Scroll dan macro `atoi` sudah dihapus setelah
   audit pemakai source menunjukkan helper tersebut tidak perlu lagi disimpan di
