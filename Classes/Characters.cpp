@@ -534,7 +534,7 @@ void Hero::AI_Akamaru(){
 
 	if(abs((_master->getPosition() - this->getPosition()).x) >winSize.width/2 -48){
 		if( this->getActionState()==ACTION_STATE_IDLE ||  this->getActionState()==ACTION_STATE_WALK || this->getActionState()==ACTION_STATE_ATTACK){
-			moveDirection =(_master->getPosition() - this->getPosition()).getNormalized()
+			moveDirection = (_master->getPosition() - this->getPosition()).getNormalized();
 			this->walk(moveDirection);
 			return;
 		}
@@ -606,7 +606,7 @@ void Hero::AI_Akamaru(){
 
 	if(abs((_master->getPosition() - this->getPosition()).x) >winSize.width/2 -64){
 
-		Vec2 moveDirection =(_master->getPosition() - this->getPosition()).getNormalized()
+		Vec2 moveDirection = (_master->getPosition() - this->getPosition()).getNormalized();
 		this->walk(moveDirection);
 		return;
 	}else{
@@ -632,7 +632,7 @@ void Hero::AI_Karasu(){
 			Vec2 moveDirection;
 			if(abs((_master->getPosition() - this->getPosition()).x) >winSize.width/2 -48){
 			    if( this->getActionState()==ACTION_STATE_IDLE ||  this->getActionState()==ACTION_STATE_WALK || this->getActionState()==ACTION_STATE_ATTACK){
-				moveDirection =(_master->getPosition() - this->getPosition()).getNormalized()
+					moveDirection = (_master->getPosition() - this->getPosition()).getNormalized();
 				this->walk(moveDirection);
 				return;
 				}
@@ -724,7 +724,7 @@ void Hero::AI_Karasu(){
 	};
 
 	if(abs((_master->getPosition() - this->getPosition()).x) >winSize.width/2 -64){
-		Vec2 moveDirection =(_master->getPosition() - this->getPosition()).getNormalized()
+		Vec2 moveDirection = (_master->getPosition() - this->getPosition()).getNormalized();
 		this->walk(moveDirection);
 		return;
 	}else{
@@ -760,7 +760,7 @@ void Hero::AI_Saso(){
 	Vec2 moveDirection;
 	if(abs((_master->getPosition() - this->getPosition()).x) >64){
 		if( this->getActionState()==ACTION_STATE_IDLE ||  this->getActionState()==ACTION_STATE_WALK || this->getActionState()==ACTION_STATE_ATTACK){
-			moveDirection =(_master->getPosition() - this->getPosition()).getNormalized()
+			moveDirection = (_master->getPosition() - this->getPosition()).getNormalized();
 			this->walk(moveDirection);
 			return;
 		}
@@ -833,7 +833,7 @@ void Hero::AI_Saso(){
 	};
 
 	if(abs((_master->getPosition() - this->getPosition()).x) >winSize.width/2 -64){
-		Vec2 moveDirection =(_master->getPosition() - this->getPosition()).getNormalized()
+		Vec2 moveDirection = (_master->getPosition() - this->getPosition()).getNormalized();
 		this->walk(moveDirection);
 		return;
 	}else{
@@ -865,7 +865,7 @@ void Hero::AI_Parents(){
 	
 	if(abs((_master->getPosition() - this->getPosition()).x) >9 && !_skillChangeBuffValue){
 		if( this->getActionState()==ACTION_STATE_IDLE ||  this->getActionState()==ACTION_STATE_WALK || this->getActionState()==ACTION_STATE_ATTACK){
-			moveDirection =(_master->getPosition() - this->getPosition()).getNormalized()
+			moveDirection = (_master->getPosition() - this->getPosition()).getNormalized();
 			this->walk(moveDirection);
 			return;
 		}
@@ -934,7 +934,7 @@ void Hero::AI_Parents(){
 
 	if(abs((_master->getPosition() - this->getPosition()).x) >9){
 		 if( this->getActionState()==ACTION_STATE_IDLE ||  this->getActionState()==ACTION_STATE_WALK ){
-			moveDirection =(_master->getPosition() - this->getPosition()).getNormalized()
+			 moveDirection = (_master->getPosition() - this->getPosition()).getNormalized();
 			this->walk(moveDirection);
 			return;
 		}
@@ -960,7 +960,7 @@ void Hero::AI_Sanshouuo(){
 			Vec2 moveDirection;
 			if(abs((_master->getPosition() - this->getPosition()).x) >winSize.width/2 -64){
 				if(this->getActionState()==ACTION_STATE_IDLE ||  this->getActionState()==ACTION_STATE_WALK || this->getActionState()==ACTION_STATE_ATTACK){
-				moveDirection =(_master->getPosition() - this->getPosition()).getNormalized()
+					moveDirection = (_master->getPosition() - this->getPosition()).getNormalized();
 				this->walk(moveDirection);
 				return;
 				}
@@ -1038,7 +1038,7 @@ void Hero::AI_Sanshouuo(){
 	};
 
 	if(abs((_master->getPosition() - this->getPosition()).x) >winSize.width/2 -64){
-		Vec2 moveDirection =(_master->getPosition() - this->getPosition()).getNormalized()
+		Vec2 moveDirection = (_master->getPosition() - this->getPosition()).getNormalized();
 		this->walk(moveDirection);
 		return;
 	}else{
