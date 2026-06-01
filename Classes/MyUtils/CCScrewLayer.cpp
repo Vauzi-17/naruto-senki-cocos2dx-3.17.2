@@ -3,7 +3,6 @@
 
 CCScrewLayer::CCScrewLayer(void)
 {
-	itemArray=NULL;
 	totalRow=100;
 	minY=154;
 	line_height=26;
@@ -26,6 +25,21 @@ bool CCScrewLayer::init(){
 
 	return bRet;
 
+}
+
+const Vector<Node*>& CCScrewLayer::getItemArray() const{
+	return itemArray;
+}
+
+void CCScrewLayer::clearItemArray(){
+	itemArray.clear();
+}
+
+void CCScrewLayer::addItem(CCScrewItem* item){
+	if (item)
+	{
+		itemArray.pushBack(item);
+	}
 }
 
 void CCScrewLayer::onEnter(){

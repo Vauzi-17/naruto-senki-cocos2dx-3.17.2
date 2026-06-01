@@ -2,6 +2,8 @@
 #include "cocos2d.h"
 USING_NS_CC;  
 
+class CCScrewItem;
+
 class CCScrewLayer : public Layer{
 
 public:
@@ -11,7 +13,9 @@ public:
 	float			prePosY;
 	virtual	bool	init();
 	CREATE_FUNC(CCScrewLayer);
-	CC_SYNTHESIZE_RETAIN(CCArray*,itemArray, ItemArray);
+	const Vector<Node*>& getItemArray() const;
+	void clearItemArray();
+	void addItem(CCScrewItem* item);
 	float minY;
 	int totalRow;
 	int line_height;
@@ -25,6 +29,9 @@ protected:
 
 	void onEnter();
 	void onExit();
+
+private:
+	Vector<Node*> itemArray;
 
 };
 

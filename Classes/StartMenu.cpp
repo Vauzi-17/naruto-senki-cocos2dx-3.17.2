@@ -1087,10 +1087,7 @@ void StartMenu::onGroupManageRequestCompleted(Node *sender ,void *data){
 				screwItem->setDelegate(_screwLayer1);
 				_screwLayer1->addChild(screwItem,10);
 
-				if(!_screwLayer1->getItemArray()){
-					_screwLayer1->setItemArray(CCArray::create());
-				}
-				_screwLayer1->getItemArray()->addObject(screwItem);
+				_screwLayer1->addItem(screwItem);
 				screwItem->setTag(userID);
 				countRow++;
 			}
@@ -1250,8 +1247,7 @@ void StartMenu::onQuitGroupRequestCompleted(Node *sender ,void *data) {
 
 		this->onInputBoxClose(NULL);
 		_screwLayer1->removeAllChildren();
-		_screwLayer1->getItemArray()->removeAllObjects();
-		_screwLayer1->setItemArray(NULL);
+		_screwLayer1->clearItemArray();
 		_screwLayer1->setPositionY(_screwLayer1->minY);
 
 		for (SizeType i = 0; i < arr.Size(); i++)  {
@@ -1328,10 +1324,7 @@ void StartMenu::onQuitGroupRequestCompleted(Node *sender ,void *data) {
 			screwItem->setDelegate(_screwLayer1);
 			_screwLayer1->addChild(screwItem,10);
 
-			if(!_screwLayer1->getItemArray()){
-				_screwLayer1->setItemArray(CCArray::create());
-			}
-			_screwLayer1->getItemArray()->addObject(screwItem);
+			_screwLayer1->addItem(screwItem);
 			screwItem->setTag(userID);
 			countRow++;
 		}
@@ -1824,10 +1817,7 @@ void StartMenu::onGroupRequestCompleted(Node *sender ,void *data){
 			screwItem->setDelegate(_screwLayer1);
 			_screwLayer1->addChild(screwItem,10);
 
-			if(!_screwLayer1->getItemArray()){
-				_screwLayer1->setItemArray(CCArray::create());
-			}
-			_screwLayer1->getItemArray()->addObject(screwItem);
+			_screwLayer1->addItem(screwItem);
 			screwItem->setTag(groupID);
 			countRow++;
 		}
@@ -1842,9 +1832,8 @@ void StartMenu::onGroupRequestCompleted(Node *sender ,void *data){
 void StartMenu::onJoinGroup(Ref* sender){
 	MenuItem* item=(MenuItem*) sender;
 
-	Ref* pObject;
-	CCARRAY_FOREACH(_screwLayer1->getItemArray(),pObject){
-		CCScrewItem* screwItem=(CCScrewItem*) pObject;
+	for (auto screwNode : _screwLayer1->getItemArray()){
+		CCScrewItem* screwItem=(CCScrewItem*) screwNode;
 		if(screwItem->getTag()==item->getTag()){
 			if(screwItem->lockItem){
 
@@ -2058,7 +2047,7 @@ void StartMenu::onSeachRequestCompleted(Node *sender ,void *data) {
 
 	_screwLayer1->removeAllChildren();
 	_screwLayer1->setPositionY(_screwLayer1->minY);
-	_screwLayer1->setItemArray(NULL);
+	_screwLayer1->clearItemArray();
 
 	cocos2d::extension::CCHttpResponse *response = (cocos2d::extension::CCHttpResponse*)data;
 	if (!response)
@@ -2163,10 +2152,7 @@ void StartMenu::onSeachRequestCompleted(Node *sender ,void *data) {
 			screwItem->setDelegate(_screwLayer1);
 			_screwLayer1->addChild(screwItem,10);
 
-			if(!_screwLayer1->getItemArray()){
-				_screwLayer1->setItemArray(CCArray::create());
-			}
-			_screwLayer1->getItemArray()->addObject(screwItem);
+			_screwLayer1->addItem(screwItem);
 			screwItem->setTag(groupID);
 			countRow++;
 		}
@@ -2367,9 +2353,8 @@ void StartMenu::onSelectGroupBtn(Ref* sender){
 
 	MenuItemLabel* item=(MenuItemLabel*) sender;
 
-	Ref* pObject;
-	CCARRAY_FOREACH(_screwLayer1->getItemArray(),pObject){
-		CCScrewItem* screwItem=(CCScrewItem*) pObject;
+	for (auto screwNode : _screwLayer1->getItemArray()){
+		CCScrewItem* screwItem=(CCScrewItem*) screwNode;
 		if(screwItem->getTag()==item->getTag()){
 			if(screwItem->linemenu){
 				screwItem->linemenu->setVisible(true);
