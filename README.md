@@ -204,6 +204,9 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
 - `Cocos2dx2Compat.h`: macro `atoi` dihapus; pemakai source game diganti ke
   `std::atoi` dengan include `<cstdlib>` eksplisit. File third-party SQLite
   tidak disentuh.
+- `SkillLayer` dan `GameOver`: sisa parsing/request HTTP yang sudah mati di
+  jalur offline dibersihkan. Callback stub tetap dipertahankan, tetapi tidak
+  lagi menyimpan akses `CCHttpResponse` atau request upload legacy.
 
 1. **Tutup helper compat kecil yang masih lokal**
    - Target file: `Cocos2dx2Compat.h`, `ActionButton`, `HPBar`, `HudLayer`,
@@ -589,6 +592,9 @@ Catatan progress terbaru:
   aktif. Alias EditBox/Scale9/Scroll dan macro `atoi` sudah dihapus setelah
   audit pemakai source menunjukkan helper tersebut tidak perlu lagi disimpan di
   compat header.
+- Dead code HTTP di `SkillLayer` dan upload `GameOver` dibersihkan agar jalur
+  offline tidak lagi membawa parsing response/request lama yang sudah tidak
+  berjalan.
 
 ## Cara Kerja Migrasi
 
