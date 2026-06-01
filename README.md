@@ -150,8 +150,6 @@ Beberapa API lama masih dibiarkan sementara karena menyentuh banyak modul:
 - `CCDictionary`
 - `CCString`
 - `CCLabelTTF`
-- `CCScale9Sprite`
-- `CCScrollView`
 - beberapa helper di `Cocos2dx2Compat.h`
 
 Strateginya adalah membersihkan API node/action/input terlebih dahulu, lalu baru
@@ -182,11 +180,11 @@ Urutan langkah berikutnya menuju 100%:
 
 Posisi saat ini: **sedang di langkah 1 menuju langkah 2**. Helper compat kecil
 yang benar-benar lokal sudah mulai ditutup (`visitNode`, `CCTime`/`cc_timeval`,
-`CCDictElement`, sebagian state cooldown `ActionButton`), tetapi langkah 1 belum
-selesai karena `Cocos2dx2Compat.h` masih menampung alias aktif seperti
-`CCHttpRequest`, `CCEditBox`, `CCScale9Sprite`, `CCScrollView`, dan macro
-`atoi`. Setelah sisa helper kecil yang aman selesai, pekerjaan bergeser penuh ke
-langkah 2 untuk membersihkan UI/menu lokal.
+`CCDictElement`, sebagian state cooldown `ActionButton`, `CCScale9Sprite`, dan
+`CCScrollView`, serta `CCEditBox`), tetapi langkah 1 belum selesai karena
+`Cocos2dx2Compat.h` masih menampung alias HTTP aktif dan macro `atoi`. Setelah
+sisa helper kecil yang aman selesai, pekerjaan bergeser penuh ke langkah 2 untuk
+membersihkan UI/menu lokal.
 
 Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
 
@@ -198,6 +196,11 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
   `CCScrollView`; sudah memakai `cocos2d::ui::Scale9Sprite` + `ScrollView`
   native cocos2d-x 3.x.
 - `SkillLayer`: callback HTTP refresh skill distub (jalur offline).
+- `Cocos2dx2Compat.h`: alias mati `CCScale9Sprite` dan `CCScrollView` beserta
+  include/konstanta scroll legacy dihapus setelah tidak ada pemakai aktif.
+- `StartMenu`: field dan pembuatan input box lokal dipindah dari alias
+  `CCEditBox`/konstanta `kEditBox*` ke `cocos2d::ui::EditBox` native, lalu
+  alias `CCEditBox` dihapus dari `Cocos2dx2Compat.h`.
 
 1. **Tutup helper compat kecil yang masih lokal**
    - Target file: `Cocos2dx2Compat.h`, `ActionButton`, `HPBar`, `HudLayer`,
@@ -212,9 +215,8 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
    - Target file: `ActionButton`, `HPBar`, `GearLayer`, `GameOver`,
      `RankingLayer`, `SelectLayer`, `SkillLayer`, dan bagian offline/dekoratif
      di `StartMenu`.
-   - Fokus: migrasi sisa `CCString`, `CCArray`, `CCDictionary`, `CCScale9Sprite`,
-     `CCScrollView`, dan callback HTTP lama yang tidak lagi dibutuhkan oleh game
-     offline.
+   - Fokus: migrasi sisa `CCString`, `CCArray`, `CCDictionary`, dan callback
+     HTTP lama yang tidak lagi dibutuhkan oleh game offline.
    - Batas aman: jangan mengubah payload hero/team yang masih dikirim ke
      `LoadLayer`, `GameLayer`, `Element`, atau `ActionManager` sebelum kontrak
      data gameplay disiapkan.
@@ -259,8 +261,8 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
 
 7. **Hapus compatibility bridge final**
    - Target file: `Cocos2dx2Compat.h` dan semua include/caller tersisa.
-   - Fokus: hapus alias `CCEditBox`, `CCScale9Sprite`, `CCScrollView`, HTTP,
-     macro `atoi`, dan include deprecated yang sudah tidak diperlukan.
+   - Fokus: hapus alias HTTP, macro `atoi`, dan include deprecated yang sudah
+     tidak diperlukan.
    - Syarat lanjut: `rg` untuk pola API 2.x utama harus bersih atau hanya
      menyisakan komentar/third-party yang memang bukan source game.
 
@@ -432,8 +434,9 @@ Catatan progress terbaru:
   memakai `Label::createWithSystemFont`.
 - `Cocos2dx2Compat.h` dikurangi dari touch delegate shim lama yang sudah tidak
   dipakai (`CCTouchDelegate`, `addTargetedDelegate`, dan `removeDelegate`).
-  Alias HTTP, EditBox, Scale9, ScrollView, time, array, string, dan sequence
-  masih dipertahankan karena masih ada pemakai aktif.
+  Alias HTTP, time, array, string, dan sequence masih dipertahankan karena masih
+  ada pemakai aktif; alias EditBox/Scale9/ScrollView sudah tidak aktif di source
+  game.
 - Commit penghapusan callback HTTP ranking, cleanup dasar `KTools`, dan
   pengurangan compat touch terbaru sudah dibuild pengguna lewat Android Studio
   dan berjalan lancar.
@@ -580,8 +583,9 @@ Catatan progress terbaru:
   berikutnya adalah melanjutkan migrasi container yang masih lokal dan mudah
   dipisahkan sebelum masuk kontrak data besar di loader XML, `ActionManager`,
   `Element`, dan `Characters`.
-- Alias HTTP/EditBox/Scale9/Scroll di `Cocos2dx2Compat.h` belum dihapus karena
-  masih punya pemakai aktif.
+- Alias HTTP di `Cocos2dx2Compat.h` belum dihapus karena masih punya pemakai
+  aktif. Alias EditBox/Scale9/Scroll sudah dihapus setelah audit pemakai source
+  menunjukkan hanya tersisa di compat header.
 
 ## Cara Kerja Migrasi
 

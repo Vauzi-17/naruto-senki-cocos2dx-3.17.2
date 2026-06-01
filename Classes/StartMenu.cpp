@@ -814,14 +814,14 @@ void  StartMenu::onGroupBtn(Ref* sender){
 
 			cocos2d::ui::Scale9Sprite * bg01=cocos2d::ui::Scale9Sprite::createWithSpriteFrameName("input_bg2.png");
 
-			searchInput =CCEditBox::create(Size(114, 20), bg01);
+			searchInput = cocos2d::ui::EditBox::create(Size(114, 20), bg01);
 			CCDictionary *strings = CCDictionary::createWithContentsOfFile("Element/strings.xml");
 			const char *reply = ((CCString*)strings->objectForKey("SeachTips"))->getCString();
 			searchInput->setPlaceHolder(reply);
 			searchInput->setFontColor(Color3B(255,255,255));
 			searchInput->setPosition(Vec2(group_bg->getPositionX()-group_bg->getContentSize().width/2+74,43));
-			searchInput->setInputMode(kEditBoxInputModeNumeric);
-			searchInput->setReturnType(kKeyboardReturnTypeDefault);
+			searchInput->setInputMode(cocos2d::ui::EditBox::InputMode::NUMERIC);
+			searchInput->setReturnType(cocos2d::ui::EditBox::KeyboardReturnType::DEFAULT);
 			group_layer->addChild(searchInput,20);
 
 
@@ -1394,11 +1394,11 @@ void StartMenu::onNoticeBtn(Ref* sender){
 
 			gpwInput=NULL;
 			cocos2d::ui::Scale9Sprite * bg01=cocos2d::ui::Scale9Sprite::createWithSpriteFrameName("input_bg.png");
-			gpwInput =CCEditBox::create(Size(115, 25), bg01);
+			gpwInput = cocos2d::ui::EditBox::create(Size(115, 25), bg01);
 			gpwInput->setFontColor(Color3B(255,255,255));
 			gpwInput->setPosition(Vec2(winSize.width/2,winSize.height/2+25));
-			gpwInput->setInputMode(kEditBoxInputModeAny);
-			gpwInput->setReturnType(kKeyboardReturnTypeDefault);
+			gpwInput->setInputMode(cocos2d::ui::EditBox::InputMode::ANY);
+			gpwInput->setReturnType(cocos2d::ui::EditBox::KeyboardReturnType::DEFAULT);
 			input_layer->addChild(gpwInput,200);
 
 			/*Sprite* pw_tip=Sprite::createWithSpriteFrameName("gpw_tip.png");
@@ -1498,11 +1498,11 @@ void StartMenu::onLockBtn(Ref* sender){
 
 				gpwInput=NULL;
 				cocos2d::ui::Scale9Sprite * bg01=cocos2d::ui::Scale9Sprite::createWithSpriteFrameName("input_bg.png");
-				gpwInput =CCEditBox::create(Size(115, 25), bg01);
+				gpwInput = cocos2d::ui::EditBox::create(Size(115, 25), bg01);
 				gpwInput->setFontColor(Color3B(255,255,255));
 				gpwInput->setPosition(Vec2(winSize.width/2+16,winSize.height/2+25));
-				gpwInput->setInputMode(kEditBoxInputModeNumeric);
-				gpwInput->setReturnType(kKeyboardReturnTypeDefault);
+				gpwInput->setInputMode(cocos2d::ui::EditBox::InputMode::NUMERIC);
+				gpwInput->setReturnType(cocos2d::ui::EditBox::KeyboardReturnType::DEFAULT);
 				input_layer->addChild(gpwInput,200);
 
 				Sprite* pw_tip=Sprite::createWithSpriteFrameName("gpw_tip.png");
@@ -1849,11 +1849,11 @@ void StartMenu::onJoinGroup(Ref* sender){
 					input_layer->addChild(gpwInputTitle,200);
 
 					cocos2d::ui::Scale9Sprite * bg01=cocos2d::ui::Scale9Sprite::createWithSpriteFrameName("input_bg.png");
-					gpwInput =CCEditBox::create(Size(115, 25), bg01);
+					gpwInput = cocos2d::ui::EditBox::create(Size(115, 25), bg01);
 					gpwInput->setFontColor(Color3B(255,255,255));
 					gpwInput->setPosition(Vec2(winSize.width/2+16,winSize.height/2+25));
-					gpwInput->setInputMode(kEditBoxInputModeNumeric);
-					gpwInput->setReturnType(kKeyboardReturnTypeDefault);
+					gpwInput->setInputMode(cocos2d::ui::EditBox::InputMode::NUMERIC);
+					gpwInput->setReturnType(cocos2d::ui::EditBox::KeyboardReturnType::DEFAULT);
 					input_layer->addChild(gpwInput,200);
 
 					Sprite* pw_tip=Sprite::createWithSpriteFrameName("gpw_tip.png");
@@ -2179,11 +2179,11 @@ void  StartMenu::onCreateBtn(Ref* sender){
 			input_layer->addChild(nameInputTitle,200);
 
 			cocos2d::ui::Scale9Sprite * bg01=cocos2d::ui::Scale9Sprite::createWithSpriteFrameName("input_bg.png");
-			nameInput =CCEditBox::create(Size(115, 25), bg01);
+			nameInput = cocos2d::ui::EditBox::create(Size(115, 25), bg01);
 			nameInput->setFontColor(Color3B(255,255,255));
 			nameInput->setPosition(Vec2(winSize.width/2+16,winSize.height/2+25));
-			nameInput->setInputMode(kEditBoxInputModeSingleLine);
-			nameInput->setReturnType(kKeyboardReturnTypeDefault);
+			nameInput->setInputMode(cocos2d::ui::EditBox::InputMode::SINGLE_LINE);
+			nameInput->setReturnType(cocos2d::ui::EditBox::KeyboardReturnType::DEFAULT);
 			input_layer->addChild(nameInput,200);
 
 			Sprite* create_tip=Sprite::createWithSpriteFrameName("createGroup_tip.png");
@@ -2978,11 +2978,11 @@ void  StartMenu::onLoginBtn(Ref* sender){
 			input_layer->addChild(userInputTitle,200);
 
 			cocos2d::ui::Scale9Sprite * bg01=cocos2d::ui::Scale9Sprite::createWithSpriteFrameName("input_bg.png");
-			usernameInput =CCEditBox::create(Size(115, 25), bg01);
+			usernameInput = cocos2d::ui::EditBox::create(Size(115, 25), bg01);
 			usernameInput->setFontColor(Color3B(255,255,255));
 			usernameInput->setPosition(Vec2(winSize.width/2+16,winSize.height/2+35));
-			usernameInput->setInputMode(kEditBoxInputModeSingleLine);
-			usernameInput->setReturnType(kKeyboardReturnTypeDefault);
+			usernameInput->setInputMode(cocos2d::ui::EditBox::InputMode::SINGLE_LINE);
+			usernameInput->setReturnType(cocos2d::ui::EditBox::KeyboardReturnType::DEFAULT);
 			input_layer->addChild(usernameInput,200);
 
 
@@ -2993,12 +2993,12 @@ void  StartMenu::onLoginBtn(Ref* sender){
 			pwInputTitle->setPosition(Vec2(winSize.width/2-60,winSize.height/2));
 			input_layer->addChild(pwInputTitle,200);
 			cocos2d::ui::Scale9Sprite * bg02=cocos2d::ui::Scale9Sprite::createWithSpriteFrameName("input_bg.png");
-			pwInput =CCEditBox::create(Size(115, 25), bg02);
+			pwInput = cocos2d::ui::EditBox::create(Size(115, 25), bg02);
 			pwInput->setFontColor(Color3B(255,255,255));
 			pwInput->setPosition(Vec2(winSize.width/2+16,winSize.height/2));
-			pwInput->setInputMode(kEditBoxInputModeSingleLine);
-			pwInput->setInputFlag(kEditBoxInputFlagPassword);
-			pwInput->setReturnType(kKeyboardReturnTypeDefault);
+			pwInput->setInputMode(cocos2d::ui::EditBox::InputMode::SINGLE_LINE);
+			pwInput->setInputFlag(cocos2d::ui::EditBox::InputFlag::PASSWORD);
+			pwInput->setReturnType(cocos2d::ui::EditBox::KeyboardReturnType::DEFAULT);
 			input_layer->addChild(pwInput,200);
 
 

@@ -7,6 +7,7 @@
 #include "CreditsLayer.h"
 
 #include "cocos-ext.h"
+#include "ui/UIEditBox/UIEditBox.h"
 #include "MyUtils/KTools.h"
 #include "MyUtils/CCStrokeLabel.h"
 #include "MyUtils/CCScrewLayer.h"
@@ -150,11 +151,11 @@ public:
 
 	Layer* input_layer;
 
-	cocos2d::extension::CCEditBox* usernameInput;
-	cocos2d::extension::CCEditBox* pwInput;
-	cocos2d::extension::CCEditBox* searchInput;
-	cocos2d::extension::CCEditBox* nameInput;
-	cocos2d::extension::CCEditBox* gpwInput;
+	cocos2d::ui::EditBox* usernameInput;
+	cocos2d::ui::EditBox* pwInput;
+	cocos2d::ui::EditBox* searchInput;
+	cocos2d::ui::EditBox* nameInput;
+	cocos2d::ui::EditBox* gpwInput;
 
 	static const int	_pos01=48;
 	static const int	_pos02=92;
