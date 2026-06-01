@@ -266,6 +266,8 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
 - `SkillLayer` dan `GameOver`: sisa parsing/request HTTP yang sudah mati di
   jalur offline dibersihkan. Callback stub tetap dipertahankan, tetapi tidak
   lagi menyimpan akses `CCHttpResponse` atau request upload legacy.
+- `ActionManager` dan `Characters`: iterator lokal `CCObject* pObject` hasil
+  `objectAtIndex()` diganti ke `Ref*`, tanpa mengubah kontrak `CCArray` lama.
 - `NetworkLayer`: komentar request list hero lama dan parsing response callback
   yang sudah tidak punya caller aktif dibersihkan; flow pemilihan hero tetap
   memakai daftar offline statis.
@@ -333,6 +335,9 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
   container `CCArray` lama.
 - `Element`: iterator lokal hasil `objectAtIndex()` di dealloc/AI kecil
   diganti dari `CCObject*` ke `Ref*`, tetap tanpa mengubah container lama.
+- `ActionManager` dan `Characters`: iterator lokal `CCObject* pObject` hasil
+  `objectAtIndex()` ikut diganti ke `Ref*` di loop core yang masih sengaja
+  mempertahankan `CCArray`.
 
 1. **Tutup helper compat kecil yang masih lokal**
    - Target file: `Cocos2dx2Compat.h`, `ActionButton`, `HPBar`, `HudLayer`,

@@ -394,7 +394,7 @@ void NarutoSenki::ActionManager::update(float dt){
 			if(strcmp(this->_role->getCString(),"Player")==0  && !_isAI && !_isWudi && !_isBati){
 				
 				//save the stop Area
-				CCObject* pObject;
+				Ref* pObject;
 				for (unsigned int ccIndex = 0; this->_delegate->_TowerArray && ccIndex < this->_delegate->_TowerArray->count(); ++ccIndex){
 					pObject = this->_delegate->_TowerArray->objectAtIndex(ccIndex);
 	
@@ -545,7 +545,7 @@ void NarutoSenki::ActionManager::acceptAttack(CCObject* object){
 
 					bool _isCounter=false;
 					if(_monsterArray && _monsterArray->count()>0){
-						CCObject* pObject;
+						Ref* pObject;
 						for (unsigned int ccIndex = 0; this->_monsterArray && ccIndex < this->_monsterArray->count(); ++ccIndex){
 							pObject = this->_monsterArray->objectAtIndex(ccIndex);
 							NarutoSenki::ActionManager* tempMonster=(NarutoSenki::ActionManager*) pObject;
@@ -569,7 +569,7 @@ void NarutoSenki::ActionManager::acceptAttack(CCObject* object){
 
 						}
 
-						CCObject* pObject;
+						Ref* pObject;
 						for (unsigned int ccIndex = 0; _delegate->_CharacterArray && ccIndex < _delegate->_CharacterArray->count(); ++ccIndex){
 							pObject = _delegate->_CharacterArray->objectAtIndex(ccIndex);
 							Hero* tempHero=(Hero*) pObject;
@@ -783,7 +783,7 @@ void NarutoSenki::ActionManager::acceptAttack(CCObject* object){
 								}
 
 								if(strcmp(Attacker->getRole()->getCString(),"Player")==0 && Attacker->hearts>0 ){
-									CCObject* pObject;
+									Ref* pObject;
 									int countMON=0;
 									for (unsigned int ccIndex = 0; Attacker->getMonsterArray() && ccIndex < Attacker->getMonsterArray()->count(); ++ccIndex){
 										pObject = Attacker->getMonsterArray()->objectAtIndex(ccIndex);
@@ -1070,7 +1070,7 @@ void NarutoSenki::ActionManager::acceptAttack(CCObject* object){
 						
 						bool _isCounter=false;
 						if(_monsterArray && _monsterArray->count()>0){
-							CCObject* pObject;
+							Ref* pObject;
 							for (unsigned int ccIndex = 0; this->_monsterArray && ccIndex < this->_monsterArray->count(); ++ccIndex){
 								pObject = this->_monsterArray->objectAtIndex(ccIndex);
 								NarutoSenki::ActionManager* tempMonster=(NarutoSenki::ActionManager*) pObject;
@@ -1108,7 +1108,7 @@ void NarutoSenki::ActionManager::acceptAttack(CCObject* object){
 							}
 
 
-							CCObject* pObject;
+							Ref* pObject;
 							for (unsigned int ccIndex = 0; _delegate->_CharacterArray && ccIndex < _delegate->_CharacterArray->count(); ++ccIndex){
 								pObject = _delegate->_CharacterArray->objectAtIndex(ccIndex);
 								Hero* tempHero=(Hero*) pObject;
@@ -1510,7 +1510,7 @@ void NarutoSenki::ActionManager::setDamage(CCString* effectType,unsigned int att
 				}
 
 				if(strcmp(this->_character->getCString(),"Chiyo")==0){
-					CCObject* pObject;
+					Ref* pObject;
 					for (unsigned int ccIndex = 0; this->getMonsterArray() && ccIndex < this->getMonsterArray()->count(); ++ccIndex){
 						pObject = this->getMonsterArray()->objectAtIndex(ccIndex);
 						Monster* mo=(Monster*) pObject;
@@ -1952,7 +1952,7 @@ void NarutoSenki::ActionManager::setItem(abType type){
 		strcmp(this->getCharacter()->getCString(),"Kiba")==0 || 
 		strcmp(this->getCharacter()->getCString(),"Kakuzu")==0
 		) && this->getMonsterArray() && getMonsterArray()->count()>0){
-		CCObject* pObject;
+		Ref* pObject;
 		for (unsigned int ccIndex = 0; this->getMonsterArray() && ccIndex < this->getMonsterArray()->count(); ++ccIndex){
 			pObject = this->getMonsterArray()->objectAtIndex(ccIndex);
 			Monster* mo=(Monster*) pObject;
@@ -2502,7 +2502,7 @@ void NarutoSenki::ActionManager::setAttackBox(Node* sender,void* date){
 
 void NarutoSenki::ActionManager::getSticker(float dt){
 
-	CCObject* pObject;
+	Ref* pObject;
 
 	for (unsigned int ccIndex = 0; _delegate->_CharacterArray && ccIndex < _delegate->_CharacterArray->count(); ++ccIndex){
 
@@ -2708,7 +2708,7 @@ void NarutoSenki::ActionManager::setCommand(Node* sender,void* date){
 		this->setVisible(true);
 		_isVisable=true;
 	}else if(strcmp(commandType->getCString(),"setTransport2")==0){
-		CCObject* pObject;
+		Ref* pObject;
 		int tsPosX=this->getPositionX();
 		int tsPosY=this->getPositionY();
 
@@ -2735,7 +2735,7 @@ void NarutoSenki::ActionManager::setCommand(Node* sender,void* date){
 
 
 	}else if(strcmp(commandType->getCString(),"setTransport")==0){
-		CCObject* pObject;
+		Ref* pObject;
 		int tsPosX=this->getPositionX();
 		int tsPosY=this->getPositionY();
 
@@ -2824,7 +2824,7 @@ void NarutoSenki::ActionManager::setCommand(Node* sender,void* date){
 
 	}else if(strcmp(commandType->getCString(),"setRevive")==0){
 
-		CCObject* pObject;
+		Ref* pObject;
 		for (unsigned int ccIndex = 0; _delegate->_CharacterArray && ccIndex < _delegate->_CharacterArray->count(); ++ccIndex){
 			pObject = _delegate->_CharacterArray->objectAtIndex(ccIndex);
 			Hero* tempHero=(Hero*) pObject;
@@ -2840,7 +2840,7 @@ void NarutoSenki::ActionManager::setCommand(Node* sender,void* date){
 		};
 	}else if(strcmp(commandType->getCString(),"setTrade")==0){
 
-		CCObject* pObject;
+		Ref* pObject;
 		for (unsigned int ccIndex = 0; _delegate->_CharacterArray && ccIndex < _delegate->_CharacterArray->count(); ++ccIndex){
 			pObject = _delegate->_CharacterArray->objectAtIndex(ccIndex);
 			Hero* tempHero=(Hero*) pObject;
@@ -2928,7 +2928,7 @@ void NarutoSenki::ActionManager::setCommand(Node* sender,void* date){
 
 		bool _isCounter=false;
 		if(_monsterArray && _monsterArray->count()>0){
-			CCObject* pObject;
+			Ref* pObject;
 			for (unsigned int ccIndex = 0; this->_monsterArray && ccIndex < this->_monsterArray->count(); ++ccIndex){
 				pObject = this->_monsterArray->objectAtIndex(ccIndex);
 				NarutoSenki::ActionManager* tempMonster=(NarutoSenki::ActionManager*) pObject;
@@ -2941,7 +2941,7 @@ void NarutoSenki::ActionManager::setCommand(Node* sender,void* date){
 		}
 
 		if(_isCounter){
-			CCObject* pObject;
+			Ref* pObject;
 			for (unsigned int ccIndex = 0; _delegate->_CharacterArray && ccIndex < _delegate->_CharacterArray->count(); ++ccIndex){
 				pObject = _delegate->_CharacterArray->objectAtIndex(ccIndex);
 				Hero* tempHero=(Hero*) pObject;
@@ -3022,7 +3022,7 @@ void NarutoSenki::ActionManager::setBuff(Node* sender,void* date){
 		
 
 		if(strcmp(_attackType->getCString(),"hsBuff")==0 ){
-			CCObject* pObject;
+			Ref* pObject;
 			for (unsigned int ccIndex = 0; _delegate->_CharacterArray && ccIndex < _delegate->_CharacterArray->count(); ++ccIndex){
 				pObject = _delegate->_CharacterArray->objectAtIndex(ccIndex);
 				NarutoSenki::ActionManager* tempHero=(NarutoSenki::ActionManager*) pObject;
@@ -3309,7 +3309,7 @@ void NarutoSenki::ActionManager::healBuff(float dt){
 	//����Ⱥ��
 	if(strcmp(_character->getCString(),"Karin")==0){
 
-		CCObject* pObject;
+		Ref* pObject;
 		for (unsigned int ccIndex = 0; _delegate->_CharacterArray && ccIndex < _delegate->_CharacterArray->count(); ++ccIndex){
 			pObject = _delegate->_CharacterArray->objectAtIndex(ccIndex);
 			Hero* tempHero=(Hero*) pObject;
@@ -3362,7 +3362,7 @@ void NarutoSenki::ActionManager::healBuff(float dt){
 
 	}else if(strcmp(_character->getCString(),"Chiyo")==0){
 
-		CCObject* pObject;
+		Ref* pObject;
 		for (unsigned int ccIndex = 0; _delegate->_CharacterArray && ccIndex < _delegate->_CharacterArray->count(); ++ccIndex){
 			pObject = _delegate->_CharacterArray->objectAtIndex(ccIndex);
 			Hero* tempHero=(Hero*) pObject;
@@ -3436,7 +3436,7 @@ void NarutoSenki::ActionManager::healBuff(float dt){
 
 	}else if(strcmp(_character->getCString(),"Slug")==0){
 
-		CCObject* pObject;
+		Ref* pObject;
 		CCArray* list;
 
 		if(strcmp("Akatsuki",_group->getCString())==0){
@@ -3526,7 +3526,7 @@ void NarutoSenki::ActionManager::dehealBuff(float dt){
 	
 
 
-	CCObject* pObject;
+	Ref* pObject;
 	for (unsigned int ccIndex = 0; _delegate->_CharacterArray && ccIndex < _delegate->_CharacterArray->count(); ++ccIndex){
 		pObject = _delegate->_CharacterArray->objectAtIndex(ccIndex);
 		Hero* tempHero=(Hero*) pObject;
@@ -3553,7 +3553,7 @@ void NarutoSenki::ActionManager::dehealBuff(float dt){
 void NarutoSenki::ActionManager::lostBlood(float dt){
 
 
-	CCObject* pObject;
+	Ref* pObject;
 	for (unsigned int ccIndex = 0; _delegate->_CharacterArray && ccIndex < _delegate->_CharacterArray->count(); ++ccIndex){
 		pObject = _delegate->_CharacterArray->objectAtIndex(ccIndex);
 		Hero* tempHero=(Hero*) pObject;
@@ -3779,7 +3779,7 @@ void NarutoSenki::ActionManager::changeAction(){
 			_skillChangeBuffValue=NULL;
 
 		}else if(_skillChangeBuffValue==18){
-			CCObject* pObject;
+			Ref* pObject;
 			for (unsigned int ccIndex = 0; this->getMonsterArray() && ccIndex < this->getMonsterArray()->count(); ++ccIndex){
 				pObject = this->getMonsterArray()->objectAtIndex(ccIndex);
 				Monster* mo=(Monster*) pObject;
@@ -3813,7 +3813,7 @@ void NarutoSenki::ActionManager::changeAction(){
 			this->_isTaunt=true;
 			this->setHurtAction(createAnimation(skillSPC5Array,10.0f,false,true));
 
-			CCObject* pObject;
+			Ref* pObject;
 			for (unsigned int ccIndex = 0; _delegate->_CharacterArray && ccIndex < _delegate->_CharacterArray->count(); ++ccIndex){
 				pObject = _delegate->_CharacterArray->objectAtIndex(ccIndex);
 				NarutoSenki::ActionManager* tempHero=(NarutoSenki::ActionManager*) pObject;
@@ -3894,7 +3894,7 @@ void NarutoSenki::ActionManager::changeAction(){
 			this->_isTaunt=true;
 			this->setHurtAction(createAnimation(skillSPC1Array,10.0f,false,true));
 
-			CCObject* pObject;
+			Ref* pObject;
 			for (unsigned int ccIndex = 0; _delegate->_CharacterArray && ccIndex < _delegate->_CharacterArray->count(); ++ccIndex){
 				pObject = _delegate->_CharacterArray->objectAtIndex(ccIndex);
 				NarutoSenki::ActionManager* tempHero=(NarutoSenki::ActionManager*) pObject;
@@ -3969,7 +3969,7 @@ void NarutoSenki::ActionManager::changeAction(){
 
 		_originSpeed=320;
 
-		CCObject* pObject;
+		Ref* pObject;
 		for (unsigned int ccIndex = 0; _delegate->_CharacterArray && ccIndex < _delegate->_CharacterArray->count(); ++ccIndex){
 			pObject = _delegate->_CharacterArray->objectAtIndex(ccIndex);
 			NarutoSenki::ActionManager* tempHero=(NarutoSenki::ActionManager*) pObject;
@@ -4069,7 +4069,7 @@ void NarutoSenki::ActionManager::changeAction(){
 		this->settempAttackValue1(CCString::createWithFormat("%d",std::atoi(_sattackValue1->getCString())));
 		this->setsAttackValue1(_spcattackValue1);
 		
-		CCObject* pObject;
+		Ref* pObject;
 		for (unsigned int ccIndex = 0; _delegate->_CharacterArray && ccIndex < _delegate->_CharacterArray->count(); ++ccIndex){
 			pObject = _delegate->_CharacterArray->objectAtIndex(ccIndex);
 			NarutoSenki::ActionManager* tempHero=(NarutoSenki::ActionManager*) pObject;
@@ -4723,7 +4723,7 @@ void NarutoSenki::ActionManager::resumeAction(float dt){
 		this->setKnockDownAction(createAnimation(knockDownArray,10.0f,false,true));
 
 		if(this->getMonsterArray() && getMonsterArray()->count()>0){
-			CCObject* pObject;
+			Ref* pObject;
 			for (unsigned int ccIndex = 0; this->getMonsterArray() && ccIndex < this->getMonsterArray()->count(); ++ccIndex){
 				pObject = this->getMonsterArray()->objectAtIndex(ccIndex);
 				Monster* mo=(Monster*) pObject;
@@ -4857,7 +4857,7 @@ void NarutoSenki::ActionManager::resumeAction(float dt){
 		_nattackRangeY=48;
 
 		if(this->getMonsterArray() && getMonsterArray()->count()>0){
-			CCObject* pObject;
+			Ref* pObject;
 			for (unsigned int ccIndex = 0; this->getMonsterArray() && ccIndex < this->getMonsterArray()->count(); ++ccIndex){
 				pObject = this->getMonsterArray()->objectAtIndex(ccIndex);
 				Monster* mo=(Monster*) pObject;
@@ -4920,7 +4920,7 @@ void NarutoSenki::ActionManager::resumeAction(float dt){
 			this->idle();
 		}
 	}else if(strcmp(this->_character->getCString(),"Ino")==0 && _isBati){
-		CCObject* pObject;
+		Ref* pObject;
 		for (unsigned int ccIndex = 0; _delegate->_CharacterArray && ccIndex < _delegate->_CharacterArray->count(); ++ccIndex){
 			pObject = _delegate->_CharacterArray->objectAtIndex(ccIndex);
 			Hero* tempHero=(Hero*) pObject;
@@ -4963,7 +4963,7 @@ void NarutoSenki::ActionManager::resumeAction(float dt){
 		this->setWalkAction(createAnimation(walkArray,10.0f,true,false));
 
 		if(this->getMonsterArray() && getMonsterArray()->count()>0){
-			CCObject* pObject;
+			Ref* pObject;
 			for (unsigned int ccIndex = 0; this->getMonsterArray() && ccIndex < this->getMonsterArray()->count(); ++ccIndex){
 				pObject = this->getMonsterArray()->objectAtIndex(ccIndex);
 				NarutoSenki::ActionManager* mo=(NarutoSenki::ActionManager*) pObject;
@@ -5385,7 +5385,7 @@ void NarutoSenki::ActionManager::setActionResume(){
 	}else if(strcmp(this->_character->getCString(),"Ino")==0){
 
 		this->unschedule(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::resumeAction));
-		CCObject* pObject;
+		Ref* pObject;
 		for (unsigned int ccIndex = 0; _delegate->_CharacterArray && ccIndex < _delegate->_CharacterArray->count(); ++ccIndex){
 			pObject = _delegate->_CharacterArray->objectAtIndex(ccIndex);
 			Hero* tempHero=(Hero*) pObject;
@@ -5425,7 +5425,7 @@ void NarutoSenki::ActionManager::setActionResume(){
 		this->setWalkAction(createAnimation(walkArray,10.0f,true,false));
 
 		if(this->getMonsterArray() && getMonsterArray()->count()>0){
-			CCObject* pObject;
+			Ref* pObject;
 			for (unsigned int ccIndex = 0; this->getMonsterArray() && ccIndex < this->getMonsterArray()->count(); ++ccIndex){
 				pObject = this->getMonsterArray()->objectAtIndex(ccIndex);
 				NarutoSenki::ActionManager* mo=(NarutoSenki::ActionManager*) pObject;
@@ -5522,7 +5522,7 @@ void NarutoSenki::ActionManager::stopMove(float dt){
 			return;
 	};
 
-	CCObject* pObject;
+	Ref* pObject;
 	for (unsigned int ccIndex = 0; _delegate->_CharacterArray && ccIndex < _delegate->_CharacterArray->count(); ++ccIndex){
 		pObject = _delegate->_CharacterArray->objectAtIndex(ccIndex);
 		Hero* tempHero=(Hero*) pObject;
@@ -5727,7 +5727,7 @@ void NarutoSenki::ActionManager::setClone(Node* sender,void* date){
 		bool isKadon=false;
 		int countMon=0;
 		if(getMonsterArray() && getMonsterArray()->count()>0){
-			CCObject* pObject;
+			Ref* pObject;
 			for (unsigned int ccIndex = 0; getMonsterArray() && ccIndex < getMonsterArray()->count(); ++ccIndex){
 				pObject = getMonsterArray()->objectAtIndex(ccIndex);
 				Monster* mo=(Monster*) pObject;
@@ -6353,7 +6353,7 @@ void NarutoSenki::ActionManager::setTrap(Node* sender,void* date){
 	CCString* trapType=str;
 	if(strcmp(trapType->getCString(),"Amaterasu")==0  ){
 
-		CCObject* pObject;
+		Ref* pObject;
 		for (unsigned int ccIndex = 0; _delegate->_CharacterArray && ccIndex < _delegate->_CharacterArray->count(); ++ccIndex){
 			pObject = _delegate->_CharacterArray->objectAtIndex(ccIndex);
 			NarutoSenki::ActionManager* tempHero=(NarutoSenki::ActionManager*) pObject;
@@ -6521,7 +6521,7 @@ void NarutoSenki::ActionManager::setTrap(Node* sender,void* date){
 
 	}else if(strcmp(trapType->getCString(),"KageBom")==0){
 
-		CCObject* pObject;
+		Ref* pObject;
 		for (unsigned int ccIndex = 0; _delegate->_CharacterArray && ccIndex < _delegate->_CharacterArray->count(); ++ccIndex){
 			pObject = _delegate->_CharacterArray->objectAtIndex(ccIndex);
 			Hero* tempHero=(Hero*) pObject;
@@ -6558,7 +6558,7 @@ void NarutoSenki::ActionManager::removeSelf(float dt){
 void NarutoSenki::ActionManager::setMonAttack(Node* sender,void* date){
 	int skillNum=(int) date;
 	if(this->getMonsterArray()){
-		CCObject* pObject;
+		Ref* pObject;
 		for (unsigned int ccIndex = 0; this->getMonsterArray() && ccIndex < this->getMonsterArray()->count(); ++ccIndex){
 			pObject = this->getMonsterArray()->objectAtIndex(ccIndex);
 			Monster* mo=(Monster*) pObject;
@@ -7052,7 +7052,7 @@ void NarutoSenki::ActionManager::walk(Vec2 direction){
 			strcmp(this->_character->getCString(),"Chiyo")==0
 			){
 			if(this->getMonsterArray() && getMonsterArray()->count()>0){
-				CCObject* pObject;
+				Ref* pObject;
 				for (unsigned int ccIndex = 0; this->getMonsterArray() && ccIndex < this->getMonsterArray()->count(); ++ccIndex){
 					pObject = this->getMonsterArray()->objectAtIndex(ccIndex);
 					Monster* mo=(Monster*) pObject;
@@ -7093,7 +7093,7 @@ bool NarutoSenki::ActionManager::hurt(){
 		){
 
 		//ǧ��buff
-		CCObject* pObject;
+		Ref* pObject;
 		for (unsigned int ccIndex = 0; _delegate->_CharacterArray && ccIndex < _delegate->_CharacterArray->count(); ++ccIndex){
 			pObject = _delegate->_CharacterArray->objectAtIndex(ccIndex);
 			Hero* tempHero=(Hero*) pObject;
@@ -7110,7 +7110,7 @@ bool NarutoSenki::ActionManager::hurt(){
 			}
 		}
 		if(strcmp(this->_character->getCString(),"Chiyo")==0){
-			CCObject* pObject;
+			Ref* pObject;
 			for (unsigned int ccIndex = 0; this->getMonsterArray() && ccIndex < this->getMonsterArray()->count(); ++ccIndex){
 				pObject = this->getMonsterArray()->objectAtIndex(ccIndex);
 				Monster* mo=(Monster*) pObject;
@@ -7166,7 +7166,7 @@ bool NarutoSenki::ActionManager::hardHurt(int delayTime,bool isHurtAction,bool i
 			}
 
 			//ǧ��buff
-			CCObject* pObject;
+			Ref* pObject;
 			for (unsigned int ccIndex = 0; _delegate->_CharacterArray && ccIndex < _delegate->_CharacterArray->count(); ++ccIndex){
 				pObject = _delegate->_CharacterArray->objectAtIndex(ccIndex);
 				Hero* tempHero=(Hero*) pObject;
@@ -7184,7 +7184,7 @@ bool NarutoSenki::ActionManager::hardHurt(int delayTime,bool isHurtAction,bool i
 			}
 
 			if(strcmp(this->_character->getCString(),"Chiyo")==0){
-				CCObject* pObject;
+				Ref* pObject;
 				for (unsigned int ccIndex = 0; this->getMonsterArray() && ccIndex < this->getMonsterArray()->count(); ++ccIndex){
 					pObject = this->getMonsterArray()->objectAtIndex(ccIndex);
 					Monster* mo=(Monster*) pObject;
@@ -7363,7 +7363,7 @@ void NarutoSenki::ActionManager::floatUP(float floatHeight, bool isCancelSkill){
 		){
 
 			//ǧ��buff
-			CCObject* pObject;
+			Ref* pObject;
 			for (unsigned int ccIndex = 0; _delegate->_CharacterArray && ccIndex < _delegate->_CharacterArray->count(); ++ccIndex){
 				pObject = _delegate->_CharacterArray->objectAtIndex(ccIndex);
 				Hero* tempHero=(Hero*) pObject;
@@ -7381,7 +7381,7 @@ void NarutoSenki::ActionManager::floatUP(float floatHeight, bool isCancelSkill){
 			}
 
 			if(strcmp(this->_character->getCString(),"Chiyo")==0){
-				CCObject* pObject;
+				Ref* pObject;
 				for (unsigned int ccIndex = 0; this->getMonsterArray() && ccIndex < this->getMonsterArray()->count(); ++ccIndex){
 					pObject = this->getMonsterArray()->objectAtIndex(ccIndex);
 					Monster* mo=(Monster*) pObject;
@@ -7739,7 +7739,7 @@ bool NarutoSenki::ActionManager::findEnemy(const char* type,int searchRange,bool
 		list=_delegate->_TowerArray;
 	}
 
-	CCObject* pObject;
+	Ref* pObject;
 	float distance;
 	float curDistance=NULL ;
 	Vec2 sp;
@@ -7825,7 +7825,7 @@ bool NarutoSenki::ActionManager::findEnemy2(const char* type){
 		list=_delegate->_TowerArray;
 	}
 	
-	CCObject* pObject;
+	Ref* pObject;
 	float distance;
 	float curDistance=NULL ;
 	Vec2 sp;
@@ -7920,7 +7920,7 @@ bool NarutoSenki::ActionManager::findEnemy2(const char* type){
 bool NarutoSenki::ActionManager::checkBase(){
 
 	CCArray* list=_delegate->_CharacterArray;
-	CCObject* pObject;
+	Ref* pObject;
 
 	for (unsigned int ccIndex = 0; list && ccIndex < list->count(); ++ccIndex){
 
@@ -7993,7 +7993,7 @@ bool NarutoSenki::ActionManager::findTargetEnemy(const char* type,bool isTowerDe
 		} 
 	}
 
-	CCObject* pObject;
+	Ref* pObject;
 
 	float curDistance=NULL ;
 	Vec2 sp;
@@ -8239,7 +8239,7 @@ void NarutoSenki::ActionManager::changeSide(Vec2 sp){
 		strcmp(this->_character->getCString(),"ImmortalSasuke")==0
 		){
 			if(this->getMonsterArray() && getMonsterArray()->count()>0){
-				CCObject* pObject;
+				Ref* pObject;
 				for (unsigned int ccIndex = 0; this->getMonsterArray() && ccIndex < this->getMonsterArray()->count(); ++ccIndex){
 					pObject = this->getMonsterArray()->objectAtIndex(ccIndex);
 					Monster* mo=(Monster*) pObject;
@@ -8286,7 +8286,7 @@ void NarutoSenki::ActionManager::changeGroup(){
 				list=_delegate->_KonohaFlogArray;
 			}
 
-			CCObject* pObject;
+			Ref* pObject;
 			for (unsigned int ccIndex = 0; list && ccIndex < list->count(); ++ccIndex){
 				pObject = list->objectAtIndex(ccIndex);
 				NarutoSenki::ActionManager* target=(NarutoSenki::ActionManager*) pObject;

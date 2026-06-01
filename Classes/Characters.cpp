@@ -176,7 +176,7 @@ void Hero::AI_DuelBasic(){
 		!_delegate->currentPlayer->_isWudi){
 		target=_delegate->currentPlayer;
 	}else{
-		CCObject* pObject;
+		Ref* pObject;
 		float bestDistance=0;
 		for(unsigned int characterIndex=0; characterIndex<_delegate->_CharacterArray->count(); ++characterIndex){
 						pObject=_delegate->_CharacterArray->objectAtIndex(characterIndex);
@@ -312,7 +312,7 @@ void Hero::AI_DevaPath(){
 					bool isHaveKuilei2=false;
 
 					if(getMonsterArray() && getMonsterArray()->count()>0){
-						CCObject* pObject;
+						Ref* pObject;
 						for(unsigned int monsterIndex=0; monsterIndex<getMonsterArray()->count(); ++monsterIndex){
 						pObject=getMonsterArray()->objectAtIndex(monsterIndex);
 							Monster* mo=(Monster*) pObject;
@@ -3386,7 +3386,7 @@ void Hero::AI_Guardian(){
 		}else if(this->getActionState()==ACTION_STATE_IDLE ||  this->getActionState()==ACTION_STATE_WALK || this->getActionState()==ACTION_STATE_ATTACK){
 			bool isTurn=false;
 
-			CCObject* pObject;
+			Ref* pObject;
 			for(unsigned int towerIndex=0; towerIndex<_delegate->_TowerArray->count(); ++towerIndex){
 				pObject=_delegate->_TowerArray->objectAtIndex(towerIndex);
 				NarutoSenki::ActionManager* target=(NarutoSenki::ActionManager*) pObject;
@@ -5036,7 +5036,7 @@ void Hero::AI_Kankuro(){
 	bool isFound3=false;
 
 	if(getMonsterArray() && getMonsterArray()->count()>0){
-		CCObject* pObject;
+		Ref* pObject;
 		for(unsigned int monsterIndex=0; monsterIndex<getMonsterArray()->count(); ++monsterIndex){
 						pObject=getMonsterArray()->objectAtIndex(monsterIndex);
 			Monster* mo=(Monster*) pObject;
@@ -5227,7 +5227,7 @@ void Hero::AI_Chiyo(){
 	bool isFound1=false;
 
 	if(getMonsterArray() && getMonsterArray()->count()>0){
-		CCObject* pObject;
+		Ref* pObject;
 		for(unsigned int monsterIndex=0; monsterIndex<getMonsterArray()->count(); ++monsterIndex){
 						pObject=getMonsterArray()->objectAtIndex(monsterIndex);
 			Monster* mo=(Monster*) pObject;
@@ -5250,7 +5250,7 @@ void Hero::AI_Chiyo(){
 		if(_actionState==ACTION_STATE_IDLE || _actionState==ACTION_STATE_WALK || _actionState==ACTION_STATE_ATTACK ){
 			if(_isCanOugis1 && !_isControled && !_buffStartTime){
 				
-				CCObject* pObject;
+				Ref* pObject;
 				int countNum=0;
 				for(unsigned int characterIndex=0; characterIndex<_delegate->_CharacterArray->count(); ++characterIndex){
 						pObject=_delegate->_CharacterArray->objectAtIndex(characterIndex);
@@ -5376,7 +5376,7 @@ void Hero::AI_Kakuzu(){
 	if(_actionState==ACTION_STATE_IDLE || _actionState==ACTION_STATE_WALK || _actionState==ACTION_STATE_ATTACK){
 
 		if(this->getHpPercent()>0.3f && !_isControled && _isCanSkill1){
-			CCObject* pObject;
+			Ref* pObject;
 			float distance;
 			float curDistance=NULL ;
 			Vec2 sp;
@@ -7330,7 +7330,7 @@ void Hero::AI_Hidan(){
 	_mainTarget=NULL;
 	bool _isFound=false;
 	if(getMonsterArray() && getMonsterArray()->count()>0){
-		CCObject* pObject;
+		Ref* pObject;
 		for(unsigned int monsterIndex=0; monsterIndex<getMonsterArray()->count(); ++monsterIndex){
 						pObject=getMonsterArray()->objectAtIndex(monsterIndex);
 			Monster* mo=(Monster*) pObject;
@@ -7352,7 +7352,7 @@ void Hero::AI_Hidan(){
 				}else{
 					if(_isBati){
 
-						CCObject* pObject;
+						Ref* pObject;
 						for(unsigned int characterIndex=0; characterIndex<_delegate->_CharacterArray->count(); ++characterIndex){
 						pObject=_delegate->_CharacterArray->objectAtIndex(characterIndex);
 							NarutoSenki::ActionManager* tempHero=(NarutoSenki::ActionManager*) pObject;
@@ -8425,7 +8425,7 @@ void Hero::AI_Minato(){
 
 		if(_isCanSkill1){
 
-			CCObject* pObject;
+			Ref* pObject;
 			bool isMark=false;
 			if(this->getMonsterArray() && this->getMonsterArray()->count()>0){
 				for(unsigned int monsterIndex=0; monsterIndex<this->getMonsterArray()->count(); ++monsterIndex){
@@ -8498,7 +8498,7 @@ void Hero::AI_Minato(){
 		}
 		if(_actionState==ACTION_STATE_IDLE || _actionState==ACTION_STATE_WALK || _actionState==ACTION_STATE_ATTACK){
 
-			CCObject* pObject;
+			Ref* pObject;
 			bool isMark=false;
 			if(this->getMonsterArray() && this->getMonsterArray()->count()>0){
 				for(unsigned int monsterIndex=0; monsterIndex<this->getMonsterArray()->count(); ++monsterIndex){
@@ -8633,7 +8633,7 @@ void Hero::AI_Minato(){
 	}else{
 		if(_isCanSkill1){
 
-			CCObject* pObject;
+			Ref* pObject;
 			bool isMark=false;
 			if(this->getMonsterArray() && this->getMonsterArray()->count()>0){
 				for(unsigned int monsterIndex=0; monsterIndex<this->getMonsterArray()->count(); ++monsterIndex){
