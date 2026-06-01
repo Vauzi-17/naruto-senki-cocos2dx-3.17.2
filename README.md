@@ -22,7 +22,7 @@ masih memakai API 2.x seperti `CCLayer`, `CCSprite`, `CCMenu`, `CCPoint`,
 
 ## Estimasi Progress Migrasi
 
-Estimasi progress menuju kode full cocos2d-x 3.17.2: **sekitar 76%**.
+Estimasi progress menuju kode full cocos2d-x 3.17.2: **sekitar 77%**.
 
 Alasan estimasi:
 
@@ -50,9 +50,15 @@ Alasan estimasi:
   API 3.x langsung.
 - Helper waktu lama `CCTime`/`cc_timeval` sudah tidak dipakai; cooldown tombol
   dan buff timer lokal memakai helper `std::chrono::steady_clock`.
-- State cooldown internal `ActionButton` mulai lepas dari retained `CCString`;
-  nilai cooldown/countdown disimpan sebagai integer lokal sambil API `setCD`
-  lama tetap tersedia untuk caller.
+- State cooldown internal `ActionButton` sudah lepas dari retained `CCString`;
+  nilai cooldown/countdown disimpan sebagai integer lokal dan caller aktif
+  memakai `setCD(int)` langsung.
+- Helper global `Defines.h` mulai lepas dari alias sprite/texture/singleton
+  2.x; helper scale/pixel-art sekarang memakai `Sprite`, `Texture2D`,
+  `SpriteFrame`, `Director`, dan `UserDefault` 3.x langsung.
+- Sisa field label lama yang tidak punya caller aktif di `ActionManager`
+  dibuang, dan helper lokal shadow/voice/display kecil mulai memakai tipe
+  `Sprite`, `Scene`, `Size`, `Director`, serta `UserDefault` 3.x langsung.
 - Masih ada sisa API 2.x yang cukup banyak di `ActionManager`, `Element`,
   `RankingLayer`, beberapa utility UI, app delegate, dan compatibility bridge.
 - Untuk mencapai 100%, sisa terbesar bukan sekadar rename API, tetapi migrasi
@@ -224,6 +230,12 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
 - `StartMenu`: fitur group online lama ditutup sebagai stub offline karena
   state login online sudah tidak mengaktifkannya; sisa `CCHttp*` hilang dari
   source game dan alias HTTP lama di `Cocos2dx2Compat.h` dihapus.
+- `Defines.h`: helper scale sprite dan pixel-art dibersihkan dari nama
+  `CCSprite`, `CCTexture2D`, `CCSpriteFrame`, `CCSize`, `sharedDirector()`,
+  dan `sharedUserDefault()`.
+- `ActionManager`: field `cpLabel`/`CCLabelTTF` mati dihapus, lalu helper lokal
+  shadow, display coin, voice check, dan shake scene mulai memakai tipe 3.x
+  langsung tanpa menyentuh kontrak action parser/XML.
 
 1. **Tutup helper compat kecil yang masih lokal**
    - Target file: `Cocos2dx2Compat.h`, `ActionButton`, `HPBar`, `HudLayer`,
@@ -598,9 +610,16 @@ Catatan progress terbaru:
 - Alias compat `CCDictElement` dihapus; parser action `ActionManager` sekarang
   memakai `DictElement` langsung untuk iterasi dictionary.
 - `ActionButton` tidak lagi menyimpan `_coldDown` dan `_timeCout` sebagai
-  retained `CCString*`. State cooldown lokal dipindahkan ke integer, sementara
-  `setCD(CCString*)` masih dipertahankan sebagai jembatan caller lama di
-  `HudLayer` dan `ActionManager`.
+  retained `CCString*`. State cooldown lokal dipindahkan ke integer, dan
+  jembatan `setCD(CCString*)` sudah dihapus setelah caller aktif di `HudLayer`
+  dan `ActionManager` memakai `setCD(int)`.
+- `Defines.h` dibersihkan dari alias tipe/singleton 2.x untuk helper global
+  scale sprite dan pixel-art, sehingga caller scene tetap memakai helper yang
+  sama tetapi implementasinya sudah 3.x.
+- `ActionManager` dibersihkan lagi secara lokal dari field `cpLabel`
+  `CCLabelTTF` yang tidak punya caller aktif, serta beberapa alias kecil di
+  helper shadow/voice/coin display. Potongan ini belum build-tested oleh
+  pengguna.
 - Setelah commit `ActionManager` lokal ini lulus build Android, langkah
   berikutnya adalah melanjutkan migrasi container yang masih lokal dan mudah
   dipisahkan sebelum masuk kontrak data besar di loader XML, `ActionManager`,

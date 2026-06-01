@@ -104,7 +104,6 @@ namespace NarutoSenki {
 		bool				_isAI;
 		bool				_isControled;
 
-		CC_SYNTHESIZE_RETAIN(CCLabelTTF*, cpLabel, CPLabel);
 		//attributes
 		CC_SYNTHESIZE_RETAIN(CCString*, _role, Role);
 		CC_SYNTHESIZE_RETAIN(CCString*, _group, Group);

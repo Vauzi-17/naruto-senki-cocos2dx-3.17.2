@@ -5,36 +5,36 @@
 
 //global parameter
 
-#define winSize  CCDirector::sharedDirector()->getWinSize()
+#define winSize  Director::getInstance()->getWinSize()
 #define random(x) (rand()%x)
 
-static inline void scaleSpriteToScreen(cocos2d::CCSprite* sprite)
+static inline void scaleSpriteToScreen(cocos2d::Sprite* sprite)
 {
 	if (!sprite || sprite->getContentSize().width <= 0 || sprite->getContentSize().height <= 0)
 	{
 		return;
 	}
-	cocos2d::CCSize size = cocos2d::CCDirector::sharedDirector()->getWinSize();
+	cocos2d::Size size = cocos2d::Director::getInstance()->getWinSize();
 	sprite->setScaleX(size.width / sprite->getContentSize().width);
 	sprite->setScaleY(size.height / sprite->getContentSize().height);
 }
 
-static inline void scaleSpriteToScreenWidth(cocos2d::CCSprite* sprite)
+static inline void scaleSpriteToScreenWidth(cocos2d::Sprite* sprite)
 {
 	if (!sprite || sprite->getContentSize().width <= 0)
 	{
 		return;
 	}
-	cocos2d::CCSize size = cocos2d::CCDirector::sharedDirector()->getWinSize();
+	cocos2d::Size size = cocos2d::Director::getInstance()->getWinSize();
 	sprite->setScaleX(size.width / sprite->getContentSize().width);
 }
 
 static inline bool isPixelArtEnabled()
 {
-	return cocos2d::CCUserDefault::sharedUserDefault()->getIntegerForKey("pixelArtSharp", 1) != 0;
+	return cocos2d::UserDefault::getInstance()->getIntegerForKey("pixelArtSharp", 1) != 0;
 }
 
-static inline void applyPixelArtToTexture(cocos2d::CCTexture2D* texture)
+static inline void applyPixelArtToTexture(cocos2d::Texture2D* texture)
 {
 	if (!texture)
 	{
@@ -50,7 +50,7 @@ static inline void applyPixelArtToTexture(cocos2d::CCTexture2D* texture)
 	}
 }
 
-static inline void applyPixelArtToFrame(cocos2d::CCSpriteFrame* frame)
+static inline void applyPixelArtToFrame(cocos2d::SpriteFrame* frame)
 {
 	if (frame)
 	{
@@ -58,7 +58,7 @@ static inline void applyPixelArtToFrame(cocos2d::CCSpriteFrame* frame)
 	}
 }
 
-static inline void applyPixelArtToSprite(cocos2d::CCSprite* sprite)
+static inline void applyPixelArtToSprite(cocos2d::Sprite* sprite)
 {
 	if (sprite)
 	{

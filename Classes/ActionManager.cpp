@@ -221,8 +221,6 @@ NarutoSenki::ActionManager::ActionManager(void)
 
 	_isAI=false;
 
-	cpLabel=NULL;
-
 	_gearArray=NULL;
 
 	callValue=NULL;
@@ -1365,10 +1363,10 @@ void NarutoSenki::ActionManager::setCharFlip(){
 
 void NarutoSenki::ActionManager::setShadow(CCNode* sender,void* date){
 
-	CCSize visibleSize = CCDirector::sharedDirector()->getVisibleSize();
+	Size visibleSize = Director::getInstance()->getVisibleSize();
 	CCDictionary* file=(CCDictionary*) date;
 	SpriteFrame *frame  = (SpriteFrame *)(file->objectForKey(1));
-	CCSprite* charN=CCSprite::createWithSpriteFrame(frame);
+	Sprite* charN=Sprite::createWithSpriteFrame(frame);
 	charN->setVisible(false);
 	if(strcmp(this->_group->getCString(),"Konoha")==0){
 		charN->setColor(Color3B(0,255,0));
@@ -1388,7 +1386,7 @@ void NarutoSenki::ActionManager::setShadow(CCNode* sender,void* date){
 
 void NarutoSenki::ActionManager::enableShadow(CCNode* sender){
 
-	CCSprite* charN=(CCSprite *) sender;
+	Sprite* charN=(Sprite *) sender;
 	charN->setVisible(true);
 	DelayTime* delay=DelayTime::create(0.1f);
 	CCFiniteTimeAction *call = CCCallFuncN::create(charN,callfuncN_selector(NarutoSenki::ActionManager::disableShadow));
@@ -1398,7 +1396,7 @@ void NarutoSenki::ActionManager::enableShadow(CCNode* sender){
 
 void NarutoSenki::ActionManager::disableShadow(CCNode* sender){
 
-	CCSprite* charN=(CCSprite *) sender;
+	Sprite* charN=(Sprite *) sender;
 	charN->stopAllActions();
 	charN->removeFromParentAndCleanup(true);
 
@@ -1795,9 +1793,9 @@ void NarutoSenki::ActionManager::setDamage(CCString* effectType,unsigned int att
 }
 
 void NarutoSenki::ActionManager::setCoinDisplay(int num){
-	CCSprite* coinDisplay=CCSprite::create();
+	Sprite* coinDisplay=Sprite::create();
 
-	CCSprite* coinSprite=CCSprite::createWithSpriteFrameName("coin.png");
+	Sprite* coinSprite=Sprite::createWithSpriteFrameName("coin.png");
 	coinSprite->setPosition(ccp(14,0));
 	coinDisplay->addChild(coinSprite);
 
@@ -2378,7 +2376,7 @@ void NarutoSenki::ActionManager::disableEffect(){
 
 void NarutoSenki::ActionManager::setSound(CCNode* sender,void* date){
 
-	if(CCUserDefault::sharedUserDefault()->getBoolForKey("isVoice")!=false){
+	if(UserDefault::getInstance()->getBoolForKey("isVoice")!=false){
 		bool _isPlayable=false;
 		if(strcmp(_role->getCString(),"Player")==0 || 
 			abs(ccpSub(this->getPosition(),_delegate->currentPlayer->getPosition()).x)<winSize.width/2 
@@ -2403,7 +2401,7 @@ void NarutoSenki::ActionManager::setSound(CCNode* sender,void* date){
 
 void NarutoSenki::ActionManager::setDSound(CCNode* sender,void* date){
 
-	if(CCUserDefault::sharedUserDefault()->getBoolForKey("isVoice")!=false){
+	if(UserDefault::getInstance()->getBoolForKey("isVoice")!=false){
 		bool _isPlayable=false;
 		if(strcmp(_role->getCString(),"Player")==0 || 
 			abs(ccpSub(this->getPosition(),_delegate->currentPlayer->getPosition()).x)<winSize.width/2 
@@ -2467,7 +2465,7 @@ void NarutoSenki::ActionManager::setAttackBox(CCNode* sender,void* date){
 
 		if((_actionState==ACTION_STATE_OATTACK|| _actionState==ACTION_STATE_O2ATTACK ) && this->_isHitOne==true && !_delegate->_isShacking){
 			_delegate->_isShacking=true;
-			CCScene* f = CCDirector::sharedDirector()->getRunningScene();
+			Scene* f = Director::getInstance()->getRunningScene();
 			FiniteTimeAction* call = CallFunc::create(CC_CALLBACK_0(NarutoSenki::ActionManager::disableShack, this));
 			f->runAction(Sequence::createWithTwoActions(CCShake::create(0.05f,12),call));
 		}
@@ -2888,7 +2886,7 @@ void NarutoSenki::ActionManager::setCommand(CCNode* sender,void* date){
 		list->addObject(call);
 		Action* seq=createSequenceFromActionArray(list);
 
-		CCSprite* tempChar=CCSprite::createWithSpriteFrameName(CCString::createWithFormat("%s_Extern_01.png",this->getCharacter()->getCString())->getCString());
+		Sprite* tempChar=Sprite::createWithSpriteFrameName(CCString::createWithFormat("%s_Extern_01.png",this->getCharacter()->getCString())->getCString());
 
 		tempChar->setAnchorPoint(ccp(0.5f,0));
 		tempChar->setPosition(this->getPosition());
