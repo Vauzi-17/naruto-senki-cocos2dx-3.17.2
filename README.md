@@ -43,6 +43,8 @@ Alasan estimasi:
 - Adapter container child node di flow ougis/pause-resume mulai dibersihkan:
   `GameLayer` dan `HudLayer` sekarang mengiterasi `getChildren()` langsung tanpa
   membuat `CCArray` sementara.
+- Adapter `ValueVector` ke `CCArray` untuk object layer TMX mulai dihapus:
+  spawn point dan meta tower di `GameLayer` membaca `ValueMap` 3.x langsung.
 - Masih ada sisa API 2.x yang cukup banyak di `ActionManager`, `Element`,
   `RankingLayer`, beberapa utility UI, app delegate, dan compatibility bridge.
 - Untuk mencapai 100%, sisa terbesar bukan sekadar rename API, tetapi migrasi
@@ -376,6 +378,7 @@ Commit awal tahap 5:
 - `1ee962e refactor: migrate action manager local animation helpers`
 - `6d20d1d refactor: migrate screw layer item container`
 - `8a94ef6 refactor: migrate child iteration containers`
+- `3e2a623 refactor: migrate map object containers`
 
 Catatan progress terbaru:
 
@@ -442,6 +445,10 @@ Catatan progress terbaru:
   `getChildren()` untuk pause/resume child pada flow ougis dan cleanup observer
   saat keluar match. Iterasi sekarang memakai `Vector<Node*>` hasil API 3.x
   langsung.
+- `GameLayer` mulai membaca object layer TMX dari `ValueVector`/`ValueMap`
+  langsung untuk spawn point dan tower meta. Setelah caller aktif hilang,
+  helper compat `toCCArray`, `createSequence(CCArray)`, dan
+  `createAnimationWithSpriteFrames(CCArray)` dihapus dari `Cocos2dx2Compat.h`.
 - Setelah commit `ActionManager` lokal ini lulus build Android, langkah
   berikutnya adalah melanjutkan migrasi container yang masih lokal dan mudah
   dipisahkan sebelum masuk kontrak data besar di loader XML, `ActionManager`,
