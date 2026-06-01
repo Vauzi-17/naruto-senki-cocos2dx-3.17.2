@@ -544,7 +544,7 @@ void Hero::AI_Akamaru(){
 		
 		Vec2 sp;
 		if(_mainTarget->_originY){
-			sp=ccpSub(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
+			sp=(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY) - this->getPosition());
 		}else{
 			sp=(_mainTarget->getPosition() - this->getPosition());
 		}
@@ -639,7 +639,7 @@ void Hero::AI_Karasu(){
 			}
 			Vec2 sp;
 			if(_mainTarget->_originY){
-				sp=ccpSub(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
+				sp=(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY) - this->getPosition());
 			}else{
 				sp=(_mainTarget->getPosition() - this->getPosition());
 			}
@@ -769,8 +769,7 @@ void Hero::AI_Saso(){
 	if(_mainTarget){
 			
 
-			Vec2 sp=ccpSub(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY?_mainTarget->_originY:_mainTarget->getPositionY()),
-			Vec2(this->getPositionX(),_originY?_originY:this->getPositionY()));
+			Vec2 sp=(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY?_mainTarget->_originY:_mainTarget->getPositionY()) - Vec2(this->getPositionX(),_originY?_originY:this->getPositionY()));
 
 			if(strcmp(_mainTarget->getRole()->getCString(),"Flog")==0){
 
@@ -874,8 +873,7 @@ void Hero::AI_Parents(){
 	if(_mainTarget){
 
 
-		Vec2 sp=ccpSub(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY?_mainTarget->_originY:_mainTarget->getPositionY()),
-			Vec2(this->getPositionX(),_originY?_originY:this->getPositionY()));
+		Vec2 sp=(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY?_mainTarget->_originY:_mainTarget->getPositionY()) - Vec2(this->getPositionX(),_originY?_originY:this->getPositionY()));
 
 		if(strcmp(_mainTarget->getRole()->getCString(),"Flog")==0 || strcmp(_mainTarget->getRole()->getCString(),"Tower")==0 ){
 
@@ -968,8 +966,7 @@ void Hero::AI_Sanshouuo(){
 				}
 			}
 
-			Vec2 sp=ccpSub(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY?_mainTarget->_originY:_mainTarget->getPositionY()),
-				Vec2(this->getPositionX(),_originY?_originY:this->getPositionY()));
+			Vec2 sp=(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY?_mainTarget->_originY:_mainTarget->getPositionY()) - Vec2(this->getPositionX(),_originY?_originY:this->getPositionY()));
 					
 
 			if(strcmp(_mainTarget->getRole()->getCString(),"Flog")==0){
@@ -1080,7 +1077,7 @@ void Hero::AI_NarutoClone(){
 		Vec2 moveDirection;
 		Vec2 sp;
 		if(_mainTarget->_originY){
-			sp=ccpSub(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
+			sp=(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY) - this->getPosition());
 		}else{
 			sp=(_mainTarget->getPosition() - this->getPosition());
 		}
@@ -1121,7 +1118,7 @@ void Hero::AI_Kurama(){
 		Vec2 moveDirection;
 		Vec2 sp;
 		if(_mainTarget->_originY){
-			sp=ccpSub(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
+			sp=(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY) - this->getPosition());
 		}else{
 			sp=(_mainTarget->getPosition() - this->getPosition());
 		}
@@ -1159,7 +1156,7 @@ void Hero::AI_SageNarutoClone(){
 			Vec2 moveDirection;
 			Vec2 sp;
 			if(_mainTarget->_originY){
-				sp=ccpSub(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
+				sp=(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY) - this->getPosition());
 			}else{
 				sp=(_mainTarget->getPosition() - this->getPosition());
 			}
@@ -1235,7 +1232,7 @@ void Hero::AI_RikudoNarutoClone(){
 		Vec2 moveDirection;
 		Vec2 sp;
 		if(_mainTarget->_originY){
-			sp=ccpSub(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
+			sp=(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY) - this->getPosition());
 		}else{
 			sp=(_mainTarget->getPosition() - this->getPosition());
 		}
@@ -1320,7 +1317,7 @@ void Hero::AI_Mask(){
 		Vec2 moveDirection;
 		Vec2 sp;
 		if(_mainTarget->_originY){
-			sp=ccpSub(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
+			sp=(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY) - this->getPosition());
 		}else{
 			sp=(_mainTarget->getPosition() - this->getPosition());
 		}
@@ -1536,7 +1533,7 @@ void Hero::AI_Naruto(){
 		Vec2 sp;
 
 		if(_mainTarget->_originY){
-			sp=ccpSub(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
+			sp=(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY) - this->getPosition());
 		}else{
 			sp=(_mainTarget->getPosition() - this->getPosition());
 		}
@@ -1609,7 +1606,7 @@ void Hero::AI_Naruto(){
 		Vec2 sp;
 
 		if(_mainTarget->_originY){
-			sp=ccpSub(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
+			sp=(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY) - this->getPosition());
 		}else{
 			sp=(_mainTarget->getPosition() - this->getPosition());
 		}
@@ -1703,7 +1700,7 @@ void Hero::AI_SageNaruto(){
 		Vec2 sp;
 
 		if(_mainTarget->_originY){
-			sp=ccpSub(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
+			sp=(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY) - this->getPosition());
 		}else{
 			sp=(_mainTarget->getPosition() - this->getPosition());
 		}
@@ -1773,7 +1770,7 @@ void Hero::AI_SageNaruto(){
 		Vec2 sp;
 
 		if(_mainTarget->_originY){
-			sp=ccpSub(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
+			sp=(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY) - this->getPosition());
 		}else{
 			sp=(_mainTarget->getPosition() - this->getPosition());
 		}
@@ -1873,7 +1870,7 @@ void Hero::AI_RikudoNaruto(){
 		Vec2 sp;
 
 		if(_mainTarget->_originY){
-			sp=ccpSub(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
+			sp=(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY) - this->getPosition());
 		}else{
 			sp=(_mainTarget->getPosition() - this->getPosition());
 		}
@@ -1942,7 +1939,7 @@ void Hero::AI_RikudoNaruto(){
 		Vec2 sp;
 
 		if(_mainTarget->_originY){
-			sp=ccpSub(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
+			sp=(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY) - this->getPosition());
 		}else{
 			sp=(_mainTarget->getPosition() - this->getPosition());
 		}
@@ -2049,7 +2046,7 @@ void Hero::AI_Asuma(){
 		Vec2 sp;
 
 		if(_mainTarget->_originY){
-			sp=ccpSub(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
+			sp=(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY) - this->getPosition());
 		}else{
 			sp=(_mainTarget->getPosition() - this->getPosition());
 		}
@@ -2133,7 +2130,7 @@ void Hero::AI_Asuma(){
 		Vec2 sp;
 
 		if(_mainTarget->_originY){
-			sp=ccpSub(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
+			sp=(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY) - this->getPosition());
 		}else{
 			sp=(_mainTarget->getPosition() - this->getPosition());
 		}
@@ -2238,7 +2235,7 @@ void Hero::AI_Kakashi(){
 		Vec2 sp;
 
 		if(_mainTarget->_originY){
-			sp=ccpSub(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
+			sp=(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY) - this->getPosition());
 		}else{
 			sp=(_mainTarget->getPosition() - this->getPosition());
 		}
@@ -2307,7 +2304,7 @@ void Hero::AI_Kakashi(){
 		Vec2 sp;
 
 		if(_mainTarget->_originY){
-			sp=ccpSub(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
+			sp=(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY) - this->getPosition());
 		}else{
 			sp=(_mainTarget->getPosition() - this->getPosition());
 		}
@@ -2406,7 +2403,7 @@ void Hero::AI_Konan(){
 		Vec2 sp;
 
 		if(_mainTarget->_originY){
-			sp=ccpSub(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
+			sp=(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY) - this->getPosition());
 		}else{
 			sp=(_mainTarget->getPosition() - this->getPosition());
 		}
@@ -2517,7 +2514,7 @@ void Hero::AI_Konan(){
 		Vec2 sp;
 
 		if(_mainTarget->_originY){
-			sp=ccpSub(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
+			sp=(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY) - this->getPosition());
 		}else{
 			sp=(_mainTarget->getPosition() - this->getPosition());
 		}
@@ -2609,7 +2606,7 @@ void Hero::AI_Deidara(){
 		Vec2 sp;
 
 		if(_mainTarget->_originY){
-			sp=ccpSub(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
+			sp=(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY) - this->getPosition());
 		}else{
 			sp=(_mainTarget->getPosition() - this->getPosition());
 		}
@@ -2718,7 +2715,7 @@ void Hero::AI_Deidara(){
 		Vec2 sp;
 
 		if(_mainTarget->_originY){
-			sp=ccpSub(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
+			sp=(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY) - this->getPosition());
 		}else{
 			sp=(_mainTarget->getPosition() - this->getPosition());
 		}
@@ -2846,7 +2843,7 @@ void Hero::AI_Ino(){
 		Vec2 sp;
 
 		if(_mainTarget->_originY){
-			sp=ccpSub(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
+			sp=(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY) - this->getPosition());
 		}else{
 			sp=(_mainTarget->getPosition() - this->getPosition());
 		}
@@ -2932,7 +2929,7 @@ void Hero::AI_Ino(){
 		Vec2 sp;
 
 		if(_mainTarget->_originY){
-			sp=ccpSub(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
+			sp=(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY) - this->getPosition());
 		}else{
 			sp=(_mainTarget->getPosition() - this->getPosition());
 		}
@@ -3030,7 +3027,7 @@ void Hero::AI_Sai(){
 		Vec2 sp;
 
 		if(_mainTarget->_originY){
-			sp=ccpSub(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
+			sp=(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY) - this->getPosition());
 		}else{
 			sp=(_mainTarget->getPosition() - this->getPosition());
 		}
@@ -3135,7 +3132,7 @@ void Hero::AI_Sai(){
 		Vec2 sp;
 
 		if(_mainTarget->_originY){
-			sp=ccpSub(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
+			sp=(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY) - this->getPosition());
 		}else{
 			sp=(_mainTarget->getPosition() - this->getPosition());
 		}
@@ -3212,7 +3209,7 @@ void Hero::AI_Sakura(){
 		Vec2 sp;
 
 		if(_mainTarget->_originY){
-			sp=ccpSub(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
+			sp=(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY) - this->getPosition());
 		}else{
 			sp=(_mainTarget->getPosition() - this->getPosition());
 		}
@@ -3308,7 +3305,7 @@ void Hero::AI_Sakura(){
 		Vec2 sp;
 
 		if(_mainTarget->_originY){
-			sp=ccpSub(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
+			sp=(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY) - this->getPosition());
 		}else{
 			sp=(_mainTarget->getPosition() - this->getPosition());
 		}
@@ -3503,7 +3500,7 @@ void Hero::AI_Tenten(){
 		Vec2 sp;
 
 		if(_mainTarget->_originY){
-			sp=ccpSub(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
+			sp=(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY) - this->getPosition());
 		}else{
 			sp=(_mainTarget->getPosition() - this->getPosition());
 		}
@@ -3599,7 +3596,7 @@ void Hero::AI_Tenten(){
 		Vec2 sp;
 
 		if(_mainTarget->_originY){
-			sp=ccpSub(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
+			sp=(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY) - this->getPosition());
 		}else{
 			sp=(_mainTarget->getPosition() - this->getPosition());
 		}
@@ -3708,7 +3705,7 @@ void Hero::AI_Itachi(){
 		Vec2 sp;
 
 		if(_mainTarget->_originY){
-			sp=ccpSub(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
+			sp=(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY) - this->getPosition());
 		}else{
 			sp=(_mainTarget->getPosition() - this->getPosition());
 		}
@@ -3795,7 +3792,7 @@ void Hero::AI_Itachi(){
 		Vec2 sp;
 
 		if(_mainTarget->_originY){
-			sp=ccpSub(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
+			sp=(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY) - this->getPosition());
 		}else{
 			sp=(_mainTarget->getPosition() - this->getPosition());
 		}
@@ -3906,7 +3903,7 @@ void Hero::AI_Jiraiya(){
 		Vec2 sp;
 
 		if(_mainTarget->_originY){
-			sp=ccpSub(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
+			sp=(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY) - this->getPosition());
 		}else{
 			sp=(_mainTarget->getPosition() - this->getPosition());
 		}
@@ -3976,7 +3973,7 @@ void Hero::AI_Jiraiya(){
 		Vec2 sp;
 
 		if(_mainTarget->_originY){
-			sp=ccpSub(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
+			sp=(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY) - this->getPosition());
 		}else{
 			sp=(_mainTarget->getPosition() - this->getPosition());
 		}
@@ -4081,7 +4078,7 @@ void Hero::AI_SageJiraiya(){
 		Vec2 sp;
 
 		if(_mainTarget->_originY){
-			sp=ccpSub(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
+			sp=(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY) - this->getPosition());
 		}else{
 			sp=(_mainTarget->getPosition() - this->getPosition());
 		}
@@ -4164,7 +4161,7 @@ void Hero::AI_SageJiraiya(){
 		Vec2 sp;
 
 		if(_mainTarget->_originY){
-			sp=ccpSub(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
+			sp=(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY) - this->getPosition());
 		}else{
 			sp=(_mainTarget->getPosition() - this->getPosition());
 		}
@@ -4269,7 +4266,7 @@ void Hero::AI_Suigetsu(){
 		Vec2 sp;
 
 		if(_mainTarget->_originY){
-			sp=ccpSub(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
+			sp=(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY) - this->getPosition());
 		}else{
 			sp=(_mainTarget->getPosition() - this->getPosition());
 		}
@@ -4368,7 +4365,7 @@ void Hero::AI_Suigetsu(){
 		Vec2 sp;
 
 		if(_mainTarget->_originY){
-			sp=ccpSub(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
+			sp=(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY) - this->getPosition());
 		}else{
 			sp=(_mainTarget->getPosition() - this->getPosition());
 		}
@@ -4461,7 +4458,7 @@ void Hero::AI_Tsunade(){
 		Vec2 sp;
 
 		if(_mainTarget->_originY){
-			sp=ccpSub(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
+			sp=(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY) - this->getPosition());
 		}else{
 			sp=(_mainTarget->getPosition() - this->getPosition());
 		}
@@ -4550,7 +4547,7 @@ void Hero::AI_Tsunade(){
 		Vec2 sp;
 
 		if(_mainTarget->_originY){
-			sp=ccpSub(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
+			sp=(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY) - this->getPosition());
 		}else{
 			sp=(_mainTarget->getPosition() - this->getPosition());
 		}
@@ -4656,7 +4653,7 @@ void Hero::AI_Sasuke(){
 		Vec2 sp;
 
 		if(_mainTarget->_originY){
-			sp=ccpSub(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
+			sp=(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY) - this->getPosition());
 		}else{
 			sp=(_mainTarget->getPosition() - this->getPosition());
 		}
@@ -4736,7 +4733,7 @@ void Hero::AI_Sasuke(){
 		Vec2 sp;
 
 		if(_mainTarget->_originY){
-			sp=ccpSub(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
+			sp=(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY) - this->getPosition());
 		}else{
 			sp=(_mainTarget->getPosition() - this->getPosition());
 		}
@@ -4845,7 +4842,7 @@ void Hero::AI_ImmortalSasuke(){
 		Vec2 sp;
 
 		if(_mainTarget->_originY){
-			sp=ccpSub(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
+			sp=(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY) - this->getPosition());
 		}else{
 			sp=(_mainTarget->getPosition() - this->getPosition());
 		}
@@ -4934,7 +4931,7 @@ void Hero::AI_ImmortalSasuke(){
 		Vec2 sp;
 
 		if(_mainTarget->_originY){
-			sp=ccpSub(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
+			sp=(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY) - this->getPosition());
 		}else{
 			sp=(_mainTarget->getPosition() - this->getPosition());
 		}
@@ -5057,7 +5054,7 @@ void Hero::AI_Kankuro(){
 		Vec2 sp;
 
 		if(_mainTarget->_originY){
-			sp=ccpSub(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
+			sp=(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY) - this->getPosition());
 		}else{
 			sp=(_mainTarget->getPosition() - this->getPosition());
 		}
@@ -5123,7 +5120,7 @@ void Hero::AI_Kankuro(){
 		Vec2 sp;
 
 		if(_mainTarget->_originY){
-			sp=ccpSub(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
+			sp=(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY) - this->getPosition());
 		}else{
 			sp=(_mainTarget->getPosition() - this->getPosition());
 		}
@@ -5241,7 +5238,7 @@ void Hero::AI_Chiyo(){
 		Vec2 sp;
 
 		if(_mainTarget->_originY){
-			sp=ccpSub(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
+			sp=(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY) - this->getPosition());
 		}else{
 			sp=(_mainTarget->getPosition() - this->getPosition());
 		}
@@ -5333,7 +5330,7 @@ void Hero::AI_Chiyo(){
 		Vec2 sp;
 
 		if(_mainTarget->_originY){
-			sp=ccpSub(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
+			sp=(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY) - this->getPosition());
 		}else{
 			sp=(_mainTarget->getPosition() - this->getPosition());
 		}
@@ -5408,7 +5405,7 @@ void Hero::AI_Kakuzu(){
 			if(_mainTarget){
 				Vec2 moveDirection;
 				if(_mainTarget->_originY){
-					sp=ccpSub(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
+					sp=(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY) - this->getPosition());
 				}else{
 					sp=(_mainTarget->getPosition() - this->getPosition());
 				}
@@ -5489,7 +5486,7 @@ void Hero::AI_Kakuzu(){
 		Vec2 sp;
 
 		if(_mainTarget->_originY){
-			sp=ccpSub(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
+			sp=(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY) - this->getPosition());
 		}else{
 			sp=(_mainTarget->getPosition() - this->getPosition());
 		}
@@ -5562,7 +5559,7 @@ void Hero::AI_Kakuzu(){
 		Vec2 sp;
 
 		if(_mainTarget->_originY){
-			sp=ccpSub(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
+			sp=(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY) - this->getPosition());
 		}else{
 			sp=(_mainTarget->getPosition() - this->getPosition());
 		}
@@ -5659,7 +5656,7 @@ void Hero::AI_Shikamaru(){
 		Vec2 sp;
 
 		if(_mainTarget->_originY){
-			sp=ccpSub(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
+			sp=(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY) - this->getPosition());
 		}else{
 			sp=(_mainTarget->getPosition() - this->getPosition());
 		}
@@ -5763,7 +5760,7 @@ void Hero::AI_Shikamaru(){
 		Vec2 sp;
 
 		if(_mainTarget->_originY){
-			sp=ccpSub(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
+			sp=(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY) - this->getPosition());
 		}else{
 			sp=(_mainTarget->getPosition() - this->getPosition());
 		}
@@ -5866,7 +5863,7 @@ void Hero::AI_Gaara(){
 		Vec2 sp;
 
 		if(_mainTarget->_originY){
-			sp=ccpSub(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
+			sp=(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY) - this->getPosition());
 		}else{
 			sp=(_mainTarget->getPosition() - this->getPosition());
 		}
@@ -5933,7 +5930,7 @@ void Hero::AI_Gaara(){
 		Vec2 sp;
 
 		if(_mainTarget->_originY){
-			sp=ccpSub(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
+			sp=(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY) - this->getPosition());
 		}else{
 			sp=(_mainTarget->getPosition() - this->getPosition());
 		}
@@ -6029,7 +6026,7 @@ void Hero::AI_Tobirama(){
 		Vec2 sp;
 
 		if(_mainTarget->_originY){
-			sp=ccpSub(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
+			sp=(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY) - this->getPosition());
 		}else{
 			sp=(_mainTarget->getPosition() - this->getPosition());
 		}
@@ -6112,7 +6109,7 @@ void Hero::AI_Tobirama(){
 		Vec2 sp;
 
 		if(_mainTarget->_originY){
-			sp=ccpSub(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
+			sp=(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY) - this->getPosition());
 		}else{
 			sp=(_mainTarget->getPosition() - this->getPosition());
 		}
@@ -6220,7 +6217,7 @@ void Hero::AI_Choji(){
 		Vec2 sp;
 
 		if(_mainTarget->_originY){
-			sp=ccpSub(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
+			sp=(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY) - this->getPosition());
 		}else{
 			sp=(_mainTarget->getPosition() - this->getPosition());
 		}
@@ -6305,7 +6302,7 @@ void Hero::AI_Choji(){
 		Vec2 sp;
 
 		if(_mainTarget->_originY){
-			sp=ccpSub(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
+			sp=(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY) - this->getPosition());
 		}else{
 			sp=(_mainTarget->getPosition() - this->getPosition());
 		}
@@ -6415,7 +6412,7 @@ void Hero::AI_Karin(){
 		Vec2 sp;
 
 		if(_mainTarget->_originY){
-			sp=ccpSub(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
+			sp=(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY) - this->getPosition());
 		}else{
 			sp=(_mainTarget->getPosition() - this->getPosition());
 		}
@@ -6508,7 +6505,7 @@ void Hero::AI_Karin(){
 		Vec2 sp;
 
 		if(_mainTarget->_originY){
-			sp=ccpSub(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
+			sp=(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY) - this->getPosition());
 		}else{
 			sp=(_mainTarget->getPosition() - this->getPosition());
 		}
@@ -6611,7 +6608,7 @@ void Hero::AI_Lee(){
 		Vec2 sp;
 
 		if(_mainTarget->_originY){
-			sp=ccpSub(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
+			sp=(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY) - this->getPosition());
 		}else{
 			sp=(_mainTarget->getPosition() - this->getPosition());
 		}
@@ -6677,7 +6674,7 @@ void Hero::AI_Lee(){
 		Vec2 sp;
 
 		if(_mainTarget->_originY){
-			sp=ccpSub(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
+			sp=(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY) - this->getPosition());
 		}else{
 			sp=(_mainTarget->getPosition() - this->getPosition());
 		}
@@ -6777,7 +6774,7 @@ void Hero::AI_RockLee(){
 		Vec2 sp;
 
 		if(_mainTarget->_originY){
-			sp=ccpSub(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
+			sp=(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY) - this->getPosition());
 		}else{
 			sp=(_mainTarget->getPosition() - this->getPosition());
 		}
@@ -6864,7 +6861,7 @@ void Hero::AI_RockLee(){
 		Vec2 sp;
 
 		if(_mainTarget->_originY){
-			sp=ccpSub(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
+			sp=(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY) - this->getPosition());
 		}else{
 			sp=(_mainTarget->getPosition() - this->getPosition());
 		}
@@ -6971,7 +6968,7 @@ void Hero::AI_Jugo(){
 		Vec2 sp;
 
 		if(_mainTarget->_originY){
-			sp=ccpSub(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
+			sp=(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY) - this->getPosition());
 		}else{
 			sp=(_mainTarget->getPosition() - this->getPosition());
 		}
@@ -7072,7 +7069,7 @@ void Hero::AI_Jugo(){
 		Vec2 sp;
 
 		if(_mainTarget->_originY){
-			sp=ccpSub(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
+			sp=(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY) - this->getPosition());
 		}else{
 			sp=(_mainTarget->getPosition() - this->getPosition());
 		}
@@ -7168,7 +7165,7 @@ void Hero::AI_Kisame(){
 		Vec2 sp;
 
 		if(_mainTarget->_originY){
-			sp=ccpSub(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
+			sp=(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY) - this->getPosition());
 		}else{
 			sp=(_mainTarget->getPosition() - this->getPosition());
 		}
@@ -7278,7 +7275,7 @@ void Hero::AI_Kisame(){
 		Vec2 sp;
 
 		if(_mainTarget->_originY){
-			sp=ccpSub(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
+			sp=(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY) - this->getPosition());
 		}else{
 			sp=(_mainTarget->getPosition() - this->getPosition());
 		}
@@ -7336,7 +7333,7 @@ void Hero::AI_Hidan(){
 				Vec2 sp;
 
 				if(_mainTarget->_originY){
-					sp=ccpSub(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
+					sp=(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY) - this->getPosition());
 				}else{
 					sp=(_mainTarget->getPosition() - this->getPosition());
 				}
@@ -7439,7 +7436,7 @@ void Hero::AI_Hidan(){
 		Vec2 sp;
 
 		if(_mainTarget->_originY){
-			sp=ccpSub(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
+			sp=(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY) - this->getPosition());
 		}else{
 			sp=(_mainTarget->getPosition() - this->getPosition());
 		}
@@ -7529,7 +7526,7 @@ void Hero::AI_Hidan(){
 		Vec2 sp;
 
 		if(_mainTarget->_originY){
-			sp=ccpSub(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
+			sp=(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY) - this->getPosition());
 		}else{
 			sp=(_mainTarget->getPosition() - this->getPosition());
 		}
@@ -7632,7 +7629,7 @@ void Hero::AI_Tobi(){
 		Vec2 sp;
 
 		if(_mainTarget->_originY){
-			sp=ccpSub(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
+			sp=(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY) - this->getPosition());
 		}else{
 			sp=(_mainTarget->getPosition() - this->getPosition());
 		}
@@ -7731,7 +7728,7 @@ void Hero::AI_Tobi(){
 		Vec2 sp;
 
 		if(_mainTarget->_originY){
-			sp=ccpSub(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
+			sp=(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY) - this->getPosition());
 		}else{
 			sp=(_mainTarget->getPosition() - this->getPosition());
 		}
@@ -7838,7 +7835,7 @@ void Hero::AI_Shino(){
 		Vec2 sp;
 
 		if(_mainTarget->_originY){
-			sp=ccpSub(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
+			sp=(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY) - this->getPosition());
 		}else{
 			sp=(_mainTarget->getPosition() - this->getPosition());
 		}
@@ -7955,7 +7952,7 @@ void Hero::AI_Shino(){
 		Vec2 sp;
 
 		if(_mainTarget->_originY){
-			sp=ccpSub(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
+			sp=(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY) - this->getPosition());
 		}else{
 			sp=(_mainTarget->getPosition() - this->getPosition());
 		}
@@ -8064,7 +8061,7 @@ void Hero::AI_Hiruzen(){
 		Vec2 sp;
 
 		if(_mainTarget->_originY){
-			sp=ccpSub(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
+			sp=(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY) - this->getPosition());
 		}else{
 			sp=(_mainTarget->getPosition() - this->getPosition());
 		}
@@ -8176,7 +8173,7 @@ void Hero::AI_Hiruzen(){
 		Vec2 sp;
 
 		if(_mainTarget->_originY){
-			sp=ccpSub(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
+			sp=(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY) - this->getPosition());
 		}else{
 			sp=(_mainTarget->getPosition() - this->getPosition());
 		}
@@ -8254,7 +8251,7 @@ void Hero::AI_Kiba(){
 		Vec2 sp;
 
 		if(_mainTarget->_originY){
-			sp=ccpSub(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
+			sp=(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY) - this->getPosition());
 		}else{
 			sp=(_mainTarget->getPosition() - this->getPosition());
 		}
@@ -8345,7 +8342,7 @@ void Hero::AI_Kiba(){
 		Vec2 sp;
 
 		if(_mainTarget->_originY){
-			sp=ccpSub(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
+			sp=(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY) - this->getPosition());
 		}else{
 			sp=(_mainTarget->getPosition() - this->getPosition());
 		}
@@ -8485,7 +8482,7 @@ void Hero::AI_Minato(){
 		Vec2 sp;
 
 		if(_mainTarget->_originY){
-			sp=ccpSub(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
+			sp=(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY) - this->getPosition());
 		}else{
 			sp=(_mainTarget->getPosition() - this->getPosition());
 		}
@@ -8592,7 +8589,7 @@ void Hero::AI_Minato(){
 		Vec2 sp;
 
 		if(_mainTarget->_originY){
-			sp=ccpSub(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
+			sp=(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY) - this->getPosition());
 		}else{
 			sp=(_mainTarget->getPosition() - this->getPosition());
 		}
@@ -8721,7 +8718,7 @@ void Hero::AI_Hinata(){
 		Vec2 sp;
 
 		if(_mainTarget->_originY){
-			sp=ccpSub(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
+			sp=(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY) - this->getPosition());
 		}else{
 			sp=(_mainTarget->getPosition() - this->getPosition());
 		}
@@ -8829,7 +8826,7 @@ void Hero::AI_Hinata(){
 		Vec2 sp;
 
 		if(_mainTarget->_originY){
-			sp=ccpSub(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
+			sp=(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY) - this->getPosition());
 		}else{
 			sp=(_mainTarget->getPosition() - this->getPosition());
 		}
@@ -8933,7 +8930,7 @@ void Hero::AI_Neji(){
 		Vec2 sp;
 
 		if(_mainTarget->_originY){
-			sp=ccpSub(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
+			sp=(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY) - this->getPosition());
 		}else{
 			sp=(_mainTarget->getPosition() - this->getPosition());
 		}
@@ -9041,7 +9038,7 @@ void Hero::AI_Neji(){
 		Vec2 sp;
 
 		if(_mainTarget->_originY){
-			sp=ccpSub(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY),this->getPosition());
+			sp=(Vec2(_mainTarget->getPositionX(),_mainTarget->_originY) - this->getPosition());
 		}else{
 			sp=(_mainTarget->getPosition() - this->getPosition());
 		}
