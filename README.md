@@ -45,6 +45,9 @@ Alasan estimasi:
   membuat `CCArray` sementara.
 - Adapter `ValueVector` ke `CCArray` untuk object layer TMX mulai dihapus:
   spawn point dan meta tower di `GameLayer` membaca `ValueMap` 3.x langsung.
+- Helper render lama `cocos2dx2_compat::visitNode` sudah tidak dipakai; snapshot
+  pause/gear/game-over dan `CCStrokeLabel` sekarang memanggil `Node::visit`
+  API 3.x langsung.
 - Masih ada sisa API 2.x yang cukup banyak di `ActionManager`, `Element`,
   `RankingLayer`, beberapa utility UI, app delegate, dan compatibility bridge.
 - Untuk mencapai 100%, sisa terbesar bukan sekadar rename API, tetapi migrasi
@@ -379,6 +382,8 @@ Commit awal tahap 5:
 - `6d20d1d refactor: migrate screw layer item container`
 - `8a94ef6 refactor: migrate child iteration containers`
 - `3e2a623 refactor: migrate map object containers`
+- `66f039f refactor: restore game layer rematch iterator`
+- `115a026 refactor: remove visit node compat helper`
 
 Catatan progress terbaru:
 
@@ -449,6 +454,14 @@ Catatan progress terbaru:
   langsung untuk spawn point dan tower meta. Setelah caller aktif hilang,
   helper compat `toCCArray`, `createSequence(CCArray)`, dan
   `createAnimationWithSpriteFrames(CCArray)` dihapus dari `Cocos2dx2Compat.h`.
+- Build Android pengguna setelah migrasi map object sempat gagal karena
+  deklarasi iterator `pObject` di cleanup rematch `GameLayer::onLeft()` ikut
+  hilang. Commit `66f039f` mengembalikan deklarasi lokal tersebut dan build
+  Android pengguna berikutnya berhasil.
+- `GameLayer` dan `CCStrokeLabel` tidak lagi memakai helper compat
+  `cocos2dx2_compat::visitNode`; pemanggilan render snapshot/stroke sudah
+  memakai `Node::visit(Director::getInstance()->getRenderer(), Mat4::IDENTITY,
+  0)` langsung, lalu helper tersebut dihapus dari `Cocos2dx2Compat.h`.
 - Setelah commit `ActionManager` lokal ini lulus build Android, langkah
   berikutnya adalah melanjutkan migrasi container yang masih lokal dan mudah
   dipisahkan sebelum masuk kontrak data besar di loader XML, `ActionManager`,
