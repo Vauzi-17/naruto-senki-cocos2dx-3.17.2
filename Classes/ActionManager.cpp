@@ -1188,19 +1188,19 @@ Action* NarutoSenki::ActionManager::createAnimation(CCArray* ationArray,float fp
 					callValue = CCDictionary::create(); 
 					callValue->retain();
 					callValue->setObject(CCString::create(keyValue), 1);
-					CCFiniteTimeAction *call = CCCallFuncND::create(this,callfuncND_selector(NarutoSenki::ActionManager::setAttackBox),(void*)callValue);
+					FiniteTimeAction *call = CCCallFuncND::create(this,callfuncND_selector(NarutoSenki::ActionManager::setAttackBox),(void*)callValue);
 					seqArray->addObject(call);
 				}else if(strcmp(key,"setSound")==0){
 					callValue = CCDictionary::create(); 
 					callValue->retain();
 					callValue->setObject(CCString::create(keyValue), 1);
-					CCFiniteTimeAction *call = CCCallFuncND::create(this,callfuncND_selector(NarutoSenki::ActionManager::setSound),(void*)callValue);
+					FiniteTimeAction *call = CCCallFuncND::create(this,callfuncND_selector(NarutoSenki::ActionManager::setSound),(void*)callValue);
 					seqArray->addObject(call);
 				}else if(strcmp(key,"setDSound")==0){
 					callValue = CCDictionary::create(); 
 					callValue->retain();
 					callValue->setObject(CCString::create(keyValue), 1);
-					CCFiniteTimeAction *call = CCCallFuncND::create(this,callfuncND_selector(NarutoSenki::ActionManager::setDSound),(void*)callValue);
+					FiniteTimeAction *call = CCCallFuncND::create(this,callfuncND_selector(NarutoSenki::ActionManager::setDSound),(void*)callValue);
 					seqArray->addObject(call);
 				}else if(strcmp(key,"setDelay")==0){
 					float delayTime=dic->valueForKey(key)->intValue();
@@ -1208,38 +1208,38 @@ Action* NarutoSenki::ActionManager::createAnimation(CCArray* ationArray,float fp
 					seqArray->addObject(delay);
 				}else if(strcmp(key,"setMove")==0){
 					int moveLength=dic->valueForKey(key)->intValue();
-					CCFiniteTimeAction *call = CCCallFuncND::create(this,callfuncND_selector(NarutoSenki::ActionManager::setMove),(void*)moveLength);
+					FiniteTimeAction *call = CCCallFuncND::create(this,callfuncND_selector(NarutoSenki::ActionManager::setMove),(void*)moveLength);
 					seqArray->addObject(call);
 				}else if(strcmp(key,"setSkillEffect")==0){
 					callValue = CCDictionary::create(); 
 					callValue->retain();
 					callValue->setObject(CCString::create(keyValue), 1);
-					CCFiniteTimeAction *call = CCCallFuncND::create(this,callfuncND_selector(NarutoSenki::ActionManager::setSkillEffect),(void*)callValue);
+					FiniteTimeAction *call = CCCallFuncND::create(this,callfuncND_selector(NarutoSenki::ActionManager::setSkillEffect),(void*)callValue);
 					seqArray->addObject(call);
 				}else if(strcmp(key,"setJump")==0){
 					bool jumpDirection=dic->valueForKey(key)->boolValue();
-					CCFiniteTimeAction *call = CCCallFuncND::create(this,callfuncND_selector(NarutoSenki::ActionManager::setJump),(void*)jumpDirection);
+					FiniteTimeAction *call = CCCallFuncND::create(this,callfuncND_selector(NarutoSenki::ActionManager::setJump),(void*)jumpDirection);
 					seqArray->addObject(call);
 				}
 				else if(strcmp(key,"setCharge")==0){
-					CCFiniteTimeAction *call=CCCallFunc::create(this,callfunc_selector(NarutoSenki::ActionManager::getCollider));
+					FiniteTimeAction *call=CCCallFunc::create(this,callfunc_selector(NarutoSenki::ActionManager::getCollider));
 					seqArray->addObject(call);
 					int moveLength=dic->valueForKey(key)->intValue();
 					call = CCCallFuncND::create(this,callfuncND_selector(NarutoSenki::ActionManager::setCharge),(void*)moveLength);
 					seqArray->addObject(call);
 				}else if(strcmp(key,"setChargeB")==0){
 					int moveLength=dic->valueForKey(key)->intValue();
-					CCFiniteTimeAction* call = CCCallFuncND::create(this,callfuncND_selector(NarutoSenki::ActionManager::setChargeB),(void*)moveLength);
+					FiniteTimeAction* call = CCCallFuncND::create(this,callfuncND_selector(NarutoSenki::ActionManager::setChargeB),(void*)moveLength);
 					seqArray->addObject(call);
 				}else if(strcmp(key,"setClone")==0){
 					int cloneTime=dic->valueForKey(key)->intValue();
-					CCFiniteTimeAction *call = CCCallFuncND::create(this,callfuncND_selector(NarutoSenki::ActionManager::setClone),(void*)cloneTime);
+					FiniteTimeAction *call = CCCallFuncND::create(this,callfuncND_selector(NarutoSenki::ActionManager::setClone),(void*)cloneTime);
 					seqArray->addObject(call);
 				}else if(strcmp(key,"setMon")==0){
 					callValue = CCDictionary::create(); 
 					callValue->retain();
 					callValue->setObject(CCString::create(keyValue), 1);
-					CCFiniteTimeAction *call = CCCallFuncND::create(this,callfuncND_selector(NarutoSenki::ActionManager::setMon),(void*)callValue);
+					FiniteTimeAction *call = CCCallFuncND::create(this,callfuncND_selector(NarutoSenki::ActionManager::setMon),(void*)callValue);
 					seqArray->addObject(call);
 				}else if(strcmp(key,"setFont")==0){
 					callValue = CCDictionary::create(); 
@@ -1257,18 +1257,18 @@ Action* NarutoSenki::ActionManager::createAnimation(CCArray* ationArray,float fp
 					} 
 					delete[] str;
 
-					//CCFiniteTimeAction *call = CCCallFuncND::create(this,callfuncND_selector(NarutoSenki::ActionManager::setFontEffect),(void*)callValue);
+					//FiniteTimeAction *call = CCCallFuncND::create(this,callfuncND_selector(NarutoSenki::ActionManager::setFontEffect),(void*)callValue);
 					//seqArray->addObject(call);
 
 				}else if(strcmp(key,"setBuff")==0){
 					int buffValue=dic->valueForKey(key)->intValue();
-					CCFiniteTimeAction *call = CCCallFuncND::create(this,callfuncND_selector(NarutoSenki::ActionManager::setBuff),(void*)buffValue);
+					FiniteTimeAction *call = CCCallFuncND::create(this,callfuncND_selector(NarutoSenki::ActionManager::setBuff),(void*)buffValue);
 					seqArray->addObject(call);
 				}else if(strcmp(key,"setCommand")==0){
 					callValue = CCDictionary::create(); 
 					callValue->retain();
 					callValue->setObject(CCString::create(keyValue), 1);
-					CCFiniteTimeAction *call = CCCallFuncND::create(this,callfuncND_selector(NarutoSenki::ActionManager::setCommand),(void*)callValue);
+					FiniteTimeAction *call = CCCallFuncND::create(this,callfuncND_selector(NarutoSenki::ActionManager::setCommand),(void*)callValue);
 					seqArray->addObject(call);
 
 				}else if(strcmp(key,"setDetonation")==0){
@@ -1279,45 +1279,45 @@ Action* NarutoSenki::ActionManager::createAnimation(CCArray* ationArray,float fp
 					callValue = CCDictionary::create(); 
 					callValue->retain();
 					callValue->setObject(CCString::create(keyValue), 1);
-					CCFiniteTimeAction *call = CCCallFuncND::create(this,callfuncND_selector(NarutoSenki::ActionManager::setBullet),(void*)callValue);
+					FiniteTimeAction *call = CCCallFuncND::create(this,callfuncND_selector(NarutoSenki::ActionManager::setBullet),(void*)callValue);
 					seqArray->addObject(call);
 				}else if(strcmp(key,"setMonAttack")==0){
 					int skillNum=dic->valueForKey(key)->intValue();
-					CCFiniteTimeAction *call = CCCallFuncND::create(this,callfuncND_selector(NarutoSenki::ActionManager::setMonAttack),(void*)skillNum);
+					FiniteTimeAction *call = CCCallFuncND::create(this,callfuncND_selector(NarutoSenki::ActionManager::setMonAttack),(void*)skillNum);
 					seqArray->addObject(call);
 				}else if(strcmp(key,"setTrap")==0){
 					callValue = CCDictionary::create(); 
 					callValue->retain();
 					callValue->setObject(CCString::create(keyValue), 1);
-				CCFiniteTimeAction *call = CCCallFuncND::create(this,callfuncND_selector(NarutoSenki::ActionManager::setTrap),(void*)callValue);
+				FiniteTimeAction *call = CCCallFuncND::create(this,callfuncND_selector(NarutoSenki::ActionManager::setTrap),(void*)callValue);
 					seqArray->addObject(call);
 				}else if(strcmp(key,"setActionResume")==0){
-					CCFiniteTimeAction *call=CCCallFunc::create(this,callfunc_selector(NarutoSenki::ActionManager::setActionResume));
+					FiniteTimeAction *call=CCCallFunc::create(this,callfunc_selector(NarutoSenki::ActionManager::setActionResume));
 					seqArray->addObject(call);
 				}
 				else if(strcmp(key,"setActionResume2")==0){
-					CCFiniteTimeAction *call=CCCallFunc::create(this,callfunc_selector(NarutoSenki::ActionManager::setActionResume2));
+					FiniteTimeAction *call=CCCallFunc::create(this,callfunc_selector(NarutoSenki::ActionManager::setActionResume2));
 					seqArray->addObject(call);
 				}else if(strcmp(key,"setShadow")==0){
 					callValue = CCDictionary::create(); 
 					callValue->retain();
 					callValue->setObject(animeFrames->objectAtIndex(int(animeFrames->count()-1)),1);
-					CCFiniteTimeAction *call = CCCallFuncND::create(this,callfuncND_selector(NarutoSenki::ActionManager::setShadow),(void*)callValue);
+					FiniteTimeAction *call = CCCallFuncND::create(this,callfuncND_selector(NarutoSenki::ActionManager::setShadow),(void*)callValue);
 					seqArray->addObject(call);
 				}
 				else if(strcmp(key,"setTransform")==0){
-					CCFiniteTimeAction *call=CCCallFunc::create(this,callfunc_selector(NarutoSenki::ActionManager::setTransform));
+					FiniteTimeAction *call=CCCallFunc::create(this,callfunc_selector(NarutoSenki::ActionManager::setTransform));
 					seqArray->addObject(call);
 				}
 				else if(strcmp(key,"setOugis")==0){
-					CCFiniteTimeAction *call= CCCallFuncN::create(this,callfuncN_selector(NarutoSenki::ActionManager::setOugis));
+					FiniteTimeAction *call= CCCallFuncN::create(this,callfuncN_selector(NarutoSenki::ActionManager::setOugis));
 					seqArray->addObject(call);
 				}else if (strcmp(key,"stopJump")==0){
 					int stopTime=dic->valueForKey(key)->intValue();
-					CCFiniteTimeAction *call = CCCallFuncND::create(this,callfuncND_selector(NarutoSenki::ActionManager::stopJump),(void*)stopTime);
+					FiniteTimeAction *call = CCCallFuncND::create(this,callfuncND_selector(NarutoSenki::ActionManager::stopJump),(void*)stopTime);
 					seqArray->addObject(call);
 				}else if (strcmp(key,"setFlipped")==0){
-					CCFiniteTimeAction *call=CCCallFunc::create(this,callfunc_selector(NarutoSenki::ActionManager::setCharFlip));
+					FiniteTimeAction *call=CCCallFunc::create(this,callfunc_selector(NarutoSenki::ActionManager::setCharFlip));
 					seqArray->addObject(call);
 				}
 
@@ -1361,7 +1361,7 @@ void NarutoSenki::ActionManager::setCharFlip(){
 	}
 }
 
-void NarutoSenki::ActionManager::setShadow(CCNode* sender,void* date){
+void NarutoSenki::ActionManager::setShadow(Node* sender,void* date){
 
 	Size visibleSize = Director::getInstance()->getVisibleSize();
 	CCDictionary* file=(CCDictionary*) date;
@@ -1379,22 +1379,22 @@ void NarutoSenki::ActionManager::setShadow(CCNode* sender,void* date){
 	charN->setFlipX(_isFlipped);
 	charN->setPosition(this->getPosition());
 	DelayTime* delay=DelayTime::create(0.1f);
-	CCFiniteTimeAction *call = CCCallFuncN::create(charN,callfuncN_selector(NarutoSenki::ActionManager::enableShadow));
+	FiniteTimeAction *call = CCCallFuncN::create(charN,callfuncN_selector(NarutoSenki::ActionManager::enableShadow));
 	charN->runAction(Sequence::createWithTwoActions(delay,call));
 	_delegate->addChild(charN,-this->getPositionY()-1);
 }
 
-void NarutoSenki::ActionManager::enableShadow(CCNode* sender){
+void NarutoSenki::ActionManager::enableShadow(Node* sender){
 
 	Sprite* charN=(Sprite *) sender;
 	charN->setVisible(true);
 	DelayTime* delay=DelayTime::create(0.1f);
-	CCFiniteTimeAction *call = CCCallFuncN::create(charN,callfuncN_selector(NarutoSenki::ActionManager::disableShadow));
+	FiniteTimeAction *call = CCCallFuncN::create(charN,callfuncN_selector(NarutoSenki::ActionManager::disableShadow));
 	charN->runAction(Sequence::createWithTwoActions(delay,call));
 
 }
 
-void NarutoSenki::ActionManager::disableShadow(CCNode* sender){
+void NarutoSenki::ActionManager::disableShadow(Node* sender){
 
 	Sprite* charN=(Sprite *) sender;
 	charN->stopAllActions();
@@ -1403,7 +1403,7 @@ void NarutoSenki::ActionManager::disableShadow(CCNode* sender){
 }
 
 
-void NarutoSenki::ActionManager::setOugis(CCNode* sender){
+void NarutoSenki::ActionManager::setOugis(Node* sender){
 		_delegate->setOugis(this);
 }
 
@@ -1810,14 +1810,14 @@ void NarutoSenki::ActionManager::setCoinDisplay(int num){
 	
 	ActionInterval*  mv=MoveBy::create(0.5f,ccp(0,12));
 	ActionInterval* fadeOut=FadeOut::create(0.8f);
-	CCFiniteTimeAction *call=CCCallFuncND::create(coinDisplay,callfuncND_selector(NarutoSenki::ActionManager::removeCoinDisplay),NULL);
+	FiniteTimeAction *call=CCCallFuncND::create(coinDisplay,callfuncND_selector(NarutoSenki::ActionManager::removeCoinDisplay),NULL);
 	ActionInterval* sp=Spawn::create(fadeOut,mv,NULL);
 	Action* seq=Sequence::create(sp,call,nullptr);
 	coinDisplay->runAction(seq);
 
 }
 
-void NarutoSenki::ActionManager::removeCoinDisplay(CCNode* sender,void* date){
+void NarutoSenki::ActionManager::removeCoinDisplay(Node* sender,void* date){
 	sender->removeFromParent();
 	sender=NULL;
 }
@@ -1845,7 +1845,7 @@ void NarutoSenki::ActionManager::setDamgeDisplay(unsigned int value,const char* 
 	_damageArray->addObject(damageFont);
 
 	ActionInterval*  sd=ScaleBy::create(0.2f,0.5f);
-	CCFiniteTimeAction *call=CCCallFunc::create(this,callfunc_selector(NarutoSenki::ActionManager::removeDamageDisplay));
+	FiniteTimeAction *call=CCCallFunc::create(this,callfunc_selector(NarutoSenki::ActionManager::removeDamageDisplay));
 
 	ActionInterval*  mv=MoveBy::create(0.4f,ccp(0,12));
 	ActionInterval* fadeOut=FadeOut::create(0.4f);
@@ -1895,7 +1895,7 @@ void NarutoSenki::ActionManager::setDamgeEffect(CCString* type){
 
 }
 
-void NarutoSenki::ActionManager::setSkillEffect(CCNode* sender,void* date){
+void NarutoSenki::ActionManager::setSkillEffect(Node* sender,void* date){
 
 	CCDictionary* file=(CCDictionary*) date;
 	CCString* str = (CCString*)(file->objectForKey(1));
@@ -2374,7 +2374,7 @@ void NarutoSenki::ActionManager::disableEffect(){
 	
 }
 
-void NarutoSenki::ActionManager::setSound(CCNode* sender,void* date){
+void NarutoSenki::ActionManager::setSound(Node* sender,void* date){
 
 	if(UserDefault::getInstance()->getBoolForKey("isVoice")!=false){
 		bool _isPlayable=false;
@@ -2393,13 +2393,12 @@ void NarutoSenki::ActionManager::setSound(CCNode* sender,void* date){
 		if(_isPlayable){
 				CCDictionary* file=(CCDictionary*) date;
 				CCString* str = (CCString*)(file->objectForKey(1));
-				//SimpleAudioEngine::sharedEngine()->preloadEffect(str->getCString());
 				KTools::playEffectOptimized(str->getCString());
 		}
 	}
 };
 
-void NarutoSenki::ActionManager::setDSound(CCNode* sender,void* date){
+void NarutoSenki::ActionManager::setDSound(Node* sender,void* date){
 
 	if(UserDefault::getInstance()->getBoolForKey("isVoice")!=false){
 		bool _isPlayable=false;
@@ -2417,13 +2416,12 @@ void NarutoSenki::ActionManager::setDSound(CCNode* sender,void* date){
 		if(_isPlayable && this->_isHitOne){
 			CCDictionary* file=(CCDictionary*) date;
 			CCString* str = (CCString*)(file->objectForKey(1));
-			//SimpleAudioEngine::sharedEngine()->preloadEffect(str->getCString());
 			KTools::playEffectOptimized(str->getCString());
 		}
 	}
 };
 
-void NarutoSenki::ActionManager::setAttackBox(CCNode* sender,void* date){
+void NarutoSenki::ActionManager::setAttackBox(Node* sender,void* date){
 	CCDictionary* file=(CCDictionary*) date;
 	CCString* str = (CCString*)(file->objectForKey(1));
 
@@ -2509,7 +2507,7 @@ void NarutoSenki::ActionManager::disableShack(){
 }
 
 
-void NarutoSenki::ActionManager::setMove(CCNode* sender,void* date){
+void NarutoSenki::ActionManager::setMove(Node* sender,void* date){
 
 	int moveLength;
 
@@ -2543,7 +2541,7 @@ void NarutoSenki::ActionManager::setMove(CCNode* sender,void* date){
 	
 };
 
-void NarutoSenki::ActionManager::setJump(CCNode* sender,void* date){
+void NarutoSenki::ActionManager::setJump(Node* sender,void* date){
 
 	if(
 		_actionState!=ACTION_STATE_FLOAT && 
@@ -2573,7 +2571,7 @@ void NarutoSenki::ActionManager::setJump(CCNode* sender,void* date){
 }
 
 
-void NarutoSenki::ActionManager::setCharge(CCNode* sender,void* date){
+void NarutoSenki::ActionManager::setCharge(Node* sender,void* date){
 	int moveLength=(int) date;
 	if( (this->getPositionX()<_delegate->currentMap->getTileSize().width && _isFlipped) ||
 		(this->getPositionX()>(_delegate->currentMap->getMapSize().width-1)*_delegate->currentMap->getTileSize().width && !_isFlipped)
@@ -2588,7 +2586,7 @@ void NarutoSenki::ActionManager::setCharge(CCNode* sender,void* date){
 };
 
 // with out getCollider
-void NarutoSenki::ActionManager::setChargeB(CCNode* sender,void* date){
+void NarutoSenki::ActionManager::setChargeB(Node* sender,void* date){
 	int moveLength=(int) date;
 	float delay;
 	if(_actionState==ACTION_STATE_OATTACK || _actionState==ACTION_STATE_O2ATTACK){
@@ -2609,7 +2607,7 @@ void NarutoSenki::ActionManager::setChargeB(CCNode* sender,void* date){
 
 };
 
-void NarutoSenki::ActionManager::setCommand(CCNode* sender,void* date){
+void NarutoSenki::ActionManager::setCommand(Node* sender,void* date){
 
 	CCDictionary* file=(CCDictionary*) date;
 	CCString* str = (CCString*)(file->objectForKey(1));
@@ -2879,7 +2877,7 @@ void NarutoSenki::ActionManager::setCommand(CCNode* sender,void* date){
 
 
 		Animation* tempAnimation=createAnimationFromFrameArray(tempArray, 0.1f);
-		CCFiniteTimeAction *call = CCCallFuncN::create(this,callfuncN_selector(NarutoSenki::ActionManager::disableShadow));
+		FiniteTimeAction *call = CCCallFuncN::create(this,callfuncN_selector(NarutoSenki::ActionManager::disableShadow));
 		Action* tempAction=Animate::create(tempAnimation);
 		CCArray* list=CCArray::create();
 		list->addObject(tempAction);
@@ -2968,7 +2966,7 @@ void NarutoSenki::ActionManager::setCommand(CCNode* sender,void* date){
 
 
 
-void NarutoSenki::ActionManager::setBuff(CCNode* sender,void* date){
+void NarutoSenki::ActionManager::setBuff(Node* sender,void* date){
 	int buffValue=(int) date;
 	float buffStayTime=_attackRangeY;
 
@@ -5497,7 +5495,7 @@ void NarutoSenki::ActionManager::stopMove(float dt){
 	};
 }
 
-void NarutoSenki::ActionManager::stopJump(CCNode* sender,void* date){
+void NarutoSenki::ActionManager::stopJump(Node* sender,void* date){
 	int stopTime=(int) date;
 
 	if(_actionState==ACTION_STATE_JUMP){
@@ -5506,7 +5504,7 @@ void NarutoSenki::ActionManager::stopJump(CCNode* sender,void* date){
 	}
 }
 
-void NarutoSenki::ActionManager::setBullet(CCNode* sender,void* date){
+void NarutoSenki::ActionManager::setBullet(Node* sender,void* date){
 	CCDictionary* file=(CCDictionary*) date;
 	CCString* str = (CCString*)(file->objectForKey(1));
 	CCString* bulletType=str;
@@ -5642,7 +5640,7 @@ void NarutoSenki::ActionManager::setBulletGroup(float dt){
 
 
 
-void NarutoSenki::ActionManager::setClone(CCNode* sender,void* date){
+void NarutoSenki::ActionManager::setClone(Node* sender,void* date){
 	int cloneTime=(int) date;
 	Hero* clone=Hero::create();
 	
@@ -5894,7 +5892,7 @@ void NarutoSenki::ActionManager::removeClone(float dt){
 }
 
 
-void NarutoSenki::ActionManager::setMon(CCNode* sender,void* date){
+void NarutoSenki::ActionManager::setMon(Node* sender,void* date){
 
 
 	CCDictionary* file=(CCDictionary*) date;
@@ -6297,7 +6295,7 @@ void NarutoSenki::ActionManager::setMonPer(float dt){
 
 }
 
-void NarutoSenki::ActionManager::setTrap(CCNode* sender,void* date){
+void NarutoSenki::ActionManager::setTrap(Node* sender,void* date){
 	
 	CCDictionary* file=(CCDictionary*) date;
 	CCString* str = (CCString*)(file->objectForKey(1));
@@ -6504,7 +6502,7 @@ void NarutoSenki::ActionManager::removeSelf(float dt){
 	this->dealloc();
 }
 
-void NarutoSenki::ActionManager::setMonAttack(CCNode* sender,void* date){
+void NarutoSenki::ActionManager::setMonAttack(Node* sender,void* date){
 	int skillNum=(int) date;
 	if(this->getMonsterArray()){
 		CCObject* pObject;
@@ -7196,7 +7194,7 @@ bool NarutoSenki::ActionManager::hardHurt(int delayTime,bool isHurtAction,bool i
 				CCDictionary* callValue = CCDictionary::create(); 
 				callValue->setObject(CCString::create("stun"), 1);
 				callValue->retain();
-				CCFiniteTimeAction *call = CCCallFuncND::create(this,callfuncND_selector(NarutoSenki::ActionManager::setSkillEffect),(void*)callValue);
+				FiniteTimeAction *call = CCCallFuncND::create(this,callfuncND_selector(NarutoSenki::ActionManager::setSkillEffect),(void*)callValue);
 				list.pushBack(call);
 
 			}

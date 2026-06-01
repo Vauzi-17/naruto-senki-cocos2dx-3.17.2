@@ -330,9 +330,9 @@ namespace NarutoSenki {
 		void				setActionResume2();
 		void				reCatched(float dt);
 
-		void				setShadow(CCNode* sender, void* date);
-		void				disableShadow(CCNode* sender);
-		void				enableShadow(CCNode* sender);
+		void				setShadow(Node* sender, void* date);
+		void				disableShadow(Node* sender);
+		void				enableShadow(Node* sender);
 
 		void				setItem(abType type);
 		void				disableEffect();
@@ -400,7 +400,7 @@ namespace NarutoSenki {
 		void				removeLostBlood(float dt);
 
 		virtual void		setAI(float dt);
-		void				setSkillEffect(CCNode* sender, void* date);
+		void				setSkillEffect(Node* sender, void* date);
 		void				setRestore2(float dt);
 
 
@@ -416,41 +416,41 @@ namespace NarutoSenki {
 
 		CCDictionary* callValue;
 
-		void				setSound(CCNode* sender, void* date);
-		void				setDSound(CCNode* sender, void* date);
-		void				setMove(CCNode* sender, void* date);
-		void				setCharge(CCNode* sender, void* date);
-		void				setChargeB(CCNode* sender, void* date);
+		void				setSound(Node* sender, void* date);
+		void				setDSound(Node* sender, void* date);
+		void				setMove(Node* sender, void* date);
+		void				setCharge(Node* sender, void* date);
+		void				setChargeB(Node* sender, void* date);
 		void				getCollider();
 		void				getSticker(float dt);
 		void				stopMove(float dt);
-		void				stopJump(CCNode* sender, void* date);
-		void				setAttackBox(CCNode* sender, void* date);
+		void				stopJump(Node* sender, void* date);
+		void				setAttackBox(Node* sender, void* date);
 		void				setDamage(CCString* effectType, unsigned int attackValue, bool isFlipped);
 		void				setDamgeDisplay(unsigned int value, const char* type);
 
-		void				setItemEffect(CCNode* sender, void* date);
+		void				setItemEffect(Node* sender, void* date);
 		void				setDamgeEffect(CCString* type);
-		void				setMonAttack(CCNode* sender, void* date);
+		void				setMonAttack(Node* sender, void* date);
 		void				setTransform();
-		void				setOugis(CCNode* sender);
+		void				setOugis(Node* sender);
 
 		void				setCharFlip();
 
 
 
-		void				setClone(CCNode* sender, void* date);
-		void				setMon(CCNode* sender, void* date);
+		void				setClone(Node* sender, void* date);
+		void				setMon(Node* sender, void* date);
 		void				setMonPer(float dt);
-		void				setBullet(CCNode* sender, void* date);
+		void				setBullet(Node* sender, void* date);
 		void				setBulletGroup(float dt);
 
-		void				setTrap(CCNode* sender, void* date);
+		void				setTrap(Node* sender, void* date);
 
 
 
-		void				setBuff(CCNode* sender, void* date);
-		void				setCommand(CCNode* sender, void* date);
+		void				setBuff(Node* sender, void* date);
+		void				setCommand(Node* sender, void* date);
 		void				setBuffEffect(const char* type);
 		void				removeBuffEffect(const char* type);
 		void				disableBuff(float dt);
@@ -459,10 +459,10 @@ namespace NarutoSenki {
 
 		void				removeClone(float dt);
 		void				removeSelf(float dt);
-		void				setJump(CCNode* sender, void* date);
+		void				setJump(Node* sender, void* date);
 
 
-		void				removeCoinDisplay(CCNode* sender, void* date);
+		void				removeCoinDisplay(Node* sender, void* date);
 
 		Rect				setHalfBox();
 		Rect				setHitBox();

@@ -539,7 +539,7 @@ void NetworkLayer::onListRequestCompleted(Node *sender ,void *data){
 
 void NetworkLayer::onPage1Btn(cocos2d::Ref* sender)
 {
-	SimpleAudioEngine::sharedEngine()->playEffect(SELECT_SOUND);
+	SimpleAudioEngine::getInstance()->playEffect(SELECT_SOUND);
 
 	page2_btn->unselected();
 	page3_btn->unselected();
@@ -556,7 +556,7 @@ void NetworkLayer::onPage1Btn(cocos2d::Ref* sender)
 
 void NetworkLayer::onPage2Btn(cocos2d::Ref* sender)
 {
-	SimpleAudioEngine::sharedEngine()->playEffect(SELECT_SOUND);
+	SimpleAudioEngine::getInstance()->playEffect(SELECT_SOUND);
 
 	page1_btn->unselected();
 	page3_btn->unselected();
@@ -573,7 +573,7 @@ void NetworkLayer::onPage2Btn(cocos2d::Ref* sender)
 
 void NetworkLayer::onPage3Btn(cocos2d::Ref* sender)
 {
-	SimpleAudioEngine::sharedEngine()->playEffect(SELECT_SOUND);
+	SimpleAudioEngine::getInstance()->playEffect(SELECT_SOUND);
 
 	page1_btn->unselected();
 	page2_btn->unselected();

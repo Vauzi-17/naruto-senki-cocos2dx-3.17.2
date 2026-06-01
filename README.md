@@ -59,6 +59,11 @@ Alasan estimasi:
 - Sisa field label lama yang tidak punya caller aktif di `ActionManager`
   dibuang, dan helper lokal shadow/voice/display kecil mulai memakai tipe
   `Sprite`, `Scene`, `Size`, `Director`, serta `UserDefault` 3.x langsung.
+- Tanda tangan callback lokal `ActionManager` mulai lepas dari alias `CCNode*`
+  ke `Node*`, dan deklarasi action sementara di jalur parser lokal memakai
+  `FiniteTimeAction` langsung.
+- Audio klik halaman di `NetworkLayer` sudah memakai
+  `SimpleAudioEngine::getInstance()` tanpa mengubah flow pemilihan hero.
 - Masih ada sisa API 2.x yang cukup banyak di `ActionManager`, `Element`,
   `RankingLayer`, beberapa utility UI, app delegate, dan compatibility bridge.
 - Untuk mencapai 100%, sisa terbesar bukan sekadar rename API, tetapi migrasi
@@ -236,6 +241,14 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
 - `ActionManager`: field `cpLabel`/`CCLabelTTF` mati dihapus, lalu helper lokal
   shadow, display coin, voice check, dan shake scene mulai memakai tipe 3.x
   langsung tanpa menyentuh kontrak action parser/XML.
+- `ActionManager`: tanda tangan callback payload lokal diganti dari `CCNode*`
+  ke `Node*`, dan deklarasi lokal `CCFiniteTimeAction` di jalur parser/action
+  diganti ke `FiniteTimeAction`.
+- `NetworkLayer`: audio klik page selector memakai
+  `SimpleAudioEngine::getInstance()`; flow training/5v5 dan payload hero tetap
+  memakai kontrak lama.
+- `Cocos2dx2Compat.h`: belum dihapus walaupun isinya minimal, karena CMake dan
+  project Win32 masih memaksa include file ini untuk semua compile unit.
 
 1. **Tutup helper compat kecil yang masih lokal**
    - Target file: `Cocos2dx2Compat.h`, `ActionButton`, `HPBar`, `HudLayer`,
@@ -620,6 +633,16 @@ Catatan progress terbaru:
   `CCLabelTTF` yang tidak punya caller aktif, serta beberapa alias kecil di
   helper shadow/voice/coin display. Potongan ini belum build-tested oleh
   pengguna.
+- Callback payload/action lokal `ActionManager` dibersihkan satu tahap lagi:
+  deklarasi `CCNode*` diganti menjadi `Node*` dan deklarasi sementara
+  `CCFiniteTimeAction` diganti menjadi `FiniteTimeAction`, tetapi factory
+  callback lama yang membawa payload `void*` belum dimigrasi agar kontrak XML
+  tetap stabil.
+- `NetworkLayer` tidak lagi memakai `SimpleAudioEngine::sharedEngine()` untuk
+  klik tab selector; pemanggilan audio lokal memakai singleton 3.x.
+- Audit menunjukkan `Cocos2dx2Compat.h` masih dipaksa lewat CMake dan project
+  Win32, jadi penghapusan file/forced include ditunda sampai sisa alias legacy
+  di source lebih kecil dan bisa diuji sebagai potongan final.
 - Setelah commit `ActionManager` lokal ini lulus build Android, langkah
   berikutnya adalah melanjutkan migrasi container yang masih lokal dan mudah
   dipisahkan sebelum masuk kontrak data besar di loader XML, `ActionManager`,
