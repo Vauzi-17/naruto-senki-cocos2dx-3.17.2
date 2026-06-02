@@ -347,7 +347,8 @@ void GameOver::listResult(){
 			for(unsigned int gearIndex=0; gearIndex<hero->getGearArray()->count(); ++gearIndex){
 				pObject=hero->getGearArray()->objectAtIndex(gearIndex);
 				CCString* tmpGear=(CCString*) pObject;
-				Sprite* gearIcon=Sprite::createWithSpriteFrameName(CCString::createWithFormat("gear_%02d.png",std::atoi(tmpGear->getCString()))->getCString());
+				std::string gearPath=cocos2d::StringUtils::format("gear_%02d.png",std::atoi(tmpGear->getCString()));
+				Sprite* gearIcon=Sprite::createWithSpriteFrameName(gearPath);
 				gearIcon->setPosition(Vec2(flogNum->getPositionX()+22+i*gearGap,flogNum->getPositionY()-1));
 				gearIcon->setScale(gearScale);
 				this->addChild(gearIcon,7);
@@ -793,13 +794,15 @@ void GameOver::onChangeChar(Ref* sender){
 	heroContainer->addChild(heroMenu,1);
 	for(int i=0;i<heroCount;i++){
 		const char* heroName=gResultHeroList[i];
-		Sprite* normal=Sprite::createWithSpriteFrameName(CCString::createWithFormat("%s_rp.png",heroName)->getCString());
+		std::string rpPath=cocos2d::StringUtils::format("%s_rp.png",heroName);
+		std::string smallPath=cocos2d::StringUtils::format("%s_small.png",heroName);
+		Sprite* normal=Sprite::createWithSpriteFrameName(rpPath);
 		if(!normal){
-			normal=Sprite::createWithSpriteFrameName(CCString::createWithFormat("%s_small.png",heroName)->getCString());
+			normal=Sprite::createWithSpriteFrameName(smallPath);
 		}
-		Sprite* selected=Sprite::createWithSpriteFrameName(CCString::createWithFormat("%s_rp.png",heroName)->getCString());
+		Sprite* selected=Sprite::createWithSpriteFrameName(rpPath);
 		if(!selected){
-			selected=Sprite::createWithSpriteFrameName(CCString::createWithFormat("%s_small.png",heroName)->getCString());
+			selected=Sprite::createWithSpriteFrameName(smallPath);
 		}
 		if(!normal || !selected){
 			continue;
@@ -820,8 +823,8 @@ void GameOver::onChangeChar(Ref* sender){
 	heroScroll->setContentOffset(Vec2(0,viewSize.height-contentH));
 	changeCharLayer->addChild(heroScroll,2);
 
-	CCString* pickText=CCString::createWithFormat("%s: %s",changeTargetEnemy?"ENEMY":"PLAYER",changeTargetEnemy && changeEnemyPick?changeEnemyPick->getCString():changePlayerPick->getCString());
-	Label* pickLabel=Label::createWithSystemFont(pickText->getCString(),FONT_TYPE,10);
+	std::string pickText=cocos2d::StringUtils::format("%s: %s",changeTargetEnemy?"ENEMY":"PLAYER",changeTargetEnemy && changeEnemyPick?changeEnemyPick->getCString():changePlayerPick->getCString());
+	Label* pickLabel=Label::createWithSystemFont(pickText,FONT_TYPE,10);
 	pickLabel->setColor(ccc3(72,55,40));
 	pickLabel->setPosition(Vec2(cx,cy-76));
 	changeCharLayer->addChild(pickLabel,2);

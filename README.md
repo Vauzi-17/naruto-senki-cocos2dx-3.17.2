@@ -284,6 +284,8 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
 - `GameOver`: format reward coin dan score label lokal ikut lepas dari
   `CCString::createWithFormat`; record/upload string yang masih menjadi kontrak
   lama tetap ditahan.
+- `GameOver`: path gear icon, path tombol pilihan hero result, dan label target
+  change-character lokal memakai `StringUtils::format`/`std::string`.
 - `NetworkLayer`: komentar request list hero lama dan parsing response callback
   yang sudah tidak punya caller aktif dibersihkan; flow pemilihan hero tetap
   memakai daftar offline statis.
@@ -367,6 +369,8 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
   dan path sekali pakai; kontrak `CCString` gameplay masih ditahan.
 - `GameOver` reward/result label bertahap dipindahkan ke `std::string`, sambil
   menahan string SQLite/upload yang masih menjadi kontrak lama.
+- `GameOver` picker/result UI juga mulai lepas dari `CCString` untuk format path
+  icon dan label lokal.
 
 1. **Tutup helper compat kecil yang masih lokal**
    - Target file: `Cocos2dx2Compat.h`, `ActionButton`, `HPBar`, `HudLayer`,
