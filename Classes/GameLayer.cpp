@@ -1355,7 +1355,7 @@ void GameLayer::onLeft(){
 		}
 	}
 
-	const char* path;
+	std::string path;
 	Ref* pObject;
 	for(unsigned int characterIndex=0; characterIndex<_CharacterArray->count(); ++characterIndex){
 	pObject=_CharacterArray->objectAtIndex(characterIndex);
@@ -1367,7 +1367,7 @@ void GameLayer::onLeft(){
 		}
 
 		//ɾ�����ﻺ��
-		path=CCString::createWithFormat("Element/%s/%s.plist",player->getCharacter()->getCString(),player->getCharacter()->getCString())->getCString();
+		path=cocos2d::StringUtils::format("Element/%s/%s.plist",player->getCharacter()->getCString(),player->getCharacter()->getCString());
 		SpriteFrameCache::getInstance()->removeSpriteFramesFromFile(path);
 
 		//ɾ��Ԥ������Ч
@@ -1507,13 +1507,16 @@ void GameLayer::checkBackgroundMusic(float dt){
 				SimpleAudioEngine::getInstance()->playBackgroundMusic("Audio/Music/Battle1.mp3");
 			}else{
 				if(_playNum==0){
-					SimpleAudioEngine::getInstance()->playBackgroundMusic(CCString::createWithFormat("Audio/Music/Battle%d.mp3",int(2+randomMap*3))->getCString(),false);
+					std::string musicPath=cocos2d::StringUtils::format("Audio/Music/Battle%d.mp3",int(2+randomMap*3));
+					SimpleAudioEngine::getInstance()->playBackgroundMusic(musicPath.c_str(),false);
 					_playNum++;
 				}else if(_playNum==1){
-					SimpleAudioEngine::getInstance()->playBackgroundMusic(CCString::createWithFormat("Audio/Music/Battle%d.mp3",int(3+randomMap*3))->getCString(),false);
+					std::string musicPath=cocos2d::StringUtils::format("Audio/Music/Battle%d.mp3",int(3+randomMap*3));
+					SimpleAudioEngine::getInstance()->playBackgroundMusic(musicPath.c_str(),false);
 					_playNum++;
 				}else if(_playNum==2){
-					SimpleAudioEngine::getInstance()->playBackgroundMusic(CCString::createWithFormat("Audio/Music/Battle%d.mp3",int(1+randomMap*3))->getCString(),false);
+					std::string musicPath=cocos2d::StringUtils::format("Audio/Music/Battle%d.mp3",int(1+randomMap*3));
+					SimpleAudioEngine::getInstance()->playBackgroundMusic(musicPath.c_str(),false);
 					_playNum=0;
 				}
 			}
@@ -1570,7 +1573,8 @@ void GameLayer::setOugis(Node* sender){
 		sender->setZOrder(2000);
 
 		if(UserDefault::getInstance()->getBoolForKey("isVoice")!=false){
-			KTools::playEffectOptimized(CCString::createWithFormat("Audio/Ougis/%s_ougis.mp3",Sender->getCharacter()->getCString())->getCString(), 15, 3);
+			std::string ougisPath=cocos2d::StringUtils::format("Audio/Ougis/%s_ougis.mp3",Sender->getCharacter()->getCString());
+			KTools::playEffectOptimized(ougisPath.c_str(), 15, 3);
 		}
 
 		_hudLayer->setOugis(Sender->getCharacter(),Sender->getGroup());

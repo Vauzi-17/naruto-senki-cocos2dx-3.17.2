@@ -294,6 +294,8 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
   `StringUtils::format`/`std::string` tanpa menyentuh report dictionary.
 - `HudLayer`: start splash, display buff, report sprite, dan cut-in ougis lokal
   ikut memakai string 3.x/native; dictionary report dan CKR tetap ditahan.
+- `GameLayer`: path cleanup sprite frame, battle music, dan ougis effect lokal
+  memakai `StringUtils::format`/`std::string` tanpa mengubah state gameplay.
 - `NetworkLayer`: komentar request list hero lama dan parsing response callback
   yang sudah tidak punya caller aktif dibersihkan; flow pemilihan hero tetap
   memakai daftar offline statis.
@@ -387,6 +389,8 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
   label status lokal, sementara report/CKR lama tetap ditahan.
 - `HudLayer` display-only berikutnya ikut dipindahkan ke string native untuk
   start splash, buff/report/ougis asset path tanpa mengubah payload report lama.
+- `GameLayer` path asset/audio sekali pakai ikut dikurangi dari
+  `CCString::createWithFormat`; `TotalTM`, tower HP, dan report lama ditahan.
 
 1. **Tutup helper compat kecil yang masih lokal**
    - Target file: `Cocos2dx2Compat.h`, `ActionButton`, `HPBar`, `HudLayer`,
