@@ -37,10 +37,7 @@ bool SelectButton::init(const char *szImage){
 	bool bRet = false;
 	do{
 		CC_BREAK_IF(!Sprite::init());
-		const char* path;
-
-		path=CCString::createWithFormat("%s",szImage)->getCString();
-		this->initWithSpriteFrameName(path);
+		this->initWithSpriteFrameName(szImage);
 		this->setAnchorPoint(Vec2(0,0));
 
 		bRet=true;
@@ -142,8 +139,8 @@ void SelectButton::click(){
 					if(this->_clickTime==0){
 						if(UserDefault::getInstance()->getBoolForKey("isVoice")!=false){
 							SimpleAudioEngine::getInstance()->stopAllEffects();
-							CCString* introSRC=CCString::createWithFormat("Audio/Intro/%s.mp3",this->getCharName()->getCString());
-							SimpleAudioEngine::getInstance()->playEffect(introSRC->getCString());
+							std::string introSRC=cocos2d::StringUtils::format("Audio/Intro/%s.mp3",this->getCharName()->getCString());
+							SimpleAudioEngine::getInstance()->playEffect(introSRC.c_str());
 						}
 						SimpleAudioEngine::getInstance()->playEffect(SELECT_SOUND);
 					}else if(this->_clickTime==1){
@@ -173,8 +170,8 @@ void SelectButton::click(){
 					if(this->_clickTime==0){
 						if(UserDefault::getInstance()->getBoolForKey("isVoice")!=false){
 							SimpleAudioEngine::getInstance()->stopAllEffects();
-							CCString* introSRC=CCString::createWithFormat("Audio/Intro/%s.mp3",this->getCharName()->getCString());
-							SimpleAudioEngine::getInstance()->playEffect(introSRC->getCString());
+							std::string introSRC=cocos2d::StringUtils::format("Audio/Intro/%s.mp3",this->getCharName()->getCString());
+							SimpleAudioEngine::getInstance()->playEffect(introSRC.c_str());
 						}
 						SimpleAudioEngine::getInstance()->playEffect(SELECT_SOUND);
 					}else if(this->_clickTime==1){
@@ -617,7 +614,8 @@ void SkillLayer::initInterface(){
 
 
 
-		LabelBMFont* recordLabel=LabelBMFont::create(CCString::createWithFormat("%s bonds",bondString.c_str())->getCString(),"Fonts/1.fnt");
+		std::string recordLabelText=cocos2d::StringUtils::format("%s bonds",bondString.c_str());
+		LabelBMFont* recordLabel=LabelBMFont::create(recordLabelText.c_str(),"Fonts/1.fnt");
 		recordLabel->setScale(0.3f);
 		recordLabel->setAnchorPoint(Vec2(0,0));
 
