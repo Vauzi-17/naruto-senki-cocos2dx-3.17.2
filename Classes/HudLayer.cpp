@@ -196,7 +196,8 @@ void HudLayer::initGearButton(){
 		gearMenu->removeFromParentAndCleanup(true);
 	}
 
-	MenuItem* gear_button=MenuItemSprite::create(Sprite::createWithSpriteFrameName(CCString::createWithFormat("%s_avator.png",_delegate->currentPlayer->getCharacter()->getCString())->getCString()),nullptr,nullptr,[this](Ref* sender){ this->gearButtonClick(sender); });
+	std::string playerAvatarPath=cocos2d::StringUtils::format("%s_avator.png",_delegate->currentPlayer->getCharacter()->getCString());
+	MenuItem* gear_button=MenuItemSprite::create(Sprite::createWithSpriteFrameName(playerAvatarPath),nullptr,nullptr,[this](Ref* sender){ this->gearButtonClick(sender); });
 	gear_button->setAnchorPoint(Vec2(0,0));
 	gearMenu=Menu::create(gear_button,nullptr);
 	gearMenu->setPosition(Vec2(0,winSize.height-gear_button->getContentSize().height));
@@ -279,7 +280,8 @@ void HudLayer::initHeroInterface(){
 		}
 
 		if(enemy){
-			Sprite* enemyAvator=Sprite::createWithSpriteFrameName(CCString::createWithFormat("%s_avator.png",enemy->getCharacter()->getCString())->getCString());
+			std::string enemyAvatarPath=cocos2d::StringUtils::format("%s_avator.png",enemy->getCharacter()->getCString());
+			Sprite* enemyAvator=Sprite::createWithSpriteFrameName(enemyAvatarPath);
 			if(enemyAvator){
 				enemyAvator->setAnchorPoint(Vec2(1,0));
 				enemyAvator->setFlipX(true);
@@ -451,7 +453,9 @@ void HudLayer::initHeroInterface(){
 
 	//init SKIll Button
 
-	skill1Button = ActionButton::create(CCString::createWithFormat("%s_skill1.png",_delegate->currentPlayer->getCharacter()->getCString())->getCString());
+	std::string characterName=_delegate->currentPlayer->getCharacter()->getCString();
+	std::string skill1Path=cocos2d::StringUtils::format("%s_skill1.png",characterName.c_str());
+	skill1Button = ActionButton::create(skill1Path.c_str());
 	skill1Button->setPosition(Vec2(winSize.width-skill1Button->getContentSize().width-64,2));
 	skill1Button->setCD(static_cast<int>(_delegate->currentPlayer->_sattackcoldDown1*1000));
 	skill1Button->setDelegate(this);
@@ -464,7 +468,8 @@ void HudLayer::initHeroInterface(){
 	uiBatch->addChild(skill1Button);
 
 
-	skill2Button = ActionButton::create(CCString::createWithFormat("%s_skill2.png",_delegate->currentPlayer->getCharacter()->getCString())->getCString());
+	std::string skill2Path=cocos2d::StringUtils::format("%s_skill2.png",characterName.c_str());
+	skill2Button = ActionButton::create(skill2Path.c_str());
 	skill2Button->setPosition(Vec2(winSize.width-95,50));
 	skill2Button->setCD(static_cast<int>(_delegate->currentPlayer->_sattackcoldDown2*1000));
 	skill2Button->setDelegate(this);
@@ -482,7 +487,8 @@ void HudLayer::initHeroInterface(){
 	uiBatch->addChild(skill2Button);
 
 
-	skill3Button = ActionButton::create(CCString::createWithFormat("%s_skill3.png",_delegate->currentPlayer->getCharacter()->getCString())->getCString());
+	std::string skill3Path=cocos2d::StringUtils::format("%s_skill3.png",characterName.c_str());
+	skill3Button = ActionButton::create(skill3Path.c_str());
 	skill3Button->setPosition(Vec2(winSize.width-44,8+nAttackButton->getContentSize().height+8));
 	skill3Button->setCD(static_cast<int>(_delegate->currentPlayer->_sattackcoldDown3*1000));
 	skill3Button->setDelegate(this);
@@ -503,13 +509,15 @@ void HudLayer::initHeroInterface(){
 
 
 
-	skill4Button = ActionButton::create(CCString::createWithFormat("%s_skill4.png",_delegate->currentPlayer->getCharacter()->getCString())->getCString());
+	std::string skill4Path=cocos2d::StringUtils::format("%s_skill4.png",characterName.c_str());
+	skill4Button = ActionButton::create(skill4Path.c_str());
 	skill4Button->setPosition(Vec2(skill1Button->getPositionX()-skill4Button->getContentSize().width-8,2));
 	skill4Button->setDelegate(this);
 	skill4Button->setABType(OUGIS1);
 	uiBatch->addChild(skill4Button);
 
-	skill5Button = ActionButton::create(CCString::createWithFormat("%s_skill5.png",_delegate->currentPlayer->getCharacter()->getCString())->getCString());
+	std::string skill5Path=cocos2d::StringUtils::format("%s_skill5.png",characterName.c_str());
+	skill5Button = ActionButton::create(skill5Path.c_str());
 	skill5Button->setPosition(Vec2(skill4Button->getPositionX()-skill5Button->getContentSize().width-8,2));
 	skill5Button->setDelegate(this);
 	skill5Button->setABType(OUGIS2);
@@ -769,7 +777,8 @@ void HudLayer::setHPLose(float percent){
 	status_hpbar->runAction(ra);
 
 	int hp=std::atoi(_delegate->currentPlayer->getHP()->getCString());
-	hpLabel->setString(CCString::createWithFormat("%d",int(hp))->getCString());
+	std::string hpText=cocos2d::StringUtils::format("%d",int(hp));
+	hpLabel->setString(hpText);
 
 }
 
@@ -787,7 +796,8 @@ void HudLayer::setEnemyHPLose(float percent){
 		if(strcmp(tempHero->getGroup()->getCString(),_delegate->currentPlayer->getGroup()->getCString())!=0 &&
 			(strcmp(tempHero->getRole()->getCString(),"Player")==0 || strcmp(tempHero->getRole()->getCString(),"Com")==0)){
 			if(enemyHpLabel){
-				enemyHpLabel->setString(CCString::createWithFormat("%d",std::atoi(tempHero->getHP()->getCString()))->getCString());
+				std::string enemyHpText=cocos2d::StringUtils::format("%d",std::atoi(tempHero->getHP()->getCString()));
+				enemyHpLabel->setString(enemyHpText);
 			}
 			return;
 		}
@@ -852,7 +862,8 @@ void HudLayer::setEXPLose(float percent){
 		status_expbar->setPercentage(100);
 		expLabel->setString("Max");
 	}else{
-		expLabel->setString(CCString::createWithFormat("%d%%",int(Percent))->getCString());
+		std::string expText=cocos2d::StringUtils::format("%d%%",int(Percent));
+		expLabel->setString(expText);
 	}
 
 
