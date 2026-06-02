@@ -527,7 +527,7 @@ void SkillLayer::initInterface(){
 		skillSprite->setPosition(Vec2(winSize.width/2,winSize.height/2));
 		this->addChild(skillSprite,2);
 
-		CCString* imgPath=NULL;
+		std::string imgPath;
 
 
 		if((strcmp(selectHero,"Hinata")==0 ||
@@ -538,11 +538,11 @@ void SkillLayer::initInterface(){
 			strcmp(selectHero,"Konan")==0 ||
 			strcmp(selectHero,"Karin")==0
 			) && std::atoi(bondString.c_str())>=100){
-				imgPath=CCString::createWithFormat("%s_full2.png",selectHero);
+				imgPath=cocos2d::StringUtils::format("%s_full2.png",selectHero);
 		}else{
-			imgPath=CCString::createWithFormat("%s_full.png",selectHero);
+			imgPath=cocos2d::StringUtils::format("%s_full.png",selectHero);
 		}
-		_heroFull=Sprite::createWithSpriteFrameName(imgPath->getCString());
+		_heroFull=Sprite::createWithSpriteFrameName(imgPath);
 		_heroFull->setAnchorPoint(Vec2(0.5,0));
 		_heroFull->setPosition(Vec2(winSize.width/2,
 			winSize.height/2-skillSprite->getContentSize().height/2+23));
@@ -665,7 +665,8 @@ void SkillLayer::onChangeBtn(Ref* sender){
 		selectHero="ImmortalSasuke";
 	}
 
-	SpriteFrame *frame=SpriteFrameCache::getInstance()->spriteFrameByName(CCString::createWithFormat("%s_full.png",selectHero)->getCString());
+	std::string fullPath=cocos2d::StringUtils::format("%s_full.png",selectHero);
+	SpriteFrame *frame=SpriteFrameCache::getInstance()->spriteFrameByName(fullPath);
 	_heroFull->setSpriteFrame(frame);
 
 
@@ -736,15 +737,15 @@ void SkillLayer::setSkillExplain(sbtnType type){
 
 	SimpleAudioEngine::getInstance()->playEffect("Audio/Menu/select.mp3");
 	if(_skillExplain) _skillExplain->removeFromParent();
-	CCString* imgPath=CCString::create("");
+	std::string imgPath;
 	if(type==Unlock1){
-		imgPath=CCString::createWithFormat("fenglabel.png");
+		imgPath="fenglabel.png";
 
 	}else if(type==Unlock2){
-		imgPath=CCString::createWithFormat("fenglabel2.png");
+		imgPath="fenglabel2.png";
 
 	}else{
-		imgPath=CCString::createWithFormat("%s_label%d.png",selectHero,(int)type-2);
+		imgPath=cocos2d::StringUtils::format("%s_label%d.png",selectHero,(int)type-2);
 
 	}
 
@@ -753,7 +754,7 @@ void SkillLayer::setSkillExplain(sbtnType type){
 	stencil->setAnchorPoint(Vec2(0,0));
 	clipper->setStencil(stencil);
 
-	_skillExplain=Sprite::createWithSpriteFrameName(imgPath->getCString());
+	_skillExplain=Sprite::createWithSpriteFrameName(imgPath);
 	_skillExplain->setAnchorPoint(Vec2(0,0));
 	_skillExplain->setPositionX(10);
 

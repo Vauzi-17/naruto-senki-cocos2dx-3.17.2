@@ -286,6 +286,8 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
   lama tetap ditahan.
 - `GameOver`: path gear icon, path tombol pilihan hero result, dan label target
   change-character lokal memakai `StringUtils::format`/`std::string`.
+- `SkillLayer`: path full art hero dan label explain lokal dipindahkan dari
+  `CCString` ke `std::string`, tanpa menyentuh data SQLite/record.
 - `NetworkLayer`: komentar request list hero lama dan parsing response callback
   yang sudah tidak punya caller aktif dibersihkan; flow pemilihan hero tetap
   memakai daftar offline statis.
@@ -371,6 +373,8 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
   menahan string SQLite/upload yang masih menjadi kontrak lama.
 - `GameOver` picker/result UI juga mulai lepas dari `CCString` untuk format path
   icon dan label lokal.
+- `SkillLayer` mulai mengurangi `CCString` path asset lokal di panel detail
+  skill, sementara data record dan parameter hero lama tetap ditahan.
 
 1. **Tutup helper compat kecil yang masih lokal**
    - Target file: `Cocos2dx2Compat.h`, `ActionButton`, `HPBar`, `HudLayer`,
