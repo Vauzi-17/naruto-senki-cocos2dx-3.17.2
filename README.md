@@ -288,6 +288,8 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
   change-character lokal memakai `StringUtils::format`/`std::string`.
 - `SkillLayer`: path full art hero dan label explain lokal dipindahkan dari
   `CCString` ke `std::string`, tanpa menyentuh data SQLite/record.
+- `GearLayer`: path icon/detail gear dan label coin lokal memakai
+  `StringUtils::format`/`std::string`, sementara isi gear array lama ditahan.
 - `NetworkLayer`: komentar request list hero lama dan parsing response callback
   yang sudah tidak punya caller aktif dibersihkan; flow pemilihan hero tetap
   memakai daftar offline statis.
@@ -375,6 +377,8 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
   icon dan label lokal.
 - `SkillLayer` mulai mengurangi `CCString` path asset lokal di panel detail
   skill, sementara data record dan parameter hero lama tetap ditahan.
+- `GearLayer` ikut mengurangi `CCString::createWithFormat` pada path asset dan
+  label lokal tanpa mengubah kontrak gear list.
 
 1. **Tutup helper compat kecil yang masih lokal**
    - Target file: `Cocos2dx2Compat.h`, `ActionButton`, `HPBar`, `HudLayer`,

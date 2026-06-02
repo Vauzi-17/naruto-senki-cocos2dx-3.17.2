@@ -1,5 +1,6 @@
 #include "GearLayer.h"
 #include <cstdlib>
+#include <string>
 #include "GameLayer.h"
 #include "HudLayer.h"
 #include "Characters.h"
@@ -89,13 +90,15 @@ void GearButton::setBtnType(gearType type,gearbtnType type2,bool isBuyed){
 	_btnType=type2;
 
 	if(_btnType==0){
-		Sprite* gearIcon=Sprite::createWithSpriteFrameName(CCString::createWithFormat("gear_%02d.png",gearType(_gearType))->getCString());
+		std::string gearPath=cocos2d::StringUtils::format("gear_%02d.png",gearType(_gearType));
+		Sprite* gearIcon=Sprite::createWithSpriteFrameName(gearPath);
 		gearIcon->setAnchorPoint(Vec2(0.5f,0.5f));
 		gearIcon->setPosition(Vec2(20,30));
 		this->addChild(gearIcon);
 
 	}else{
-		Sprite* gearIcon=Sprite::createWithSpriteFrameName(CCString::createWithFormat("gear_%02d.png",gearType(_gearType))->getCString());
+		std::string gearPath=cocos2d::StringUtils::format("gear_%02d.png",gearType(_gearType));
+		Sprite* gearIcon=Sprite::createWithSpriteFrameName(gearPath);
 		gearIcon->setAnchorPoint(Vec2(0.5f,0.5f));
 		gearIcon->setScale(0.75f);
 		this->addChild(gearIcon);
@@ -139,7 +142,8 @@ void GearButton::ccTouchEnded(Touch* touch,Event* event){
 	}
 
 
-	SpriteFrame *frame=SpriteFrameCache::getInstance()->spriteFrameByName(CCString::createWithFormat("gearDetail_%02d.png",gearType(_gearType))->getCString());
+	std::string detailPath=cocos2d::StringUtils::format("gearDetail_%02d.png",gearType(_gearType));
+	SpriteFrame *frame=SpriteFrameCache::getInstance()->spriteFrameByName(detailPath);
 	_delegate->gearDetail->setSpriteFrame(frame);
 };
 
@@ -468,7 +472,8 @@ void GearLayer::updatePlayerGear(){
 	}
 
 
-	coinLabel->setString(CCString::createWithFormat("%d",std::atoi(_delegate->currentPlayer->getCoin()->getCString()))->getCString());
+	std::string coinText=cocos2d::StringUtils::format("%d",std::atoi(_delegate->currentPlayer->getCoin()->getCString()));
+	coinLabel->setString(coinText);
 	this->updateGearList();
 
 };
@@ -510,7 +515,8 @@ void GearLayer::updateGearList(){
 
 			if(currentGear==None && !isBuyed){
 				currentGear=gearType(i);
-				SpriteFrame *frame=SpriteFrameCache::getInstance()->spriteFrameByName(CCString::createWithFormat("gearDetail_%02d.png",i)->getCString());
+				std::string detailPath=cocos2d::StringUtils::format("gearDetail_%02d.png",i);
+				SpriteFrame *frame=SpriteFrameCache::getInstance()->spriteFrameByName(detailPath);
 				gearDetail->setSpriteFrame(frame);
 			}
 
