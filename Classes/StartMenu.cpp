@@ -1095,7 +1095,7 @@ void  StartMenu::onProfileBtn(Ref* sender){
 		}
 
 		int point=std::atoi(CValue.c_str());
-		std::string pointText=CCString::createWithFormat("%d",point)->getCString();
+		std::string pointText=cocos2d::StringUtils::format("%d",point);
 		std::string namePlate=UserDefault::getInstance()->getStringForKey("namePlateId");
 
 		Label* group_name=Label::createWithSystemFont("Offline",FONT_TYPE,12);
@@ -1114,9 +1114,9 @@ void  StartMenu::onProfileBtn(Ref* sender){
 		user_point->setPosition(Vec2(winSize.width/2+72,150));
 		profile_layer->addChild(user_point);
 
-		const char* path="shinobiCard_null.png";
+		std::string path="shinobiCard_null.png";
 		if(!namePlate.empty()){
-			path=CCString::createWithFormat("%s.png",namePlate.c_str())->getCString();
+			path=cocos2d::StringUtils::format("%s.png",namePlate.c_str());
 		}
 		MenuItem* np_btn=MenuItemSprite::create(Sprite::createWithSpriteFrameName(path),NULL,NULL,CC_CALLBACK_1(StartMenu::onNamePlate, this));
 		Menu* np_menu =Menu::create(np_btn,NULL);
@@ -1183,7 +1183,7 @@ void  StartMenu::onNamePlate(Ref* sender){
 		for(int i=0;i<np1000;i++){
 			CCScrewItem* screwItem=CCScrewItem::create();
 
-			MenuItem* np_btn=MenuItemSprite::create(Sprite::createWithSpriteFrameName(CCString::createWithFormat("np10%02d.png",i)->getCString()),NULL,NULL,CC_CALLBACK_1(StartMenu::onNamePlateClick, this));
+			MenuItem* np_btn=MenuItemSprite::create(Sprite::createWithSpriteFrameName(cocos2d::StringUtils::format("np10%02d.png",i)),NULL,NULL,CC_CALLBACK_1(StartMenu::onNamePlateClick, this));
 			np_btn->setTag(1000+i);
 			Menu* menu =Menu::create(np_btn,NULL);
 			np_btn->setAnchorPoint(Vec2(0,0));
@@ -1202,7 +1202,7 @@ void  StartMenu::onNamePlate(Ref* sender){
 		for(int i=0;i<np900;i++){
 			CCScrewItem* screwItem=CCScrewItem::create();
 
-			MenuItem* np_btn=MenuItemSprite::create(Sprite::createWithSpriteFrameName(CCString::createWithFormat("np9%02d.png",i)->getCString()),NULL,NULL,CC_CALLBACK_1(StartMenu::onNamePlateClick, this));
+			MenuItem* np_btn=MenuItemSprite::create(Sprite::createWithSpriteFrameName(cocos2d::StringUtils::format("np9%02d.png",i)),NULL,NULL,CC_CALLBACK_1(StartMenu::onNamePlateClick, this));
 			np_btn->setTag(900+i);
 			Menu* menu =Menu::create(np_btn,NULL);
 			np_btn->setAnchorPoint(Vec2(0,0));
@@ -1220,7 +1220,7 @@ void  StartMenu::onNamePlate(Ref* sender){
 		for(int i=0;i<np800;i++){
 			CCScrewItem* screwItem=CCScrewItem::create();
 
-			MenuItem* np_btn=MenuItemSprite::create(Sprite::createWithSpriteFrameName(CCString::createWithFormat("np8%02d.png",i)->getCString()),NULL,NULL,CC_CALLBACK_1(StartMenu::onNamePlateClick, this));
+			MenuItem* np_btn=MenuItemSprite::create(Sprite::createWithSpriteFrameName(cocos2d::StringUtils::format("np8%02d.png",i)),NULL,NULL,CC_CALLBACK_1(StartMenu::onNamePlateClick, this));
 			np_btn->setTag(800+i);
 			Menu* menu =Menu::create(np_btn,NULL);
 			np_btn->setAnchorPoint(Vec2(0,0));
@@ -1241,7 +1241,7 @@ void  StartMenu::onNamePlate(Ref* sender){
 		for(int i=0;i<np700;i++){
 			CCScrewItem* screwItem=CCScrewItem::create();
 
-			MenuItem* np_btn=MenuItemSprite::create(Sprite::createWithSpriteFrameName(CCString::createWithFormat("np7%02d.png",i)->getCString()),NULL,NULL,CC_CALLBACK_1(StartMenu::onNamePlateClick, this));
+			MenuItem* np_btn=MenuItemSprite::create(Sprite::createWithSpriteFrameName(cocos2d::StringUtils::format("np7%02d.png",i)),NULL,NULL,CC_CALLBACK_1(StartMenu::onNamePlateClick, this));
 			np_btn->setTag(700+i);
 			Menu* menu =Menu::create(np_btn,NULL);
 			np_btn->setAnchorPoint(Vec2(0,0));
@@ -1259,7 +1259,7 @@ void  StartMenu::onNamePlate(Ref* sender){
 		for(int i=0;i<np600;i++){
 			CCScrewItem* screwItem=CCScrewItem::create();
 
-			MenuItem* np_btn=MenuItemSprite::create(Sprite::createWithSpriteFrameName(CCString::createWithFormat("np6%02d.png",i)->getCString()),NULL,NULL,CC_CALLBACK_1(StartMenu::onNamePlateClick, this));
+			MenuItem* np_btn=MenuItemSprite::create(Sprite::createWithSpriteFrameName(cocos2d::StringUtils::format("np6%02d.png",i)),NULL,NULL,CC_CALLBACK_1(StartMenu::onNamePlateClick, this));
 			np_btn->setTag(600+i);
 			Menu* menu =Menu::create(np_btn,NULL);
 			np_btn->setAnchorPoint(Vec2(0,0));
@@ -1278,7 +1278,7 @@ void  StartMenu::onNamePlate(Ref* sender){
 		for(int i=0;i<np500;i++){
 			CCScrewItem* screwItem=CCScrewItem::create();
 
-			MenuItem* np_btn=MenuItemSprite::create(Sprite::createWithSpriteFrameName(CCString::createWithFormat("np5%02d.png",i)->getCString()),NULL,NULL,CC_CALLBACK_1(StartMenu::onNamePlateClick, this));
+			MenuItem* np_btn=MenuItemSprite::create(Sprite::createWithSpriteFrameName(cocos2d::StringUtils::format("np5%02d.png",i)),NULL,NULL,CC_CALLBACK_1(StartMenu::onNamePlateClick, this));
 			np_btn->setTag(500+i);
 			Menu* menu =Menu::create(np_btn,NULL);
 			np_btn->setAnchorPoint(Vec2(0,0));
@@ -1296,7 +1296,7 @@ void  StartMenu::onNamePlate(Ref* sender){
 		for(int i=0;i<np400;i++){
 			CCScrewItem* screwItem=CCScrewItem::create();
 
-			MenuItem* np_btn=MenuItemSprite::create(Sprite::createWithSpriteFrameName(CCString::createWithFormat("np4%02d.png",i)->getCString()),NULL,NULL,CC_CALLBACK_1(StartMenu::onNamePlateClick, this));
+			MenuItem* np_btn=MenuItemSprite::create(Sprite::createWithSpriteFrameName(cocos2d::StringUtils::format("np4%02d.png",i)),NULL,NULL,CC_CALLBACK_1(StartMenu::onNamePlateClick, this));
 			np_btn->setTag(400+i);
 			Menu* menu =Menu::create(np_btn,NULL);
 			np_btn->setAnchorPoint(Vec2(0,0));
@@ -1315,7 +1315,7 @@ void  StartMenu::onNamePlate(Ref* sender){
 		for(int i=0;i<np300;i++){
 			CCScrewItem* screwItem=CCScrewItem::create();
 
-			MenuItem* np_btn=MenuItemSprite::create(Sprite::createWithSpriteFrameName(CCString::createWithFormat("np3%02d.png",i)->getCString()),NULL,NULL,CC_CALLBACK_1(StartMenu::onNamePlateClick, this));
+			MenuItem* np_btn=MenuItemSprite::create(Sprite::createWithSpriteFrameName(cocos2d::StringUtils::format("np3%02d.png",i)),NULL,NULL,CC_CALLBACK_1(StartMenu::onNamePlateClick, this));
 			np_btn->setTag(300+i);
 			Menu* menu =Menu::create(np_btn,NULL);
 			np_btn->setAnchorPoint(Vec2(0,0));
@@ -1335,7 +1335,7 @@ void  StartMenu::onNamePlate(Ref* sender){
 		for(int i=0;i<np200;i++){
 			CCScrewItem* screwItem=CCScrewItem::create();
 
-			MenuItem* np_btn=MenuItemSprite::create(Sprite::createWithSpriteFrameName(CCString::createWithFormat("np2%02d.png",i)->getCString()),NULL,NULL,CC_CALLBACK_1(StartMenu::onNamePlateClick, this));
+			MenuItem* np_btn=MenuItemSprite::create(Sprite::createWithSpriteFrameName(cocos2d::StringUtils::format("np2%02d.png",i)),NULL,NULL,CC_CALLBACK_1(StartMenu::onNamePlateClick, this));
 			np_btn->setTag(200+i);
 			Menu* menu =Menu::create(np_btn,NULL);
 			np_btn->setAnchorPoint(Vec2(0,0));
@@ -1353,7 +1353,7 @@ void  StartMenu::onNamePlate(Ref* sender){
 		for(int i=0;i<np100;i++){
 			CCScrewItem* screwItem=CCScrewItem::create();
 
-			MenuItem* np_btn=MenuItemSprite::create(Sprite::createWithSpriteFrameName(CCString::createWithFormat("np1%02d.png",i)->getCString()),NULL,NULL,CC_CALLBACK_1(StartMenu::onNamePlateClick, this));
+			MenuItem* np_btn=MenuItemSprite::create(Sprite::createWithSpriteFrameName(cocos2d::StringUtils::format("np1%02d.png",i)),NULL,NULL,CC_CALLBACK_1(StartMenu::onNamePlateClick, this));
 			np_btn->setTag(100+i);
 			Menu* menu =Menu::create(np_btn,NULL);
 			np_btn->setAnchorPoint(Vec2(0,0));
@@ -1420,7 +1420,7 @@ void  StartMenu::onNamePlateComfrim(Ref* sender){
 
 	int tempCoin =cl->intValue()-std::atoi(tempCost2.c_str());
 	if(tempCoin>=0){
-		std::string namePlate=CCString::createWithFormat("np%d",item->getTag())->getCString();
+		std::string namePlate=cocos2d::StringUtils::format("np%d",item->getTag());
 		UserDefault::getInstance()->setStringForKey("namePlateId",namePlate);
 		UserDefault::getInstance()->flush();
 
