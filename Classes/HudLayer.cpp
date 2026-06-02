@@ -224,7 +224,7 @@ void HudLayer::onKaichang(){
 	Animation* tempAnimation= Animation::createWithSpriteFrames(tempArray, 0.1f);
 	Action* tempAction=Animate::create(tempAnimation);
 
-	Kaichang=Sprite::createWithSpriteFrameName(CCString::createWithFormat("gameStart_001.png")->getCString());
+	Kaichang=Sprite::createWithSpriteFrameName("gameStart_001.png");
 
 	Kaichang->setAnchorPoint(Vec2(0.5f,0.5f));
 	Kaichang->setPosition(Vec2(winSize.width/2+32,winSize.height/2));
@@ -415,8 +415,9 @@ void HudLayer::initHeroInterface(){
 
 
 
-	expLabel=LabelBMFont::create(CCString::createWithFormat("%d%%",
-		this->_delegate->currentPlayer->getEXP()-((this->_delegate->currentPlayer->getLV() -1 )*500)/500)->getCString(),"Fonts/1.fnt");
+	std::string expText=cocos2d::StringUtils::format("%d%%",
+		this->_delegate->currentPlayer->getEXP()-((this->_delegate->currentPlayer->getLV() -1 )*500)/500);
+	expLabel=LabelBMFont::create(expText.c_str(),"Fonts/1.fnt");
 	expLabel->setScale(0.35f);
 	expLabel->setPosition(Vec2(94,winSize.height-54));
 	expLabel->setAnchorPoint(Vec2(0.5f,0));
@@ -953,7 +954,8 @@ void HudLayer::setReport(const char* name1, const char* name2,CCString* killNum)
 void HudLayer::setBuffDisplay(const char* buffName, float buffStayTime){
 
 
-	Sprite* buffSprite=Sprite::createWithSpriteFrameName(CCString::createWithFormat("%s_%s.png",_delegate->currentPlayer->getCharacter()->getCString(),buffName)->getCString());
+	std::string buffPath=cocos2d::StringUtils::format("%s_%s.png",_delegate->currentPlayer->getCharacter()->getCString(),buffName);
+	Sprite* buffSprite=Sprite::createWithSpriteFrameName(buffPath);
     buffSprite->setScale(24.0f / buffSprite->getContentSize().width);
 
     CCLOG("buff=%s", buffName);
@@ -964,14 +966,16 @@ void HudLayer::setBuffDisplay(const char* buffName, float buffStayTime){
 	if(buffStayTime !=0){
 		if(_buffCount==0){
 
-			bcdLabel1=LabelBMFont::create(CCString::createWithFormat("%d",(int)buffStayTime)->getCString(),"Fonts/1.fnt");
+			std::string buffTimeText=cocos2d::StringUtils::format("%d",(int)buffStayTime);
+			bcdLabel1=LabelBMFont::create(buffTimeText.c_str(),"Fonts/1.fnt");
 			bcdLabel1->setScale(0.35f);
 			bcdLabel1->setPosition(Vec2(5,5));
 			bcdLabel1->setAnchorPoint(Vec2(0.5,0.5));
 			buffSprite->addChild(bcdLabel1);
 			this->schedule(CC_SCHEDULE_SELECTOR(HudLayer::updateBuffDisplay),1.0f);
 		}else{
-			bcdLabel2=LabelBMFont::create(CCString::createWithFormat("%d",(int)buffStayTime)->getCString(),"Fonts/1.fnt");
+			std::string buffTimeText=cocos2d::StringUtils::format("%d",(int)buffStayTime);
+			bcdLabel2=LabelBMFont::create(buffTimeText.c_str(),"Fonts/1.fnt");
 			bcdLabel2->setScale(0.35f);
 			bcdLabel2->setPosition(Vec2(5,5));
 			bcdLabel2->setAnchorPoint(Vec2(0.5,0.5));
@@ -1266,12 +1270,14 @@ Sprite* HudLayer::createReport(const char* name1,const char* name2,float &length
 
 	Sprite* reportSprite=Sprite::create();
 
-	Sprite* slain_p=Sprite::createWithSpriteFrameName(CCString::createWithFormat("%s_rp.png",name1)->getCString());
+	std::string slainPath=cocos2d::StringUtils::format("%s_rp.png",name1);
+	Sprite* slain_p=Sprite::createWithSpriteFrameName(slainPath);
 	slain_p->setAnchorPoint(Vec2(0,0.5f));
 	slain_p->setPosition(Vec2(0,0));
 	reportSprite->addChild(slain_p);
 
-	Sprite* slain_pf=Sprite::createWithSpriteFrameName(CCString::createWithFormat("%s_rpf.png",name1)->getCString());
+	std::string slainFullPath=cocos2d::StringUtils::format("%s_rpf.png",name1);
+	Sprite* slain_pf=Sprite::createWithSpriteFrameName(slainFullPath);
 	slain_pf->setPosition(Vec2(slain_p->getContentSize().width,0));
 	slain_pf->setAnchorPoint(Vec2(0,0.5f));
 	reportSprite->addChild(slain_pf);
@@ -1290,14 +1296,16 @@ Sprite* HudLayer::createReport(const char* name1,const char* name2,float &length
 	slain->setPosition(Vec2(slain_pf->getPositionX()+slain_pf->getContentSize().width,0));
 
 
-	Sprite* death_pf=Sprite::createWithSpriteFrameName(CCString::createWithFormat("%s_rpf.png",name2)->getCString());
+	std::string deathFullPath=cocos2d::StringUtils::format("%s_rpf.png",name2);
+	Sprite* death_pf=Sprite::createWithSpriteFrameName(deathFullPath);
 	death_pf->setAnchorPoint(Vec2(0,0.5f));
 	death_pf->setPosition(Vec2(slain->getPositionX()+slain->getContentSize().width,0));
 	reportSprite->addChild(death_pf);
 	Sprite* death_p;
 	if(strcmp(name2,"Tower")!=0){
 
-		death_p=Sprite::createWithSpriteFrameName(CCString::createWithFormat("%s_rp.png",name2)->getCString());
+		std::string deathPath=cocos2d::StringUtils::format("%s_rp.png",name2);
+		death_p=Sprite::createWithSpriteFrameName(deathPath);
 		death_p->setAnchorPoint(Vec2(0,0.5f));
 		death_p->setPosition(Vec2(death_pf->getPositionX()+death_pf->getContentSize().width,0));
 		reportSprite->addChild(death_p);
@@ -1468,7 +1476,8 @@ void HudLayer::setOugis(CCString* character,CCString* group){
 
 		Vector<SpriteFrame*> animeFrames;
 		for (int i=1;i<=8; i++){
-			SpriteFrame *frame = SpriteFrameCache::getInstance()->spriteFrameByName(CCString::createWithFormat("CutLine_%02d.png",i)->getCString());
+			std::string cutLinePath=cocos2d::StringUtils::format("CutLine_%02d.png",i);
+			SpriteFrame *frame = SpriteFrameCache::getInstance()->spriteFrameByName(cutLinePath);
 			animeFrames.pushBack(frame);
 		}
 
@@ -1507,7 +1516,8 @@ void HudLayer::setOugis(CCString* character,CCString* group){
 
 
 
-		Sprite* CutIn=Sprite::createWithSpriteFrameName(CCString::createWithFormat("%s_CutIn.png",character->getCString())->getCString());
+		std::string cutInPath=cocos2d::StringUtils::format("%s_CutIn.png",character->getCString());
+		Sprite* CutIn=Sprite::createWithSpriteFrameName(cutInPath);
 		if(strcmp(group->getCString(),"Konoha")==0){
 			CutIn->setAnchorPoint(Vec2(0,0));
 			CutIn->setPosition(Vec2(-200,10));

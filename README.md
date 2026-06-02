@@ -292,6 +292,8 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
   `StringUtils::format`/`std::string`, sementara isi gear array lama ditahan.
 - `HudLayer`: path avatar/skill button dan label HP/EXP lokal mulai memakai
   `StringUtils::format`/`std::string` tanpa menyentuh report dictionary.
+- `HudLayer`: start splash, display buff, report sprite, dan cut-in ougis lokal
+  ikut memakai string 3.x/native; dictionary report dan CKR tetap ditahan.
 - `NetworkLayer`: komentar request list hero lama dan parsing response callback
   yang sudah tidak punya caller aktif dibersihkan; flow pemilihan hero tetap
   memakai daftar offline statis.
@@ -383,6 +385,8 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
   label lokal tanpa mengubah kontrak gear list.
 - `HudLayer` ikut mengurangi `CCString::createWithFormat` pada path button dan
   label status lokal, sementara report/CKR lama tetap ditahan.
+- `HudLayer` display-only berikutnya ikut dipindahkan ke string native untuk
+  start splash, buff/report/ougis asset path tanpa mengubah payload report lama.
 
 1. **Tutup helper compat kecil yang masih lokal**
    - Target file: `Cocos2dx2Compat.h`, `ActionButton`, `HPBar`, `HudLayer`,
