@@ -132,26 +132,6 @@ void LoadLayer::preloadIMG(){
 
 
 
-		/*	if(strcmp(player,"Chiyo")==0 ||
-		strcmp(player,"Shikamaru")==0 ||
-		strcmp(player,"Kisame")==0
-		){
-
-		std::string filePath=FileUtils::getInstance()->getWritablePath()+CCString::createWithFormat("/DLC/%s.xml",player)->getCString();
-		bool isExisted=FileUtils::getInstance()->isFileExist(filePath);
-
-		if(!isExisted){
-		if(!DLCArray){
-		DLCArray=CCArray::create();
-		DLCArray->retain();
-		}
-		CCDictionary* dic=CCDictionary::create();
-		dic->setObject(player,"character");
-		DLCArray->addObject(dic);
-		}
-
-		}*/
-
 		path=cocos2d::StringUtils::format("Element/%s/%s.plist",player,player);
 		SpriteFrameCache::getInstance()->addSpriteFramesWithFile(path);
 		std::string texturePath=cocos2d::StringUtils::format("Element/%s/%s.pvr.ccz",player,player);
