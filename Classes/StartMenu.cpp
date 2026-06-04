@@ -465,7 +465,6 @@ bool StartMenu::init()
 
 		// 	CCArray* idleFrames=CCArray::create();
 		// 	for(int i=1;i<=4;i++){
-		// 		SpriteFrame* frame=SpriteFrameCache::getInstance()->spriteFrameByName(CCString::createWithFormat("Naruto_Idle_%03d.png",i)->getCString());
 		// 		if(frame){
 		// 			idleFrames->addObject(frame);
 		// 		}
@@ -682,7 +681,6 @@ void StartMenu::onExit(){
 void StartMenu::setOfferWall(){
 
 	//if(MemberID && !task_btn){
-	//	CCString* user_id=CCString::createWithFormat("%d",MemberID);
 	//	const std::string user_string=user_id->getCString();
 	//
 	//	#if CC_TARGET_PLATFORM==CC_PLATFORM_ANDROID
@@ -1424,8 +1422,8 @@ void  StartMenu::onNamePlateComfrim(Ref* sender){
 		UserDefault::getInstance()->setStringForKey("namePlateId",namePlate);
 		UserDefault::getInstance()->flush();
 
-		CCString* coin= CCString::createWithFormat("%d",tempCoin);
-		tool->saveToSQLite("GameRecord","coin",coin->getCString(),true);
+		std::string coin=cocos2d::StringUtils::format("%d",tempCoin);
+		tool->saveToSQLite("GameRecord","coin",coin.c_str(),true);
 
 		CCTips *tip=CCTips::create("ManagementSuccessed");
 		this->addChild(tip,5000);

@@ -322,6 +322,9 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
   `CCString::createWithFormat`; field lama tetap `CCString`.
 - `GameOver`: blok komentar achievement lose lama yang masih membawa format
   `CCString` dead-code dihapus; flow result aktif tidak berubah.
+- `StartMenu`: simpan coin nameplate lokal memakai `StringUtils::format`/
+  `std::string`, dan komentar legacy yang membawa format `CCString` lama
+  dibersihkan.
 - `NetworkLayer`: komentar request list hero lama dan parsing response callback
   yang sudah tidak punya caller aktif dibersihkan; flow pemilihan hero tetap
   memakai daftar offline statis.
@@ -439,6 +442,8 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
   tanpa mengubah kontrak field gameplay lama.
 - `GameOver` membersihkan dead comment legacy achievement supaya audit source
   aktif tidak lagi membawa sisa format `CCString` lama.
+- `StartMenu` menutup sisa format string aktif di nameplate coin dan membuang
+  komentar API 2.x lama yang tidak aktif.
 
 1. **Tutup helper compat kecil yang masih lokal**
    - Target file: `Cocos2dx2Compat.h`, `ActionButton`, `HPBar`, `HudLayer`,
