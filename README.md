@@ -332,6 +332,9 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
 - `Element`: path XML lokal untuk hero/flog/tower/monster/bullet, frame
   `hp_bottom`, label reborn, dan kill count awal memakai string native/literal;
   kontrak stat HP/attack lama tetap `CCString`.
+- `ActionManager`: path heart-effect, reward coin display, damage font, gear
+  item/cost, dan extern frame lokal memakai string native; kontrak gear array
+  dan stat combat lama tetap `CCString`.
 - `NetworkLayer`: komentar request list hero lama dan parsing response callback
   yang sudah tidak punya caller aktif dibersihkan; flow pemilihan hero tetap
   memakai daftar offline statis.
@@ -457,6 +460,8 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
   mengubah dictionary report atau field chakra lama.
 - `Element` mulai melepas path XML dan display kecil dari
   `CCString::createWithFormat`, sambil menahan migrasi stat gameplay besar.
+- `ActionManager` mulai mengurangi format string display/path lokal tanpa
+  menyentuh nilai HP/CKR/attack yang masih menjadi kontrak combat utama.
 
 1. **Tutup helper compat kecil yang masih lokal**
    - Target file: `Cocos2dx2Compat.h`, `ActionButton`, `HPBar`, `HudLayer`,

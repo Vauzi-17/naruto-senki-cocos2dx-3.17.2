@@ -1,5 +1,6 @@
 #include "ActionManager.h"
 #include <cstdlib>
+#include <string>
 #include "Characters.h"
 #include "HudLayer.h"
 #include "MyUtils/CCShake.h"
@@ -776,7 +777,8 @@ void NarutoSenki::ActionManager::acceptAttack(Ref* object){
 									Attacker->hearts+=1;	
 
 									if(Attacker->_heartEffect){
-										SpriteFrame *frame=SpriteFrameCache::getInstance()->spriteFrameByName(CCString::createWithFormat("Heart_Effect_%02d.png",Attacker->hearts)->getCString());
+										std::string heartPath=cocos2d::StringUtils::format("Heart_Effect_%02d.png",Attacker->hearts);
+									SpriteFrame *frame=SpriteFrameCache::getInstance()->spriteFrameByName(heartPath);
 										Attacker->_heartEffect->setSpriteFrame(frame);
 									}																	
 	
@@ -1819,8 +1821,8 @@ void NarutoSenki::ActionManager::setCoinDisplay(int num){
 	coinSprite->setPosition(Vec2(14,0));
 	coinDisplay->addChild(coinSprite);
 
-	CCString* label=CCString::createWithFormat("+%d",num);
-	LabelBMFont* rewardLabel=LabelBMFont::create(label->getCString(),"Fonts/yellow.fnt");
+	std::string label=cocos2d::StringUtils::format("+%d",num);
+	LabelBMFont* rewardLabel=LabelBMFont::create(label,"Fonts/yellow.fnt");
 	rewardLabel->setPosition(Vec2(0,0));
 	rewardLabel->setScale(0.3f);
 	coinDisplay->addChild(rewardLabel);
@@ -1851,8 +1853,9 @@ void NarutoSenki::ActionManager::setDamgeDisplay(unsigned int value,const char* 
 
 	if(_damageArray->count()<6 ){
 
-	LabelBMFont* damageFont=LabelBMFont::create(CCString::createWithFormat("%d",value)->getCString(),
-		CCString::createWithFormat("Fonts/%s.fnt",type)->getCString());
+	std::string damageText=cocos2d::StringUtils::format("%d",value);
+	std::string damageFontPath=cocos2d::StringUtils::format("Fonts/%s.fnt",type);
+	LabelBMFont* damageFont=LabelBMFont::create(damageText,damageFontPath);
 	damageFont->setAnchorPoint(Vec2(0.5,0.5));
 	
 	if(strcmp(this->_role->getCString(),"Flog")==0){
@@ -2014,11 +2017,13 @@ bool NarutoSenki::ActionManager::setGear(gearType type){
 	}
 	
 	if( this->getGearArray()->count()<=2 && std::atoi(this->getCoin()->getCString())>=gearCost){
-		CCString* gearItem=CCString::createWithFormat("%d",gearType(type));
+		std::string gearItemText=cocos2d::StringUtils::format("%d",gearType(type));
+		CCString* gearItem=CCString::create(gearItemText);
 		this->getGearArray()->addObject(gearItem);
 		
 		if(strcmp(this->getRole()->getCString(),"Player")==0){
-			_delegate->getHudLayer()->offCoin(CCString::createWithFormat("%d",gearCost)->getCString());
+			std::string gearCostText=cocos2d::StringUtils::format("%d",gearCost);
+			_delegate->getHudLayer()->offCoin(gearCostText.c_str());
 		}else{
 			this->minusCoin(gearCost);
 		}
@@ -2895,8 +2900,8 @@ void NarutoSenki::ActionManager::setCommand(Node* sender,void* date){
 		if(strcmp(this->getCharacter()->getCString(),"Tenten")==0){
 			while (i<11)
 			{
-				CCString* path=CCString::createWithFormat("Tenten_Extern_0%d.png",i);
-				SpriteFrame* frame = SpriteFrameCache::getInstance()->spriteFrameByName(path->getCString());
+				std::string path=cocos2d::StringUtils::format("Tenten_Extern_0%d.png",i);
+				SpriteFrame* frame = SpriteFrameCache::getInstance()->spriteFrameByName(path);
 				tempArray->addObject(frame);
 				i+=1;
 			}
@@ -2906,7 +2911,8 @@ void NarutoSenki::ActionManager::setCommand(Node* sender,void* date){
 
 		Animation* tempAnimation=createAnimationFromFrameArray(tempArray, 0.1f);
 		Action* tempAction=Animate::create(tempAnimation);
-		Sprite* tempChar=Sprite::createWithSpriteFrameName(CCString::createWithFormat("%s_Extern_01.png",this->getCharacter()->getCString())->getCString());
+		std::string tempCharPath=cocos2d::StringUtils::format("%s_Extern_01.png",this->getCharacter()->getCString());
+		Sprite* tempChar=Sprite::createWithSpriteFrameName(tempCharPath);
 		FiniteTimeAction *call = CallFunc::create([this, tempChar]() {
 			this->disableShadow(tempChar);
 		});
