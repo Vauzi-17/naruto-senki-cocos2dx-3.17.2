@@ -327,6 +327,8 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
   dibersihkan.
 - `LoadLayer`: blok komentar DLC lama yang masih membawa `CCString`/
   `CCArray`/`CCDictionary` dead-code dihapus; preload aktif tetap sama.
+- `HudLayer`: angka report queue, countdown buff, dan pengurangan CKR lokal
+  memakai literal/string native; field report/CKR lama tetap `CCString`.
 - `NetworkLayer`: komentar request list hero lama dan parsing response callback
   yang sudah tidak punya caller aktif dibersihkan; flow pemilihan hero tetap
   memakai daftar offline statis.
@@ -448,6 +450,8 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
   komentar API 2.x lama yang tidak aktif.
 - `LoadLayer` membersihkan komentar DLC lama yang sudah tidak aktif agar audit
   source fokus pada kontrak loader yang masih dipakai.
+- `HudLayer` menutup sisa format string aktif untuk report/buff/CKR tanpa
+  mengubah dictionary report atau field chakra lama.
 
 1. **Tutup helper compat kecil yang masih lokal**
    - Target file: `Cocos2dx2Compat.h`, `ActionButton`, `HPBar`, `HudLayer`,

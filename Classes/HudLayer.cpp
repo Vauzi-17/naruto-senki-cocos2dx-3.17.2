@@ -920,7 +920,7 @@ void HudLayer::setReport(const char* name1, const char* name2,CCString* killNum)
 		CCDictionary* dic=CCDictionary::create();
 		dic->setObject(CCString::create(name1),"name1");
 		dic->setObject(CCString::create(name2),"name2");
-		dic->setObject(CCString::createWithFormat("%d",1),"num");
+		dic->setObject(CCString::create("1"),"num");
 		dic->setObject(killNum,"kills");
 		_reportListArray->addObject(dic);
 		return;
@@ -941,7 +941,7 @@ void HudLayer::setReport(const char* name1, const char* name2,CCString* killNum)
 	CCDictionary* dic=CCDictionary::create();
 	dic->setObject(CCString::create(name1),"name1");
 	dic->setObject(CCString::create(name2),"name2");
-	dic->setObject(CCString::createWithFormat("%d",1),"num");
+	dic->setObject(CCString::create("1"),"num");
 	dic->setObject(killNum,"kills");
 	dic->setObject(CCString::create("True"),"isDisplay");
 	_reportListArray->addObject(dic);
@@ -1005,12 +1005,8 @@ void HudLayer::updateBuffDisplay(float dt){
 
 	if(bcdLabel1){
 		if (std::atoi(bcdLabel1->getString().c_str()) > 0){
-			bcdLabel1->setString(
-				CCString::createWithFormat(
-					"%d",
-					std::atoi(bcdLabel1->getString().c_str()) - 1
-				)->getCString()
-			);
+			std::string buffTimeText=cocos2d::StringUtils::format("%d",std::atoi(bcdLabel1->getString().c_str()) - 1);
+			bcdLabel1->setString(buffTimeText);
 		}else{
 			bcdLabel1->removeFromParentAndCleanup(true);
 			bcdLabel1=nullptr;
@@ -1032,12 +1028,8 @@ void HudLayer::updateBuffDisplay2(float dt){
 
 	if(bcdLabel2){
 		if (std::atoi(bcdLabel2->getString().c_str()) > 0){
-			bcdLabel2->setString(
-				CCString::createWithFormat(
-					"%d",
-					std::atoi(bcdLabel2->getString().c_str()) - 1
-				)->getCString()
-			);
+			std::string buffTimeText=cocos2d::StringUtils::format("%d",std::atoi(bcdLabel2->getString().c_str()) - 1);
+			bcdLabel2->setString(buffTimeText);
 
 		}else{
 			bcdLabel2->removeFromParentAndCleanup(true);
@@ -1405,7 +1397,8 @@ void HudLayer::costCKR(int value,bool isCKR2){
 			ckr=0;
 		}
 
-		_delegate->currentPlayer->setCKR(CCString::createWithFormat("%f",ckr));
+		std::string ckrText=cocos2d::StringUtils::format("%f",ckr);
+		_delegate->currentPlayer->setCKR(CCString::create(ckrText));
 		this->setCKRLose(false);
 
 	}else{
@@ -1418,7 +1411,8 @@ void HudLayer::costCKR(int value,bool isCKR2){
 			ckr=0;
 		}
 
-		_delegate->currentPlayer->setCKR2(CCString::createWithFormat("%f",ckr));
+		std::string ckrText=cocos2d::StringUtils::format("%f",ckr);
+		_delegate->currentPlayer->setCKR2(CCString::create(ckrText));
 		this->setCKRLose(true);
 
 	}
