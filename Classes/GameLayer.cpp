@@ -809,9 +809,9 @@ void GameLayer::initTower(){
 		if(i==1 || i==4 ){
 			//4v4
 			if(Cheats>10){
-				tower->setMaxHP(CCString::createWithFormat("%d",80000));
+				tower->setMaxHP(CCString::create("80000"));
 			}else{
-				tower->setMaxHP(CCString::createWithFormat("%d",50000));
+				tower->setMaxHP(CCString::create("50000"));
 			}
 			tower->setHP(CCString::create(tower->getMaxHP()->getCString()));
 		}
@@ -856,7 +856,8 @@ void GameLayer::updateGameTime(float dt)
 	this->_hudLayer->gameClock->setString(tempTime);
 
 	int newValue=std::atoi(this->getTotalTM()->getCString())+1;
-	this->setTotalTM(CCString::createWithFormat("%d",newValue));
+	std::string totalTimeText=cocos2d::StringUtils::format("%d",newValue);
+	this->setTotalTM(CCString::create(totalTimeText));
 }
 
 
