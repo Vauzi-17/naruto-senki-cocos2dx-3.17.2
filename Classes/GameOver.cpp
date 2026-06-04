@@ -648,15 +648,7 @@ void GameOver::listResult(){
 				}
 				}
 
-			}/*else{
-
-			 CCString* loseNum=tool->readSQLite("Achievement","name",resultChar->getCString(),"column2");
-			 int tempLose=std::atoi(loseNum->getCString())+1;
-			 CCString* realLose=CCString::createWithFormat("%d",tempLose);
-			 if(CError!=1){
-			 tool->saveSQLite("Achievement","name",resultChar->getCString(),"column2",(char*) realLose->getCString(),false);
-			 }
-			 }	*/
+			}
 
 
 
