@@ -309,6 +309,9 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
   ke loader tetap `CCString`/`CCArray`.
 - `Effect`: path frame effect dan helper animasi effect lokal memakai
   `StringUtils::format`/`std::string`; flow damage/buff effect tidak diubah.
+- `LoadLayer`: path plist/texture preload, avatar loading, tips, dan checksum
+  lokal memakai `StringUtils::format`/`std::string`; kontrak `tempHeros` lama
+  tetap `CCArray`/`CCDictionary`.
 - `NetworkLayer`: komentar request list hero lama dan parsing response callback
   yang sudah tidak punya caller aktif dibersihkan; flow pemilihan hero tetap
   memakai daftar offline statis.
@@ -416,6 +419,8 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
   `CCString::createWithFormat`, sambil menahan kontrak hero offline ke loader.
 - `Effect` melepas path frame effect lokal dari `CCString::createWithFormat`
   tanpa menyentuh kontrak damage/buff di `ActionManager`.
+- `LoadLayer` melepas path preload aktif dari `CCString::createWithFormat`
+  sambil menahan payload hero lama ke `GameLayer`.
 
 1. **Tutup helper compat kecil yang masih lokal**
    - Target file: `Cocos2dx2Compat.h`, `ActionButton`, `HPBar`, `HudLayer`,

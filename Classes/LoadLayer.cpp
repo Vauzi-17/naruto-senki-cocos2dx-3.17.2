@@ -4,6 +4,7 @@
 #include<time.h>
 #include <fstream>
 #include <iostream>
+#include <string>
 
 #ifdef _WIN32
 #include <direct.h>
@@ -102,7 +103,7 @@ bool LoadLayer::init(){
 void LoadLayer::preloadIMG(){
 
 	int i=0;
-	const char* path;
+	std::string path;
 	KTools* tool=KTools::create();
 
 	for(unsigned int heroIndex=0; heroIndex<tempHeros->count(); ++heroIndex){
@@ -120,9 +121,10 @@ void LoadLayer::preloadIMG(){
 			strcmp(player,"Kakuzu")!=0
 			){
 
-				path=CCString::createWithFormat("Element/Skills/%s_Skill.plist",player)->getCString();
+				path=cocos2d::StringUtils::format("Element/Skills/%s_Skill.plist",player);
 				SpriteFrameCache::getInstance()->addSpriteFramesWithFile(path);
-				applyPixelArtToTexture(Director::getInstance()->getTextureCache()->textureForKey(CCString::createWithFormat("Element/Skills/%s_Skill.pvr.ccz",player)->getCString()));
+				std::string texturePath=cocos2d::StringUtils::format("Element/Skills/%s_Skill.pvr.ccz",player);
+				applyPixelArtToTexture(Director::getInstance()->getTextureCache()->textureForKey(texturePath));
 		}
 
 		//Ԥ������Ч
@@ -150,9 +152,10 @@ void LoadLayer::preloadIMG(){
 
 		}*/
 
-		path=CCString::createWithFormat("Element/%s/%s.plist",player,player)->getCString();
+		path=cocos2d::StringUtils::format("Element/%s/%s.plist",player,player);
 		SpriteFrameCache::getInstance()->addSpriteFramesWithFile(path);
-		applyPixelArtToTexture(Director::getInstance()->getTextureCache()->textureForKey(CCString::createWithFormat("Element/%s/%s.pvr.ccz",player,player)->getCString()));
+		std::string texturePath=cocos2d::StringUtils::format("Element/%s/%s.pvr.ccz",player,player);
+		applyPixelArtToTexture(Director::getInstance()->getTextureCache()->textureForKey(texturePath));
 
 
 
@@ -205,15 +208,15 @@ void LoadLayer::preloadIMG(){
 
 		if(i==0 ||( (i==1 || i==2 ) && _isHardCoreMode) ){
 
-			Sprite* loadingAvator=Sprite::createWithSpriteFrameName(CCString::createWithFormat("%s_Walk_01.png",player)->getCString());
+			std::string loadingAvatarPath=cocos2d::StringUtils::format("%s_Walk_01.png",player);
+			Sprite* loadingAvator=Sprite::createWithSpriteFrameName(loadingAvatarPath);
 			loadingAvator->setFlipX(true);
 			loadingAvator->setPosition(Vec2(winSize.width-100+i*16,30));
 			loadingAvator->setAnchorPoint(Vec2(0,0));
 
 			Vector<SpriteFrame*> animeFrames;
-			CCString* str;
 
-			const char* file=CCString::createWithFormat("%s_Walk_",player)->getCString();
+			std::string filePrefix=cocos2d::StringUtils::format("%s_Walk_",player);
 			int frameCount;
 			if(strcmp(player,"Konan")==0){
 				frameCount=1;
@@ -222,8 +225,8 @@ void LoadLayer::preloadIMG(){
 			}
 
 			for(int i = 1; i < frameCount; i++){
-				str=CCString::createWithFormat("%s%02d.png",file,i);
-				SpriteFrame *frame =  SpriteFrameCache::getInstance()->spriteFrameByName(str->getCString());
+				std::string framePath=cocos2d::StringUtils::format("%s%02d.png",filePrefix.c_str(),i);
+				SpriteFrame *frame =  SpriteFrameCache::getInstance()->spriteFrameByName(framePath);
 				applyPixelArtToFrame(frame);
 				if(frame){
 					animeFrames.pushBack(frame);
@@ -272,7 +275,8 @@ void LoadLayer::preloadIMG(){
 	try{
 		srand((int)time(0));
 		int num=rand()%3+1;
-		Sprite* tips=Sprite::createWithSpriteFrameName(CCString::createWithFormat("tip%d.png",num)->getCString());
+		std::string tipsPath=cocos2d::StringUtils::format("tip%d.png",num);
+		Sprite* tips=Sprite::createWithSpriteFrameName(tipsPath);
 		tips->setPosition(Vec2(winSize.width/2,winSize.height/2));
 		this->addChild(tips);
 
@@ -331,11 +335,11 @@ void LoadLayer::preloadAudio(){
 	tool->prepareFileMD5();
 	std::string str2="fkhfnPG8";
 	tool->decode(str2);
-	std::string filePath=FileUtils::getInstance()->getWritablePath()+CCString::createWithFormat("%s.xml",str2.c_str())->getCString();
+	std::string filePath=FileUtils::getInstance()->getWritablePath()+cocos2d::StringUtils::format("%s.xml",str2.c_str());
 	std::string strFileMD5 =CMD5Checksum::GetMD5(filePath);
 	remove(filePath.c_str());
-	CCString* code1=CCString::createWithFormat("%s%s",strFileMD5.substr(16,5).c_str(),strFileMD5.substr(6,5).c_str());
-	if(strcmp(code1->getCString(),"e0213bffe1")!=0){
+	std::string code1=cocos2d::StringUtils::format("%s%s",strFileMD5.substr(16,5).c_str(),strFileMD5.substr(6,5).c_str());
+	if(code1!="e0213bffe1"){
 	const char* soundpath="Audio";
 	//return;
 	//tool->dfsFolder(soundpath,0,1);
@@ -396,7 +400,7 @@ void LoadLayer::preloadPlist(Ref* obj){
 	CCString* player=CCString::create(tempdict->valueForKey("character")->getCString());
 	const char* name=player->getCString();
 
-    const char* path=CCString::createWithFormat("Element/%s/%s.plist",name,name)->getCString();
+    std::string path=cocos2d::StringUtils::format("Element/%s/%s.plist",name,name);
 	SpriteFrameCache::getInstance()->addSpriteFramesWithFile(path,texture);//ͨ��������.plist�ļ�����SpriteFrameCache
 
 	loadNum++;
