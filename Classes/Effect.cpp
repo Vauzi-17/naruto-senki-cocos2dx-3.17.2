@@ -1,6 +1,7 @@
 #include "Effect.h"
 #include "MyUtils/KTools.h"
 #include "ActionManager.h"
+#include <string>
 using namespace CocosDenshion;
 
 Effect::Effect(void)
@@ -85,8 +86,10 @@ bool Effect::init(const char *szImage,Ref* Attacker){
 		}else if(strcmp(szImage,"hp_restore")==0 ||
 			strcmp(szImage,"speedUp")==0
 			){
-			this->initWithSpriteFrameName(CCString::createWithFormat("%s_01.png",szImage)->getCString());
-			FiniteTimeAction* effectAction=static_cast<FiniteTimeAction*>(this->createEffectAnimation(CCString::createWithFormat("%s_",szImage)->getCString(),5,5,false));
+			std::string framePath=cocos2d::StringUtils::format("%s_01.png",szImage);
+			std::string effectPrefix=cocos2d::StringUtils::format("%s_",szImage);
+			this->initWithSpriteFrameName(framePath);
+			FiniteTimeAction* effectAction=static_cast<FiniteTimeAction*>(this->createEffectAnimation(effectPrefix.c_str(),5,5,false));
 			FiniteTimeAction* call=CallFunc::create(CC_CALLBACK_0(NarutoSenki::ActionManager::disableEffect, at));
 			Action* seq=Sequence::create(effectAction,call,nullptr);
 			this->runAction(seq);
@@ -129,14 +132,15 @@ bool Effect::init(const char *szImage,Ref* Attacker){
 
 		}
 		else if(strcmp(szImage,"Bagua")==0){
-			this->initWithSpriteFrameName(CCString::createWithFormat("Bagua_01.png",szImage)->getCString());
-			Action* effectAction=this->createEffectAnimation(CCString::createWithFormat("Bagua_",szImage)->getCString(),24,10,false);
+			this->initWithSpriteFrameName("Bagua_01.png");
+			Action* effectAction=this->createEffectAnimation("Bagua_",24,10,false);
 			this->setAnchorPoint(Vec2(0.5f,0));
 			this->setPosition(Vec2(at->getPositionX()+2,at->getPositionY()-52));
 			this->runAction(effectAction);
 
 		}else if(strcmp(szImage,"Kujiyose")==0){
-			this->initWithSpriteFrameName(CCString::createWithFormat(("%s.png"),szImage)->getCString());
+			std::string framePath=cocos2d::StringUtils::format("%s.png",szImage);
+			this->initWithSpriteFrameName(framePath);
 			this->setAnchorPoint(Vec2(0.5f,0));
 			this->setPosition(Vec2(at->getPositionX(),at->getPositionY()-this->getContentSize().height/2));
 			DelayTime* delay=DelayTime::create(0.3f);
@@ -158,7 +162,8 @@ bool Effect::init(const char *szImage,Ref* Attacker){
 			strcmp(szImage,"sharingan3")==0 ||
 			strcmp(szImage,"sharingan4")==0
 			){
-			this->initWithSpriteFrameName(CCString::createWithFormat(("%s.png"),szImage)->getCString());
+			std::string framePath=cocos2d::StringUtils::format("%s.png",szImage);
+			this->initWithSpriteFrameName(framePath);
 			this->setPosition(Vec2(at->getPositionX()+(at->_isFlipped?-32:32),
 				at->getPositionY()+at->getContentSize().height));
 			ActionInterval* rt=RotateBy::create(0.3f,180,180);
@@ -168,38 +173,48 @@ bool Effect::init(const char *szImage,Ref* Attacker){
 			this->runAction(seq);
 		}else if(strcmp(szImage,"Hiraishin")==0||
 			strcmp(szImage,"Hiraishin2")==0){
-			this->initWithSpriteFrameName(CCString::createWithFormat("%sEffect_01.png",szImage)->getCString());
+			std::string framePath=cocos2d::StringUtils::format("%sEffect_01.png",szImage);
+			std::string effectPrefix=cocos2d::StringUtils::format("%sEffect_",szImage);
+			this->initWithSpriteFrameName(framePath);
 			this->setAnchorPoint(Vec2(0.5f,0));
 			this->setPosition(at->getPosition());
-			Action* effectAction=this->createEffectAnimation(CCString::createWithFormat("%sEffect_",szImage)->getCString(),4,10,false);
+			Action* effectAction=this->createEffectAnimation(effectPrefix.c_str(),4,10,false);
 			this->runAction(effectAction);
 		}
 		//buffÌØÐ§
 		else if(strcmp(szImage,"hBuff")==0 ){
-			this->initWithSpriteFrameName(CCString::createWithFormat("%s_Effect_01.png",szImage)->getCString());
+			std::string framePath=cocos2d::StringUtils::format("%s_Effect_01.png",szImage);
+			std::string effectPrefix=cocos2d::StringUtils::format("%s_Effect_",szImage);
+			this->initWithSpriteFrameName(framePath);
 			this->setAnchorPoint(Vec2(0.5f,0));
-			Action* effectAction=this->createEffectAnimation(CCString::createWithFormat("%s_Effect_",szImage)->getCString(),4,5,true);
+			Action* effectAction=this->createEffectAnimation(effectPrefix.c_str(),4,5,true);
 			this->runAction(effectAction);
 		}
 		else if(strcmp(szImage,"hsBuff")==0||
 			strcmp(szImage,"tBuff")==0
 			){
-			this->initWithSpriteFrameName(CCString::createWithFormat("%s_Effect_01.png",szImage)->getCString());
+			std::string framePath=cocos2d::StringUtils::format("%s_Effect_01.png",szImage);
+			std::string effectPrefix=cocos2d::StringUtils::format("%s_Effect_",szImage);
+			this->initWithSpriteFrameName(framePath);
 			this->setAnchorPoint(Vec2(0.5f,0));
-			Action* effectAction=this->createEffectAnimation(CCString::createWithFormat("%s_Effect_",szImage)->getCString(),13,10,true);
+			Action* effectAction=this->createEffectAnimation(effectPrefix.c_str(),13,10,true);
 			this->runAction(effectAction);
 		}else if(strcmp(szImage,"dcBuff")==0
 			){
-				this->initWithSpriteFrameName(CCString::createWithFormat("%s_Effect_01.png",szImage)->getCString());
+				std::string framePath=cocos2d::StringUtils::format("%s_Effect_01.png",szImage);
+				std::string effectPrefix=cocos2d::StringUtils::format("%s_Effect_",szImage);
+				this->initWithSpriteFrameName(framePath);
 				this->setAnchorPoint(Vec2(0.5f,0));
-				Action* effectAction=this->createEffectAnimation(CCString::createWithFormat("%s_Effect_",szImage)->getCString(),11,10,true);
+				Action* effectAction=this->createEffectAnimation(effectPrefix.c_str(),11,10,true);
 				this->runAction(effectAction);
 		}else if(strcmp(szImage,"jdBuff")==0 ||
 			strcmp(szImage,"bmBuff")==0
 			){
-				this->initWithSpriteFrameName(CCString::createWithFormat("%s_Effect_01.png",szImage)->getCString());
+				std::string framePath=cocos2d::StringUtils::format("%s_Effect_01.png",szImage);
+				std::string effectPrefix=cocos2d::StringUtils::format("%s_Effect_",szImage);
+				this->initWithSpriteFrameName(framePath);
 				this->setAnchorPoint(Vec2(0.5f,0));
-				Action* effectAction=this->createEffectAnimation(CCString::createWithFormat("%s_Effect_",szImage)->getCString(),9,10,true);
+				Action* effectAction=this->createEffectAnimation(effectPrefix.c_str(),9,10,true);
 				this->runAction(effectAction);
 		}
 		else if(strcmp(szImage,"dhBuff")==0){
@@ -230,11 +245,9 @@ bool Effect::init(const char *szImage,Ref* Attacker){
 
 Action* Effect::createEffectAnimation(const char* file,int frameCount,float fps,bool isRepeat){
 	Vector<SpriteFrame*> animeFrames;
-	CCString* str;
-
 	for(int i = 1; i < frameCount; i++){
-		str=CCString::createWithFormat("%s%02d.png",file,i);
-		SpriteFrame *frame =  SpriteFrameCache::getInstance()->spriteFrameByName(str->getCString());
+		std::string framePath=cocos2d::StringUtils::format("%s%02d.png",file,i);
+		SpriteFrame *frame =  SpriteFrameCache::getInstance()->spriteFrameByName(framePath);
 		animeFrames.pushBack(frame);
 	}
 

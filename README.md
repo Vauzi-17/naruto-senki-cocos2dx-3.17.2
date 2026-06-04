@@ -307,6 +307,8 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
 - `NetworkLayer`: path tombol select, preview hero, map preview/label, dan slot
   team training lokal memakai `StringUtils::format`/`std::string`; payload hero
   ke loader tetap `CCString`/`CCArray`.
+- `Effect`: path frame effect dan helper animasi effect lokal memakai
+  `StringUtils::format`/`std::string`; flow damage/buff effect tidak diubah.
 - `NetworkLayer`: komentar request list hero lama dan parsing response callback
   yang sudah tidak punya caller aktif dibersihkan; flow pemilihan hero tetap
   memakai daftar offline statis.
@@ -412,6 +414,8 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
   tanpa mengubah payload karakter yang masih dipakai layer lama.
 - `NetworkLayer` ikut melepas path/label UI lokal dari
   `CCString::createWithFormat`, sambil menahan kontrak hero offline ke loader.
+- `Effect` melepas path frame effect lokal dari `CCString::createWithFormat`
+  tanpa menyentuh kontrak damage/buff di `ActionManager`.
 
 1. **Tutup helper compat kecil yang masih lokal**
    - Target file: `Cocos2dx2Compat.h`, `ActionButton`, `HPBar`, `HudLayer`,
