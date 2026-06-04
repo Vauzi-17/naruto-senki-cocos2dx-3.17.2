@@ -2,6 +2,7 @@
 #include "Defines.h"
 #include "StartMenu.h"
 #include <algorithm>
+#include <string>
 USING_NS_CC_EXT;
 using namespace CocosDenshion;
 
@@ -291,17 +292,15 @@ bool NetworkLayer::init(){
 				const char* charName;
 				charName=selectList[i];
 
-				_selectList->addObject(CCString::createWithFormat("%s",charName));
+				_selectList->addObject(CCString::create(charName));
 
-				CCString* path;
-
-				path=CCString::createWithFormat("%s_select.png",charName);
+				std::string path=cocos2d::StringUtils::format("%s_select.png",charName);
 				Column=i%7;
 				Row=i/7;
 				Page=int(i/21);
-				SelectButton* select_btn=SelectButton::create(path->getCString());
+				SelectButton* select_btn=SelectButton::create(path.c_str());
 				select_btn->setDelegate2(this);
-				select_btn->setCharName(CCString::createWithFormat("%s",charName));
+				select_btn->setCharName(CCString::create(charName));
 				if(Page==0){
 					select_btn->setPosition(Vec2(winSize.width/2-36+(Column-1)*27+Column/4*10,winSize.height-112-(72*Row)));
 					_pageLayer1->addChild(select_btn,-Column);
@@ -348,13 +347,13 @@ bool NetworkLayer::init(){
 
 			CCString* hero=(CCString *)_selectList->objectAtIndex(0);
 
-			const char* path=CCString::createWithFormat("%s_half.png",hero->getCString())->getCString();
+			std::string path=cocos2d::StringUtils::format("%s_half.png",hero->getCString());
 			_heroHalf=Sprite::createWithSpriteFrameName(path);
 			_heroHalf->setAnchorPoint(Vec2(0,0));
 			_heroHalf->setPosition(Vec2(10,10));
 			this->addChild(_heroHalf,1);
 
-			const char* namePath=CCString::createWithFormat("%s_font.png",hero->getCString())->getCString();
+			std::string namePath=cocos2d::StringUtils::format("%s_font.png",hero->getCString());
 			_heroName=Sprite::createWithSpriteFrameName(namePath);
 			_heroName->setAnchorPoint(Vec2(0.5f,0));
 			_heroName->setPosition(Vec2(100,20));
@@ -602,14 +601,16 @@ void NetworkLayer::updateMapPreview(){
 		oldLabel->removeFromParent();
 	}
 
-	_mapPreview=Sprite::create(CCString::createWithFormat("Tiles/map_bg%d.png",_selectedMap+1)->getCString());
+	std::string mapPath=cocos2d::StringUtils::format("Tiles/map_bg%d.png",_selectedMap+1);
+	_mapPreview=Sprite::create(mapPath);
 	if(_mapPreview){
 		_mapPreview->setScale(0.205f);
 		_mapPreview->setPosition(Vec2(mapPos.x,mapPos.y+6));
 		this->addChild(_mapPreview,81,previewTag);
 	}
 
-	_mapLabel=LabelBMFont::create(CCString::createWithFormat("MAP %d",_selectedMap+1)->getCString(),"Fonts/1.fnt");
+	std::string mapLabel=cocos2d::StringUtils::format("MAP %d",_selectedMap+1);
+	_mapLabel=LabelBMFont::create(mapLabel,"Fonts/1.fnt");
 	if(_mapLabel){
 		_mapLabel->setScale(0.25f);
 		_mapLabel->setAnchorPoint(Vec2(0.5f,0.5f));
@@ -699,7 +700,8 @@ void NetworkLayer::refreshTeamSelectorUI(){
 	}
 
 	if(_com1Select){
-		SpriteFrame* com1Frame=SpriteFrameCache::getInstance()->spriteFrameByName(CCString::createWithFormat("%s_small.png",_com1Select)->getCString());
+		std::string com1Path=cocos2d::StringUtils::format("%s_small.png",_com1Select);
+		SpriteFrame* com1Frame=SpriteFrameCache::getInstance()->spriteFrameByName(com1Path);
 		if(com1Frame && _comSelector1){
 			_comSelector1->setSpriteFrame(com1Frame);
 		}
@@ -717,7 +719,8 @@ void NetworkLayer::refreshTeamSelectorUI(){
 	}
 
 	if(_com2Select){
-		SpriteFrame* com2Frame=SpriteFrameCache::getInstance()->spriteFrameByName(CCString::createWithFormat("%s_small.png",_com2Select)->getCString());
+		std::string com2Path=cocos2d::StringUtils::format("%s_small.png",_com2Select);
+		SpriteFrame* com2Frame=SpriteFrameCache::getInstance()->spriteFrameByName(com2Path);
 		if(com2Frame && _comSelector2){
 			_comSelector2->setSpriteFrame(com2Frame);
 		}
@@ -740,7 +743,8 @@ void NetworkLayer::refreshTrainingTeamSlots(){
 		}
 		if(i==0){
 			if(_playerSelect){
-				SpriteFrame* frame=SpriteFrameCache::getInstance()->spriteFrameByName(CCString::createWithFormat("%s_small.png",_playerSelect)->getCString());
+				std::string framePath=cocos2d::StringUtils::format("%s_small.png",_playerSelect);
+				SpriteFrame* frame=SpriteFrameCache::getInstance()->spriteFrameByName(framePath);
 				if(frame){
 					_trainingTeamSlots[i]->setSpriteFrame(frame);
 				}
@@ -749,7 +753,8 @@ void NetworkLayer::refreshTrainingTeamSlots(){
 			}
 		}else if((int)_trainingTeamPicks.size()>=i){
 			const std::string& picked=_trainingTeamPicks[i-1];
-			SpriteFrame* frame=SpriteFrameCache::getInstance()->spriteFrameByName(CCString::createWithFormat("%s_small.png",picked.c_str())->getCString());
+			std::string framePath=cocos2d::StringUtils::format("%s_small.png",picked.c_str());
+			SpriteFrame* frame=SpriteFrameCache::getInstance()->spriteFrameByName(framePath);
 			if(frame){
 				_trainingTeamSlots[i]->setSpriteFrame(frame);
 			}
@@ -767,7 +772,8 @@ void NetworkLayer::refreshTrainingEnemySlots(){
 		}
 		if((int)_trainingEnemyPicks.size()>i){
 			const std::string& picked=_trainingEnemyPicks[i];
-			SpriteFrame* frame=SpriteFrameCache::getInstance()->spriteFrameByName(CCString::createWithFormat("%s_small.png",picked.c_str())->getCString());
+			std::string framePath=cocos2d::StringUtils::format("%s_small.png",picked.c_str());
+			SpriteFrame* frame=SpriteFrameCache::getInstance()->spriteFrameByName(framePath);
 			if(frame){
 				_trainingEnemySlots[i]->setSpriteFrame(frame);
 			}
@@ -898,7 +904,7 @@ void NetworkLayer::setSelected(Ref* sender){
 		if(_heroHalf){
 			_heroHalf->removeFromParent();
 		}
-		const char* path=CCString::createWithFormat("%s_half.png",_selectHero)->getCString();
+		std::string path=cocos2d::StringUtils::format("%s_half.png",_selectHero);
 		_heroHalf=Sprite::createWithSpriteFrameName(path);
 		if(_heroHalf){
 			_heroHalf->setAnchorPoint(Vec2(0,0));
@@ -909,7 +915,7 @@ void NetworkLayer::setSelected(Ref* sender){
 		if(_heroName){
 			_heroName->removeFromParent();
 		}
-		const char* namePath=CCString::createWithFormat("%s_font.png",_selectHero)->getCString();
+		std::string namePath=cocos2d::StringUtils::format("%s_font.png",_selectHero);
 		_heroName=Sprite::createWithSpriteFrameName(namePath);
 		if(_heroName){
 			_heroName->setAnchorPoint(Vec2(0.5f,0));
@@ -928,7 +934,8 @@ void NetworkLayer::setSelected(Ref* sender){
 		if(!_playerSelect){
 			_trainingPlayerPick=_selectHero;
 			_playerSelect=_trainingPlayerPick.c_str();
-			SpriteFrame* frame=SpriteFrameCache::getInstance()->spriteFrameByName(CCString::createWithFormat("%s_small.png",_selectHero)->getCString());
+			std::string framePath=cocos2d::StringUtils::format("%s_small.png",_selectHero);
+			SpriteFrame* frame=SpriteFrameCache::getInstance()->spriteFrameByName(framePath);
 			if(frame && _trainingTeamSlots[0]){
 				_trainingTeamSlots[0]->setSpriteFrame(frame);
 			}
@@ -946,7 +953,8 @@ void NetworkLayer::setSelected(Ref* sender){
 		if(!_trainingRandomTeam && (int)_trainingTeamPicks.size()<teamNeed){
 			int slotIndex=(int)_trainingTeamPicks.size()+1;
 			_trainingTeamPicks.push_back(_selectHero);
-			SpriteFrame* frame=SpriteFrameCache::getInstance()->spriteFrameByName(CCString::createWithFormat("%s_small.png",_selectHero)->getCString());
+			std::string framePath=cocos2d::StringUtils::format("%s_small.png",_selectHero);
+			SpriteFrame* frame=SpriteFrameCache::getInstance()->spriteFrameByName(framePath);
 			if(frame && slotIndex<5 && _trainingTeamSlots[slotIndex]){
 				_trainingTeamSlots[slotIndex]->setSpriteFrame(frame);
 			}
@@ -956,7 +964,8 @@ void NetworkLayer::setSelected(Ref* sender){
 		if(!_trainingRandomEnemy && (int)_trainingEnemyPicks.size()<_trainingTeamSize){
 			int slotIndex=(int)_trainingEnemyPicks.size();
 			_trainingEnemyPicks.push_back(_selectHero);
-			SpriteFrame* frame=SpriteFrameCache::getInstance()->spriteFrameByName(CCString::createWithFormat("%s_small.png",_selectHero)->getCString());
+			std::string framePath=cocos2d::StringUtils::format("%s_small.png",_selectHero);
+			SpriteFrame* frame=SpriteFrameCache::getInstance()->spriteFrameByName(framePath);
 			if(frame && slotIndex<5 && _trainingEnemySlots[slotIndex]){
 				_trainingEnemySlots[slotIndex]->setSpriteFrame(frame);
 			}
@@ -974,14 +983,14 @@ void NetworkLayer::setSelected(Ref* sender){
 		if(isHeroConfirmedSelected(_selectHero)){
 			_heroHalf->removeFromParent();
 			const char* charName=btn->getCharName()->getCString();
-			const char* path=CCString::createWithFormat("%s_half.png", charName)->getCString();
+			std::string path=cocos2d::StringUtils::format("%s_half.png", charName);
 			_heroHalf=Sprite::createWithSpriteFrameName(path);
 			_heroHalf->setAnchorPoint(Vec2(0,0));
 			_heroHalf->setPosition(Vec2(10,10));
 			this->addChild(_heroHalf,1);
 
 			_heroName->removeFromParent();
-			const char* namePath=CCString::createWithFormat("%s_font.png",charName)->getCString();
+			std::string namePath=cocos2d::StringUtils::format("%s_font.png",charName);
 			_heroName=Sprite::createWithSpriteFrameName(namePath);
 			_heroName->setAnchorPoint(Vec2(0.5f,0));
 			_heroName->setPosition(Vec2(100,20));
@@ -1007,7 +1016,7 @@ void NetworkLayer::setSelected(Ref* sender){
 			const char* charName=btn->getCharName()->getCString();
 
 
-			const char* path=CCString::createWithFormat("%s_half.png", charName)->getCString();
+			std::string path=cocos2d::StringUtils::format("%s_half.png", charName);
 			_heroHalf=Sprite::createWithSpriteFrameName(path);
 
 			_heroHalf->setAnchorPoint(Vec2(0,0));
@@ -1015,7 +1024,7 @@ void NetworkLayer::setSelected(Ref* sender){
 			this->addChild(_heroHalf,1);
 
 			_heroName->removeFromParent();
-			const char* namePath=CCString::createWithFormat("%s_font.png",charName)->getCString();
+			std::string namePath=cocos2d::StringUtils::format("%s_font.png",charName);
 			_heroName=Sprite::createWithSpriteFrameName(namePath);
 			_heroName->setAnchorPoint(Vec2(0.5f,0));
 			_heroName->setPosition(Vec2(100,20));
@@ -1024,7 +1033,8 @@ void NetworkLayer::setSelected(Ref* sender){
 
 
 		}else if(!_com1Select){
-			SpriteFrame *frame=SpriteFrameCache::getInstance()->spriteFrameByName(CCString::createWithFormat("%s_small.png",_selectHero)->getCString());
+			std::string framePath=cocos2d::StringUtils::format("%s_small.png",_selectHero);
+			SpriteFrame *frame=SpriteFrameCache::getInstance()->spriteFrameByName(framePath);
 			this->getComSelector1()->setSpriteFrame(frame);
 
 			if(btn->_clickTime>=2){
@@ -1042,7 +1052,8 @@ void NetworkLayer::setSelected(Ref* sender){
 		}else if(!_com2Select){
 
 
-			SpriteFrame *frame=SpriteFrameCache::getInstance()->spriteFrameByName(CCString::createWithFormat("%s_small.png",_selectHero)->getCString());
+			std::string framePath=cocos2d::StringUtils::format("%s_small.png",_selectHero);
+			SpriteFrame *frame=SpriteFrameCache::getInstance()->spriteFrameByName(framePath);
 			this->getComSelector2()->setSpriteFrame(frame);
 
 			if(btn->_clickTime>=2){
