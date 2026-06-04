@@ -1,5 +1,6 @@
 #include "Characters.h"
 #include <cstdlib>
+#include <string>
 #include "HudLayer.h"
 USING_NS_CC;
 
@@ -63,14 +64,14 @@ void HeroElement::setID(CCString* character,CCString* role,CCString* group){
 	this->setGroup(group);
 
 	CCArray* animationArray=CCArray::create();
-	const char* filePath;
+	std::string filePath;
 
 	KTools* tool= KTools::create();
 
-	filePath=CCString::createWithFormat("Element/%s/%s.xml",this->getCharacter()->getCString(),this->getCharacter()->getCString())->getCString();
+	filePath=cocos2d::StringUtils::format("Element/%s/%s.xml",this->getCharacter()->getCString(),this->getCharacter()->getCString());
 
-	std::string key =tool->getKeycode(filePath);
-	int id=tool->checkMD5(filePath);
+	std::string key =tool->getKeycode(filePath.c_str());
+	int id=tool->checkMD5(filePath.c_str());
 
 	if(strcmp(key.c_str(),_delegate->KeyList[id])!=0){
 		//return;
@@ -82,7 +83,7 @@ void HeroElement::setID(CCString* character,CCString* role,CCString* group){
 
 
 
-	tool->readXMLToArray(filePath,animationArray);
+	tool->readXMLToArray(filePath.c_str(),animationArray);
 
 	SpriteFrame* firstFrame=NULL;
 	if(animationArray->count()>0){
@@ -150,7 +151,7 @@ void HeroElement::setID(CCString* character,CCString* role,CCString* group){
 
 	//���ѱر�
 	if(this->getKillNum()==NULL){
-		this->setKillNum(CCString::createWithFormat("%d",0));
+		this->setKillNum(CCString::create("0"));
 	}
 
 	if(!this->getCKR() && !this->getCKR2()){
@@ -606,7 +607,8 @@ void HeroElement::changeHPbar(){
 		}
 
 		if(_hpBar){
-			SpriteFrame* frame = SpriteFrameCache::getInstance()->spriteFrameByName(CCString::createWithFormat("hp_bottom%d.png",int(_level))->getCString());
+			std::string hpBottomPath=cocos2d::StringUtils::format("hp_bottom%d.png",int(_level));
+		SpriteFrame* frame = SpriteFrameCache::getInstance()->spriteFrameByName(hpBottomPath);
 			_hpBar->getHPBottom()->setSpriteFrame(frame);
 		}
 
@@ -826,7 +828,8 @@ void HeroElement::dealloc(){
 						skullSpirte->setPosition(Vec2(0,0));
 						rebornSprite->addChild(skullSpirte);
 
-						rebornLabel=LabelBMFont::create(CCString::createWithFormat("%d",rebornLabelTime)->getCString(),"Fonts/1.fnt");
+						std::string rebornText=cocos2d::StringUtils::format("%d",rebornLabelTime);
+						rebornLabel=LabelBMFont::create(rebornText,"Fonts/1.fnt");
 						rebornLabel->setScale(0.3f);
 						rebornLabel->setPosition(Vec2(skullSpirte->getContentSize().width,0));
 						rebornSprite->addChild(rebornLabel);
@@ -847,7 +850,8 @@ void HeroElement::dealloc(){
 void HeroElement::countDown(float dt){
 
 		rebornLabelTime-=1;
-		rebornLabel->setString(CCString::createWithFormat("%d",rebornLabelTime)->getCString());
+		std::string rebornText=cocos2d::StringUtils::format("%d",rebornLabelTime);
+		rebornLabel->setString(rebornText);
 
 
 }
@@ -970,16 +974,16 @@ void Flog::setID(CCString* character,CCString* role,CCString* group){
 	this->setGroup(group);
 
 	CCArray* animationArray=CCArray::create();
-	const char* filePath;
+	std::string filePath;
 
 
-	filePath=CCString::createWithFormat("Element/Flog/%s.xml",this->getCharacter()->getCString(),this->getCharacter()->getCString())->getCString();
+	filePath=cocos2d::StringUtils::format("Element/Flog/%s.xml",this->getCharacter()->getCString());
 
 
 	KTools* tool= KTools::create();
 
 
-	tool->readXMLToArray(filePath,animationArray);
+	tool->readXMLToArray(filePath.c_str(),animationArray);
 
 	//init Attribute; & indleFrame
 
@@ -1000,7 +1004,7 @@ void Flog::setID(CCString* character,CCString* role,CCString* group){
 	this->setHeight(tmpHeight);
 	this->setWalkSpeed(tmpSpeed);
 
-	this->setKillNum(CCString::createWithFormat("%d",0));
+	this->setKillNum(CCString::create("0"));
 
 
 
@@ -1229,7 +1233,7 @@ void Tower::setID(CCString* character,CCString* role,CCString* group){
 	this->setGroup(group);
 
 	CCArray* animationArray=CCArray::create();
-	const char* filePath;
+	std::string filePath;
 
 
 	if(strcmp(this->getCharacter()->getCString(),"KonohaCenter")==0 || strcmp(this->getCharacter()->getCString(),"AkatsukiCenter")==0 ){
@@ -1240,15 +1244,15 @@ void Tower::setID(CCString* character,CCString* role,CCString* group){
 	}
 
 	KTools* tool= KTools::create();
-	std::string key =tool->getKeycode(filePath);
-	int id=tool->checkMD5(filePath);
+	std::string key =tool->getKeycode(filePath.c_str());
+	int id=tool->checkMD5(filePath.c_str());
 
 	if(strcmp(key.c_str(),_delegate->KeyList[id])!=0){
 		//return;
 	}
 
 
-	tool->readXMLToArray(filePath,animationArray);
+	tool->readXMLToArray(filePath.c_str(),animationArray);
 
 
 	//init Attribute; & indleFrame
@@ -1387,16 +1391,16 @@ void Monster::setID(CCString* character,CCString* role,CCString* group){
 	this->setGroup(group);
 
 	CCArray* animationArray=CCArray::create();
-	const char* filePath;
+	std::string filePath;
 
 
-	filePath=CCString::createWithFormat("Element/Monster/%s.xml",this->getCharacter()->getCString(),this->getCharacter()->getCString())->getCString();
+	filePath=cocos2d::StringUtils::format("Element/Monster/%s.xml",this->getCharacter()->getCString());
 
 
 	KTools* tool= KTools::create();
-	std::string key =tool->getKeycode(filePath);
+	std::string key =tool->getKeycode(filePath.c_str());
 
-	tool->readXMLToArray(filePath,animationArray);
+	tool->readXMLToArray(filePath.c_str(),animationArray);
 
 	//init Attribute; & indleFrame
 
@@ -1525,7 +1529,8 @@ void Monster::changeHPbar(){
 	}
 
 	if(_hpBar){
-		SpriteFrame* frame = SpriteFrameCache::getInstance()->spriteFrameByName(CCString::createWithFormat("hp_bottom%d.png",int(_level))->getCString());
+		std::string hpBottomPath=cocos2d::StringUtils::format("hp_bottom%d.png",int(_level));
+		SpriteFrame* frame = SpriteFrameCache::getInstance()->spriteFrameByName(hpBottomPath);
 		_hpBar->getHPBottom()->setSpriteFrame(frame);
 	}
 
@@ -1892,22 +1897,22 @@ void Bullet::setID(CCString* character,CCString* role,CCString* group){
 	this->setGroup(group);
 
 	CCArray* animationArray=CCArray::create();
-	const char* filePath;
+	std::string filePath;
 
 
-	filePath=CCString::createWithFormat("Element/Bullet/%s.xml",this->getCharacter()->getCString(),this->getCharacter()->getCString())->getCString();
+	filePath=cocos2d::StringUtils::format("Element/Bullet/%s.xml",this->getCharacter()->getCString());
 
 
 	KTools* tool= KTools::create();
-	std::string key =tool->getKeycode(filePath);
-	int id=tool->checkMD5(filePath);
+	std::string key =tool->getKeycode(filePath.c_str());
+	int id=tool->checkMD5(filePath.c_str());
 
 	if(strcmp(key.c_str(),_delegate->KeyList[id])!=0){
 		//return;
 	}
 
 
-	tool->readXMLToArray(filePath,animationArray);
+	tool->readXMLToArray(filePath.c_str(),animationArray);
 
 	//init Attribute; & idleFrame
 
