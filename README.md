@@ -315,6 +315,9 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
 - `RankingLayer`: label ranking, path nameplate/banner/blink, score, group,
   dan tombol hero lokal memakai `StringUtils::format`/`std::string`; field
   tombol rank lama tetap `CCString`.
+- `HPBar`: path heart-effect, label kill/team, total kill, dan reward coin
+  lokal memakai `StringUtils::format`/`std::string`; field kill lama tetap
+  `CCString`.
 - `NetworkLayer`: komentar request list hero lama dan parsing response callback
   yang sudah tidak punya caller aktif dibersihkan; flow pemilihan hero tetap
   memakai daftar offline statis.
@@ -426,6 +429,8 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
   sambil menahan payload hero lama ke `GameLayer`.
 - `RankingLayer` melepas format string UI aktif dari
   `CCString::createWithFormat`, sambil menahan field pilihan hero lama.
+- `HPBar` melepas format string display/reward lokal dari
+  `CCString::createWithFormat` tanpa mengubah rumus kill, EXP, atau coin.
 
 1. **Tutup helper compat kecil yang masih lokal**
    - Target file: `Cocos2dx2Compat.h`, `ActionButton`, `HPBar`, `HudLayer`,

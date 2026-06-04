@@ -1,5 +1,6 @@
 #include "Characters.h"
 #include <cstdlib>
+#include <string>
 #include "HudLayer.h"
 USING_NS_CC;
 
@@ -366,7 +367,8 @@ void HPBar::loseHP(float percent){
 					_delegate->hearts-=1;
 
 					if(_delegate->_heartEffect){
-						SpriteFrame *frame=SpriteFrameCache::getInstance()->spriteFrameByName(CCString::createWithFormat("Heart_Effect_%02d.png",_delegate->hearts)->getCString());
+						std::string heartPath=cocos2d::StringUtils::format("Heart_Effect_%02d.png",_delegate->hearts);
+						SpriteFrame *frame=SpriteFrameCache::getInstance()->spriteFrameByName(heartPath);
 						_delegate->_heartEffect->setSpriteFrame(frame);
 					}
 
@@ -423,7 +425,8 @@ void HPBar::loseHP(float percent){
 						currentSlayer->hearts+=1;
 
 						if(currentSlayer->_heartEffect){
-							SpriteFrame *frame=SpriteFrameCache::getInstance()->spriteFrameByName(CCString::createWithFormat("Heart_Effect_%02d.png",currentSlayer->hearts)->getCString());
+							std::string heartPath=cocos2d::StringUtils::format("Heart_Effect_%02d.png",currentSlayer->hearts);
+							SpriteFrame *frame=SpriteFrameCache::getInstance()->spriteFrameByName(heartPath);
 							currentSlayer->_heartEffect->setSpriteFrame(frame);
 						}
 
@@ -442,7 +445,8 @@ void HPBar::loseHP(float percent){
 				if(strcmp(currentSlayer->getRole()->getCString(),"Flog")!=0){
 
 					int realKillNum=std::atoi(currentSlayer->getKillNum()->getCString())+1;
-					currentSlayer->setKillNum(CCString::createWithFormat("%d",realKillNum));
+					std::string realKillText=cocos2d::StringUtils::format("%d",realKillNum);
+					currentSlayer->setKillNum(CCString::create(realKillText));
 					_delegate->getDelegate()->setReport(currentSlayer->getCharacter()->getCString(),_delegate->getCharacter()->getCString(),currentSlayer->getKillNum());
 
 
@@ -456,10 +460,12 @@ void HPBar::loseHP(float percent){
 
 					if(strcmp(currentSlayer->getGroup()->getCString(),currentTeam)==0){
 						int teamKills = std::atoi(_delegate->getDelegate()->getHudLayer()->KonoLabel->getString().c_str()) + 1;
-						_delegate->getDelegate()->getHudLayer()->KonoLabel->setString(CCString::createWithFormat("%d",teamKills)->getCString());
+						std::string teamKillText=cocos2d::StringUtils::format("%d",teamKills);
+						_delegate->getDelegate()->getHudLayer()->KonoLabel->setString(teamKillText);
 					}else{
 						int teamKills = std::atoi(_delegate->getDelegate()->getHudLayer()->AkaLabel->getString().c_str()) + 1;
-						_delegate->getDelegate()->getHudLayer()->AkaLabel->setString(CCString::createWithFormat("%d",teamKills)->getCString());
+						std::string teamKillText=cocos2d::StringUtils::format("%d",teamKills);
+						_delegate->getDelegate()->getHudLayer()->AkaLabel->setString(teamKillText);
 					}
 					if(_delegate->getDelegate()->_isDuelMode &&
 						_delegate->getDelegate()->currentPlayer &&
@@ -472,7 +478,8 @@ void HPBar::loseHP(float percent){
 						strcmp(currentSlayer->getCharacter()->getCString(),"Roshi")!=0
 						){
 							int newValue=std::atoi(_delegate->getDelegate()->getTotalKills()->getCString())+1;
-							_delegate->getDelegate()->setTotalKills(CCString::createWithFormat("%d",newValue));
+							std::string totalKillText=cocos2d::StringUtils::format("%d",newValue);
+							_delegate->getDelegate()->setTotalKills(CCString::create(totalKillText));
 					}
 
 
@@ -506,10 +513,11 @@ void HPBar::loseHP(float percent){
 								_delegate->setCoinDisplay(1000);
 						}else{
 							if(_delegate->getDelegate()->_isHardCoreGame){
-								_delegate->getDelegate()->setCoin(CCString::createWithFormat("%d",50+(_delegate->getLV()-1)*10)->getCString());
+								std::string coinText=cocos2d::StringUtils::format("%d",50+(_delegate->getLV()-1)*10);
+								_delegate->getDelegate()->setCoin(coinText.c_str());
 								_delegate->setCoinDisplay(50+(_delegate->getLV()-1)*10);
 							}else{
-								_delegate->getDelegate()->setCoin(CCString::createWithFormat("%d",50)->getCString());
+								_delegate->getDelegate()->setCoin("50");
 								_delegate->setCoinDisplay(50);
 							}
 
@@ -519,7 +527,8 @@ void HPBar::loseHP(float percent){
 						_delegate->getDelegate()->getHudLayer()->setEXPLose(NULL);
 						std::string kl = _delegate->getDelegate()->getHudLayer()->killLabel->getString();
 						int kills = std::atoi(kl.c_str()) + 1;
-						_delegate->getDelegate()->getHudLayer()->killLabel->setString(CCString::createWithFormat("%d",kills)->getCString());
+						std::string killText=cocos2d::StringUtils::format("%d",kills);
+						_delegate->getDelegate()->getHudLayer()->killLabel->setString(killText);
 					}
 
 
@@ -564,15 +573,16 @@ void HPBar::loseHP(float percent){
 								if(strcmp(_delegate->getCharacter()->getCString(),"Han")==0||
 									strcmp(_delegate->getCharacter()->getCString(),"Roshi")==0
 									){
-										_delegate->getDelegate()->setCoin(CCString::createWithFormat("%d",850)->getCString());
+										_delegate->getDelegate()->setCoin("850");
 										_delegate->setCoinDisplay(850);
 								}else{
-									_delegate->getDelegate()->setCoin(CCString::createWithFormat("%d",25+(_delegate->getLV()-1)*10)->getCString());
+									std::string coinText=cocos2d::StringUtils::format("%d",25+(_delegate->getLV()-1)*10);
+									_delegate->getDelegate()->setCoin(coinText.c_str());
 									_delegate->setCoinDisplay(25+(_delegate->getLV()-1)*10);
 								}
 
 							}else{
-								_delegate->getDelegate()->setCoin(CCString::createWithFormat("%d",25)->getCString());
+								_delegate->getDelegate()->setCoin("25");
 								_delegate->setCoinDisplay(25);
 							}
 							_delegate->getDelegate()->getHudLayer()->setEXPLose(NULL);
