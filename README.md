@@ -312,6 +312,9 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
 - `LoadLayer`: path plist/texture preload, avatar loading, tips, dan checksum
   lokal memakai `StringUtils::format`/`std::string`; kontrak `tempHeros` lama
   tetap `CCArray`/`CCDictionary`.
+- `RankingLayer`: label ranking, path nameplate/banner/blink, score, group,
+  dan tombol hero lokal memakai `StringUtils::format`/`std::string`; field
+  tombol rank lama tetap `CCString`.
 - `NetworkLayer`: komentar request list hero lama dan parsing response callback
   yang sudah tidak punya caller aktif dibersihkan; flow pemilihan hero tetap
   memakai daftar offline statis.
@@ -421,6 +424,8 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
   tanpa menyentuh kontrak damage/buff di `ActionManager`.
 - `LoadLayer` melepas path preload aktif dari `CCString::createWithFormat`
   sambil menahan payload hero lama ke `GameLayer`.
+- `RankingLayer` melepas format string UI aktif dari
+  `CCString::createWithFormat`, sambil menahan field pilihan hero lama.
 
 1. **Tutup helper compat kecil yang masih lokal**
    - Target file: `Cocos2dx2Compat.h`, `ActionButton`, `HPBar`, `HudLayer`,

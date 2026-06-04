@@ -1,5 +1,6 @@
 #include "RankingLayer.h"
 #include <cstdlib>
+#include <string>
 #include "NetworkLayer.h"
 USING_NS_CC_EXT;
 using namespace CocosDenshion;
@@ -513,7 +514,7 @@ void RakingLayer::postRequest(int code,CCString* useChar/* =NULL */){
 						reply= ((CCString*)strings->objectForKey("RankingNull2"))->getCString();
 					}
 
-					rankingDetail=Label::createWithSystemFont(CCString::createWithFormat("%s",reply)->getCString(),FONT_TYPE,12);
+					rankingDetail=Label::createWithSystemFont(reply,FONT_TYPE,12);
 					rankingDetail->setAnchorPoint(Vec2(0,0.5f));
 					rankingDetail->setPosition(Vec2(ranking_bg->getPositionX()-ranking_bg->getContentSize().width/2 +20,ranking_bg->getPositionY()-ranking_bg->getContentSize().height/2+14));
 					ranking_layer->addChild(rankingDetail,500);
@@ -522,7 +523,8 @@ void RakingLayer::postRequest(int code,CCString* useChar/* =NULL */){
 					CCDictionary *strings = CCDictionary::createWithContentsOfFile("Element/strings.xml");
 					const char *reply = ((CCString*)strings->objectForKey("RankingDetail"))->getCString();
 					const char *reply2 = ((CCString*)strings->objectForKey("RankingDetail2"))->getCString();
-					rankingDetail=Label::createWithSystemFont(CCString::createWithFormat("%s %d %s",reply,sortNO,reply2)->getCString(),FONT_TYPE,12);
+					std::string detailText=cocos2d::StringUtils::format("%s %d %s",reply,sortNO,reply2);
+					rankingDetail=Label::createWithSystemFont(detailText,FONT_TYPE,12);
 					rankingDetail->setAnchorPoint(Vec2(0,0.5f));
 					rankingDetail->setPosition(Vec2(ranking_bg->getPositionX()-ranking_bg->getContentSize().width/2 +20,ranking_bg->getPositionY()-ranking_bg->getContentSize().height/2+14));
 					ranking_layer->addChild(rankingDetail,500);
@@ -616,14 +618,16 @@ void RakingLayer::postRequest(int code,CCString* useChar/* =NULL */){
 					num_icon->setPosition(Vec2(1,1));
 					screwItem->addChild(num_icon);
 				}else{
-					Label* numLabel=Label::createWithSystemFont(CCString::createWithFormat("%d",i)->getCString(),"????",12);
+					std::string rankText=cocos2d::StringUtils::format("%d",i);
+					Label* numLabel=Label::createWithSystemFont(rankText,"????",12);
 					numLabel->setPosition(Vec2(13,13));
 					screwItem->addChild(numLabel);
 				}
 
 				if(strcmp(npString.c_str(),"")!=0){
 
-					Sprite* nameplate=Sprite::createWithSpriteFrameName(CCString::createWithFormat("%s.png",npString.c_str())->getCString());
+					std::string nameplatePath=cocos2d::StringUtils::format("%s.png",npString.c_str());
+					Sprite* nameplate=Sprite::createWithSpriteFrameName(nameplatePath);
 					nameplate->setAnchorPoint(Vec2(0.5f,0));
 					nameplate->setPosition(Vec2(106,0));
 					screwItem->addChild(nameplate);
@@ -667,7 +671,8 @@ void RakingLayer::postRequest(int code,CCString* useChar/* =NULL */){
 						bannerPath="banner_green";
 					}
 
-					Sprite* nameBaner=Sprite::createWithSpriteFrameName(CCString::createWithFormat("%s.png",bannerPath)->getCString());
+					std::string bannerFramePath=cocos2d::StringUtils::format("%s.png",bannerPath);
+					Sprite* nameBaner=Sprite::createWithSpriteFrameName(bannerFramePath);
 					nameBaner->setAnchorPoint(Vec2(0.5f,0));
 					nameBaner->setPosition(Vec2(106,0));
 					screwItem->addChild(nameBaner);
@@ -687,8 +692,8 @@ void RakingLayer::postRequest(int code,CCString* useChar/* =NULL */){
 
 						while (i<7)
 						{
-							CCString* path=CCString::createWithFormat("banner_blink%d.png",i);
-							SpriteFrame* frame = SpriteFrameCache::getInstance()->getSpriteFrameByName(path->getCString());
+							std::string path=cocos2d::StringUtils::format("banner_blink%d.png",i);
+							SpriteFrame* frame = SpriteFrameCache::getInstance()->getSpriteFrameByName(path);
 							tempArray.pushBack(frame);
 
 
@@ -719,7 +724,8 @@ void RakingLayer::postRequest(int code,CCString* useChar/* =NULL */){
 
 
 
-				Label* user_score=Label::createWithSystemFont(CCString::createWithFormat("%d",score)->getCString(),FONT_TYPE,12);
+				std::string scoreText=cocos2d::StringUtils::format("%d",score);
+				Label* user_score=Label::createWithSystemFont(scoreText,FONT_TYPE,12);
 
 				user_score->setAnchorPoint(Vec2(0.5f,0));
 				user_score->setPosition(Vec2(214,5));
@@ -727,7 +733,7 @@ void RakingLayer::postRequest(int code,CCString* useChar/* =NULL */){
 
 
 				if(groupID!=0){
-					Label* group_Name=Label::createWithSystemFont(CCString::createWithFormat("%s",groupName.c_str())->getCString(),FONT_TYPE,12);
+					Label* group_Name=Label::createWithSystemFont(groupName,FONT_TYPE,12);
 
 					MenuItemLabel* item=MenuItemLabel::create(group_Name, CC_CALLBACK_1(RakingLayer::onSelectGroupBtn, this));
 
@@ -739,7 +745,7 @@ void RakingLayer::postRequest(int code,CCString* useChar/* =NULL */){
 					screwItem->setTag(groupID);
 
 				}else if(strcmp(groupName.c_str(),"")!=0 ){
-					Label* group_Name=Label::createWithSystemFont(CCString::createWithFormat("%s",groupName.c_str())->getCString(),FONT_TYPE,12);
+					Label* group_Name=Label::createWithSystemFont(groupName,FONT_TYPE,12);
 
 					group_Name->setAnchorPoint(Vec2(0.5f,0));
 					group_Name->setPosition(Vec2(304,5));
@@ -899,12 +905,12 @@ void RakingLayer::makeCharList(){
 	for(int i=0;i<num;i++){
 
 		const char* charName=heroList[i];
-		CCString* path=CCString::createWithFormat("%s_small.png",charName);
+		std::string path=cocos2d::StringUtils::format("%s_small.png",charName);
 
 
-		RankCharButton* char_btn=RankCharButton::create(path->getCString());
+		RankCharButton* char_btn=RankCharButton::create(path.c_str());
 		char_btn->setDelegate(this);
-		char_btn->setBtnType(CCString::createWithFormat("%s",charName));
+		char_btn->setBtnType(CCString::create(charName));
 		char_btn->setAnchorPoint(Vec2(0,0));
 		int row=int(floor(float(i)/8));
 		int column=i-8*row;
@@ -940,7 +946,7 @@ void RakingLayer::onSelectGroupBtn(Ref* sender){
 
 	CCDictionary *strings = CCDictionary::createWithContentsOfFile("Element/strings.xml");
 	const char *reply = ((CCString*)strings->objectForKey("RankingNull2"))->getCString();
-	rankingDetail=Label::createWithSystemFont(CCString::createWithFormat("%s",reply)->getCString(),FONT_TYPE,12);
+	rankingDetail=Label::createWithSystemFont(reply,FONT_TYPE,12);
 	rankingDetail->setAnchorPoint(Vec2(0,0.5f));
 	rankingDetail->setPosition(Vec2(ranking_bg->getPositionX()-ranking_bg->getContentSize().width/2 +20,ranking_bg->getPositionY()-ranking_bg->getContentSize().height/2+14));
 	ranking_layer->addChild(rankingDetail,500);
