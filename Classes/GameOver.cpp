@@ -513,7 +513,7 @@ void GameOver::listResult(){
 			this->addChild(upMenu,7);
 
 
-			detailRecord=CCString::createWithFormat("%02d:%02d,%s,%d,%d",_minute,_delegate->_second,_delegate->currentPlayer->getKillNum()->getCString(),_delegate->currentPlayer->_deadNum,_delegate->currentPlayer->_flogNum)->getCString();
+			detailRecord=cocos2d::StringUtils::format("%02d:%02d,%s,%d,%d",_minute,_delegate->_second,_delegate->currentPlayer->getKillNum()->getCString(),_delegate->currentPlayer->_deadNum,_delegate->currentPlayer->_flogNum);
 
 		}
 
@@ -548,9 +548,9 @@ void GameOver::listResult(){
 					tempWin=std::atoi(winNum->getCString())+1;
 				}
 
-				CCString* realWin=CCString::createWithFormat("%d",tempWin);
+				std::string realWin=cocos2d::StringUtils::format("%d",tempWin);
 				if(CError!=1){
-					tool->saveSQLite("CharRecord","name",resultChar->getCString(),"column1",(char*) realWin->getCString(),false);
+					tool->saveSQLite("CharRecord","name",resultChar->getCString(),"column1",(char*) realWin.c_str(),false);
 				}
 				//
 				if(_delegate->_isRandomChar && resultScore>=120 ){
@@ -592,9 +592,9 @@ void GameOver::listResult(){
 								tempWin=std::atoi(winNum->getCString())+1;
 							}
 
-							CCString* realWin=CCString::createWithFormat("%d",tempWin);
+							std::string realWin=cocos2d::StringUtils::format("%d",tempWin);
 							if(CError!=1){
-								tool->saveSQLite("CharRecord","name",hero->getCharacter()->getCString(),"column1",(char*) realWin->getCString(),false);
+								tool->saveSQLite("CharRecord","name",hero->getCharacter()->getCString(),"column1",(char*) realWin.c_str(),false);
 							}
 
 						}

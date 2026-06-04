@@ -300,6 +300,8 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
   lokal memakai string native/`StringUtils::format`; data SQLite tetap ditahan.
 - `StartMenu`: profile/nameplate point label dan path asset tombol nameplate
   lokal memakai `StringUtils::format`/`std::string`; coin SQLite tetap ditahan.
+- `GameOver`: `detailRecord` dan string angka win record aktif memakai
+  `StringUtils::format`/`std::string`, tanpa mengubah isi nilai SQLite.
 - `NetworkLayer`: komentar request list hero lama dan parsing response callback
   yang sudah tidak punya caller aktif dibersihkan; flow pemilihan hero tetap
   memakai daftar offline statis.
@@ -399,6 +401,8 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
   dan label UI lokal tanpa menyentuh record SQLite.
 - `StartMenu` nameplate UI lokal ikut mengurangi `CCString::createWithFormat`
   pada label/path asset, sambil menahan penyimpanan coin lama.
+- `GameOver` mulai melepas string record aktif dari `CCString::createWithFormat`
+  sambil mempertahankan format data SQLite lama.
 
 1. **Tutup helper compat kecil yang masih lokal**
    - Target file: `Cocos2dx2Compat.h`, `ActionButton`, `HPBar`, `HudLayer`,
