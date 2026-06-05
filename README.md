@@ -140,6 +140,10 @@ Alasan estimasi:
   lewat `cocos2d.h`/`CCDeprecated.h`; penghapusan total tipe deprecated ini
   adalah tahap data-structure modernisasi yang lebih besar setelah build final
   pengguna aman.
+- Event mini map `updateMap` dipindah dari `NotificationCenter` lama ke
+  `EventDispatcher::dispatchCustomEvent`/`addCustomEventListener`; event core
+  `acceptAttack` masih ditahan sebagai kontrak lifecycle gameplay yang lebih
+  besar.
 - UI perimeter berikutnya ikut dibersihkan dari `CCARRAY_FOREACH`:
   `SelectLayer`, `SkillLayer`, `GearLayer`, dan `GameOver` sekarang memakai
   loop indeks atau container STL lokal untuk iterator yang aman.

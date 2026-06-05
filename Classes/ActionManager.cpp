@@ -447,7 +447,7 @@ void NarutoSenki::ActionManager::update(float dt){
 		_delegate->reorderChild(this,-this->getPositionY());
 		//����minimap
 		if(strcmp(this->getRole()->getCString(),"Player")==0 || strcmp(this->getRole()->getCString(),"Com")==0){
-			NotificationCenter::getInstance()->postNotification("updateMap", this);
+			Director::getInstance()->getEventDispatcher()->dispatchCustomEvent("updateMap", this);
 		}
 
 	};
@@ -837,7 +837,7 @@ void NarutoSenki::ActionManager::acceptAttack(Ref* object){
 								  }
 
 								 
-								  NotificationCenter::getInstance()->postNotification("updateMap", this);
+								  Director::getInstance()->getEventDispatcher()->dispatchCustomEvent("updateMap", this);
 								  _delegate->reorderChild(this,-this->getPositionY());
 							  }
 							}
@@ -2749,7 +2749,7 @@ void NarutoSenki::ActionManager::setCommand(Node* sender,void* date){
 		}
 
 		this->setPosition(Vec2(tsPosX,tsPosY));
-		NotificationCenter::getInstance()->postNotification("updateMap", this);
+		Director::getInstance()->getEventDispatcher()->dispatchCustomEvent("updateMap", this);
 		
 		_delegate->reorderChild(this,-tsPosY);
 
@@ -2795,7 +2795,7 @@ void NarutoSenki::ActionManager::setCommand(Node* sender,void* date){
 		}
 
 		this->setPosition(Vec2(tsPosX,tsPosY));
-		NotificationCenter::getInstance()->postNotification("updateMap", this);
+		Director::getInstance()->getEventDispatcher()->dispatchCustomEvent("updateMap", this);
 
 		if(strcmp(this->getCharacter()->getCString(),"Yominuma")!=0){
 			_delegate->reorderChild(this,-tsPosY);
@@ -7680,7 +7680,7 @@ void NarutoSenki::ActionManager::dead(){
 	_actionState=ACTION_STATE_DEAD;	
 
 	if(strcmp(this->_role->getCString(),"Player")==0 ||  strcmp(this->_role->getCString(),"Com")==0){
-		NotificationCenter::getInstance()->postNotification("updateMap", this);
+		Director::getInstance()->getEventDispatcher()->dispatchCustomEvent("updateMap", this);
 	}
 
 

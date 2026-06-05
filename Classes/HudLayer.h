@@ -29,13 +29,14 @@ public:
 
 	CC_SYNTHESIZE(unsigned int,_charNO,CharNO);
 	static MiniIcon*	create(const char *szImage,bool isNotification);
-	void	updateMap(Ref* sender);
+	void	updateMap(EventCustom* event);
 	void	updateState();
 
 	void	updatePosition(Vec2 location);
 	virtual bool init(const char *szImage,bool isNotification );
 
 	Layer*	_delegate;
+	EventListenerCustom* _updateMapListener;
 
 };
 

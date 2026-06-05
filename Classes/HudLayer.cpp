@@ -11,14 +11,16 @@ using namespace CocosDenshion;
 
 MiniIcon::MiniIcon(void)
 {
-
+	_updateMapListener=nullptr;
 }
 
 
 MiniIcon::~MiniIcon(void)
 {
-
-	NotificationCenter::getInstance()->removeObserver(this,"updateMap");
+	if(_updateMapListener){
+		Director::getInstance()->getEventDispatcher()->removeEventListener(_updateMapListener);
+		_updateMapListener=nullptr;
+	}
 }
 
 
@@ -32,7 +34,9 @@ bool MiniIcon::init(const char *szImage,bool isNotification){
 
 		if(isNotification){
 			this->setAnchorPoint(Vec2(0.5f,0));
-			NotificationCenter::getInstance()->addObserver(this, static_cast<cocos2d::SEL_CallFuncO>(&MiniIcon::updateMap), "updateMap", nullptr);
+			_updateMapListener=Director::getInstance()->getEventDispatcher()->addCustomEventListener("updateMap", [this](EventCustom* event) {
+				this->updateMap(event);
+			});
 		}else{
 			this->setAnchorPoint(Vec2(0.5f,0.5f));
 
@@ -46,8 +50,14 @@ bool MiniIcon::init(const char *szImage,bool isNotification){
 }
 
 
-void MiniIcon::updateMap(Ref* sender){
-	NarutoSenki::ActionManager* poster=(NarutoSenki::ActionManager*) sender;
+void MiniIcon::updateMap(EventCustom* event){
+	if(!event){
+		return;
+	}
+	NarutoSenki::ActionManager* poster=(NarutoSenki::ActionManager*) event->getUserData();
+	if(!poster){
+		return;
+	}
 
 	if(this->getCharNO()==poster->getCharNO()){
 		if(poster->getActionState()==ACTION_STATE_DEAD || poster->_isVisable==false){
