@@ -1574,7 +1574,7 @@ void GameLayer::setOugis(Node* sender){
 			KTools::playEffectOptimized(ougisPath.c_str(), 15, 3);
 		}
 
-		_hudLayer->setOugis(Sender->getCharacter(),Sender->getGroup());
+		_hudLayer->setOugis(Sender->getCharacter()->getCString(),Sender->getGroup()->getCString());
 	}
 
 

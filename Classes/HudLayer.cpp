@@ -1358,7 +1358,7 @@ void HudLayer::costCKR(int value,bool isCKR2){
 
 }
 
-void HudLayer::setOugis(CCString* character,CCString* group){
+void HudLayer::setOugis(const char* character,const char* group){
 
 	if(!ougisLayer){
 		const auto& childArray = this->getChildren();
@@ -1384,7 +1384,7 @@ void HudLayer::setOugis(CCString* character,CCString* group){
 
 		}
 
-		if(strcmp(group->getCString(),"Konoha")==0){
+		if(strcmp(group,"Konoha")==0){
 			startPosY=0;
 			startPosX=-48;
 			endPosX=0;
@@ -1416,7 +1416,7 @@ void HudLayer::setOugis(CCString* character,CCString* group){
 		Action* tempAction=Animate::create(tempAnimation);
 
 		Sprite* CutLine=Sprite::createWithSpriteFrameName("CutLine_01.png");
-		if(strcmp(group->getCString(),"Konoha")==0){
+		if(strcmp(group,"Konoha")==0){
 			CutLine->setAnchorPoint(Vec2(0,0));
 			CutLine->setPosition(Vec2(-48,0));
 			CutLine->runAction(tempAction);
@@ -1432,7 +1432,7 @@ void HudLayer::setOugis(CCString* character,CCString* group){
 		ougisLayer->addChild(CutLine);
 
 		Sprite* CutLineUP=Sprite::createWithSpriteFrameName("CutLineUP.png");
-		if(strcmp(group->getCString(),"Konoha")==0){
+		if(strcmp(group,"Konoha")==0){
 			CutLineUP->setAnchorPoint(Vec2(0,0));
 			CutLineUP->setPosition(Vec2(-48,2));
 			CutLineUP->runAction(MoveTo::create(0.3f,Vec2(-1,1)));
@@ -1447,9 +1447,9 @@ void HudLayer::setOugis(CCString* character,CCString* group){
 
 
 
-		std::string cutInPath=cocos2d::StringUtils::format("%s_CutIn.png",character->getCString());
+		std::string cutInPath=cocos2d::StringUtils::format("%s_CutIn.png",character);
 		Sprite* CutIn=Sprite::createWithSpriteFrameName(cutInPath);
-		if(strcmp(group->getCString(),"Konoha")==0){
+		if(strcmp(group,"Konoha")==0){
 			CutIn->setAnchorPoint(Vec2(0,0));
 			CutIn->setPosition(Vec2(-200,10));
 			CutIn->runAction(MoveTo::create(0.3f,Vec2(0,10)));
@@ -1463,7 +1463,7 @@ void HudLayer::setOugis(CCString* character,CCString* group){
 
 
 		Sprite* CutLineDown=Sprite::createWithSpriteFrameName("CutLineDown.png");
-		if(strcmp(group->getCString(),"Konoha")==0){
+		if(strcmp(group,"Konoha")==0){
 			CutLineDown->setAnchorPoint(Vec2(0,0));
 			CutLineDown->setPosition(Vec2(-48,0));
 			CutLineDown->runAction(MoveTo::create(0.3f,Vec2(0,0)));

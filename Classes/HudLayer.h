@@ -152,7 +152,7 @@ public:
 	virtual bool    getOugisEnable(bool isCKR2);
 	
 	Layer* ougisLayer;
-	void setOugis(CCString* character,CCString* group);
+	void setOugis(const char* character,const char* group);
 	void removeOugis(Node* sender);
 
 	bool	_isAllButtonLocked;

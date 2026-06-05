@@ -308,6 +308,8 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
   `CCArray`/`CCDictionary` ke `std::vector<HudReportEntry>`.
 - `HudLayer`/`GameLayer`: API report HUD tidak lagi menerima `CCString*`;
   caller mengirim `const char*` kill count dari core player.
+- `HudLayer`/`GameLayer`: API cut-in ougis HUD tidak lagi menerima
+  `CCString*`; caller mengirim nama karakter/group sebagai `const char*`.
 - `GameLayer`: path cleanup sprite frame, battle music, dan ougis effect lokal
   memakai `StringUtils::format`/`std::string` tanpa mengubah state gameplay.
 - `SkillLayer`: constructor tombol select, path intro voice, dan label bond
@@ -1053,6 +1055,9 @@ Catatan progress terbaru:
 - `GameLayer::setReport` dan `HudLayer::setReport` memakai `const char*`
   untuk kill count report, sehingga HUD tidak lagi menerima pointer
   `CCString*` dari core player untuk tampilan report.
+- `HudLayer::setOugis` memakai `const char*` untuk nama karakter dan group
+  cut-in, sehingga HUD cut-in tidak lagi bergantung pada pointer `CCString*`
+  dari `ActionManager`.
 - `SelectLayer`, `SkillLayer`, `GearLayer`, dan `GameOver` ikut lepas dari
   `CCARRAY_FOREACH` aktif. Perubahan ini hanya mengganti iterator lokal pada
   daftar select button, gear, result character, dan rematch handoff tanpa
