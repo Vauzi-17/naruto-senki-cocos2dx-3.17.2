@@ -134,6 +134,12 @@ Alasan estimasi:
 - Sisa teks helper compat sequence di komentar lama `GameLayer` dibersihkan,
   dan pemakaian `callfuncO_selector` aktif di `Element`/`HudLayer` diganti ke
   cast `SEL_CallFuncO` eksplisit.
+- Catatan batas validasi: source aktif sudah lepas dari nama alias lama `CC*`,
+  tetapi beberapa kontrak data masih memakai tipe deprecated cocos2d-x 3.x
+  bernama `__Array`, `__Dictionary`, dan `__String`. Tipe ini masih tersedia
+  lewat `cocos2d.h`/`CCDeprecated.h`; penghapusan total tipe deprecated ini
+  adalah tahap data-structure modernisasi yang lebih besar setelah build final
+  pengguna aman.
 - UI perimeter berikutnya ikut dibersihkan dari `CCARRAY_FOREACH`:
   `SelectLayer`, `SkillLayer`, `GearLayer`, dan `GameOver` sekarang memakai
   loop indeks atau container STL lokal untuk iterator yang aman.
