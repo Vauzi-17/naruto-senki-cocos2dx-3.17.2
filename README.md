@@ -304,7 +304,8 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
 - `HudLayer`: start splash, display buff, report sprite, dan cut-in ougis lokal
   ikut memakai string 3.x/native; dictionary report dan CKR tetap ditahan.
 - `HudLayer`: render report cache membaca nilai dictionary lama ke
-  `std::string` lokal; struktur queue report tetap `CCArray`/`CCDictionary`.
+  `std::string` lokal, lalu queue report lokal dipindah dari
+  `CCArray`/`CCDictionary` ke `std::vector<HudReportEntry>`.
 - `GameLayer`: path cleanup sprite frame, battle music, dan ougis effect lokal
   memakai `StringUtils::format`/`std::string` tanpa mengubah state gameplay.
 - `SkillLayer`: constructor tombol select, path intro voice, dan label bond
@@ -1044,6 +1045,9 @@ Catatan progress terbaru:
 - `HudLayer` melepas container icon tower mini map `_towerIconArray` dari
   retained `CCArray*` ke `std::vector<MiniIcon*>`; queue report lama tetap
   `CCArray`/`CCDictionary`.
+- `HudLayer` melepas queue report lokal `_reportListArray` dari
+  `CCArray`/`CCDictionary` ke `std::vector<HudReportEntry>`; sisa `CCString`
+  di file ini tinggal update CKR/CKR2 milik core player.
 - `SelectLayer`, `SkillLayer`, `GearLayer`, dan `GameOver` ikut lepas dari
   `CCARRAY_FOREACH` aktif. Perubahan ini hanya mengganti iterator lokal pada
   daftar select button, gear, result character, dan rematch handoff tanpa

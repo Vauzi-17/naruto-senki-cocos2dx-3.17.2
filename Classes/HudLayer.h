@@ -7,11 +7,19 @@
 #include "Defines.h"
 #include "ActionButton.h"
 #include "SimpleAudioEngine.h"
+#include <string>
 #include <vector>
 
 USING_NS_CC;
 
 class GameLayer;
+
+struct HudReportEntry {
+	std::string name1;
+	std::string name2;
+	std::string kills;
+	bool isDisplay;
+};
 
 
 class MiniIcon: public Sprite{
@@ -75,7 +83,7 @@ public:
 	Sprite* reportSprite;
 	
 
-	CC_SYNTHESIZE(CCArray*,_reportListArray ,ReportListArray);
+	std::vector<HudReportEntry> _reportListArray;
 	int _buffCount;
 
 	LabelBMFont*		hpLabel;

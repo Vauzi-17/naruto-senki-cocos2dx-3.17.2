@@ -95,7 +95,6 @@ HudLayer::HudLayer(void)
 	_joyStick=nullptr;
 
 
-	_reportListArray=nullptr;
 	_buffCount=0;
 	reportSPCSprite=nullptr;
 
@@ -142,7 +141,6 @@ void HudLayer::onExit(){
 	Layer::onExit();
 	if(_delegate->_isExiting){
 
-	CC_SAFE_RELEASE(_reportListArray);
 	}
 };
 
@@ -899,25 +897,20 @@ bool HudLayer::offCoin(const char* value){
 
 void HudLayer::setReport(const char* name1, const char* name2,CCString* killNum){
 	float length;
+	HudReportEntry entry;
+	entry.name1=name1 ? name1 : "";
+	entry.name2=name2 ? name2 : "";
+	entry.kills=killNum ? killNum->getCString() : "";
+	entry.isDisplay=false;
 
-	if(!_reportListArray){
-		_reportListArray=CCArray::create();
-		_reportListArray->retain();
-	}else if(_reportListArray->count()>0){
-		CCDictionary* dic=CCDictionary::create();
-		dic->setObject(CCString::create(name1),"name1");
-		dic->setObject(CCString::create(name2),"name2");
-		dic->setObject(CCString::create("1"),"num");
-		dic->setObject(killNum,"kills");
-		_reportListArray->addObject(dic);
+	if(!_reportListArray.empty()){
+		_reportListArray.push_back(entry);
 		return;
 	}
 
-
-    reportSprite=this->createReport(name1,name2,length);
+    reportSprite=this->createReport(entry.name1.c_str(),entry.name2.c_str(),length);
 	reportSprite->setPosition(Vec2(winSize.width/2-length/2,winSize.height-80));
 	this->addChild(reportSprite,500);
-
 
 	ActionInterval*  su=ScaleBy::create(0.2f,1.0f);
 	FiniteTimeAction* call=CallFunc::create(CC_CALLBACK_0(HudLayer::setReportCache, this));
@@ -925,18 +918,9 @@ void HudLayer::setReport(const char* name1, const char* name2,CCString* killNum)
 	Action* seq=Sequence::create(su,su->reverse(),delay,call,nullptr);
 	reportSprite->runAction(seq);
 
-	CCDictionary* dic=CCDictionary::create();
-	dic->setObject(CCString::create(name1),"name1");
-	dic->setObject(CCString::create(name2),"name2");
-	dic->setObject(CCString::create("1"),"num");
-	dic->setObject(killNum,"kills");
-	dic->setObject(CCString::create("True"),"isDisplay");
-	_reportListArray->addObject(dic);
-
-
-
+	entry.isDisplay=true;
+	_reportListArray.push_back(entry);
 }
-
 
 void HudLayer::setBuffDisplay(const char* buffName, float buffStayTime){
 
@@ -1081,22 +1065,10 @@ void HudLayer::updateSPCReprot(float dt){
 }
 
 void HudLayer::setReportCache(){
-	reportSprite->removeFromParent();
-	Ref* pObject;
-
-	for(unsigned int reportIndex=0; reportIndex<_reportListArray->count(); ++reportIndex){
-		pObject=_reportListArray->objectAtIndex(reportIndex);
-		CCDictionary* tempdict=(CCDictionary *) pObject;
-		std::string isDisplay=tempdict->valueForKey("isDisplay")->getCString();
-
-		if(strcmp(isDisplay.c_str(),"True")!=0){
-
-			std::string name1=tempdict->valueForKey("name1")->getCString();
-			std::string name2=tempdict->valueForKey("name2")->getCString();
-			std::string killnum=tempdict->valueForKey("kills")->getCString();
-
+	for(HudReportEntry& entry : _reportListArray){
+		if(!entry.isDisplay){
 			float length;
-			reportSprite=this->createReport(name1.c_str(),name2.c_str(),length);
+			reportSprite=this->createReport(entry.name1.c_str(),entry.name2.c_str(),length);
 			reportSprite->setPosition(Vec2(winSize.width/2-length/2,winSize.height-80));
 			this->addChild(reportSprite,500);
 
@@ -1104,36 +1076,26 @@ void HudLayer::setReportCache(){
 			FiniteTimeAction* call=CallFunc::create(CC_CALLBACK_0(HudLayer::setReportCache, this));
 			DelayTime* delay=DelayTime::create(2.0f);
 			Action* seq=Sequence::create(su,su->reverse(),delay,call,nullptr);
-
 			reportSprite->runAction(seq);
 
-
-			if(strcmp(name2.c_str(),"Tower")!=0){
-				Ref* pObject2;
+			if(strcmp(entry.name2.c_str(),"Tower")!=0){
 				int num2=0;
-				for(unsigned int reportIndex2=0; reportIndex2<_reportListArray->count(); ++reportIndex2){
-					pObject2=_reportListArray->objectAtIndex(reportIndex2);
-					CCDictionary* tempdict2=(CCDictionary *) pObject2;
-					std::string tempName=tempdict2->valueForKey("name1")->getCString();
-					std::string tempName2=tempdict2->valueForKey("name2")->getCString();
-					std::string isDisplay2=tempdict2->valueForKey("isDisplay")->getCString();
-
-					if(strcmp(tempName.c_str(),name1.c_str())==0 &&
-						strcmp(tempName2.c_str(),"Tower")!=0 &&
-						strcmp(isDisplay2.c_str(),"True")==0
+				for(const HudReportEntry& cachedEntry : _reportListArray){
+					if(strcmp(cachedEntry.name1.c_str(),entry.name1.c_str())==0 &&
+						strcmp(cachedEntry.name2.c_str(),"Tower")!=0 &&
+						cachedEntry.isDisplay
 						){
 						num2+=1;
 					}
 				}
 
-				// �����ɱ
+				// legacy multi-kill announcement
 				if(num2==1){
-
 					if(reportSPCSprite){
 						reportSPCSprite->stopAllActions();
 						reportSPCSprite->removeFromParent();
 					}
-					reportSPCSprite=this->createSPCReport(killnum.c_str(),num2);
+					reportSPCSprite=this->createSPCReport(entry.kills.c_str(),num2);
 					reportSPCSprite->setPosition(Vec2(winSize.width/2,winSize.height-115));
 					this->addChild(reportSPCSprite,500);
 					FadeIn* fn=FadeIn::create(0.8f);
@@ -1144,13 +1106,12 @@ void HudLayer::setReportCache(){
 					Action* seq2=Sequence::create(sp,delay2,call2,nullptr);
 					reportSPCSprite->runAction(seq2);
 				}else if(num2>=2){
-
 					if(reportSPCSprite){
 						reportSPCSprite->stopAllActions();
 						reportSPCSprite->removeFromParent();
 					}
 
-					reportSPCSprite=this->createSPCReport(killnum.c_str(),num2);
+					reportSPCSprite=this->createSPCReport(entry.kills.c_str(),num2);
 					reportSPCSprite->setScale(2.0);
 					reportSPCSprite->setPosition(Vec2(winSize.width/2,winSize.height-105));
 					this->addChild(reportSPCSprite,500);
@@ -1164,24 +1125,14 @@ void HudLayer::setReportCache(){
 
 					this->schedule(CC_SCHEDULE_SELECTOR(HudLayer::updateSPCReprot),0.2f);
 				}
-
-
 			}
 
-			tempdict->setObject(CCString::create("True"),"isDisplay");
+			entry.isDisplay=true;
 			return;
-
-
 		}
 	}
 
-
-	if(_reportListArray){
-
-		_reportListArray->removeAllObjects();
-		_reportListArray=nullptr;
-	}
-
+	_reportListArray.clear();
 }
 Sprite* HudLayer::createSPCReport(const char* killNum,int num){
 
