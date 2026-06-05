@@ -3,6 +3,7 @@
 #include <string>
 #include "GameLayer.h"
 #include "Characters.h"
+#include "HeroPayload.h"
 
 USING_NS_CC_EXT;
 using namespace CocosDenshion;
@@ -17,14 +18,6 @@ static const char* gResultHeroList[] = {
 	"Hiruzen","Kiba","Jugo","Lee"
 };
 
-static void resultAddHero(__Array* heros, const char* character, const char* role, const char* group)
-{
-	__Dictionary* dic = __Dictionary::create();
-	dic->setObject(__String::create(character), "character");
-	dic->setObject(__String::create(role), "role");
-	dic->setObject(__String::create(group), "group");
-	heros->addObject(dic);
-}
 GameOver::GameOver(void)
 {
 	exitLayer=nullptr;
@@ -867,7 +860,7 @@ void GameOver::onChangeCharConfirm(Ref* sender){
 		}else if(_delegate->_isDuelMode && !changeEnemyPick.empty() && strcmp(hero->getGroup()->getCString(),_delegate->currentPlayer->getGroup()->getCString())!=0){
 			character=changeEnemyPick.c_str();
 		}
-		resultAddHero(rematchHeros,character,hero->getRole()->getCString(),hero->getGroup()->getCString());
+		NarutoSenkiPayload::addHero(rematchHeros,character,hero->getRole()->getCString(),hero->getGroup()->getCString());
 	}
 	rematchHeros->retain();
 	CC_SAFE_RELEASE(_delegate->_rematchHerosOverride);

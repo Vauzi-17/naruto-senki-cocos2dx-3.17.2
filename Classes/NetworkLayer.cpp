@@ -1,6 +1,7 @@
 #include "NetworkLayer.h"
 #include "Defines.h"
 #include "StartMenu.h"
+#include "HeroPayload.h"
 #include <algorithm>
 #include <string>
 USING_NS_CC_EXT;
@@ -68,14 +69,6 @@ static bool networkArrayHasHero(const std::vector<std::string>& list, const char
 	return false;
 }
 
-static void networkAddHero(__Array* heros, const char* character, const char* role, const char* group)
-{
-	__Dictionary* dic=__Dictionary::create();
-	dic->setObject(__String::create(character),"character");
-	dic->setObject(__String::create(role),"role");
-	dic->setObject(__String::create(group),"group");
-	heros->addObject(dic);
-}
 /*
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 #include <jni.h>
@@ -1158,7 +1151,7 @@ void NetworkLayer::onGameStart(Ref* sender){
 				playerName="Naruto";
 			}
 			used.push_back(playerName);
-			networkAddHero(tempHeros,playerName,"Player","Konoha");
+			NarutoSenkiPayload::addHero(tempHeros,playerName,"Player","Konoha");
 
 			for(int i=1;i<teamSize;i++){
 				const char* heroName=NULL;
@@ -1172,7 +1165,7 @@ void NetworkLayer::onGameStart(Ref* sender){
 				}else{
 					used.push_back(heroName);
 				}
-				networkAddHero(tempHeros,heroName,"Com","Konoha");
+				NarutoSenkiPayload::addHero(tempHeros,heroName,"Com","Konoha");
 			}
 
 			for(int i=0;i<teamSize;i++){
@@ -1187,7 +1180,7 @@ void NetworkLayer::onGameStart(Ref* sender){
 				}else{
 					used.push_back(heroName);
 				}
-				networkAddHero(tempHeros,heroName,"Com","Akatsuki");
+				NarutoSenkiPayload::addHero(tempHeros,heroName,"Com","Akatsuki");
 			}
 
 			Scene* loadScene=Scene::create();
@@ -1261,7 +1254,7 @@ void NetworkLayer::onGameStart(Ref* sender){
 
 
 		__Array* tempHeros=__Array::create();
-		networkAddHero(tempHeros,tmpChar.c_str(),"Player",groupName);
+		NarutoSenkiPayload::addHero(tempHeros,tmpChar.c_str(),"Player",groupName);
 
 
 
@@ -1311,7 +1304,7 @@ void NetworkLayer::onGameStart(Ref* sender){
 				}
 
 				const char* comGroup=zhenying>0 ? "Konoha" : "Akatsuki";
-				networkAddHero(tempHeros,hero.c_str(),"Com",comGroup);
+				NarutoSenkiPayload::addHero(tempHeros,hero.c_str(),"Com",comGroup);
 
 
 			}else{
@@ -1325,7 +1318,7 @@ void NetworkLayer::onGameStart(Ref* sender){
 				std::string hero=realHero[index];
 
 				const char* comGroup=zhenying>0 ? "Akatsuki" : "Konoha";
-				networkAddHero(tempHeros,hero.c_str(),"Com",comGroup);
+				NarutoSenkiPayload::addHero(tempHeros,hero.c_str(),"Com",comGroup);
 				realHero.erase(realHero.begin()+index);
 
 			}

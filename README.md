@@ -103,10 +103,10 @@ Alasan estimasi:
   memakai `std::vector<std::string>`; `CCArray`/`CCDictionary` tetap hanya
   dipakai sebagai payload akhir ke `LoadLayer`.
 - Payload non-training start battle `NetworkLayer` sekarang memakai helper
-  `networkAddHero(...)`, sehingga blok lokal tidak lagi membuat
+  payload bersama, sehingga blok lokal tidak lagi membuat
   `CCDictionary`/`CCString` manual untuk player dan COM.
 - Payload random roster `StartMenu` untuk mode training/hard-core sekarang
-  dibangun lewat helper `trainingAddHero(...)`, sehingga konstruksi
+  dibangun lewat helper payload bersama, sehingga konstruksi
   `CCString`/`CCDictionary` manual di blok roster lokal ikut hilang.
 - Cast gear string lokal di `GearLayer`, `HudLayer`, dan `GameOver` memakai
   `__String*` 3.x langsung; container gear lama tetap dipertahankan di core.
@@ -154,6 +154,10 @@ Alasan estimasi:
 - Payload player awal di `SelectLayer` sekarang dibangun lewat helper payload
   yang sama dengan roster random, sehingga string/dictionary lokal kecil di
   start battle training ikut hilang tanpa mengubah format `tempHeros`.
+- Helper payload hero scene awal/result (`StartMenu`, `NetworkLayer`,
+  `SelectLayer`, dan `GameOver`) dikonsolidasikan ke `HeroPayload.h`, sehingga
+  kontrak `__Array`/`__Dictionary`/`__String` lama tetap ada tetapi tidak lagi
+  tersebar sebagai helper duplikat di beberapa scene.
 - Area HUD gameplay yang lebih dekat runtime ikut dibersihkan:
   `HudLayer`/`HPBar` tidak lagi memakai `CCARRAY_FOREACH` aktif untuk map icon,
   gear button, report queue, enemy HP, dan pengecekan reward/share team.
@@ -293,8 +297,10 @@ include `Cocos2dx2Compat.h` juga sudah dilepas dari CMake dan project Win32,
 lalu file compat kosong tersebut dihapus. Area
 UI/menu, HUD, parser XML lokal, `Element`, dan `ActionManager` sudah lepas dari
 alias source lama `CCArray`, `CCDictionary`, `CCString`, dan
-`CCARRAY_FOREACH`; pekerjaan berikutnya adalah validasi build Android/Win32
-pengguna serta audit final konfigurasi build setelah compat bridge dihapus.
+`CCARRAY_FOREACH`; helper payload hero scene awal/result juga sudah
+dikonsolidasikan ke satu header kecil. Pekerjaan berikutnya adalah validasi
+build Android/Win32 pengguna serta audit final konfigurasi build setelah compat
+bridge dihapus.
 
 Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
 
@@ -381,7 +387,7 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
   dari `CCArray`/`CCString` lokal ke `std::vector<std::string>`; payload
   `tempHeros` ke loader tetap `CCArray`/`CCDictionary`.
 - `StartMenu`: payload random roster training/hard-core sekarang memakai helper
-  `trainingAddHero(...)`, sehingga blok lokal tidak lagi membuat
+  payload bersama, sehingga blok lokal tidak lagi membuat
   `CCDictionary`/`CCString` manual untuk setiap hero.
 - `GameOver`: `detailRecord` dan string angka win record aktif memakai
   `StringUtils::format`/`std::string`, tanpa mengubah isi nilai SQLite.
@@ -399,8 +405,8 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
   retained `CCArray*` ke `std::vector<SelectButton*>`; payload hero ke loader
   tetap `CCArray`/`CCDictionary`.
 - `SelectLayer`: payload player awal pada start battle training memakai helper
-  `selectAddHero(...)`, sehingga `CCString`/`CCDictionary` lokal kecil tidak
-  lagi dibuat manual sebelum payload `tempHeros`.
+  payload bersama, sehingga `CCString`/`CCDictionary` lokal kecil tidak lagi
+  dibuat manual sebelum payload `tempHeros`.
 - `NetworkLayer`: container tombol UI lokal `selectArray` dipindah dari
   retained `CCArray*` ke `std::vector<SelectButton*>`; `_selectList` nama hero
   dan payload loader lama tetap `CCArray`. Caller `SkillLayer` yang mereset
@@ -411,6 +417,9 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
 - `NetworkLayer`: daftar hero cadangan lokal pada flow start battle memakai
   `std::vector<std::string>`; payload `tempHeros` ke `LoadLayer` tetap
   memakai kontrak lama agar perubahan tidak melebar ke gameplay core.
+- `StartMenu`/`NetworkLayer`/`SelectLayer`/`GameOver`: helper payload hero lama
+  yang duplikatif dikonsolidasikan ke `HeroPayload.h`; format payload loader
+  dan rematch tetap sama.
 - `NetworkLayer`: path tombol select, preview hero, map preview/label, dan slot
   team training lokal memakai `StringUtils::format`/`std::string`; payload hero
   ke loader tetap `CCString`/`CCArray`.

@@ -149,6 +149,9 @@
     <ClInclude Include="..\Classes\HPBar.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="..\Classes\HeroPayload.h">
+      <Filter>src</Filter>
+    </ClInclude>
     <ClInclude Include="..\Classes\HudLayer.h">
       <Filter>src</Filter>
     </ClInclude>

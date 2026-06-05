@@ -1,6 +1,7 @@
 #include "SelectLayer.h"
 #include "Defines.h"
 #include "StartMenu.h"
+#include "HeroPayload.h"
 #include <string>
 #include <vector>
 USING_NS_CC_EXT;
@@ -53,14 +54,6 @@ static const char* selectPickHero(std::vector<std::string>& used, const char** a
 	return allHeroes[0];
 }
 
-static void selectAddHero(__Array* heros, const char* character, const char* role, const char* group)
-{
-	__Dictionary* dic=__Dictionary::create();
-	dic->setObject(__String::create(character),"character");
-	dic->setObject(__String::create(role),"role");
-	dic->setObject(__String::create(group),"group");
-	heros->addObject(dic);
-}
 
 SelectLayer::SelectLayer(void)
 {
@@ -376,7 +369,7 @@ void SelectLayer::onGameStart(Ref* sender){
 
 
 		__Array* tempHeros=__Array::create();
-		selectAddHero(tempHeros,_selectHero,"Player","Konoha");
+		NarutoSenkiPayload::addHero(tempHeros,_selectHero,"Player","Konoha");
 
 
 
@@ -394,12 +387,12 @@ void SelectLayer::onGameStart(Ref* sender){
 
 		for(int i=1;i<teamSize;i++){
 			const char* heroName=selectPickHero(used,(const char**)heroList,num,teamPreset,sizeof(teamPreset)/sizeof(char*),i-1,_trainingRandomTeam);
-			selectAddHero(tempHeros,heroName,"Com","Konoha");
+			NarutoSenkiPayload::addHero(tempHeros,heroName,"Com","Konoha");
 		}
 
 		for(int i=0;i<teamSize;i++){
 			const char* heroName=selectPickHero(used,(const char**)heroList,num,enemyPreset,sizeof(enemyPreset)/sizeof(char*),i,_trainingRandomEnemy);
-			selectAddHero(tempHeros,heroName,"Com","Akatsuki");
+			NarutoSenkiPayload::addHero(tempHeros,heroName,"Com","Akatsuki");
 		}
 
 
