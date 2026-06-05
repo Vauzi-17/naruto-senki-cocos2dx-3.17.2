@@ -6,14 +6,14 @@ USING_NS_CC;
 
 namespace
 {
-CCString* createElementIntString(int value)
+__String* createElementIntString(int value)
 {
-	return CCString::create(cocos2d::StringUtils::format("%d", value));
+	return __String::create(cocos2d::StringUtils::format("%d", value));
 }
 
-CCString* createElementFloatString(float value)
+__String* createElementFloatString(float value)
 {
-	return CCString::create(cocos2d::StringUtils::format("%f", value));
+	return __String::create(cocos2d::StringUtils::format("%f", value));
 }
 }
 
@@ -69,13 +69,13 @@ bool HeroElement::init(){
 
 };
 
-void HeroElement::setID(CCString* character,CCString* role,CCString* group){
+void HeroElement::setID(__String* character,__String* role,__String* group){
 
 	this->setCharacter(character);
 	this->setRole(role);
 	this->setGroup(group);
 
-	CCArray* animationArray=CCArray::create();
+	__Array* animationArray=__Array::create();
 	std::string filePath;
 
 	KTools* tool= KTools::create();
@@ -99,11 +99,11 @@ void HeroElement::setID(CCString* character,CCString* role,CCString* group){
 
 	SpriteFrame* firstFrame=NULL;
 	if(animationArray->count()>0){
-		CCArray* firstAction=(CCArray*)animationArray->objectAtIndex(0);
+		__Array* firstAction=(__Array*)animationArray->objectAtIndex(0);
 		if(firstAction && firstAction->count()>1){
-			CCArray* firstFrames=(CCArray*)firstAction->objectAtIndex(1);
+			__Array* firstFrames=(__Array*)firstAction->objectAtIndex(1);
 			if(firstFrames && firstFrames->count()>0){
-				CCDictionary* firstFrameDict=(CCDictionary*)firstFrames->objectAtIndex(0);
+				__Dictionary* firstFrameDict=(__Dictionary*)firstFrames->objectAtIndex(0);
 				const char* firstFrameName=firstFrameDict->valueForKey("frameName")->getCString();
 				firstFrame=SpriteFrameCache::getInstance()->spriteFrameByName(firstFrameName);
 			}
@@ -116,9 +116,9 @@ void HeroElement::setID(CCString* character,CCString* role,CCString* group){
 
 	//init Attribute; & indleFrame
 
-	CCArray* tmpAction=(CCArray*)(animationArray->objectAtIndex(0));
-	CCArray* tmpDate=(CCArray *)(tmpAction->objectAtIndex(0));
-	idleArray=(CCArray*)(tmpAction->objectAtIndex(1));
+	__Array* tmpAction=(__Array*)(animationArray->objectAtIndex(0));
+	__Array* tmpDate=(__Array *)(tmpAction->objectAtIndex(0));
+	idleArray=(__Array*)(tmpAction->objectAtIndex(1));
 
 	if(strcmp(this->getCharacter()->getCString(),"Kakashi")==0||
 		strcmp(this->getCharacter()->getCString(),"Deidara")==0 ||
@@ -147,29 +147,29 @@ void HeroElement::setID(CCString* character,CCString* role,CCString* group){
 	}
 
 
-	CCString* tmpName;
-	CCString* tmpHpMax;
+	__String* tmpName;
+	__String* tmpHpMax;
 	int tmpWidth;
 	int tmpHeight;
 	unsigned int tmpSpeed;
 	int tmpCombatPoint;
 	this->readDate(tmpDate,tmpName,tmpHpMax,tmpWidth,tmpHeight,tmpSpeed,tmpCombatPoint);
 	this->setMaxHP(createElementIntString(std::atoi(tmpHpMax->getCString())));
-	this->setHP(CCString::create(this->getMaxHP()->getCString()));
+	this->setHP(__String::create(this->getMaxHP()->getCString()));
 
 	this->setHeight(tmpHeight);
 	this->setWalkSpeed(tmpSpeed);
 	_originSpeed=tmpSpeed;
 
 	if(!this->getCKR() && !this->getCKR2()){
-		this->setCKR(CCString::create("0"));
-		this->setCKR2(CCString::create("0"));
+		this->setCKR(__String::create("0"));
+		this->setCKR2(__String::create("0"));
 	}
 
 
 	//init WalkFrame
-	tmpAction=(CCArray*)(animationArray->objectAtIndex(1));
-	walkArray=(CCArray*)(tmpAction->objectAtIndex(1));
+	tmpAction=(__Array*)(animationArray->objectAtIndex(1));
+	walkArray=(__Array*)(tmpAction->objectAtIndex(1));
 
 	if(strcmp(this->getCharacter()->getCString(),"Konan")==0 ||
 		strcmp(this->getCharacter()->getCString(),"Deidara")==0 ||
@@ -203,8 +203,8 @@ void HeroElement::setID(CCString* character,CCString* role,CCString* group){
 
 
 	//init HurtFrame
-	tmpAction=(CCArray*)(animationArray->objectAtIndex(2));
-	hurtArray=(CCArray*)(tmpAction->objectAtIndex(1));
+	tmpAction=(__Array*)(animationArray->objectAtIndex(2));
+	hurtArray=(__Array*)(tmpAction->objectAtIndex(1));
 
 	if(strcmp(this->getCharacter()->getCString(),"Sasuke")==0||
 		strcmp(this->getCharacter()->getCString(),"ImmortalSasuke")==0
@@ -214,12 +214,12 @@ void HeroElement::setID(CCString* character,CCString* role,CCString* group){
 
 
 	//init AirHurtFrame
-	tmpAction=(CCArray*)(animationArray->objectAtIndex(3));
-	airHurtArray=(CCArray*)(tmpAction->objectAtIndex(1));
+	tmpAction=(__Array*)(animationArray->objectAtIndex(3));
+	airHurtArray=(__Array*)(tmpAction->objectAtIndex(1));
 
 	//init KnockDownFrame
-	tmpAction=(CCArray*)(animationArray->objectAtIndex(4));
-	knockDownArray=(CCArray*)(tmpAction->objectAtIndex(1));
+	tmpAction=(__Array*)(animationArray->objectAtIndex(4));
+	knockDownArray=(__Array*)(tmpAction->objectAtIndex(1));
 
 	if(strcmp(this->getCharacter()->getCString(),"Itachi")==0 ||
 		strcmp(this->getCharacter()->getCString(),"Sasuke")==0 ||
@@ -230,24 +230,24 @@ void HeroElement::setID(CCString* character,CCString* role,CCString* group){
 	}
 
 	//init FloatFrame
-	tmpAction=(CCArray*)(animationArray->objectAtIndex(5));
-	floatArray=(CCArray*)(tmpAction->objectAtIndex(1));
+	tmpAction=(__Array*)(animationArray->objectAtIndex(5));
+	floatArray=(__Array*)(tmpAction->objectAtIndex(1));
 
 	//init DeadFrame
-	tmpAction=(CCArray*)(animationArray->objectAtIndex(6));
-	deadArray=(CCArray*)(tmpAction->objectAtIndex(1));
+	tmpAction=(__Array*)(animationArray->objectAtIndex(6));
+	deadArray=(__Array*)(tmpAction->objectAtIndex(1));
 
 
 	//init nAttack date & Frame Array
-	tmpAction=(CCArray*)(animationArray->objectAtIndex(7));
-	tmpDate=(CCArray *)(tmpAction->objectAtIndex(0));
-	CCString* tmpValue;
+	tmpAction=(__Array*)(animationArray->objectAtIndex(7));
+	tmpDate=(__Array *)(tmpAction->objectAtIndex(0));
+	__String* tmpValue;
 	unsigned int tmpCD;
 	this->readDate(tmpDate,_nattackType,tmpValue,_nattackRangeX,_nattackRangeY,tmpCD,tmpCombatPoint);
 	this->setnAttackValue(tmpValue);
 	_nattackType->retain();
 
-	nattackArray=(CCArray *)(tmpAction->objectAtIndex(1));
+	nattackArray=(__Array *)(tmpAction->objectAtIndex(1));
 
 	if(strcmp(this->getCharacter()->getCString(),"Sai")==0||
 		strcmp(this->getCharacter()->getCString(),"Tenten")==0||
@@ -282,24 +282,24 @@ void HeroElement::setID(CCString* character,CCString* role,CCString* group){
 
 
 	//init skill1 date & Frame Array
-	tmpAction=(CCArray*)(animationArray->objectAtIndex(8));
-	tmpDate=(CCArray *)(tmpAction->objectAtIndex(0));
+	tmpAction=(__Array*)(animationArray->objectAtIndex(8));
+	tmpDate=(__Array *)(tmpAction->objectAtIndex(0));
 
 	this->readDate(tmpDate,_sattackType1,tmpValue,_sattackRangeX1,_sattackRangeY1,_sattackcoldDown1,_sattackCombatPoint1);
 	this->setsAttackValue1(tmpValue);
 	_sattackType1->retain();
 
-	skill1Array=(CCArray *)(tmpAction->objectAtIndex(1));
+	skill1Array=(__Array *)(tmpAction->objectAtIndex(1));
 
 
 
 	//init skill2 date & Frame Array
-	tmpAction=(CCArray*)(animationArray->objectAtIndex(9));
-	tmpDate=(CCArray *)(tmpAction->objectAtIndex(0));
+	tmpAction=(__Array*)(animationArray->objectAtIndex(9));
+	tmpDate=(__Array *)(tmpAction->objectAtIndex(0));
 	this->readDate(tmpDate,_sattackType2,tmpValue,_sattackRangeX2,_sattackRangeY2,_sattackcoldDown2,_sattackCombatPoint2);
 	_sattackType2->retain();
 	this->setsAttackValue2(tmpValue);
-	skill2Array=(CCArray *)(tmpAction->objectAtIndex(1));
+	skill2Array=(__Array *)(tmpAction->objectAtIndex(1));
 
 	if(strcmp(this->getCharacter()->getCString(),"Kakashi")==0 ){
 		skill1Array->retain();
@@ -313,30 +313,30 @@ void HeroElement::setID(CCString* character,CCString* role,CCString* group){
 
 
 	//init skill3 date & Frame Array
-	tmpAction=(CCArray*)(animationArray->objectAtIndex(10));
-	tmpDate=(CCArray *)(tmpAction->objectAtIndex(0));
+	tmpAction=(__Array*)(animationArray->objectAtIndex(10));
+	tmpDate=(__Array *)(tmpAction->objectAtIndex(0));
 	this->readDate(tmpDate,_sattackType3,tmpValue,_sattackRangeX3,_sattackRangeY3,_sattackcoldDown3,_sattackCombatPoint3);
 	_sattackType3->retain();
 	this->setsAttackValue3(tmpValue);
-	skill3Array=(CCArray *)(tmpAction->objectAtIndex(1));
+	skill3Array=(__Array *)(tmpAction->objectAtIndex(1));
 
 
 	//init skill4 date & Frame Array
-	tmpAction=(CCArray*)(animationArray->objectAtIndex(11));
-	tmpDate=(CCArray *)(tmpAction->objectAtIndex(0));
+	tmpAction=(__Array*)(animationArray->objectAtIndex(11));
+	tmpDate=(__Array *)(tmpAction->objectAtIndex(0));
 	this->readDate(tmpDate,_sattackType4,tmpValue,_sattackRangeX4,_sattackRangeY4,_sattackcoldDown4,_sattackCombatPoint4);
 	this->setsAttackValue4(tmpValue);
 	_sattackType4->retain();
-	skill4Array=(CCArray *)(tmpAction->objectAtIndex(1));
+	skill4Array=(__Array *)(tmpAction->objectAtIndex(1));
 
 	//init skill5 date & Frame Array
 
-	tmpAction=(CCArray*)(animationArray->objectAtIndex(12));
-	tmpDate=(CCArray *)(tmpAction->objectAtIndex(0));
+	tmpAction=(__Array*)(animationArray->objectAtIndex(12));
+	tmpDate=(__Array *)(tmpAction->objectAtIndex(0));
 	this->readDate(tmpDate,_sattackType5,tmpValue,_sattackRangeX5,_sattackRangeY5,_sattackcoldDown5,_sattackCombatPoint5);
 	this->setsAttackValue5(tmpValue);
 	_sattackType5->retain();
-	skill5Array=(CCArray *)(tmpAction->objectAtIndex(1));
+	skill5Array=(__Array *)(tmpAction->objectAtIndex(1));
 
 
 	//init specal Frame
@@ -349,12 +349,12 @@ void HeroElement::setID(CCString* character,CCString* role,CCString* group){
 		strcmp(this->getCharacter()->getCString(),"Tobi")==0 ||
 		strcmp(this->getCharacter()->getCString(),"RockLee")==0
 		){
-			tmpAction=(CCArray*)(animationArray->objectAtIndex(17));
-			tmpDate=(CCArray *)(tmpAction->objectAtIndex(0));
+			tmpAction=(__Array*)(animationArray->objectAtIndex(17));
+			tmpDate=(__Array *)(tmpAction->objectAtIndex(0));
 			this->readDate(tmpDate,_spcattackType1,tmpValue,_spcattackRangeX1,_spcattackRangeY1,_spcattackcoldDown1,tmpCombatPoint);
 			this->setspcAttackValue1(tmpValue);
 			_spcattackType1->retain();
-			skillSPC1Array=(CCArray *)(tmpAction->objectAtIndex(1));
+			skillSPC1Array=(__Array *)(tmpAction->objectAtIndex(1));
 			skillSPC1Array->retain();
 
 	}else if(strcmp(this->getCharacter()->getCString(),"Sai")==0 ||
@@ -384,26 +384,26 @@ void HeroElement::setID(CCString* character,CCString* role,CCString* group){
 		strcmp(this->getCharacter()->getCString(),"Kisame")==0
 		){
 
-		tmpAction=(CCArray*)(animationArray->objectAtIndex(17));
-		tmpDate=(CCArray *)(tmpAction->objectAtIndex(0));
+		tmpAction=(__Array*)(animationArray->objectAtIndex(17));
+		tmpDate=(__Array *)(tmpAction->objectAtIndex(0));
 		this->readDate(tmpDate,_spcattackType1,tmpValue,_spcattackRangeX1,_spcattackRangeY1,_spcattackcoldDown1,tmpCombatPoint);
 		this->setspcAttackValue1(tmpValue);
 		_spcattackType1->retain();
-		skillSPC1Array=(CCArray *)(tmpAction->objectAtIndex(1));
+		skillSPC1Array=(__Array *)(tmpAction->objectAtIndex(1));
 		skillSPC1Array->retain();
 
-		tmpAction=(CCArray*)(animationArray->objectAtIndex(18));
-		tmpDate=(CCArray *)(tmpAction->objectAtIndex(0));
+		tmpAction=(__Array*)(animationArray->objectAtIndex(18));
+		tmpDate=(__Array *)(tmpAction->objectAtIndex(0));
 		this->readDate(tmpDate,_spcattackType2,tmpValue,_spcattackRangeX2,_spcattackRangeY2,_spcattackcoldDown2,tmpCombatPoint);
-		skillSPC2Array=(CCArray *)(tmpAction->objectAtIndex(1));
+		skillSPC2Array=(__Array *)(tmpAction->objectAtIndex(1));
 		this->setspcAttackValue2(tmpValue);
 		_spcattackType2->retain();
 		skillSPC2Array->retain();
 
-		tmpAction=(CCArray*)(animationArray->objectAtIndex(19));
-		tmpDate=(CCArray *)(tmpAction->objectAtIndex(0));
+		tmpAction=(__Array*)(animationArray->objectAtIndex(19));
+		tmpDate=(__Array *)(tmpAction->objectAtIndex(0));
 		this->readDate(tmpDate,_spcattackType3,tmpValue,_spcattackRangeX3,_spcattackRangeY3,_spcattackcoldDown3,tmpCombatPoint);
-		skillSPC3Array=(CCArray *)(tmpAction->objectAtIndex(1));
+		skillSPC3Array=(__Array *)(tmpAction->objectAtIndex(1));
 		this->setspcAttackValue3(tmpValue);
 		_spcattackType3->retain();
 		skillSPC3Array->retain();
@@ -419,16 +419,16 @@ void HeroElement::setID(CCString* character,CCString* role,CCString* group){
 		strcmp(this->getCharacter()->getCString(),"Sasuke")==0||
 		strcmp(this->getCharacter()->getCString(),"ImmortalSasuke")==0
 		){
-		tmpAction=(CCArray*)(animationArray->objectAtIndex(16));
-		skillSPC4Array=(CCArray *)(tmpAction->objectAtIndex(1));
+		tmpAction=(__Array*)(animationArray->objectAtIndex(16));
+		skillSPC4Array=(__Array *)(tmpAction->objectAtIndex(1));
 		skillSPC4Array->retain();
 	}
 
 	if(strcmp(this->getCharacter()->getCString(),"Sasuke")==0 ||
 		strcmp(this->getCharacter()->getCString(),"SageNaruto")==0
 		){
-		tmpAction=(CCArray*)(animationArray->objectAtIndex(15));
-		skillSPC5Array=(CCArray *)(tmpAction->objectAtIndex(1));
+		tmpAction=(__Array*)(animationArray->objectAtIndex(15));
+		skillSPC5Array=(__Array *)(tmpAction->objectAtIndex(1));
 		skillSPC5Array->retain();
 	}
 
@@ -443,11 +443,11 @@ void HeroElement::setID(CCString* character,CCString* role,CCString* group){
 	}
 
 
-	_damageArray=CCArray::create();
+	_damageArray=__Array::create();
 	_damageArray->retain();
 
 	if(this->getLV()==1 && !this->getCoin()){
-		this->setGearArray(CCArray::create());
+		this->setGearArray(__Array::create());
 		this->setCoin(50);
 	}
 
@@ -524,7 +524,7 @@ void HeroElement::applyStartLevel6(){
 		_exp=expThresholds[i];
 		this->changeHPbar();
 	}
-	this->setHP(CCString::create(this->getMaxHP()->getCString()));
+	this->setHP(__String::create(this->getMaxHP()->getCString()));
 	if(_hpBar){
 		_hpBar->loseHP(this->getHpPercent());
 	}
@@ -872,7 +872,7 @@ void HeroElement::reborn(float dt){
 	{
 		NotificationCenter::getInstance()->addObserver(this, callfuncO_selector(NarutoSenki::ActionManager::acceptAttack), "acceptAttack", NULL);
 		this->setOpacity(255);
-		this->setHP(CCString::create(this->getMaxHP()->getCString()));
+		this->setHP(__String::create(this->getMaxHP()->getCString()));
 		if(_delegate && _delegate->_isDuelMode && _delegate->currentPlayer){
 			if(strcmp(this->getRole()->getCString(),"Player")==0){
 				_delegate->setHPLose(this->getHpPercent());
@@ -974,13 +974,13 @@ bool Flog::init(){
 
 };
 
-void Flog::setID(CCString* character,CCString* role,CCString* group){
+void Flog::setID(__String* character,__String* role,__String* group){
 
 	this->setCharacter(character);
 	this->setRole(role);
 	this->setGroup(group);
 
-	CCArray* animationArray=CCArray::create();
+	__Array* animationArray=__Array::create();
 	std::string filePath;
 
 
@@ -994,12 +994,12 @@ void Flog::setID(CCString* character,CCString* role,CCString* group){
 
 	//init Attribute; & indleFrame
 
-	CCArray* tmpAction=(CCArray*)(animationArray->objectAtIndex(0));
-	CCArray* tmpDate=(CCArray *)(tmpAction->objectAtIndex(0));
-	idleArray=(CCArray*)(tmpAction->objectAtIndex(1));
+	__Array* tmpAction=(__Array*)(animationArray->objectAtIndex(0));
+	__Array* tmpDate=(__Array *)(tmpAction->objectAtIndex(0));
+	idleArray=(__Array*)(tmpAction->objectAtIndex(1));
 
-	CCString* tmpName;
-	CCString* tmpHpMax;
+	__String* tmpName;
+	__String* tmpHpMax;
 	int tmpWidth;
 	int tmpHeight;
 	unsigned int tmpSpeed;
@@ -1007,7 +1007,7 @@ void Flog::setID(CCString* character,CCString* role,CCString* group){
 
 	this->readDate(tmpDate,tmpName,tmpHpMax,tmpWidth,tmpHeight,tmpSpeed,tmpCombatPoint);
 	this->setMaxHP(createElementIntString(std::atoi(tmpHpMax->getCString())));
-	this->setHP(CCString::create(this->getMaxHP()->getCString()));
+	this->setHP(__String::create(this->getMaxHP()->getCString()));
 	this->setHeight(tmpHeight);
 	this->setWalkSpeed(tmpSpeed);
 
@@ -1016,48 +1016,48 @@ void Flog::setID(CCString* character,CCString* role,CCString* group){
 
 
 	if(!this->getCKR() && !this->getCKR2()){
-		this->setCKR(CCString::create("0"));
-		this->setCKR2(CCString::create("0"));
+		this->setCKR(__String::create("0"));
+		this->setCKR2(__String::create("0"));
 	}
 
 	//init WalkFrame
-	tmpAction=(CCArray*)(animationArray->objectAtIndex(1));
-	walkArray=(CCArray*)(tmpAction->objectAtIndex(1));
+	tmpAction=(__Array*)(animationArray->objectAtIndex(1));
+	walkArray=(__Array*)(tmpAction->objectAtIndex(1));
 
 
 	//init HurtFrame
-	tmpAction=(CCArray*)(animationArray->objectAtIndex(2));
-	hurtArray=(CCArray*)(tmpAction->objectAtIndex(1));
+	tmpAction=(__Array*)(animationArray->objectAtIndex(2));
+	hurtArray=(__Array*)(tmpAction->objectAtIndex(1));
 
 	//init AirHurtFrame
-	tmpAction=(CCArray*)(animationArray->objectAtIndex(3));
-	airHurtArray=(CCArray*)(tmpAction->objectAtIndex(1));
+	tmpAction=(__Array*)(animationArray->objectAtIndex(3));
+	airHurtArray=(__Array*)(tmpAction->objectAtIndex(1));
 
 	//init KnockDownFrame
-	tmpAction=(CCArray*)(animationArray->objectAtIndex(4));
-	knockDownArray=(CCArray*)(tmpAction->objectAtIndex(1));
+	tmpAction=(__Array*)(animationArray->objectAtIndex(4));
+	knockDownArray=(__Array*)(tmpAction->objectAtIndex(1));
 
 	//init FloatFrame
-	tmpAction=(CCArray*)(animationArray->objectAtIndex(5));
-	floatArray=(CCArray*)(tmpAction->objectAtIndex(1));
+	tmpAction=(__Array*)(animationArray->objectAtIndex(5));
+	floatArray=(__Array*)(tmpAction->objectAtIndex(1));
 
 	//init DeadFrame
-	tmpAction=(CCArray*)(animationArray->objectAtIndex(6));
-	deadArray=(CCArray*)(tmpAction->objectAtIndex(1));
+	tmpAction=(__Array*)(animationArray->objectAtIndex(6));
+	deadArray=(__Array*)(tmpAction->objectAtIndex(1));
 
 
 	//init nAttack date & Frame Array
-	tmpAction=(CCArray*)(animationArray->objectAtIndex(7));
-	tmpDate=(CCArray *)(tmpAction->objectAtIndex(0));
+	tmpAction=(__Array*)(animationArray->objectAtIndex(7));
+	tmpDate=(__Array *)(tmpAction->objectAtIndex(0));
 	unsigned int tmpCD;
-	CCString* tmpValue;
+	__String* tmpValue;
 	this->readDate(tmpDate,_nattackType,tmpValue,_nattackRangeX,_nattackRangeY,tmpCD,tmpCombatPoint);
 	this->setnAttackValue(tmpValue);
 	_nattackType->retain();
-	nattackArray=(CCArray *)(tmpAction->objectAtIndex(1));
+	nattackArray=(__Array *)(tmpAction->objectAtIndex(1));
 
 
-	_damageArray=CCArray::create();
+	_damageArray=__Array::create();
 	_damageArray->retain();
 
 	this->setCoin(50);
@@ -1233,13 +1233,13 @@ bool Tower::init(){
 
 };
 
-void Tower::setID(CCString* character,CCString* role,CCString* group){
+void Tower::setID(__String* character,__String* role,__String* group){
 
 	this->setCharacter(character);
 	this->setRole(role);
 	this->setGroup(group);
 
-	CCArray* animationArray=CCArray::create();
+	__Array* animationArray=__Array::create();
 	std::string filePath;
 
 
@@ -1264,12 +1264,12 @@ void Tower::setID(CCString* character,CCString* role,CCString* group){
 
 	//init Attribute; & indleFrame
 
-	CCArray* tmpAction=(CCArray*)(animationArray->objectAtIndex(0));
-	CCArray* tmpDate=(CCArray *)(tmpAction->objectAtIndex(0));
-	idleArray=(CCArray*)(tmpAction->objectAtIndex(1));
+	__Array* tmpAction=(__Array*)(animationArray->objectAtIndex(0));
+	__Array* tmpDate=(__Array *)(tmpAction->objectAtIndex(0));
+	idleArray=(__Array*)(tmpAction->objectAtIndex(1));
 
-	CCString* tmpName;
-	CCString* tmpHpMax;
+	__String* tmpName;
+	__String* tmpHpMax;
 	int tmpWidth;
 	int tmpHeight;
 	unsigned int tmpSpeed;
@@ -1277,20 +1277,20 @@ void Tower::setID(CCString* character,CCString* role,CCString* group){
 
 	this->readDate(tmpDate,tmpName,tmpHpMax,tmpWidth,tmpHeight,tmpSpeed, tmpCombatPoint);
 	this->setMaxHP(createElementIntString(std::atoi(tmpHpMax->getCString())));
-	this->setHP(CCString::create(this->getMaxHP()->getCString()));
+	this->setHP(__String::create(this->getMaxHP()->getCString()));
 
 	this->setHeight(tmpHeight);
 	this->setWalkSpeed(tmpSpeed);
 
 
 	if(!this->getCKR() && !this->getCKR2()){
-		this->setCKR(CCString::create("0"));
-		this->setCKR2(CCString::create("0"));
+		this->setCKR(__String::create("0"));
+		this->setCKR2(__String::create("0"));
 	}
 
 	//init DeadFrame
-	tmpAction=(CCArray*)(animationArray->objectAtIndex(6));
-	deadArray=(CCArray*)(tmpAction->objectAtIndex(1));
+	tmpAction=(__Array*)(animationArray->objectAtIndex(6));
+	deadArray=(__Array*)(tmpAction->objectAtIndex(1));
 
 	this->setCoin(50);
 
@@ -1327,7 +1327,7 @@ void Tower::dealloc(){
 	this->stopAllActions();
 
 	Ref* pObject;
-	CCArray* list;
+	__Array* list;
 	for(int i=0;i<2;i++){
 		if(i==0){
 			list=_delegate->_KonohaFlogArray;
@@ -1391,13 +1391,13 @@ bool Monster::init(){
 
 };
 
-void Monster::setID(CCString* character,CCString* role,CCString* group){
+void Monster::setID(__String* character,__String* role,__String* group){
 
 	this->setCharacter(character);
 	this->setRole(role);
 	this->setGroup(group);
 
-	CCArray* animationArray=CCArray::create();
+	__Array* animationArray=__Array::create();
 	std::string filePath;
 
 
@@ -1411,12 +1411,12 @@ void Monster::setID(CCString* character,CCString* role,CCString* group){
 
 	//init Attribute; & indleFrame
 
-	CCArray* tmpAction=(CCArray*)(animationArray->objectAtIndex(0));
-	CCArray* tmpDate=(CCArray *)(tmpAction->objectAtIndex(0));
-	idleArray=(CCArray*)(tmpAction->objectAtIndex(1));
+	__Array* tmpAction=(__Array*)(animationArray->objectAtIndex(0));
+	__Array* tmpDate=(__Array *)(tmpAction->objectAtIndex(0));
+	idleArray=(__Array*)(tmpAction->objectAtIndex(1));
 
-	CCString* tmpName;
-	CCString* tmpHpMax;
+	__String* tmpName;
+	__String* tmpHpMax;
 	int tmpWidth;
 	int tmpHeight;
 	unsigned int tmpSpeed;
@@ -1424,7 +1424,7 @@ void Monster::setID(CCString* character,CCString* role,CCString* group){
 
 	this->readDate(tmpDate,tmpName,tmpHpMax,tmpWidth,tmpHeight,tmpSpeed, tmpCombatPoint);
 	this->setMaxHP(createElementIntString(std::atoi(tmpHpMax->getCString())));
-	this->setHP(CCString::create(this->getMaxHP()->getCString()));
+	this->setHP(__String::create(this->getMaxHP()->getCString()));
 
 	this->setHeight(tmpHeight);
 	this->setWalkSpeed(tmpSpeed);
@@ -1432,29 +1432,29 @@ void Monster::setID(CCString* character,CCString* role,CCString* group){
 
 
 	if(!this->getCKR() && !this->getCKR2()){
-		this->setCKR(CCString::create("0"));
-		this->setCKR2(CCString::create("0"));
+		this->setCKR(__String::create("0"));
+		this->setCKR2(__String::create("0"));
 	}
 
 	//init WalkFrame
-	tmpAction=(CCArray*)(animationArray->objectAtIndex(1));
-	walkArray=(CCArray*)(tmpAction->objectAtIndex(1));
+	tmpAction=(__Array*)(animationArray->objectAtIndex(1));
+	walkArray=(__Array*)(tmpAction->objectAtIndex(1));
 
 
 	//init DeadFrame
-	tmpAction=(CCArray*)(animationArray->objectAtIndex(6));
-	deadArray=(CCArray*)(tmpAction->objectAtIndex(1));
+	tmpAction=(__Array*)(animationArray->objectAtIndex(6));
+	deadArray=(__Array*)(tmpAction->objectAtIndex(1));
 
 
 	//init nAttack date & Frame Array
-	tmpAction=(CCArray*)(animationArray->objectAtIndex(7));
-	tmpDate=(CCArray *)(tmpAction->objectAtIndex(0));
+	tmpAction=(__Array*)(animationArray->objectAtIndex(7));
+	tmpDate=(__Array *)(tmpAction->objectAtIndex(0));
 	unsigned int tmpCD;
-	CCString* tmpValue;
+	__String* tmpValue;
 	this->readDate(tmpDate,_nattackType,tmpValue,_nattackRangeX,_nattackRangeY,tmpCD,tmpCombatPoint);
 	this->setnAttackValue(tmpValue);
 	_nattackType->retain();
-	nattackArray=(CCArray *)(tmpAction->objectAtIndex(1));
+	nattackArray=(__Array *)(tmpAction->objectAtIndex(1));
 
 	this->setCoin(50);
 
@@ -1566,8 +1566,8 @@ void Monster::setAI(float dt){
 				float distanceX=_isFlipped?tempHero->getPositionX() - this->getPositionX() + this->getContentSize().width:tempHero->getPositionX() - this->getPositionX()-this->getContentSize().width;
 				if( abs(distanceX)< 32 &&  distanceY< 48){
 					if(!this->_monsterArray){
-						CCDictionary* dic=CCDictionary::create();
-						CCString* monterName=CCString::create("KageHand");
+						__Dictionary* dic=__Dictionary::create();
+						__String* monterName=__String::create("KageHand");
 						dic->setObject(monterName,1);
 						this->setMon(this,(void*) dic);
 						this->unschedule(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::setAI));
@@ -1895,7 +1895,7 @@ bool Bullet::init(){
 
 };
 
-void Bullet::setID(CCString* character,CCString* role,CCString* group){
+void Bullet::setID(__String* character,__String* role,__String* group){
 
 
 
@@ -1903,7 +1903,7 @@ void Bullet::setID(CCString* character,CCString* role,CCString* group){
 	this->setRole(role);
 	this->setGroup(group);
 
-	CCArray* animationArray=CCArray::create();
+	__Array* animationArray=__Array::create();
 	std::string filePath;
 
 
@@ -1923,26 +1923,26 @@ void Bullet::setID(CCString* character,CCString* role,CCString* group){
 
 	//init Attribute; & idleFrame
 
-	CCArray* tmpAction=(CCArray*)(animationArray->objectAtIndex(0));
-	CCArray* tmpDate=(CCArray *)(tmpAction->objectAtIndex(0));
-	idleArray=(CCArray*)(tmpAction->objectAtIndex(1));
+	__Array* tmpAction=(__Array*)(animationArray->objectAtIndex(0));
+	__Array* tmpDate=(__Array *)(tmpAction->objectAtIndex(0));
+	idleArray=(__Array*)(tmpAction->objectAtIndex(1));
 
 	//init nAttack date & Frame Array
-	tmpAction=(CCArray*)(animationArray->objectAtIndex(7));
-	tmpDate=(CCArray *)(tmpAction->objectAtIndex(0));
+	tmpAction=(__Array*)(animationArray->objectAtIndex(7));
+	tmpDate=(__Array *)(tmpAction->objectAtIndex(0));
 	unsigned int tmpCD;
 	int tmpCombatPoint;
-	CCString* tmpValue;
+	__String* tmpValue;
 
 	this->readDate(tmpDate,_nattackType,tmpValue,_nattackRangeX,_nattackRangeY,tmpCD,tmpCombatPoint);
 	this->setnAttackValue(tmpValue);
 	_nattackType->retain();
-	nattackArray=(CCArray *)(tmpAction->objectAtIndex(1));
+	nattackArray=(__Array *)(tmpAction->objectAtIndex(1));
 
 	if(strcmp(this->getCharacter()->getCString(),"Amaterasu")==0 ){
 		//init DeadFrame
-		tmpAction=(CCArray*)(animationArray->objectAtIndex(6));
-		deadArray=(CCArray*)(tmpAction->objectAtIndex(1));
+		tmpAction=(__Array*)(animationArray->objectAtIndex(6));
+		deadArray=(__Array*)(tmpAction->objectAtIndex(1));
 	}
 
 	this->setCoin(50);

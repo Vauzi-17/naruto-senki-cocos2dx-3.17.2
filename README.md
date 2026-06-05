@@ -119,6 +119,9 @@ Alasan estimasi:
 - Parser XML `KTools::readXMLToArray` masih mempertahankan signature
   `CCArray*&`, tetapi container/dictionary/string lokal di dalam parser sudah
   memakai `__Array`, `__Dictionary`, dan `__String` langsung.
+- Core `Element.cpp`/`Element.h` mulai masuk tahap alias-only: implementasi
+  hero/flog/tower/monster/bullet memakai `__Array`, `__Dictionary`, dan
+  `__String` langsung tanpa mengubah alur data XML atau field gameplay besar.
 - UI perimeter berikutnya ikut dibersihkan dari `CCARRAY_FOREACH`:
   `SelectLayer`, `SkillLayer`, `GearLayer`, dan `GameOver` sekarang memakai
   loop indeks atau container STL lokal untuk iterator yang aman.
