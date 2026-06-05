@@ -4313,7 +4313,8 @@ void NarutoSenki::ActionManager::changeAction(){
 		}
 		if(bamen<5){
 			bamen+=1;
-			SpriteFrame *frame=SpriteFrameCache::getInstance()->spriteFrameByName(CCString::createWithFormat("Bamen_Effect_%02d.png",this->bamen-1)->getCString());
+			std::string frameName=cocos2d::StringUtils::format("Bamen_Effect_%02d.png",this->bamen-1);
+			SpriteFrame *frame=SpriteFrameCache::getInstance()->spriteFrameByName(frameName);
 			this->_heartEffect->setSpriteFrame(frame);
 		}else{
 			return;
@@ -5773,7 +5774,8 @@ void NarutoSenki::ActionManager::setClone(Node* sender,void* date){
 			
 			this->hearts-=1;
 			if(this->_heartEffect){
-				SpriteFrame *frame=SpriteFrameCache::getInstance()->spriteFrameByName(CCString::createWithFormat("Heart_Effect_%02d.png",this->hearts)->getCString());
+				std::string frameName=cocos2d::StringUtils::format("Heart_Effect_%02d.png",this->hearts);
+				SpriteFrame *frame=SpriteFrameCache::getInstance()->spriteFrameByName(frameName);
 				this->_heartEffect->setSpriteFrame(frame);
 			}
 			
@@ -6700,25 +6702,30 @@ void NarutoSenki::ActionManager::setTransform(){
 		this->_delegate->getHudLayer()->skill3Button->_isColdChanged=true;
 
 
-		SpriteFrame *frame=SpriteFrameCache::getInstance()->spriteFrameByName(CCString::createWithFormat("%s_skill1.png",charName)->getCString());
+		std::string frameName=cocos2d::StringUtils::format("%s_skill1.png",charName);
+		SpriteFrame *frame=SpriteFrameCache::getInstance()->spriteFrameByName(frameName);
 		_delegate->getHudLayer()->skill1Button->setSpriteFrame(frame);
-		frame=SpriteFrameCache::getInstance()->spriteFrameByName(CCString::createWithFormat("%s_skill2.png",charName)->getCString());
+		frameName=cocos2d::StringUtils::format("%s_skill2.png",charName);
+		frame=SpriteFrameCache::getInstance()->spriteFrameByName(frameName);
 		_delegate->getHudLayer()->skill2Button->setSpriteFrame(frame);
 	
 		
 
-		frame=SpriteFrameCache::getInstance()->spriteFrameByName(CCString::createWithFormat("%s_skill3.png",charName)->getCString());
+		frameName=cocos2d::StringUtils::format("%s_skill3.png",charName);
+		frame=SpriteFrameCache::getInstance()->spriteFrameByName(frameName);
 		_delegate->getHudLayer()->skill3Button->setSpriteFrame(frame);
 
 
-		frame=SpriteFrameCache::getInstance()->spriteFrameByName(CCString::createWithFormat("%s_skill4.png",charName)->getCString());
+		frameName=cocos2d::StringUtils::format("%s_skill4.png",charName);
+		frame=SpriteFrameCache::getInstance()->spriteFrameByName(frameName);
 		if(_delegate->getHudLayer()->skill4Button){
 			_delegate->getHudLayer()->skill4Button->setSpriteFrame(frame);
 		}
 
 
 
-		frame=SpriteFrameCache::getInstance()->spriteFrameByName(CCString::createWithFormat("%s_skill5.png",charName)->getCString());
+		frameName=cocos2d::StringUtils::format("%s_skill5.png",charName);
+		frame=SpriteFrameCache::getInstance()->spriteFrameByName(frameName);
 		if(_delegate->getHudLayer()->skill5Button){
 			_delegate->getHudLayer()->skill5Button->setSpriteFrame(frame);
 		}
@@ -7242,14 +7249,14 @@ bool NarutoSenki::ActionManager::hardHurt(int delayTime,bool isHurtAction,bool i
 			}else{
 				_isSticking=true;
 				NarutoSenki::ActionManager* attacker=(NarutoSenki::ActionManager *) _slayer;
-					CCString* path;
+					std::string path;
 				if(strcmp(attacker->getCharacter()->getCString(),"Kakuzu")==0){
-					path=CCString::createWithFormat("%s_AirHurt_02.png",this->getCharacter()->getCString());
+					path=cocos2d::StringUtils::format("%s_AirHurt_02.png",this->getCharacter()->getCString());
 				}else{
-					path=CCString::createWithFormat("%s_Hurt_02.png",this->getCharacter()->getCString());
+					path=cocos2d::StringUtils::format("%s_Hurt_02.png",this->getCharacter()->getCString());
 				}
 				
-				SpriteFrame* frame = SpriteFrameCache::getInstance()->spriteFrameByName(path->getCString());
+				SpriteFrame* frame = SpriteFrameCache::getInstance()->spriteFrameByName(path);
 				Vector<SpriteFrame*> tempArray;
 				if(frame){
 					tempArray.pushBack(frame);
@@ -7539,7 +7546,7 @@ void NarutoSenki::ActionManager::dead(){
 			if(strcmp(this->_role->getCString(),"Player")==0){
 				const char* dl=_delegate->getHudLayer()->deadLabel->getString().c_str();
 				int deads=std::atoi(dl)+1;
-				_delegate->getHudLayer()->deadLabel->setString(CCString::createWithFormat("%d",deads)->getCString());
+				_delegate->getHudLayer()->deadLabel->setString(cocos2d::StringUtils::format("%d",deads));
 			}
 		}
 
@@ -7577,7 +7584,8 @@ void NarutoSenki::ActionManager::dead(){
 
 	if(strcmp(this->getCharacter()->getCString(),"Kakuzu") ==0){
 		if(_heartEffect){
-			SpriteFrame *frame=SpriteFrameCache::getInstance()->spriteFrameByName(CCString::createWithFormat("Heart_Effect_%02d.png",this->hearts)->getCString());
+			std::string frameName=cocos2d::StringUtils::format("Heart_Effect_%02d.png",this->hearts);
+			SpriteFrame *frame=SpriteFrameCache::getInstance()->spriteFrameByName(frameName);
 			this->_heartEffect->setSpriteFrame(frame);
 		}
 
@@ -7634,7 +7642,8 @@ void NarutoSenki::ActionManager::dead(){
 				this->_heartEffect->removeFromParent();
 				this->_heartEffect=NULL;
 			}else {
-				SpriteFrame *frame=SpriteFrameCache::getInstance()->spriteFrameByName(CCString::createWithFormat("Bamen_Effect_%02d.png",this->bamen-1)->getCString());
+				std::string frameName=cocos2d::StringUtils::format("Bamen_Effect_%02d.png",this->bamen-1);
+				SpriteFrame *frame=SpriteFrameCache::getInstance()->spriteFrameByName(frameName);
 				this->_heartEffect->setSpriteFrame(frame);
 			}
 

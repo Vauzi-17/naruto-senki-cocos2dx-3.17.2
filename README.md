@@ -337,6 +337,9 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
   dan stat combat lama tetap `CCString`.
 - `ActionManager`: helper payload callback lokal memakai `CallFuncN` 3.x dengan
   `Node*` runtime dan guard null; payload XML lama tetap dipertahankan.
+- `ActionManager`: sisa path frame efek Bamen/Heart, icon skill transform,
+  path hurt frame, dan dead label lokal memakai `StringUtils::format`/
+  `std::string`; sisa format `CCString` aktif sengaja ditahan pada stat combat.
 - `KTools`: helper keycode MD5 lokal memakai `StringUtils::format`/
   `std::string`; builder SQL lama tetap ditahan.
 - `KTools`: helper read SQLite lokal mulai memakai `std::string` untuk query
@@ -473,6 +476,9 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
   menyentuh nilai HP/CKR/attack yang masih menjadi kontrak combat utama.
 - `ActionManager` helper `createPayloadCall(...)` dirapikan ke `CallFuncN`
   sehingga callback payload tetap menerima node action 3.x.
+- `ActionManager` menutup format path/label lokal terakhir di area efek,
+  transform skill, hurt frame, dan dead counter; sisa format angka combat
+  dipisahkan sebagai kontrak core.
 - `KTools::getKeycode(...)` melepas format `CCString` lokal tanpa menyentuh
   SQL/SQLite helper yang masih menjadi kontrak utility lama.
 - `KTools` read helper mulai melepas format `CCString` pada query/result yang
