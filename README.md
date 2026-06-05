@@ -105,6 +105,8 @@ Alasan estimasi:
 - Payload random roster `StartMenu` untuk mode training/hard-core sekarang
   dibangun lewat helper `trainingAddHero(...)`, sehingga konstruksi
   `CCString`/`CCDictionary` manual di blok roster lokal ikut hilang.
+- Cast gear string lokal di `GearLayer`, `HudLayer`, dan `GameOver` memakai
+  `__String*` 3.x langsung; container gear lama tetap dipertahankan di core.
 - UI perimeter berikutnya ikut dibersihkan dari `CCARRAY_FOREACH`:
   `SelectLayer`, `SkillLayer`, `GearLayer`, dan `GameOver` sekarang memakai
   loop indeks atau container STL lokal untuk iterator yang aman.

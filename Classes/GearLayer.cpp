@@ -458,7 +458,7 @@ void GearLayer::updatePlayerGear(){
 		int i=0;
 		for(unsigned int gearIndex=0; gearIndex<_delegate->currentPlayer->getGearArray()->count(); ++gearIndex){
 			Ref* pObject=_delegate->currentPlayer->getGearArray()->objectAtIndex(gearIndex);
-			CCString* tmpGear=(CCString*) pObject;
+			__String* tmpGear=(__String*) pObject;
 			GearButton* btn=GearButton::create("");
 			btn->setBtnType(gearType(std::atoi(tmpGear->getCString())),gearbtnType(1),false);
 			btn->setPositionX(13+i*34);
@@ -499,7 +499,7 @@ void GearLayer::updateGearList(){
 			if(_delegate->currentPlayer->getGearArray() && _delegate->currentPlayer->getGearArray()->count()>0){
 				for(unsigned int gearIndex=0; gearIndex<_delegate->currentPlayer->getGearArray()->count(); ++gearIndex){
 					Ref* pObject=_delegate->currentPlayer->getGearArray()->objectAtIndex(gearIndex);
-					CCString* tmpGear=(CCString*) pObject;
+					__String* tmpGear=(__String*) pObject;
 					if (std::atoi(tmpGear->getCString())== i){
 						isBuyed=true;
 					}

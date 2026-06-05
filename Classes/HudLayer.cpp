@@ -722,7 +722,7 @@ void HudLayer::updateGears(){
 		int i=0;
 		for(unsigned int gearIndex=0; gearIndex<_delegate->currentPlayer->getGearArray()->count(); ++gearIndex){
 			pObject=_delegate->currentPlayer->getGearArray()->objectAtIndex(gearIndex);
-			CCString* tmpGear=(CCString*) pObject;
+			__String* tmpGear=(__String*) pObject;
 			if(tmpGear->intValue()!=gear1Button->_gearType && i==0){
 				gear1Button->setGearType(tmpGear->intValue());
 			}else if(tmpGear->intValue()!=gear2Button->_gearType && i==1){
