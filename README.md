@@ -102,6 +102,9 @@ Alasan estimasi:
 - Daftar hero cadangan lokal di flow start battle `NetworkLayer` juga sudah
   memakai `std::vector<std::string>`; `CCArray`/`CCDictionary` tetap hanya
   dipakai sebagai payload akhir ke `LoadLayer`.
+- Payload non-training start battle `NetworkLayer` sekarang memakai helper
+  `networkAddHero(...)`, sehingga blok lokal tidak lagi membuat
+  `CCDictionary`/`CCString` manual untuk player dan COM.
 - Payload random roster `StartMenu` untuk mode training/hard-core sekarang
   dibangun lewat helper `trainingAddHero(...)`, sehingga konstruksi
   `CCString`/`CCDictionary` manual di blok roster lokal ikut hilang.

@@ -1204,8 +1204,6 @@ void NetworkLayer::onGameStart(Ref* sender){
 			Director::getInstance()->replaceScene(TransitionFade::create(1.5f,loadScene));
 			return;
 		}
-		CCDictionary* dic=CCDictionary::create();
-
 		std::string tmpChar;
 
 
@@ -1262,14 +1260,8 @@ void NetworkLayer::onGameStart(Ref* sender){
 		}
 
 
-		CCString* tmpRole=CCString::create("Player");
-		CCString* tmpGroup=CCString::create(groupName);
-
-		dic->setObject(CCString::create(tmpChar.c_str()),"character");
-		dic->setObject(tmpRole,"role");
-		dic->setObject(tmpGroup,"group");
-
-		CCArray* tempHeros=CCArray::createWithObject(dic);
+		CCArray* tempHeros=CCArray::create();
+		networkAddHero(tempHeros,tmpChar.c_str(),"Player",groupName);
 
 
 
@@ -1318,19 +1310,8 @@ void NetworkLayer::onGameStart(Ref* sender){
 					realHero.erase(realHero.begin()+index);
 				}
 
-				dic=CCDictionary::create();
-				tmpChar=hero;
-				tmpRole=CCString::create("Com");
-				if(zhenying>0){
-				tmpGroup=CCString::create("Konoha");
-				}else{
-					tmpGroup=CCString::create("Akatsuki");
-				}
-				dic->setObject(CCString::create(tmpChar.c_str()),"character");
-				dic->setObject(tmpRole,"role");
-				dic->setObject(tmpGroup,"group");
-
-				tempHeros->addObject(dic);
+				const char* comGroup=zhenying>0 ? "Konoha" : "Akatsuki";
+				networkAddHero(tempHeros,hero.c_str(),"Com",comGroup);
 
 
 			}else{
@@ -1343,20 +1324,8 @@ void NetworkLayer::onGameStart(Ref* sender){
 
 				std::string hero=realHero[index];
 
-				dic=CCDictionary::create();
-				tmpChar=hero;
-				tmpRole=CCString::create("Com");
-				if(zhenying>0){
-					tmpGroup=CCString::create("Akatsuki");
-				}else{
-					tmpGroup=CCString::create("Konoha");
-
-				}
-				dic->setObject(CCString::create(tmpChar.c_str()),"character");
-				dic->setObject(tmpRole,"role");
-				dic->setObject(tmpGroup,"group");
-
-				tempHeros->addObject(dic);
+				const char* comGroup=zhenying>0 ? "Akatsuki" : "Konoha";
+				networkAddHero(tempHeros,hero.c_str(),"Com",comGroup);
 				realHero.erase(realHero.begin()+index);
 
 			}
