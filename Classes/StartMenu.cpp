@@ -341,7 +341,6 @@ init StartMenu layer;
 
 StartMenu::StartMenu(void)
 {
-	_menu_array=NULL;
 	isClockwise=false;
 	isDrag=false;
 	isNewAviable=false;
@@ -464,14 +463,14 @@ bool StartMenu::init()
 
 		//produce the menu button
 
-		this->setMenus(CCArray::createWithCapacity(3));
+		_menu_array.clear();
 
 		MenuButton* network_btn=MenuButton::create("menu01.png");
 		network_btn->setDelegate(this);
 		network_btn->setBtnType(Network);
 		network_btn->setScale(0.5f);
 		network_btn->setPositionY(_pos03);
-		_menu_array->addObject(network_btn);
+		_menu_array.push_back(network_btn);
 
 		MenuButton* credits_btn=MenuButton::create("menu04.png");
 		credits_btn->setDelegate(this);
@@ -480,7 +479,7 @@ bool StartMenu::init()
 		credits_btn->setVisible(false);
 		credits_btn->_isBottom=true;
 		credits_btn->setPositionY(_pos02);
-		_menu_array->addObject(credits_btn);
+		_menu_array.push_back(credits_btn);
 
 
 		MenuButton* training_btn=MenuButton::create("menu02.png");
@@ -488,7 +487,7 @@ bool StartMenu::init()
 		training_btn->setBtnType(Training);
 		training_btn->_isTop=true;
 		training_btn->setPositionY(_pos02);
-		_menu_array->addObject(training_btn);
+		_menu_array.push_back(training_btn);
 
 		/*if(!UserDefault::getInstance()->getBoolForKey("isHardCore")){
 			UserDefault::getInstance()->setBoolForKey("isHardCore", false);
@@ -516,7 +515,7 @@ bool StartMenu::init()
 		exit_btn->setBtnType(Exit);
 		exit_btn->setScale(0.5f);
 		exit_btn->setPositionY(_pos01);
-		_menu_array->addObject(exit_btn);
+		_menu_array.push_back(exit_btn);
 
 
 
@@ -536,9 +535,7 @@ bool StartMenu::init()
 		}
 
 		int menuIntroIndex=0;
-		for(unsigned int menuIndex=0; menuIndex<_menu_array->count(); ++menuIndex){
-				Ref* pObject=_menu_array->objectAtIndex(menuIndex);
-			MenuButton* menu=(MenuButton *)pObject;
+		for(MenuButton* menu : _menu_array){
 			float finalY=menu->getPositionY();
 			menu->setPositionX(menuPosX-36);
 			menu->setOpacity(0);
@@ -2318,9 +2315,7 @@ void StartMenu::onCreditsCallBack(){
 
 void StartMenu::scrollMenu(int posY){
 		if(posY>_pos02 || (isDrag && isClockwise)){ //˳ʱ��
-			for(unsigned int menuIndex=0; menuIndex<_menu_array->count(); ++menuIndex){
-				Ref* pObject=_menu_array->objectAtIndex(menuIndex);
-				MenuButton* menu=(MenuButton *)pObject;
+			for(MenuButton* menu : _menu_array){
 				if(menu->getPositionY()==_pos01){
 					ActionInterval* spn=MoveTo::create(0.5,Vec2(menu->getPositionX(),_pos02));
 					this->reorderChild(menu,1);
@@ -2370,9 +2365,7 @@ void StartMenu::scrollMenu(int posY){
 			};
 
 		}else{ //��ʱ��
-			for(unsigned int menuIndex=0; menuIndex<_menu_array->count(); ++menuIndex){
-				Ref* pObject=_menu_array->objectAtIndex(menuIndex);
-				MenuButton* menu=(MenuButton *)pObject;
+			for(MenuButton* menu : _menu_array){
 				if(menu->getPositionY()==_pos01){
 					FiniteTimeAction* spn=Spawn::create(
 						MoveTo::create(0.5,Vec2(menu->getPositionX(),_pos02)),
@@ -2422,9 +2415,7 @@ void StartMenu::scrollMenu(int posY){
 
 		};
 		std::string src="";
-		for(unsigned int menuIndex=0; menuIndex<_menu_array->count(); ++menuIndex){
-				Ref* pObject=_menu_array->objectAtIndex(menuIndex);
-			MenuButton* menu=(MenuButton *)pObject;
+		for(MenuButton* menu : _menu_array){
 
 			if(menu->_isTop){
 				switch(menu->getBtnType()){

@@ -307,6 +307,9 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
   `std::string` lokal; API `KTools` lama tetap dipertahankan.
 - `StartMenu`: profile/nameplate point label dan path asset tombol nameplate
   lokal memakai `StringUtils::format`/`std::string`; coin SQLite tetap ditahan.
+- `StartMenu`: container tombol menu lokal `_menu_array` dipindah dari retained
+  `CCArray*` ke `std::vector<MenuButton*>`; flow training/battle payload lama
+  tetap `CCArray`/`CCDictionary`.
 - `GameOver`: `detailRecord` dan string angka win record aktif memakai
   `StringUtils::format`/`std::string`, tanpa mengubah isi nilai SQLite.
 - `GameOver`: hasil baca SQLite untuk coin, win count, dan best time disalin ke
@@ -1008,6 +1011,9 @@ Catatan progress terbaru:
 - `GameOver` melepas field record result `resultChar` dari retained
   `CCString*` ke `std::string`; jalur record SQLite memakai `c_str()` dan
   payload rematch tetap memakai struktur lama.
+- `StartMenu` melepas container tombol menu lokal `_menu_array` dari retained
+  `CCArray*` ke `std::vector<MenuButton*>`; menu button tetap dimiliki oleh
+  scene sebagai child node.
 - `SelectLayer`, `SkillLayer`, `GearLayer`, dan `GameOver` ikut lepas dari
   `CCARRAY_FOREACH` aktif. Perubahan ini hanya mengganti iterator lokal pada
   daftar select button, gear, result character, dan rematch handoff tanpa

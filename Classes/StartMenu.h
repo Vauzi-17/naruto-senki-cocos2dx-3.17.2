@@ -11,6 +11,7 @@
 #include "MyUtils/KTools.h"
 #include "MyUtils/CCStrokeLabel.h"
 #include "MyUtils/CCScrewLayer.h"
+#include <vector>
 
 
 USING_NS_CC;
@@ -197,7 +198,7 @@ public:
 	virtual void   onKeyReleased(EventKeyboard::KeyCode keyCode, Event* event);
 	void onBackKeyClicked();
 
-	CC_SYNTHESIZE_RETAIN(CCArray*, _menu_array, Menus);
+	std::vector<MenuButton*> _menu_array;
 	CREATE_FUNC(StartMenu);
 
 
