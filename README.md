@@ -298,6 +298,8 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
   memakai `StringUtils::format`/`std::string` tanpa mengubah state gameplay.
 - `SkillLayer`: constructor tombol select, path intro voice, dan label bond
   lokal memakai string native/`StringUtils::format`; data SQLite tetap ditahan.
+- `SkillLayer`: hasil baca SQLite untuk coin, bond, dan best time disalin ke
+  `std::string` lokal; API `KTools` lama tetap dipertahankan.
 - `StartMenu`: profile/nameplate point label dan path asset tombol nameplate
   lokal memakai `StringUtils::format`/`std::string`; coin SQLite tetap ditahan.
 - `GameOver`: `detailRecord` dan string angka win record aktif memakai
@@ -507,6 +509,8 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
   lokal, sambil menahan update/insert SQL lama untuk slice berikutnya.
 - `KTools` menutup sisa format `CCString` pada builder SQL update/insert lokal,
   sehingga sisa format angka/path aktif tinggal di area core combat.
+- `SkillLayer` melepas local `CCString*` untuk hasil SQLite yang langsung
+  dipakai label/progress, tanpa mengubah return API `KTools`.
 
 1. **Tutup helper compat kecil yang masih lokal**
    - Target file: `Cocos2dx2Compat.h`, `ActionButton`, `HPBar`, `HudLayer`,

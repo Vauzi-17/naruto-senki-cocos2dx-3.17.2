@@ -444,8 +444,8 @@ void SkillLayer::initInterface(){
 		goldBG->setPosition(Vec2(winSize.width/2+skillSprite->getContentSize().width/4+25,winSize.height/2+skillSprite->getContentSize().width/2-74));
 		this->addChild(goldBG,9);
 
-		CCString* cl=tool->readFromSQLite();
-		coinLabel=LabelBMFont::create(cl->getCString(),"Fonts/1.fnt");
+		std::string coinText=tool->readFromSQLite()->getCString();
+		coinLabel=LabelBMFont::create(coinText.c_str(),"Fonts/1.fnt");
 		coinLabel->setScale(0.3f);
 		coinLabel->setAnchorPoint(Vec2(0.5,0));
 		coinLabel->setPosition(Vec2(goldBG->getPositionX()-goldBG->getContentSize().width/2+40,goldBG->getPositionY()+4));
@@ -469,15 +469,15 @@ void SkillLayer::initInterface(){
 
 
 
-		if(std::atoi(cl->getCString())>=99999){
+		if(std::atoi(coinText.c_str())>=99999){
 		bonds->setPercentage(100);
-		}else if(std::atoi(cl->getCString())>=80000){
+		}else if(std::atoi(coinText.c_str())>=80000){
 		bonds->setPercentage(80);
-		}else if(std::atoi(cl->getCString())>=60000){
+		}else if(std::atoi(coinText.c_str())>=60000){
 		bonds->setPercentage(60);
-		}else if(std::atoi(cl->getCString())>=40000){
+		}else if(std::atoi(coinText.c_str())>=40000){
 		bonds->setPercentage(40);
-		}else if(std::atoi(cl->getCString())>=20000){
+		}else if(std::atoi(coinText.c_str())>=20000){
 		bonds->setPercentage(20);
 		}
 
@@ -489,9 +489,7 @@ void SkillLayer::initInterface(){
 
 
 
-		CCString* winNum=tool->readSQLite("CharRecord","name",selectHero,"column1");
-		std::string bondString=winNum->getCString();
-		CCString* totalNum=tool->readSQLite("CharRecord","name",selectHero,"column2");
+		std::string bondString=tool->readSQLite("CharRecord","name",selectHero,"column1")->getCString();
 
 
 
@@ -592,12 +590,12 @@ void SkillLayer::initInterface(){
 		detailBG1->setPosition(Vec2(skillSprite->getPositionX()-skillSprite->getContentSize().width/2+8,skillSprite->getPositionY()-skillSprite->getContentSize().height/2+74));
 		this->addChild(detailBG1,5);
 
-		CCString* recordTime=tool->readSQLite("CharRecord","name",selectHero,"column3");
+		std::string recordTime=tool->readSQLite("CharRecord","name",selectHero,"column3")->getCString();
 		LabelBMFont* bestLabel;
-		if(strcmp(recordTime->getCString(),"")==0){
+		if(recordTime.empty()){
 			bestLabel=LabelBMFont::create("00:00:00","Fonts/1.fnt");
 		}else{
-			bestLabel=LabelBMFont::create(recordTime->getCString(),"Fonts/1.fnt");
+			bestLabel=LabelBMFont::create(recordTime.c_str(),"Fonts/1.fnt");
 		}
 
 		bestLabel->setScale(0.3f);
