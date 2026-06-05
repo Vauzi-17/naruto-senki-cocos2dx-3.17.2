@@ -32,6 +32,7 @@ public:
 	const char* _com1Select;
 	const char* _com2Select;
 	std::string _trainingPlayerPick;
+	std::string _randomPlayerPick;
 	std::vector<std::string> _trainingTeamPicks;
 	std::vector<std::string> _trainingEnemyPicks;
 	Sprite* _trainingTeamSlots[5];
@@ -67,7 +68,7 @@ public:
 	void  onMapBtn(Ref* sender);
 	void  updateMapPreview();
 
-	CC_SYNTHESIZE_RETAIN(CCArray*,_selectList,SelectList);
+	std::vector<std::string> _selectList;
 	Menu*  page_menu;
 
 	bool isStart;

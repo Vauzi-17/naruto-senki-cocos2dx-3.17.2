@@ -91,7 +91,6 @@ NetworkLayer::NetworkLayer(void)
 	_selectImg=NULL;
 
 
-	_selectList=NULL;
 
 	_comSelector1=NULL;
 	_comLabel1=NULL;
@@ -248,7 +247,7 @@ bool NetworkLayer::init(){
 
 		if(!SaveError){
 
-			_selectList=CCArray::create();
+			_selectList.clear();
 			selectArray.clear();
 			_pageLayer1=Layer::create();
 			_pageLayer2=Layer::create();
@@ -290,7 +289,7 @@ bool NetworkLayer::init(){
 				const char* charName;
 				charName=selectList[i];
 
-				_selectList->addObject(CCString::create(charName));
+				_selectList.push_back(charName);
 
 				std::string path=cocos2d::StringUtils::format("%s_select.png",charName);
 				Column=i%7;
@@ -340,17 +339,15 @@ bool NetworkLayer::init(){
 
 
 
-			_selectList->retain();
+			const std::string& hero=_selectList[0];
 
-			CCString* hero=(CCString *)_selectList->objectAtIndex(0);
-
-			std::string path=cocos2d::StringUtils::format("%s_half.png",hero->getCString());
+			std::string path=cocos2d::StringUtils::format("%s_half.png",hero.c_str());
 			_heroHalf=Sprite::createWithSpriteFrameName(path);
 			_heroHalf->setAnchorPoint(Vec2(0,0));
 			_heroHalf->setPosition(Vec2(10,10));
 			this->addChild(_heroHalf,1);
 
-			std::string namePath=cocos2d::StringUtils::format("%s_font.png",hero->getCString());
+			std::string namePath=cocos2d::StringUtils::format("%s_font.png",hero.c_str());
 			_heroName=Sprite::createWithSpriteFrameName(namePath);
 			_heroName->setAnchorPoint(Vec2(0.5f,0));
 			_heroName->setPosition(Vec2(100,20));
@@ -1209,7 +1206,7 @@ void NetworkLayer::onGameStart(Ref* sender){
 		}
 		CCDictionary* dic=CCDictionary::create();
 
-		CCString* tmpChar;
+		std::string tmpChar;
 
 
 
@@ -1229,25 +1226,26 @@ void NetworkLayer::onGameStart(Ref* sender){
 
 
 		if(_playerSelect){
-			tmpChar=CCString::create(_playerSelect);
+			tmpChar=_playerSelect;
 		}else{
 			srand((int)time(0));
-			int num2=this->getSelectList()->count();
+			int num2=(int)_selectList.size();
 			int index=random(num2);
-			tmpChar=(CCString*)_selectList->objectAtIndex(index);
+			tmpChar=_selectList[index];
 			do{
 				srand((int)time(0));
-				int num=this->getSelectList()->count();
+				int num=(int)_selectList.size();
 				int index=random(num);
-				tmpChar=(CCString*)_selectList->objectAtIndex(index);
+				tmpChar=_selectList[index];
 			}
-			while(strcmp(tmpChar->getCString(),"Pain")==0 ||
-				strcmp(tmpChar->getCString(),"Orochimaru")==0 ||
-				strcmp(tmpChar->getCString(),"None")==0
+			while(strcmp(tmpChar.c_str(),"Pain")==0 ||
+				strcmp(tmpChar.c_str(),"Orochimaru")==0 ||
+				strcmp(tmpChar.c_str(),"None")==0
 				);
 
 
-			_playerSelect=tmpChar->getCString();
+			_randomPlayerPick=tmpChar;
+			_playerSelect=_randomPlayerPick.c_str();
 			_isRandomChar=true;
 		}
 
@@ -1267,7 +1265,7 @@ void NetworkLayer::onGameStart(Ref* sender){
 		CCString* tmpRole=CCString::create("Player");
 		CCString* tmpGroup=CCString::create(groupName);
 
-		dic->setObject(tmpChar,"character");
+		dic->setObject(CCString::create(tmpChar.c_str()),"character");
 		dic->setObject(tmpRole,"role");
 		dic->setObject(tmpGroup,"group");
 
@@ -1323,14 +1321,14 @@ void NetworkLayer::onGameStart(Ref* sender){
 				}
 
 				dic=CCDictionary::create();
-				tmpChar=CCString::create(hero->getCString());
+				tmpChar=hero->getCString();
 				tmpRole=CCString::create("Com");
 				if(zhenying>0){
 				tmpGroup=CCString::create("Konoha");
 				}else{
 					tmpGroup=CCString::create("Akatsuki");
 				}
-				dic->setObject(tmpChar,"character");
+				dic->setObject(CCString::create(tmpChar.c_str()),"character");
 				dic->setObject(tmpRole,"role");
 				dic->setObject(tmpGroup,"group");
 
@@ -1349,7 +1347,7 @@ void NetworkLayer::onGameStart(Ref* sender){
 				CCString* hero=(CCString*) tempObject;
 
 				dic=CCDictionary::create();
-				tmpChar=CCString::create(hero->getCString());
+				tmpChar=hero->getCString();
 				tmpRole=CCString::create("Com");
 				if(zhenying>0){
 					tmpGroup=CCString::create("Akatsuki");
@@ -1357,7 +1355,7 @@ void NetworkLayer::onGameStart(Ref* sender){
 					tmpGroup=CCString::create("Konoha");
 
 				}
-				dic->setObject(tmpChar,"character");
+				dic->setObject(CCString::create(tmpChar.c_str()),"character");
 				dic->setObject(tmpRole,"role");
 				dic->setObject(tmpGroup,"group");
 
