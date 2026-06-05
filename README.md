@@ -122,6 +122,10 @@ Alasan estimasi:
 - Core `Element.cpp`/`Element.h` mulai masuk tahap alias-only: implementasi
   hero/flog/tower/monster/bullet memakai `__Array`, `__Dictionary`, dan
   `__String` langsung tanpa mengubah alur data XML atau field gameplay besar.
+- Core `ActionManager.cpp`/`ActionManager.h` ikut dibersihkan secara
+  alias-only dari `CCArray`, `CCDictionary`, dan `CCString` ke tipe
+  `__Array`, `__Dictionary`, dan `__String`; macro ownership dan alur combat
+  lama tidak diubah.
 - UI perimeter berikutnya ikut dibersihkan dari `CCARRAY_FOREACH`:
   `SelectLayer`, `SkillLayer`, `GearLayer`, dan `GameOver` sekarang memakai
   loop indeks atau container STL lokal untuk iterator yang aman.
