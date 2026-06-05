@@ -29,6 +29,11 @@ inline const char* group(cocos2d::Ref* payload)
 	return value(payload, "group");
 }
 
+inline int gearValue(cocos2d::Ref* payload)
+{
+	return static_cast<cocos2d::__String*>(payload)->intValue();
+}
+
 inline void addHero(cocos2d::__Array* heros, const char* character, const char* role, const char* group)
 {
 	cocos2d::__Dictionary* dic = cocos2d::__Dictionary::create();

@@ -335,8 +335,8 @@ void GameOver::listResult(){
 			int i=0;
 			for(unsigned int gearIndex=0; gearIndex<hero->getGearArray()->count(); ++gearIndex){
 				pObject=hero->getGearArray()->objectAtIndex(gearIndex);
-				__String* tmpGear=(__String*) pObject;
-				std::string gearPath=cocos2d::StringUtils::format("gear_%02d.png",std::atoi(tmpGear->getCString()));
+				int tmpGear=NarutoSenkiPayload::gearValue(pObject);
+				std::string gearPath=cocos2d::StringUtils::format("gear_%02d.png",tmpGear);
 				Sprite* gearIcon=Sprite::createWithSpriteFrameName(gearPath);
 				gearIcon->setPosition(Vec2(flogNum->getPositionX()+22+i*gearGap,flogNum->getPositionY()-1));
 				gearIcon->setScale(gearScale);

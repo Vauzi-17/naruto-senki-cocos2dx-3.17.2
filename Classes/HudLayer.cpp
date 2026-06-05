@@ -3,6 +3,7 @@
 #include <string>
 #include "MyUtils/CCShake.h"
 #include "MyUtils/KTools.h"
+#include "HeroPayload.h"
 
 using namespace CocosDenshion;
 
@@ -732,30 +733,30 @@ void HudLayer::updateGears(){
 		int i=0;
 		for(unsigned int gearIndex=0; gearIndex<_delegate->currentPlayer->getGearArray()->count(); ++gearIndex){
 			pObject=_delegate->currentPlayer->getGearArray()->objectAtIndex(gearIndex);
-			__String* tmpGear=(__String*) pObject;
-			if(tmpGear->intValue()!=gear1Button->_gearType && i==0){
-				gear1Button->setGearType(tmpGear->intValue());
-			}else if(tmpGear->intValue()!=gear2Button->_gearType && i==1){
-				gear2Button->setGearType(tmpGear->intValue());
-			}else if(tmpGear->intValue()!=gear3Button->_gearType && i==2){
-				gear3Button->setGearType(tmpGear->intValue());
+			int tmpGear=NarutoSenkiPayload::gearValue(pObject);
+			if(tmpGear!=gear1Button->_gearType && i==0){
+				gear1Button->setGearType(tmpGear);
+			}else if(tmpGear!=gear2Button->_gearType && i==1){
+				gear2Button->setGearType(tmpGear);
+			}else if(tmpGear!=gear3Button->_gearType && i==2){
+				gear3Button->setGearType(tmpGear);
 			}
 
-			if(tmpGear->intValue()==6 && this->getItem2Button()->_gearType==None){
-				this->getItem2Button()->_gearType=gearType(tmpGear->intValue());
+			if(tmpGear==6 && this->getItem2Button()->_gearType==None){
+				this->getItem2Button()->_gearType=gearType(tmpGear);
 				this->getItem2Button()->setVisible(true);
 				this->getItem2Button()->_isLock=false;
-			}else if(tmpGear->intValue()==0 && this->getItem3Button()->_gearType==None){
+			}else if(tmpGear==0 && this->getItem3Button()->_gearType==None){
 
 
-				this->getItem3Button()->_gearType=gearType(tmpGear->intValue());
+				this->getItem3Button()->_gearType=gearType(tmpGear);
 				this->getItem3Button()->_isLock=false;
 				this->getItem3Button()->setVisible(true);
 
-			}else if(tmpGear->intValue()==3 && this->getItem4Button()->_gearType==None){
+			}else if(tmpGear==3 && this->getItem4Button()->_gearType==None){
 
 				this->getItem4Button()->setVisible(true);
-				this->getItem4Button()->_gearType=gearType(tmpGear->intValue());
+				this->getItem4Button()->_gearType=gearType(tmpGear);
 				this->getItem4Button()->_isLock=false;
 			}
 

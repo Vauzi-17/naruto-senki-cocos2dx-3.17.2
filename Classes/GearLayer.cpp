@@ -3,6 +3,7 @@
 #include <string>
 #include "GameLayer.h"
 #include "HudLayer.h"
+#include "HeroPayload.h"
 #include "Characters.h"
 using namespace CocosDenshion;
 
@@ -458,9 +459,9 @@ void GearLayer::updatePlayerGear(){
 		int i=0;
 		for(unsigned int gearIndex=0; gearIndex<_delegate->currentPlayer->getGearArray()->count(); ++gearIndex){
 			Ref* pObject=_delegate->currentPlayer->getGearArray()->objectAtIndex(gearIndex);
-			__String* tmpGear=(__String*) pObject;
+			int tmpGear=NarutoSenkiPayload::gearValue(pObject);
 			GearButton* btn=GearButton::create("");
-			btn->setBtnType(gearType(std::atoi(tmpGear->getCString())),gearbtnType(1),false);
+			btn->setBtnType(gearType(tmpGear),gearbtnType(1),false);
 			btn->setPositionX(13+i*34);
 			btn->setDelegate(this);
 			currentGear_layer->addChild(btn);
@@ -499,8 +500,8 @@ void GearLayer::updateGearList(){
 			if(_delegate->currentPlayer->getGearArray() && _delegate->currentPlayer->getGearArray()->count()>0){
 				for(unsigned int gearIndex=0; gearIndex<_delegate->currentPlayer->getGearArray()->count(); ++gearIndex){
 					Ref* pObject=_delegate->currentPlayer->getGearArray()->objectAtIndex(gearIndex);
-					__String* tmpGear=(__String*) pObject;
-					if (std::atoi(tmpGear->getCString())== i){
+					int tmpGear=NarutoSenkiPayload::gearValue(pObject);
+					if (tmpGear== i){
 						isBuyed=true;
 					}
 				}
