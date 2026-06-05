@@ -346,6 +346,9 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
 - `ActionManager`: beberapa nilai literal stat/counter dan salinan attack value
   yang tidak membutuhkan formatting mulai memakai `CCString::create` langsung;
   rumus HP/CKR/attack aktif tetap ditahan untuk slice core berikutnya.
+- `ActionManager`: helper lokal format int/float ditambahkan untuk mengganti
+  `CCString::createWithFormat` pada blok damage/CKR awal, item recovery, coin,
+  dan gear stat tanpa mengubah rumus combat lama.
 - `KTools`: helper keycode MD5 lokal memakai `StringUtils::format`/
   `std::string`; builder SQL lama tetap ditahan.
 - `KTools`: helper read SQLite lokal mulai memakai `std::string` untuk query
@@ -490,6 +493,8 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
   dipisahkan sebagai kontrak core.
 - `ActionManager` melepas formatter lama untuk literal stat/counter yang tidak
   menghitung nilai baru, tanpa mengubah rumus combat aktif.
+- `ActionManager` mulai memindahkan format angka combat aktif ke helper lokal
+  `StringUtils::format`, dimulai dari damage/CKR awal, recovery, coin, dan gear.
 - `KTools::getKeycode(...)` melepas format `CCString` lokal tanpa menyentuh
   SQL/SQLite helper yang masih menjadi kontrak utility lama.
 - `KTools` read helper mulai melepas format `CCString` pada query/result yang

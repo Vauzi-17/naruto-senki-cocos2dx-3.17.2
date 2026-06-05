@@ -21,6 +21,16 @@ namespace
 			steady_clock::now() - startTime).count());
 	}
 
+	CCString* createActionIntString(int value)
+	{
+		return CCString::create(cocos2d::StringUtils::format("%d", value));
+	}
+
+	CCString* createActionFloatString(float value)
+	{
+		return CCString::create(cocos2d::StringUtils::format("%f", value));
+	}
+
 	Animation* createAnimationFromFrameArray(CCArray* frames, float delay)
 	{
 		Vector<SpriteFrame*> frameVector;
@@ -1547,7 +1557,7 @@ void NarutoSenki::ActionManager::setDamage(CCString* effectType,unsigned int att
 	if (std::atoi(_hp->getCString())-realValue<0){
 		this->setHP(CCString::create("0"));
 	}else{
-		this->setHP(CCString::createWithFormat("%d",std::atoi(this->getHP()->getCString())-realValue));
+		this->setHP(createActionIntString(std::atoi(this->getHP()->getCString())-realValue));
 	}
 	
 	if(strcmp(this->getRole()->getCString(),"Clone")==0){
@@ -1580,7 +1590,7 @@ void NarutoSenki::ActionManager::setDamage(CCString* effectType,unsigned int att
 			if(_master->getLV()>=2 && !_master->_isControled){
 				if(45000-atof(_master->getCKR()->getCString())>=boundValue){
 					float newValue=atof(_master->getCKR()->getCString())+boundValue;
-					_master->setCKR(CCString::createWithFormat("%f",newValue));
+					_master->setCKR(createActionFloatString(newValue));
 				}else{
 					_master->setCKR(CCString::create("45000"));
 				}	
@@ -1599,7 +1609,7 @@ void NarutoSenki::ActionManager::setDamage(CCString* effectType,unsigned int att
 
 					if(50000-atof(_master->getCKR2()->getCString())>=boundValue){
 						float newValue=atof(_master->getCKR2()->getCString())+boundValue;
-						_master->setCKR2(CCString::createWithFormat("%f",newValue));
+						_master->setCKR2(createActionFloatString(newValue));
 					}else{
 						
 						_master->setCKR2(CCString::create("50000"));
@@ -1657,7 +1667,7 @@ void NarutoSenki::ActionManager::setDamage(CCString* effectType,unsigned int att
 		if(_level>=2 && !_isControled && isGainable){
 				if(45000-atof(this->getCKR()->getCString())>=boundValue){
 					float newValue=atof(this->getCKR()->getCString())+boundValue;
-					this->setCKR(CCString::createWithFormat("%f",newValue));
+					this->setCKR(createActionFloatString(newValue));
 				}else{
 					this->setCKR(CCString::create("45000"));
 			
@@ -1682,7 +1692,7 @@ void NarutoSenki::ActionManager::setDamage(CCString* effectType,unsigned int att
 
 				if(50000-atof(this->getCKR2()->getCString())>=boundValue){
 					float newValue=atof(this->getCKR2()->getCString())+boundValue;
-					this->setCKR2(CCString::createWithFormat("%f",newValue));
+					this->setCKR2(createActionFloatString(newValue));
 
 				}else{
 					this->setCKR2(CCString::create("50000"));
@@ -1996,7 +2006,7 @@ void NarutoSenki::ActionManager::setItem(abType type){
 			}
 			
 		}else{
-			this->setHP(CCString::createWithFormat("%d",std::atoi(_hp->getCString())+hpRestore)) ;
+			this->setHP(createActionIntString(std::atoi(_hp->getCString())+hpRestore)) ;
 			if(_hpBar){
 			_hpBar->loseHP(this->getHpPercent());
 			}
@@ -2050,9 +2060,9 @@ bool NarutoSenki::ActionManager::setGear(gearType type){
 		case gear04:
 
 			if(this->gettempAttackValue1()){
-				this->settempAttackValue1(CCString::createWithFormat("%d",std::atoi(this->gettempAttackValue1()->getCString())+160));
+				this->settempAttackValue1(createActionIntString(std::atoi(this->gettempAttackValue1()->getCString())+160));
 			}
-			this->setnAttackValue(CCString::createWithFormat("%d",std::atoi(this->getnAttackValue()->getCString())+160));
+			this->setnAttackValue(createActionIntString(std::atoi(this->getnAttackValue()->getCString())+160));
 			this->isPofang=true;
 
 			break;
@@ -2087,7 +2097,7 @@ bool NarutoSenki::ActionManager::setGear(gearType type){
 		case gear08:
 			int tempMaxHP=std::atoi(this->getMaxHP()->getCString());
 			tempMaxHP+=6000;
-			this->setMaxHP(CCString::createWithFormat("%d",tempMaxHP));
+			this->setMaxHP(createActionIntString(tempMaxHP));
 			if(_hpBar){
 				_hpBar->loseHP(this->getHpPercent());
 			}
@@ -2286,12 +2296,12 @@ void NarutoSenki::ActionManager::enableGear06(float dt){
 
 
 void NarutoSenki::ActionManager::addCoin(int num){
-	this->setCoin(CCString::createWithFormat("%d",std::atoi(this->getCoin()->getCString())+num));
+	this->setCoin(createActionIntString(std::atoi(this->getCoin()->getCString())+num));
 }
 
 void NarutoSenki::ActionManager::minusCoin(int num){
 	if( std::atoi(this->getCoin()->getCString()) > num){
-		this->setCoin(CCString::createWithFormat("%d",std::atoi(this->getCoin()->getCString())-num));
+		this->setCoin(createActionIntString(std::atoi(this->getCoin()->getCString())-num));
 	}else{
 		this->setCoin(CCString::create("0"));
 	}
@@ -2306,7 +2316,7 @@ void NarutoSenki::ActionManager::setRestore(float dt){
 			this->setHP(CCString::create(this->getMaxHP()->getCString()));
 			_hpBar->loseHP(this->getHpPercent());
 		}else{
-			this->setHP(CCString::createWithFormat("%d",std::atoi(_hp->getCString())+800));
+			this->setHP(createActionIntString(std::atoi(_hp->getCString())+800));
 			_hpBar->loseHP(this->getHpPercent());
 		}
 
@@ -2325,7 +2335,7 @@ void NarutoSenki::ActionManager::setRestore2(float dt){
 		//���ź�Ѫ
 		if(bamen>=8){
 			if(std::atoi(_hp->getCString())-1000>0){
-				this->setHP(CCString::createWithFormat("%d",std::atoi(_hp->getCString())-1000));
+				this->setHP(createActionIntString(std::atoi(_hp->getCString())-1000));
 				_hpBar->loseHP(this->getHpPercent());
 			}else{
 				this->setHP(CCString::create("100"));
@@ -2333,7 +2343,7 @@ void NarutoSenki::ActionManager::setRestore2(float dt){
 			}
 		}else if(bamen>=5){
 			if(std::atoi(_hp->getCString())-200>0){
-				this->setHP(CCString::createWithFormat("%d",std::atoi(_hp->getCString())-200));
+				this->setHP(createActionIntString(std::atoi(_hp->getCString())-200));
 				_hpBar->loseHP(this->getHpPercent());
 			}else{
 				this->setHP(CCString::create("100"));
@@ -2341,7 +2351,7 @@ void NarutoSenki::ActionManager::setRestore2(float dt){
 			}
 		}else if(bamen>=4){
 			if(std::atoi(_hp->getCString())-150>0){
-				this->setHP(CCString::createWithFormat("%d",std::atoi(_hp->getCString())-150));
+				this->setHP(createActionIntString(std::atoi(_hp->getCString())-150));
 				_hpBar->loseHP(this->getHpPercent());
 			}else{
 				this->setHP(CCString::create("100"));
@@ -2349,7 +2359,7 @@ void NarutoSenki::ActionManager::setRestore2(float dt){
 			}
 		}else if(bamen>=3){
 			if(std::atoi(_hp->getCString())-100>0){
-				this->setHP(CCString::createWithFormat("%d",std::atoi(_hp->getCString())-100));
+				this->setHP(createActionIntString(std::atoi(_hp->getCString())-100));
 				_hpBar->loseHP(this->getHpPercent());
 			}else{
 				this->setHP(CCString::create("100"));
@@ -2367,7 +2377,7 @@ void NarutoSenki::ActionManager::setRestore2(float dt){
 		if(isZone){
 
 			if(std::atoi(_hp->getCString())-1000>0){
-				this->setHP(CCString::createWithFormat("%d",std::atoi(_hp->getCString())-1000));
+				this->setHP(createActionIntString(std::atoi(_hp->getCString())-1000));
 				_hpBar->loseHP(this->getHpPercent());
 			}else{
 				this->setHP(CCString::create("100"));
@@ -2382,7 +2392,7 @@ void NarutoSenki::ActionManager::setRestore2(float dt){
 				this->setHP(CCString::create(this->getMaxHP()->getCString()));
 				_hpBar->loseHP(this->getHpPercent());
 			}else{
-				this->setHP(CCString::createWithFormat("%d",std::atoi(_hp->getCString())+300));
+				this->setHP(createActionIntString(std::atoi(_hp->getCString())+300));
 				_hpBar->loseHP(this->getHpPercent());
 			}
 
@@ -2473,7 +2483,7 @@ void NarutoSenki::ActionManager::setAttackBox(Node* sender,void* date){
 					this->setHP(CCString::create(this->getMaxHP()->getCString()));
 					_hpBar->loseHP(this->getHpPercent());
 				}else{
-					this->setHP(CCString::createWithFormat("%d",std::atoi(_hp->getCString())+260));
+					this->setHP(createActionIntString(std::atoi(_hp->getCString())+260));
 					_hpBar->loseHP(this->getHpPercent());
 				}
 
