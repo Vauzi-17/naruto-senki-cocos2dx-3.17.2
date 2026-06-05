@@ -116,7 +116,6 @@ NetworkLayer::NetworkLayer(void)
 	_playerSelect=NULL;
 	_com1Select=NULL;
 	_com2Select=NULL;
-	selectArray=NULL;
 
 	_pageLayer1=NULL;
 	_pageLayer2=NULL;
@@ -137,7 +136,6 @@ NetworkLayer::NetworkLayer(void)
 
 NetworkLayer::~NetworkLayer(void)
 {
-	CC_SAFE_RELEASE(selectArray);
 
 }
 
@@ -251,7 +249,7 @@ bool NetworkLayer::init(){
 		if(!SaveError){
 
 			_selectList=CCArray::create();
-			selectArray=CCArray::create();
+			selectArray.clear();
 			_pageLayer1=Layer::create();
 			_pageLayer2=Layer::create();
 			_pageLayer3=Layer::create();
@@ -315,7 +313,7 @@ bool NetworkLayer::init(){
 				}
 
 
-				selectArray->addObject(select_btn);
+				selectArray.push_back(select_btn);
 			};
 
 
@@ -342,7 +340,6 @@ bool NetworkLayer::init(){
 
 
 
-			selectArray->retain();
 			_selectList->retain();
 
 			CCString* hero=(CCString *)_selectList->objectAtIndex(0);
@@ -362,7 +359,7 @@ bool NetworkLayer::init(){
 
 			_selectImg=Sprite::createWithSpriteFrameName("1p.png");
 			_selectImg->setAnchorPoint(Vec2(0,0));
-			SelectButton* pObject=(SelectButton*) selectArray->objectAtIndex(0);
+			SelectButton* pObject=selectArray[0];
 			_selectImg->setPosition(Vec2(pObject->getPositionX()-2,pObject->getPositionY()-2));
 			this->addChild(_selectImg,500);
 
@@ -635,12 +632,11 @@ void NetworkLayer::updateMapPreview(){
 
 
 SelectButton* NetworkLayer::findSelectButton(const char* heroName){
-	if(!heroName || !selectArray){
+	if(!heroName){
 		return NULL;
 	}
-	for(unsigned int selectIndex=0; selectIndex<selectArray->count(); ++selectIndex){
-		Ref* pObject=selectArray->objectAtIndex(selectIndex);
-		SelectButton* btn=(SelectButton*)pObject;
+
+	for(SelectButton* btn : selectArray){
 		if(strcmp(btn->getCharName()->getCString(),heroName)==0){
 			return btn;
 		}
@@ -796,8 +792,8 @@ void NetworkLayer::unselectHero(const char* heroName){
 	if(_playerSelect && strcmp(_playerSelect,heroName)==0){
 		_playerSelect=NULL;
 		_trainingPlayerPick.clear();
-		if(!_selectImg && selectArray && selectArray->count()>0){
-			SelectButton* firstBtn=(SelectButton*)selectArray->objectAtIndex(0);
+		if(!_selectImg && !selectArray.empty()){
+			SelectButton* firstBtn=selectArray[0];
 			_selectImg=Sprite::createWithSpriteFrameName("1p.png");
 			_selectImg->setAnchorPoint(Vec2(0,0));
 			_selectImg->setPosition(Vec2(firstBtn->getPositionX()-2,firstBtn->getPositionY()-2));
@@ -832,12 +828,8 @@ void NetworkLayer::unselectAll(){
 		return;
 	}
 
-	if(selectArray){
-		for(unsigned int selectIndex=0; selectIndex<selectArray->count(); ++selectIndex){
-			Ref* pObject=selectArray->objectAtIndex(selectIndex);
-			SelectButton* btn=(SelectButton*)pObject;
-			btn->spriteResetGrey();
-		}
+	for(SelectButton* btn : selectArray){
+		btn->spriteResetGrey();
 	}
 
 	_playerSelect=NULL;
@@ -854,8 +846,8 @@ void NetworkLayer::unselectAll(){
 		refreshTeamSelectorUI();
 	}
 
-	if(!_selectImg && selectArray && selectArray->count()>0){
-		SelectButton* firstBtn=(SelectButton*)selectArray->objectAtIndex(0);
+	if(!_selectImg && !selectArray.empty()){
+		SelectButton* firstBtn=selectArray[0];
 		_selectImg=Sprite::createWithSpriteFrameName("1p.png");
 		_selectImg->setAnchorPoint(Vec2(0,0));
 		_selectImg->setPosition(Vec2(firstBtn->getPositionX()-2,firstBtn->getPositionY()-2));

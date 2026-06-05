@@ -316,6 +316,9 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
 - `SelectLayer`: container tombol UI lokal `selectArray` dipindah dari
   retained `CCArray*` ke `std::vector<SelectButton*>`; payload hero ke loader
   tetap `CCArray`/`CCDictionary`.
+- `NetworkLayer`: container tombol UI lokal `selectArray` dipindah dari
+  retained `CCArray*` ke `std::vector<SelectButton*>`; `_selectList` nama hero
+  dan payload loader lama tetap `CCArray`.
 - `NetworkLayer`: path tombol select, preview hero, map preview/label, dan slot
   team training lokal memakai `StringUtils::format`/`std::string`; payload hero
   ke loader tetap `CCString`/`CCArray`.
@@ -996,6 +999,9 @@ Catatan progress terbaru:
   `_trainingEnemyPicks` memakai `std::string`/`std::vector<std::string>`.
   Handoff `tempHeros` ke `LoadLayer` tetap `CCArray`/`CCDictionary` karena
   masih menjadi kontrak dengan `GameLayer`.
+- `NetworkLayer` ikut melepas container tombol select UI lokal dari retained
+  `CCArray*` ke `std::vector<SelectButton*>`, sambil menahan `_selectList` dan
+  payload hero battle lama sebagai kontrak loader/gameplay.
 - `SelectLayer`, `SkillLayer`, `GearLayer`, dan `GameOver` ikut lepas dari
   `CCARRAY_FOREACH` aktif. Perubahan ini hanya mengganti iterator lokal pada
   daftar select button, gear, result character, dan rematch handoff tanpa

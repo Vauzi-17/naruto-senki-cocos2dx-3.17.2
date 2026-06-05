@@ -50,7 +50,7 @@ public:
 	CC_SYNTHESIZE_RETAIN(Sprite*,_comSelector2,ComSelector2);
 	CC_SYNTHESIZE_RETAIN(Sprite*,_comLabel2,ComLabel2);
 
-	CCArray* selectArray;
+	std::vector<SelectButton*> selectArray;
 
 	CC_SYNTHESIZE_RETAIN(Layer*,_pageLayer1,Page1);
 	CC_SYNTHESIZE_RETAIN(Layer*,_pageLayer2,Page2);
