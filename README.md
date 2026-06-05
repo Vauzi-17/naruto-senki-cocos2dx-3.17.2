@@ -116,6 +116,9 @@ Alasan estimasi:
 - Helper payload scene awal/result dan cast dictionary loader memakai
   `__Dictionary`/`__String` langsung, sehingga alias deprecated `CCDictionary`
   dan `CCString` makin terkonsentrasi di core/parser.
+- Parser XML `KTools::readXMLToArray` masih mempertahankan signature
+  `CCArray*&`, tetapi container/dictionary/string lokal di dalam parser sudah
+  memakai `__Array`, `__Dictionary`, dan `__String` langsung.
 - UI perimeter berikutnya ikut dibersihkan dari `CCARRAY_FOREACH`:
   `SelectLayer`, `SkillLayer`, `GearLayer`, dan `GameOver` sekarang memakai
   loop indeks atau container STL lokal untuk iterator yang aman.

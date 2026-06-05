@@ -765,9 +765,9 @@ bool KTools::readXMLToArray(const char* filePath,CCArray* &array)
 		//CCLOG("[%s]",actionName);
 
 		XMLElement *actionNodeEle=actionEle->FirstChildElement();
-        CCArray* actionArray=CCArray::create();
-		CCArray* actionDate=CCArray::create();
-		CCArray* actionFrame=CCArray::create();
+        __Array* actionArray=__Array::create();
+		__Array* actionDate=__Array::create();
+		__Array* actionFrame=__Array::create();
 		while(actionNodeEle){
 			//CCLOG("+[%s]",actionNodeEle->Name());
 			if(strcmp(actionNodeEle->Name(),"frame")){
@@ -776,10 +776,10 @@ bool KTools::readXMLToArray(const char* filePath,CCArray* &array)
 				while(dateEle){
 
 					const char* nodeKey=dateEle->FirstAttribute()->Value();
-					CCString* nodeValue=CCString::create(dateEle->GetText());
+					__String* nodeValue=__String::create(dateEle->GetText());
 
 					//CCLOG("%s:%s",nodeKey,nodeValue->getCString());
-					CCDictionary* dateDic=CCDictionary::create();
+					__Dictionary* dateDic=__Dictionary::create();
 					dateDic->setObject(nodeValue,nodeKey);
 
 					actionDate->addObject(dateDic);
@@ -799,10 +799,10 @@ bool KTools::readXMLToArray(const char* filePath,CCArray* &array)
 						nodeKey=frameEle->Name();
 					}
 					
-					CCString* nodeValue=CCString::create(frameEle->GetText());
+					__String* nodeValue=__String::create(frameEle->GetText());
 
 					//CCLOG("%s:%s",nodeKey,nodeValue->getCString());
-					CCDictionary* frameDic=CCDictionary::create();
+					__Dictionary* frameDic=__Dictionary::create();
 					frameDic->setObject(nodeValue,nodeKey);
 					actionFrame->addObject(frameDic);
 
