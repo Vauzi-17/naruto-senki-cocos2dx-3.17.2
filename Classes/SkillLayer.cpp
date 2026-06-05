@@ -447,7 +447,7 @@ void SkillLayer::initInterface(){
 		goldBG->setPosition(Vec2(winSize.width/2+skillSprite->getContentSize().width/4+25,winSize.height/2+skillSprite->getContentSize().width/2-74));
 		this->addChild(goldBG,9);
 
-		std::string coinText=tool->readFromSQLite()->getCString();
+		std::string coinText=tool->readFromSQLite();
 		coinLabel=LabelBMFont::create(coinText.c_str(),"Fonts/1.fnt");
 		coinLabel->setScale(0.3f);
 		coinLabel->setAnchorPoint(Vec2(0.5,0));
@@ -492,7 +492,7 @@ void SkillLayer::initInterface(){
 
 
 
-		std::string bondString=tool->readSQLite("CharRecord","name",selectHero,"column1")->getCString();
+		std::string bondString=tool->readSQLite("CharRecord","name",selectHero,"column1");
 
 
 
@@ -593,7 +593,7 @@ void SkillLayer::initInterface(){
 		detailBG1->setPosition(Vec2(skillSprite->getPositionX()-skillSprite->getContentSize().width/2+8,skillSprite->getPositionY()-skillSprite->getContentSize().height/2+74));
 		this->addChild(detailBG1,5);
 
-		std::string recordTime=tool->readSQLite("CharRecord","name",selectHero,"column3")->getCString();
+		std::string recordTime=tool->readSQLite("CharRecord","name",selectHero,"column3");
 		LabelBMFont* bestLabel;
 		if(recordTime.empty()){
 			bestLabel=LabelBMFont::create("00:00:00","Fonts/1.fnt");

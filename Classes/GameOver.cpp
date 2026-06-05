@@ -395,7 +395,7 @@ void GameOver::listResult(){
 
 	tool->decode(tempReward);
 
-	std::string coinRecord=tool->readFromSQLite()->getCString();
+	std::string coinRecord=tool->readFromSQLite();
 	int rewardNum;
 	if(_isWin){
 		rewardNum=realKillNum*75+std::atoi(tempReward.c_str());
@@ -533,7 +533,7 @@ void GameOver::listResult(){
 
 
 			if(_isWin ){
-				std::string winNum=tool->readSQLite("CharRecord","name",resultChar.c_str(),"column1")->getCString();
+				std::string winNum=tool->readSQLite("CharRecord","name",resultChar.c_str(),"column1");
 				int tempWin=0;
 
 				if(resultScore>=140){
@@ -580,7 +580,7 @@ void GameOver::listResult(){
 
 						if(strcmp(hero->getGroup()->getCString(),_delegate->currentPlayer->getGroup()->getCString())==0){
 
-							std::string winNum=tool->readSQLite("CharRecord","name",hero->getCharacter()->getCString(),"column1")->getCString();
+							std::string winNum=tool->readSQLite("CharRecord","name",hero->getCharacter()->getCString(),"column1");
 							int tempWin=0;
 							if(resultScore>=140){
 								tempWin=std::atoi(winNum.c_str())+2;
@@ -601,7 +601,7 @@ void GameOver::listResult(){
 				}
 
 				//×îËÙ¼ÇÂ¼
-				std::string recordTime=tool->readSQLite("CharRecord","name",resultChar.c_str(),"column3")->getCString();
+				std::string recordTime=tool->readSQLite("CharRecord","name",resultChar.c_str(),"column3");
 				if(recordTime.empty()){
 					if(CError!=1){
 						tool->saveSQLite("CharRecord","name",resultChar.c_str(),"column3",(char*) tempTime->getCString(),false);

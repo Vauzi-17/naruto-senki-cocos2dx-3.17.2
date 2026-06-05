@@ -1389,7 +1389,7 @@ void  StartMenu::onNamePlateComfrim(Ref* sender){
 
 	MenuItem* item=(MenuItem*) sender;
 	KTools* tool=KTools::create();
-	std::string coinValue=tool->readFromSQLite()->getCString();
+	std::string coinValue=tool->readFromSQLite();
 	std::string tempCost2="EFDDD\x14";
 	tool->decode(tempCost2);
 

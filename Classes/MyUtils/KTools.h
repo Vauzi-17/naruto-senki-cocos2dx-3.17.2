@@ -33,7 +33,7 @@ public:
 	bool checkData();
 	void updateData();
 	bool	saveToSQLite(const char* table="GameRecord",const char* column=NULL,const char* value=NULL,bool isBuy=false);
-	CCString*  readFromSQLite(const char* table="GameRecord",const char* column=NULL,const char* value=NULL);
+	std::string readFromSQLite(const char* table="GameRecord",const char* column=NULL,const char* value=NULL);
 	
 	void encode(std::string &str,int randomKey);
 	void decode(std::string &str);
@@ -51,7 +51,7 @@ public:
 	std::string getKeycode(std::string path);
 	
 
-	CCString*  readSQLite(const char* table,const char* column,const char* value,const char* targetColumn);
+	std::string readSQLite(const char* table,const char* column,const char* value,const char* targetColumn);
 	void saveSQLite(const char* table,const char* relatedColumn,const char* value,const char* targetColumn,char* targetValue,bool isPlus);
 
 

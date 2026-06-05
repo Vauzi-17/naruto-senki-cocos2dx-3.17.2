@@ -1312,7 +1312,7 @@ bool KTools::saveToSQLite(const char* table/* ="GameRecord"*/,const char* column
 
 
 
-CCString* KTools::readFromSQLite(const char* table/* ="GameRecord" */,const char* column/* =NULL */,const char* value/* =NULL */){
+std::string KTools::readFromSQLite(const char* table/* ="GameRecord" */,const char* column/* =NULL */,const char* value/* =NULL */){
 
 	sqlite3* pDB =prepareTableInDB();
 
@@ -1330,14 +1330,14 @@ CCString* KTools::readFromSQLite(const char* table/* ="GameRecord" */,const char
 		decode(str);
 		sqlite3_free_table(result);
 		sqlite3_close(pDB);
-		return CCString::create(str);
+		return str;
 	}
 	sqlite3_close(pDB);
-	return 0;
+	return "";
 
 }
 
-CCString* KTools::readSQLite(const char* table,const char* column,const char* value,const char* targetColumn){
+std::string KTools::readSQLite(const char* table,const char* column,const char* value,const char* targetColumn){
 
 	sqlite3* pDB =prepareTableInDB();
 
@@ -1376,11 +1376,11 @@ CCString* KTools::readSQLite(const char* table,const char* column,const char* va
 		}
 		sqlite3_free_table(result);
 		sqlite3_close(pDB);
-		return CCString::create(targetValue);
+		return targetValue;
 		
 	}
 	sqlite3_close(pDB);
-	return 0;
+	return "";
 	
 }
 

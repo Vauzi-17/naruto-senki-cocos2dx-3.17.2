@@ -316,6 +316,9 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
   lokal memakai string native/`StringUtils::format`; data SQLite tetap ditahan.
 - `SkillLayer`: hasil baca SQLite untuk coin, bond, dan best time disalin ke
   `std::string` lokal; API `KTools` lama tetap dipertahankan.
+- `KTools`: API baca SQLite `readFromSQLite` dan `readSQLite` sekarang
+  mengembalikan `std::string`; caller `SkillLayer`, `GameOver`, dan
+  `StartMenu` tidak lagi menerima `CCString*` dari helper ini.
 - `StartMenu`: profile/nameplate point label dan path asset tombol nameplate
   lokal memakai `StringUtils::format`/`std::string`; coin SQLite tetap ditahan.
 - `StartMenu`: hasil baca coin SQLite untuk konfirmasi nameplate disalin ke
@@ -1068,6 +1071,9 @@ Catatan progress terbaru:
 - Lookup teks UI `Element/strings.xml` untuk notice, ranking, dan tips sudah
   memakai `FileUtils::getValueMapFromFile`; parser XML gameplay di `KTools`
   tetap dipisah sebagai kontrak besar berikutnya.
+- `KTools::readFromSQLite` dan `KTools::readSQLite` melepas return
+  `CCString*` ke `std::string`; caller UI/result/skill langsung memakai string
+  native.
 - `SelectLayer`, `SkillLayer`, `GearLayer`, dan `GameOver` ikut lepas dari
   `CCARRAY_FOREACH` aktif. Perubahan ini hanya mengganti iterator lokal pada
   daftar select button, gear, result character, dan rematch handoff tanpa
