@@ -3,6 +3,7 @@
 #include "SimpleAudioEngine.h"
 #include "LoadLayer.h"
 #include "SkillLayer.h"
+#include <vector>
 
 USING_NS_CC;
 
@@ -22,7 +23,7 @@ public:
 	const char* _playerSelect;
 
 
-	CCArray* selectArray;
+	std::vector<SelectButton*> selectArray;
 
 	bool isStart;
 	bool SaveError;

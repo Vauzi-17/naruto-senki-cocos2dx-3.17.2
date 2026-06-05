@@ -77,7 +77,6 @@ SelectLayer::SelectLayer(void)
 
 	SaveError=false;
 	_playerSelect=NULL;
-	selectArray=NULL;
 
 
 }
@@ -85,7 +84,6 @@ SelectLayer::SelectLayer(void)
 
 SelectLayer::~SelectLayer(void)
 {
-	CC_SAFE_RELEASE(selectArray);
 
 }
 
@@ -198,7 +196,7 @@ bool SelectLayer::init(){
 
 		if(!SaveError){
 			int first_player=NULL;
-			selectArray=CCArray::create();
+			selectArray.clear();
 
 			char* selectList[]={"Naruto","Sakura","Sai",
 				"Itachi","Konan","Deidara",
@@ -226,10 +224,9 @@ bool SelectLayer::init(){
 				}
 				select_btn->setCharName(CCString::create(charName));
 				this->addChild(select_btn,2);
-				selectArray->addObject(select_btn);
+				selectArray.push_back(select_btn);
 
 			};
-			selectArray->retain();
 
 
 			first_player=0;
@@ -250,7 +247,7 @@ bool SelectLayer::init(){
 
 			_selectImg=Sprite::createWithSpriteFrameName("1p.png");
 			_selectImg->setAnchorPoint(Vec2(0,0));
-			SelectButton* pObject=(SelectButton*) selectArray->objectAtIndex(first_player);
+			SelectButton* pObject=selectArray[first_player];
 			_selectImg->setPosition(Vec2(pObject->getPositionX()-2,pObject->getPositionY()-2));
 			this->addChild(_selectImg,500);
 

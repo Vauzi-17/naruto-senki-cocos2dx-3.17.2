@@ -313,6 +313,9 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
   `std::string` lokal; API `KTools` lama tetap dipertahankan.
 - `SelectLayer`: path tombol select dan preview hero lokal memakai
   `StringUtils::format`/`std::string`; field `charName` lama tetap `CCString`.
+- `SelectLayer`: container tombol UI lokal `selectArray` dipindah dari
+  retained `CCArray*` ke `std::vector<SelectButton*>`; payload hero ke loader
+  tetap `CCArray`/`CCDictionary`.
 - `NetworkLayer`: path tombol select, preview hero, map preview/label, dan slot
   team training lokal memakai `StringUtils::format`/`std::string`; payload hero
   ke loader tetap `CCString`/`CCArray`.
@@ -543,6 +546,8 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
   sambil mempertahankan queue report lama sebagai dictionary.
 - `GameOver` melepas local `CCString*` untuk hasil SQLite result/record yang
   langsung dipakai sebagai angka/string lokal.
+- `SelectLayer` melepas container tombol UI lokal dari `CCArray` ke
+  `std::vector`, sambil menahan payload hero battle lama.
 
 1. **Tutup helper compat kecil yang masih lokal**
    - Target file: `Cocos2dx2Compat.h`, `ActionButton`, `HPBar`, `HudLayer`,
