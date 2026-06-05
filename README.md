@@ -318,6 +318,8 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
   `std::string` lokal; API `KTools` lama tetap dipertahankan.
 - `StartMenu`: profile/nameplate point label dan path asset tombol nameplate
   lokal memakai `StringUtils::format`/`std::string`; coin SQLite tetap ditahan.
+- `StartMenu`: hasil baca coin SQLite untuk konfirmasi nameplate disalin ke
+  `std::string` lokal sebelum dihitung.
 - `StartMenu`: container tombol menu lokal `_menu_array` dipindah dari retained
   `CCArray*` ke `std::vector<MenuButton*>`; flow training/battle payload lama
   tetap `CCArray`/`CCDictionary`.
@@ -1058,6 +1060,9 @@ Catatan progress terbaru:
 - `HudLayer::setOugis` memakai `const char*` untuk nama karakter dan group
   cut-in, sehingga HUD cut-in tidak lagi bergantung pada pointer `CCString*`
   dari `ActionManager`.
+- `StartMenu` membaca coin SQLite konfirmasi nameplate ke `std::string` lokal,
+  lalu menghitung biaya dengan `std::atoi` tanpa menyimpan `CCString*`
+  sementara.
 - `SelectLayer`, `SkillLayer`, `GearLayer`, dan `GameOver` ikut lepas dari
   `CCARRAY_FOREACH` aktif. Perubahan ini hanya mengganti iterator lokal pada
   daftar select button, gear, result character, dan rematch handoff tanpa

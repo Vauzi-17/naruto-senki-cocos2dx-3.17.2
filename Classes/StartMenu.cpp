@@ -1389,11 +1389,11 @@ void  StartMenu::onNamePlateComfrim(Ref* sender){
 
 	MenuItem* item=(MenuItem*) sender;
 	KTools* tool=KTools::create();
-	CCString* cl=tool->readFromSQLite();
+	std::string coinValue=tool->readFromSQLite()->getCString();
 	std::string tempCost2="EFDDD\x14";
 	tool->decode(tempCost2);
 
-	int tempCoin =cl->intValue()-std::atoi(tempCost2.c_str());
+	int tempCoin =std::atoi(coinValue.c_str())-std::atoi(tempCost2.c_str());
 	if(tempCoin>=0){
 		std::string namePlate=cocos2d::StringUtils::format("np%d",item->getTag());
 		UserDefault::getInstance()->setStringForKey("namePlateId",namePlate);
