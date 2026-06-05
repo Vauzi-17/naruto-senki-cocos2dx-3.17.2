@@ -108,6 +108,9 @@ Alasan estimasi:
 - Helper random roster lokal `SelectLayer` sudah memakai
   `std::vector<std::string>` untuk daftar hero terpakai, sementara output battle
   tetap `CCArray`/`CCDictionary` sebagai kontrak lama ke loader.
+- Payload player awal di `SelectLayer` sekarang dibangun lewat helper payload
+  yang sama dengan roster random, sehingga sisa `CCString`/`CCDictionary` lokal
+  kecil di start battle training ikut hilang tanpa mengubah format `tempHeros`.
 - Area HUD gameplay yang lebih dekat runtime ikut dibersihkan:
   `HudLayer`/`HPBar` tidak lagi memakai `CCARRAY_FOREACH` aktif untuk map icon,
   gear button, report queue, enemy HP, dan pengecekan reward/share team.
@@ -348,6 +351,9 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
 - `SelectLayer`: container tombol UI lokal `selectArray` dipindah dari
   retained `CCArray*` ke `std::vector<SelectButton*>`; payload hero ke loader
   tetap `CCArray`/`CCDictionary`.
+- `SelectLayer`: payload player awal pada start battle training memakai helper
+  `selectAddHero(...)`, sehingga `CCString`/`CCDictionary` lokal kecil tidak
+  lagi dibuat manual sebelum payload `tempHeros`.
 - `NetworkLayer`: container tombol UI lokal `selectArray` dipindah dari
   retained `CCArray*` ke `std::vector<SelectButton*>`; `_selectList` nama hero
   dan payload loader lama tetap `CCArray`. Caller `SkillLayer` yang mereset

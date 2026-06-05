@@ -363,11 +363,6 @@ void SelectLayer::onGameStart(Ref* sender){
 		SimpleAudioEngine::getInstance()->playEffect("Audio/Menu/confirm.ogg");
 
 
-		CCDictionary* dic=CCDictionary::create();
-
-		CCString* tmpChar;
-
-
 		char* heroList[]={"Konan","Sakura","Naruto","Sai","Deidara",
 			"Kakashi","Itachi","Tenten","Jiraiya","Suigetsu",
 			"Tsunade","Tobirama","Neji","Ino","Asuma","Gaara",
@@ -380,22 +375,8 @@ void SelectLayer::onGameStart(Ref* sender){
 		int num= sizeof(heroList)/sizeof(char*);
 
 
-		tmpChar=CCString::create(_selectHero);
-
-		srand((int)time(0));
-		int zhenying=1;
-
-
-
-
-		CCString* tmpRole=CCString::create("Player");
-		CCString* tmpGroup=CCString::create("Konoha");
-
-		dic->setObject(tmpChar,"character");
-		dic->setObject(tmpRole,"role");
-		dic->setObject(tmpGroup,"group");
-
-		CCArray* tempHeros=CCArray::createWithObject(dic);
+		CCArray* tempHeros=CCArray::create();
+		selectAddHero(tempHeros,_selectHero,"Player","Konoha");
 
 
 
