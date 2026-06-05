@@ -437,10 +437,7 @@ void HudLayer::initHeroInterface(){
 	coinLabel->setAnchorPoint(Vec2(0,0));
 	coinLabel->setPosition(Vec2(121,winSize.height-61));
 
-// 		if (_delegate && _delegate->currentPlayer)
-// {
-//     _delegate->currentPlayer->setCoin(CCString::create("9999"));
-// }
+
 
 	this->addChild(coinLabel,5000);
 

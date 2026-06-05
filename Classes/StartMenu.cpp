@@ -455,27 +455,7 @@ bool StartMenu::init()
 		menu_bar_t->setPosition(Vec2(0,winSize.height-menu_bar_t->getContentSize().height));
 		this->addChild(menu_bar_t,2);
 
-		// Sprite* narutoIdle=Sprite::createWithSpriteFrameName("Naruto_Idle_001.png");
-		// if(narutoIdle){
-		// 	narutoIdle->setAnchorPoint(Vec2(0.5f,0));
-		// 	narutoIdle->setScale(1.45f);
-		// 	narutoIdle->setPosition(Vec2(winSize.width*0.56f,36));
-		// 	narutoIdle->setOpacity(0);
-		// 	this->addChild(narutoIdle,3);
 
-		// 	CCArray* idleFrames=CCArray::create();
-		// 	for(int i=1;i<=4;i++){
-		// 		if(frame){
-		// 			idleFrames->addObject(frame);
-		// 		}
-		// 	}
-		// 	if(idleFrames->count()>0){
-		// 		Animation* idleAnimation=cocos2d::cocos2dx2_compat::createAnimationWithSpriteFrames(idleFrames,0.16f);
-		// 		narutoIdle->runAction(RepeatForever::create(Animate::create(idleAnimation)));
-		// 	}
-		// 	narutoIdle->runAction(FadeIn::create(0.45f));
-		// 	narutoIdle->runAction(RepeatForever::create(cocos2d::cocos2dx2_compat::createSequence(MoveBy::create(1.2f,Vec2(0,4)),MoveBy::create(1.2f,Vec2(0,-4)),NULL)));
-		// }
 
 		Sprite* startmenu_title=Sprite::createWithSpriteFrameName("startmenu_title.png");
 		startmenu_title->setAnchorPoint(Vec2(0,0));
@@ -1962,31 +1942,7 @@ void StartMenu::onTrainingCallBack(){
 			realHero->removeObjectAtIndex(index);
 
 
-			////�������
-			//int length=enemyHero->count();
-			//srand((int)time(0));
-			//int index=random(length);
-			//if(index==(int)enemyHero->count()){
-			//	index=enemyHero->count()-1;
-			//}
 
-			//Ref* tempObject=enemyHero->objectAtIndex(index);
-			//CCString* hero=(CCString*) tempObject;
-
-			//dic=CCDictionary::create();
-			//tmpChar=CCString::create(hero->getCString());
-			//tmpRole=CCString::create("Com");
-			//tmpGroup=CCString::create("Akatsuki");
-
-
-			//dic->setObject(tmpChar,"character");
-			//dic->setObject(tmpRole,"role");
-			//dic->setObject(tmpGroup,"group");
-
-			//tempHeros->addObject(dic);
-			//enemyHero->removeObjectAtIndex(index);
-
-			////---------
 
 		}
 

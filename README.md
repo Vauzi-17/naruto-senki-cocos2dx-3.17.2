@@ -521,6 +521,9 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
   `std::string`, sambil menahan pembacaan `strings.xml` lama.
 - `GameOver` melepas state pilihan change-character dari retained `CCString*`
   ke `std::string`, tanpa mengubah payload rematch ke loader.
+- Komentar dead-code legacy yang masih membawa `CCArray`/`CCDictionary`/
+  `CCString` di `StartMenu`, `HudLayer`, dan `GameOver` dibersihkan agar audit
+  sisa API lama hanya menghitung source aktif.
 
 1. **Tutup helper compat kecil yang masih lokal**
    - Target file: `Cocos2dx2Compat.h`, `ActionButton`, `HPBar`, `HudLayer`,
