@@ -150,22 +150,21 @@ Alasan estimasi:
   loop indeks atau container STL lokal untuk iterator yang aman.
 - Helper random roster lokal `SelectLayer` sudah memakai
   `std::vector<std::string>` untuk daftar hero terpakai, sementara output battle
-  tetap `CCArray`/`CCDictionary` sebagai kontrak lama ke loader.
+  tetap payload array/dictionary lama sebagai kontrak ke loader.
 - Payload player awal di `SelectLayer` sekarang dibangun lewat helper payload
-  yang sama dengan roster random, sehingga sisa `CCString`/`CCDictionary` lokal
-  kecil di start battle training ikut hilang tanpa mengubah format `tempHeros`.
+  yang sama dengan roster random, sehingga string/dictionary lokal kecil di
+  start battle training ikut hilang tanpa mengubah format `tempHeros`.
 - Area HUD gameplay yang lebih dekat runtime ikut dibersihkan:
   `HudLayer`/`HPBar` tidak lagi memakai `CCARRAY_FOREACH` aktif untuk map icon,
   gear button, report queue, enemy HP, dan pengecekan reward/share team.
 - Iterator core terbaru ikut dibersihkan: `ActionManager.cpp` dan `Element.cpp`
   sekarang tidak lagi memakai `CCARRAY_FOREACH` aktif; loop tetap memakai
-  `CCArray::count()` / `objectAtIndex(...)` agar kontrak gameplay lama belum
+  `__Array::count()` / `objectAtIndex(...)` agar kontrak gameplay lama belum
   berubah besar.
-- Masih ada sisa API 2.x yang cukup besar pada kontrak data `ActionManager`,
-  `Element`, `RankingLayer`, beberapa utility UI, app delegate, dan compatibility bridge.
-- Untuk mencapai 100%, sisa terbesar bukan sekadar rename API, tetapi migrasi
-  kontrak data lama seperti `CCArray`, `CCDictionary`, dan `CCString` yang masih
-  dipakai lintas scene, ranking, loader, XML, dan gameplay core.
+- Sisa besar saat ini bukan lagi alias/helper 2.x, melainkan modernisasi
+  kontrak data deprecated internal seperti `__Array`, `__Dictionary`, dan
+  `__String` yang masih dipakai lintas loader, XML, `GameLayer`,
+  `ActionManager`, dan `Element`.
 - Project ini diperlakukan sebagai game offline. Nama `NetworkLayer` adalah nama
   lama untuk flow utama/offline saat ini, bukan indikasi mode online yang harus
   dihapus.
@@ -1095,7 +1094,7 @@ Catatan progress terbaru:
 - `GameLayer.cpp` juga mulai lepas dari `CCARRAY_FOREACH` pada area lokal yang
   mudah dipisahkan: init hero, pemicu AI saat start game, setup duel/training,
   refresh lock ougis, cek tower, dan cleanup/rematch. Kontrak `Heros`,
-  `_CharacterArray`, dan `_TowerArray` tetap `CCArray` untuk menjaga handoff
+  `_CharacterArray`, dan `_TowerArray` tetap `__Array` untuk menjaga handoff
   gameplay lama.
 - `StartMenu.cpp`, `LoadLayer.cpp`, dan `NetworkLayer.cpp` ikut dibersihkan
   dari `CCARRAY_FOREACH` aktif. Loop menu, preload loader, select button, dan
@@ -1103,7 +1102,7 @@ Catatan progress terbaru:
 - `NetworkLayer` tidak lagi menyimpan state training manual sebagai retained
   `CCString*`/`CCArray*`; `_trainingPlayerPick`, `_trainingTeamPicks`, dan
   `_trainingEnemyPicks` memakai `std::string`/`std::vector<std::string>`.
-  Handoff `tempHeros` ke `LoadLayer` tetap `CCArray`/`CCDictionary` karena
+  Handoff `tempHeros` ke `LoadLayer` tetap payload array/dictionary lama karena
   masih menjadi kontrak dengan `GameLayer`.
 - `NetworkLayer` ikut melepas container tombol select UI lokal dari retained
   `CCArray*` ke `std::vector<SelectButton*>`, sambil menahan `_selectList` dan
@@ -1128,7 +1127,7 @@ Catatan progress terbaru:
   ditahan sebagai kontrak core.
 - `HudLayer` melepas container icon tower mini map `_towerIconArray` dari
   retained `CCArray*` ke `std::vector<MiniIcon*>`; queue report lama tetap
-  `CCArray`/`CCDictionary`.
+  payload array/dictionary lama.
 - `HudLayer` melepas queue report lokal `_reportListArray` dari
   `CCArray`/`CCDictionary` ke `std::vector<HudReportEntry>`; sisa `CCString`
   di file ini tinggal update CKR/CKR2 milik core player.
@@ -1167,7 +1166,7 @@ Catatan progress terbaru:
 - `HudLayer.cpp` dan `HPBar.cpp` ikut lepas dari `CCARRAY_FOREACH` aktif pada
   area gameplay lokal: lookup musuh duel, map icon tower/karakter, guardian
   icon, gear button, update HP musuh, state tower icon, report queue, dan
-  pengecekan share/reward team. Container lama tetap `CCArray` agar kontrak
+  pengecekan share/reward team. Container lama tetap `__Array` agar kontrak
   gameplay belum berubah besar.
 - `ActionManager.cpp` dan `Element.cpp` ikut lepas dari `CCARRAY_FOREACH` aktif.
   Loop core pada tower, monster, karakter, target search, dealloc, dan AI kecil
