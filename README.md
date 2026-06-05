@@ -303,6 +303,7 @@ payload, pembacaan payload loader, pembacaan gear UI, set ID spawn lokal, dan
 payload efek kecil juga sudah dikonsolidasikan ke helper kecil. Setter stat
 lokal di `GameLayer`/`HudLayer` mulai ikut dipusatkan ke helper yang sama.
 Helper lokal parser XML juga mulai mengurangi duplikasi entry data lama.
+Array gameplay lokal `GameLayer` juga mulai dipusatkan di helper file-scope.
 Pekerjaan berikutnya adalah validasi build Android/Win32 pengguna serta audit
 final konfigurasi build setelah compat bridge dihapus.
 
@@ -446,6 +447,9 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
 - `KTools::readXMLToArray`: pembuatan array action dan entry string/dictionary
   XML dipusatkan ke helper lokal parser, sehingga output lama tetap sama tetapi
   duplikasi `__Array`/`__Dictionary`/`__String` di loop parser berkurang.
+- `GameLayer`: pembuatan array gameplay lokal untuk character/flog/tower
+  dipusatkan ke helper file-scope, sehingga `__Array::create()` tidak lagi
+  tersebar langsung di beberapa blok init.
 - `NetworkLayer`: path tombol select, preview hero, map preview/label, dan slot
   team training lokal memakai `StringUtils::format`/`std::string`; payload hero
   ke loader tetap `CCString`/`CCArray`.

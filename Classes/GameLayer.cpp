@@ -13,6 +13,15 @@ int CError=0;
 
 using namespace CocosDenshion;
 
+namespace {
+
+__Array* createGameplayArray()
+{
+	return __Array::create();
+}
+
+}
+
 GameLayer::GameLayer(void)
 {
 	_isAttackButtonRelease=true;
@@ -373,11 +382,11 @@ void GameLayer::initHeros(){
 	this->initTileMap();
 	this->initEffects();
 
-	_CharacterArray=__Array::create();
+	_CharacterArray=createGameplayArray();
 	if(_isDuelMode){
-		_KonohaFlogArray=__Array::create();
+		_KonohaFlogArray=createGameplayArray();
 		_KonohaFlogArray->retain();
-		_AkatsukiFlogArray=__Array::create();
+		_AkatsukiFlogArray=createGameplayArray();
 		_AkatsukiFlogArray->retain();
 	}
 	SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Element/hpBar/hpBar.plist");
@@ -634,8 +643,8 @@ void GameLayer::initFlogs(){
 	kName="KotetsuFlog";
 	aName="FemalePainFlog";
 
-	_KonohaFlogArray=__Array::create();
-	_AkatsukiFlogArray=__Array::create();
+	_KonohaFlogArray=createGameplayArray();
+	_AkatsukiFlogArray=createGameplayArray();
 
 
 	SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Element/hpBar/flogBar.plist");
@@ -743,7 +752,7 @@ void GameLayer::addFlog(float dt){
 void GameLayer::initTower(){
 
 	if(_isDuelMode){
-		_TowerArray=__Array::create();
+		_TowerArray=createGameplayArray();
 		_TowerArray->retain();
 		return;
 	}
@@ -765,7 +774,7 @@ void GameLayer::initTower(){
 	TMXObjectGroup* metaGroup = currentMap->objectGroupNamed("meta");
 	const auto& metaArray = metaGroup->getObjects();
 
-	_TowerArray=__Array::create();
+	_TowerArray=createGameplayArray();
 
 	int i=0;
 
