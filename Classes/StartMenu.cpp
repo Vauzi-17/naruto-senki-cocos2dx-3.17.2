@@ -1606,8 +1606,9 @@ void StartMenu::setNotice(){
 		notice_layer->addChild(clipper);
 
 		this->addChild(notice_layer);
-		CCDictionary *strings = CCDictionary::createWithContentsOfFile("Element/strings.xml");
-		const char *reply = ((CCString*)strings->objectForKey("Notice"))->getCString();
+		ValueMap strings=FileUtils::getInstance()->getValueMapFromFile("Element/strings.xml");
+		auto noticeValue=strings.find("Notice");
+		std::string reply=noticeValue != strings.end() ? noticeValue->second.asString() : "";
 
 		noticeLabel->setString(reply);
 

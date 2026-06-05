@@ -9,9 +9,9 @@ namespace
 {
 std::string rankingText(const char* key)
 {
-	CCDictionary* strings=CCDictionary::createWithContentsOfFile("Element/strings.xml");
-	CCString* value=(CCString*)strings->objectForKey(key);
-	return value ? value->getCString() : "";
+	ValueMap strings=FileUtils::getInstance()->getValueMapFromFile("Element/strings.xml");
+	auto value=strings.find(key);
+	return value != strings.end() ? value->second.asString() : "";
 }
 }
 

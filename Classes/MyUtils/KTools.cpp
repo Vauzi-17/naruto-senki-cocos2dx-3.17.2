@@ -1495,10 +1495,11 @@ bool CCTips::init(const char *tips){
 	do{
 		CC_BREAK_IF(!Sprite::init());
 		this->setAnchorPoint(Vec2(0.5f,0.5f));
-		CCDictionary *strings = CCDictionary::createWithContentsOfFile("Element/strings.xml");  
-		const char *reply = ((CCString*)strings->objectForKey(tips))->getCString();  
+		ValueMap strings=FileUtils::getInstance()->getValueMapFromFile("Element/strings.xml");
+		auto value=strings.find(tips);
+		std::string reply=value != strings.end() ? value->second.asString() : "";
 
-		Label* tipLabel=Label::createWithSystemFont(reply,FONT_TYPE,12);
+		Label* tipLabel=Label::createWithSystemFont(reply.c_str(),FONT_TYPE,12);
 		this->addChild(tipLabel,5000);
 		this->setPosition(Vec2(winSize.width/2,50));
 		FiniteTimeAction *call=CallFunc::create(CC_CALLBACK_0(CCTips::onDestroy, this));

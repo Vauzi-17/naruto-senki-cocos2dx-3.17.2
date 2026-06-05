@@ -359,8 +359,10 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
   ke `std::string`; request ranking offline/dekoratif tetap menerima nama hero
   yang sama.
 - `RankingLayer`: lookup teks ranking dari `strings.xml` dipusatkan ke helper
-  lokal yang mengembalikan `std::string`; cast `CCString*` lama tidak lagi
-  tersebar di flow ranking.
+  lokal yang mengembalikan `std::string`; lookup sekarang memakai
+  `FileUtils::getValueMapFromFile` tanpa `CCDictionary`/`CCString`.
+- `StartMenu`, `RankingLayer`, dan `CCTips`: lookup teks UI dari
+  `Element/strings.xml` dipindah ke `ValueMap` 3.x.
 - `HPBar`: path heart-effect, label kill/team, total kill, dan reward coin
   lokal memakai `StringUtils::format`/`std::string`; field kill lama tetap
   `CCString`.
@@ -1063,6 +1065,9 @@ Catatan progress terbaru:
 - `StartMenu` membaca coin SQLite konfirmasi nameplate ke `std::string` lokal,
   lalu menghitung biaya dengan `std::atoi` tanpa menyimpan `CCString*`
   sementara.
+- Lookup teks UI `Element/strings.xml` untuk notice, ranking, dan tips sudah
+  memakai `FileUtils::getValueMapFromFile`; parser XML gameplay di `KTools`
+  tetap dipisah sebagai kontrak besar berikutnya.
 - `SelectLayer`, `SkillLayer`, `GearLayer`, dan `GameOver` ikut lepas dari
   `CCARRAY_FOREACH` aktif. Perubahan ini hanya mengganti iterator lokal pada
   daftar select button, gear, result character, dan rematch handoff tanpa
