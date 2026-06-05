@@ -39,6 +39,13 @@ inline cocos2d::__Array* createHeroList()
 	return cocos2d::__Array::create();
 }
 
+inline cocos2d::__Dictionary* createStringPayload(const char* value, int key = 1)
+{
+	auto payload = cocos2d::__Dictionary::create();
+	payload->setObject(cocos2d::__String::create(value), key);
+	return payload;
+}
+
 inline void addHero(cocos2d::__Array* heros, const char* character, const char* role, const char* group)
 {
 	cocos2d::__Dictionary* dic = cocos2d::__Dictionary::create();

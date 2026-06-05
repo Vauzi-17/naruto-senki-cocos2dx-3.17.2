@@ -299,10 +299,10 @@ lalu file compat kosong tersebut dihapus. Area
 UI/menu, HUD, parser XML lokal, `Element`, dan `ActionManager` sudah lepas dari
 alias source lama `CCArray`, `CCDictionary`, `CCString`, dan
 `CCARRAY_FOREACH`; helper payload hero scene awal/result, pembuatan list
-payload, pembacaan payload loader, pembacaan gear UI, dan set ID spawn lokal
-juga sudah dikonsolidasikan ke helper kecil. Pekerjaan berikutnya adalah
-validasi build Android/Win32 pengguna serta audit final konfigurasi build
-setelah compat bridge dihapus.
+payload, pembacaan payload loader, pembacaan gear UI, set ID spawn lokal, dan
+payload efek kecil juga sudah dikonsolidasikan ke helper kecil. Pekerjaan
+berikutnya adalah validasi build Android/Win32 pengguna serta audit final
+konfigurasi build setelah compat bridge dihapus.
 
 Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
 
@@ -435,6 +435,9 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
 - `GameLayer`: set ID guardian, flog, dan tower memakai helper string-to-ID
   bersama, sehingga konversi `__String::create(...)` untuk identitas spawn
   tidak lagi tersebar di blok spawn lokal.
+- `GameLayer`: payload efek guardian dan pointer rematch lokal ikut dirapikan
+  lewat helper payload/`auto`, sehingga dictionary payload kecil tidak lagi
+  dibuat langsung di blok guardian.
 - `NetworkLayer`: path tombol select, preview hero, map preview/label, dan slot
   team training lokal memakai `StringUtils::format`/`std::string`; payload hero
   ke loader tetap `CCString`/`CCArray`.

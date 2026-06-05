@@ -354,8 +354,7 @@ void GameLayer::initGard(){
 	Guardian->setCharNO(7);
 
 	Guardian->idle();
-	__Dictionary* callValue = __Dictionary::create();
-	callValue->setObject(__String::create("smk"), 1);
+	auto callValue=NarutoSenkiPayload::createStringPayload("smk");
 	Guardian->setSkillEffect(Guardian,callValue);
 
 	Guardian->doAI();
@@ -1322,10 +1321,8 @@ void GameLayer::onLeft(){
 
 	KTools* tool=KTools::create();
 
-	__Array* rematchHeros=NULL;
-	if(_isRematching && _rematchHerosOverride){
-		rematchHeros=_rematchHerosOverride;
-	}else if(_isRematching && _CharacterArray){
+	auto rematchHeros=_isRematching ? _rematchHerosOverride : nullptr;
+	if(_isRematching && !rematchHeros && _CharacterArray){
 		rematchHeros=NarutoSenkiPayload::createHeroList();
 		Ref* heroObject;
 		for(unsigned int heroIndex=0; heroIndex<_CharacterArray->count(); ++heroIndex){
