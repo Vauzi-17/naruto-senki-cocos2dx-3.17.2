@@ -99,6 +99,9 @@ Alasan estimasi:
   `CCString*`/`CCArray*` dan memakai `std::string` serta
   `std::vector<std::string>`, sementara payload `tempHeros` ke `LoadLayer`
   tetap `CCArray` agar kontrak gameplay lama belum berubah besar.
+- Daftar hero cadangan lokal di flow start battle `NetworkLayer` juga sudah
+  memakai `std::vector<std::string>`; `CCArray`/`CCDictionary` tetap hanya
+  dipakai sebagai payload akhir ke `LoadLayer`.
 - UI perimeter berikutnya ikut dibersihkan dari `CCARRAY_FOREACH`:
   `SelectLayer`, `SkillLayer`, `GearLayer`, dan `GameOver` sekarang memakai
   loop indeks atau container STL lokal untuk iterator yang aman.
@@ -237,13 +240,14 @@ Roadmap menuju 100%:
 
 Urutan langkah berikutnya menuju 100%:
 
-Posisi saat ini: **akhir langkah 5 menuju langkah 6**. Helper compat kecil
-yang benar-benar lokal sudah mulai ditutup (`visitNode`, `CCTime`/`cc_timeval`,
-`CCDictElement`, sebagian state cooldown `ActionButton`, `CCScale9Sprite`,
-`CCScrollView`, `CCEditBox`, macro `atoi`, dan alias HTTP `CCHttp*`). Area
-UI/menu dan HUD lokal juga sudah banyak lepas dari `CCARRAY_FOREACH`; pekerjaan
-berikutnya bergeser ke kontrak data lebih besar seperti parser XML, ranking
-string/XML, dan kontrak data `ActionManager`/`Element`.
+Posisi saat ini: **langkah 6, pembersihan container/data lokal sebelum parser
+XML dan core penuh**. Helper compat kecil yang benar-benar lokal sudah mulai
+ditutup (`visitNode`, `CCTime`/`cc_timeval`, `CCDictElement`, sebagian state
+cooldown `ActionButton`, `CCScale9Sprite`, `CCScrollView`, `CCEditBox`, macro
+`atoi`, dan alias HTTP `CCHttp*`). Area UI/menu dan HUD lokal juga sudah banyak
+lepas dari `CCARRAY_FOREACH`; pekerjaan berikutnya bergeser ke kontrak data
+lebih besar seperti parser XML, ranking string/XML, dan kontrak data
+`ActionManager`/`Element`.
 
 Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
 
@@ -351,6 +355,9 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
 - `NetworkLayer`: daftar nama hero lokal `_selectList` dipindah dari retained
   `CCArray*` ke `std::vector<std::string>`; payload loader tetap membangun
   `CCArray`/`CCDictionary`.
+- `NetworkLayer`: daftar hero cadangan lokal pada flow start battle memakai
+  `std::vector<std::string>`; payload `tempHeros` ke `LoadLayer` tetap
+  memakai kontrak lama agar perubahan tidak melebar ke gameplay core.
 - `NetworkLayer`: path tombol select, preview hero, map preview/label, dan slot
   team training lokal memakai `StringUtils::format`/`std::string`; payload hero
   ke loader tetap `CCString`/`CCArray`.

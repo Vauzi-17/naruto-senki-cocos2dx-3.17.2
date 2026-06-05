@@ -1273,7 +1273,7 @@ void NetworkLayer::onGameStart(Ref* sender){
 
 
 
-		CCArray* realHero=CCArray::create();
+		std::vector<std::string> realHero;
 
 		for(int i=0;i<num;i++){
 
@@ -1294,34 +1294,32 @@ void NetworkLayer::onGameStart(Ref* sender){
 			}
 
 
-			CCString* hero=CCString::create(heroList[i]);
-			realHero->addObject(hero);
+			realHero.push_back(heroList[i]);
 		}
 
 
 		for(int i=0;i<5;i++){
-			CCString* hero;
+			std::string hero;
 			if(i<2){
 
 				if(i==0 && _isHardCoreMode && _com1Select){
-					hero=CCString::create(_com1Select);
+					hero=_com1Select;
 				}else if(i==1 && _isHardCoreMode && _com2Select){
-					hero=CCString::create(_com2Select);
+					hero=_com2Select;
 				}else{
-					int length=realHero->count();
+					int length=(int)realHero.size();
 					srand((int)time(0));
 					int index=random(length);
-					if(index==(int)realHero->count()){
-						index=realHero->count()-1;
+					if(index==(int)realHero.size()){
+						index=(int)realHero.size()-1;
 					}
 
-					Ref* tempObject=realHero->objectAtIndex(index);
-					hero=(CCString*) tempObject;
-					realHero->removeObjectAtIndex(index);
+					hero=realHero[index];
+					realHero.erase(realHero.begin()+index);
 				}
 
 				dic=CCDictionary::create();
-				tmpChar=hero->getCString();
+				tmpChar=hero;
 				tmpRole=CCString::create("Com");
 				if(zhenying>0){
 				tmpGroup=CCString::create("Konoha");
@@ -1336,18 +1334,17 @@ void NetworkLayer::onGameStart(Ref* sender){
 
 
 			}else{
-				int length=realHero->count();
+				int length=(int)realHero.size();
 				srand((int)time(0));
 				int index=random(length);
-				if(index==(int)realHero->count()){
-					index=realHero->count()-1;
+				if(index==(int)realHero.size()){
+					index=(int)realHero.size()-1;
 				}
 
-				Ref* tempObject=realHero->objectAtIndex(index);
-				CCString* hero=(CCString*) tempObject;
+				std::string hero=realHero[index];
 
 				dic=CCDictionary::create();
-				tmpChar=hero->getCString();
+				tmpChar=hero;
 				tmpRole=CCString::create("Com");
 				if(zhenying>0){
 					tmpGroup=CCString::create("Akatsuki");
@@ -1360,7 +1357,7 @@ void NetworkLayer::onGameStart(Ref* sender){
 				dic->setObject(tmpGroup,"group");
 
 				tempHeros->addObject(dic);
-				realHero->removeObjectAtIndex(index);
+				realHero.erase(realHero.begin()+index);
 
 			}
 
