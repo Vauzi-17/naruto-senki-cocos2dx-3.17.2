@@ -22,7 +22,7 @@ masih memakai API 2.x seperti `CCLayer`, `CCSprite`, `CCMenu`, `CCPoint`,
 
 ## Estimasi Progress Migrasi
 
-Estimasi progress menuju kode full cocos2d-x 3.17.2: **sekitar 98%**.
+Estimasi progress menuju kode full cocos2d-x 3.17.2: **sekitar 98-99%**.
 
 Alasan estimasi:
 
@@ -349,6 +349,9 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
 - `ActionManager`: helper lokal format int/float ditambahkan untuk mengganti
   `CCString::createWithFormat` pada blok damage/CKR awal, item recovery, coin,
   dan gear stat tanpa mengubah rumus combat lama.
+- `ActionManager`: seluruh sisa `CCString::createWithFormat` aktif sudah
+  dipindahkan ke helper lokal `StringUtils::format`/`CCString::create`; kontrak
+  field stat lama tetap `CCString*`.
 - `KTools`: helper keycode MD5 lokal memakai `StringUtils::format`/
   `std::string`; builder SQL lama tetap ditahan.
 - `KTools`: helper read SQLite lokal mulai memakai `std::string` untuk query
@@ -495,6 +498,9 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
   menghitung nilai baru, tanpa mengubah rumus combat aktif.
 - `ActionManager` mulai memindahkan format angka combat aktif ke helper lokal
   `StringUtils::format`, dimulai dari damage/CKR awal, recovery, coin, dan gear.
+- `ActionManager` menutup sisa formatter `CCString::createWithFormat` aktif
+  secara penuh; sisa pekerjaan core bergeser ke kontrak container/string lama
+  (`CCArray`, `CCDictionary`, `CCString`) bukan lagi formatter.
 - `KTools::getKeycode(...)` melepas format `CCString` lokal tanpa menyentuh
   SQL/SQLite helper yang masih menjadi kontrak utility lama.
 - `KTools` read helper mulai melepas format `CCString` pada query/result yang
