@@ -894,7 +894,7 @@ void GameLayer::setCKRLose(bool isCRK2){
 
 
 
-void GameLayer::setReport(const char* name1, const char* name2,CCString* killNum){
+void GameLayer::setReport(const char* name1, const char* name2,const char* killNum){
 	this->_hudLayer->setReport(name1,name2,killNum);
 }
 

@@ -110,7 +110,7 @@ public:
 	void setHPLose(float percent);
 	void setCKRLose(bool isCRK2);
 
-	void setReport(const char* name1, const char* name2,CCString* killNum);
+	void setReport(const char* name1, const char* name2,const char* killNum);
 	void clearDoubleClick();
 	void resetStatusBar();
 	void setCoin(const char* value);

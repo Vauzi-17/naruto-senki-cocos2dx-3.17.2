@@ -895,12 +895,12 @@ bool HudLayer::offCoin(const char* value){
 }
 
 
-void HudLayer::setReport(const char* name1, const char* name2,CCString* killNum){
+void HudLayer::setReport(const char* name1, const char* name2,const char* killNum){
 	float length;
 	HudReportEntry entry;
 	entry.name1=name1 ? name1 : "";
 	entry.name2=name2 ? name2 : "";
-	entry.kills=killNum ? killNum->getCString() : "";
+	entry.kills=killNum ? killNum : "";
 	entry.isDisplay=false;
 
 	if(!_reportListArray.empty()){

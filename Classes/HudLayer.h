@@ -123,7 +123,7 @@ public:
 	void	attackButtonRelease();
 	void	pauseButtonClick(Ref* sender);
 	void	gearButtonClick(Ref* sender);
-	void	setReport(const char* name1, const char* name2,CCString* killNum);
+	void	setReport(const char* name1, const char* name2,const char* killNum);
 	void	setReportCache();
 	void    setBuffDisplay(const char* buffName,float buffStayTime);
 	void	clearSPCReport();
