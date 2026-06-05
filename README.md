@@ -367,6 +367,9 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
 - `KTools`: sisa builder SQL update/insert lokal sudah tidak memakai
   `CCString::createWithFormat`; jalur SQLite lama tetap memakai query yang sama
   dan return/caller lama tidak diubah.
+- `KTools`: query dan nilai encoded lokal pada init/update SQLite memakai
+  `std::string` langsung; return API lama `CCString*` tetap dipertahankan untuk
+  caller yang belum dimigrasi.
 - `NetworkLayer`: komentar request list hero lama dan parsing response callback
   yang sudah tidak punya caller aktif dibersihkan; flow pemilihan hero tetap
   memakai daftar offline statis.
@@ -524,6 +527,9 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
 - Komentar dead-code legacy yang masih membawa `CCArray`/`CCDictionary`/
   `CCString` di `StartMenu`, `HudLayer`, dan `GameOver` dibersihkan agar audit
   sisa API lama hanya menghitung source aktif.
+- `KTools` SQLite helper melepas `CCString` lokal untuk query/encoded value
+  yang tidak perlu menjadi kontrak caller; sisa `KTools` tinggal XML parser,
+  return API `CCString*`, dan lookup `strings.xml`.
 
 1. **Tutup helper compat kecil yang masih lokal**
    - Target file: `Cocos2dx2Compat.h`, `ActionButton`, `HPBar`, `HudLayer`,

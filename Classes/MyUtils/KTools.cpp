@@ -873,29 +873,28 @@ void KTools::initTableInDB(){
 		return;
 	};
 
-	CCString*sql=CCString::create("drop table IF EXISTS Achievement");
+	std::string sql="drop table IF EXISTS Achievement";
 
-	sqlite3_exec(pDB,sql->getCString(),NULL,NULL,&errorMsg);
+	sqlite3_exec(pDB,sql.c_str(),NULL,NULL,&errorMsg);
 
 
-	sql=CCString::create("create table if not exists CharRecord (name char(20)  primary key ,column1 char(10),column2 char(10),column3 char(10))");
-	sqlite3_exec(pDB,sql->getCString(),NULL,NULL,&errorMsg);
+	sql="create table if not exists CharRecord (name char(20)  primary key ,column1 char(10),column2 char(10),column3 char(10))";
+	sqlite3_exec(pDB,sql.c_str(),NULL,NULL,&errorMsg);
 	 
-	sql=CCString::create("select * from  GameRecord");
+	sql="select * from  GameRecord";
 	
-	sqlite3_exec(pDB,sql->getCString(),NULL,NULL,&errorMsg);
+	sqlite3_exec(pDB,sql.c_str(),NULL,NULL,&errorMsg);
 	
 
 
 	if(errorMsg!=NULL){
 		errorMsg=NULL;
-		sql=CCString::create("create table if not exists GameRecord (id char(10) primary key,coin char(20),version char(20))");
-		sqlite3_exec(pDB,sql->getCString(),NULL,NULL,&errorMsg);
+		sql="create table if not exists GameRecord (id char(10) primary key,coin char(20),version char(20))";
+		sqlite3_exec(pDB,sql.c_str(),NULL,NULL,&errorMsg);
 		
 		std::string str="n>";
-		CCString* coin=CCString::create(str);
 
-		std::string insertSql=cocos2d::StringUtils::format("insert into GameRecord values(1,'%s','1')",coin->getCString());
+		std::string insertSql=cocos2d::StringUtils::format("insert into GameRecord values(1,'%s','1')",str.c_str());
 		int result=sqlite3_exec(pDB,insertSql.c_str(),NULL,NULL,&errorMsg);
 
 		if(errorMsg!=NULL){
@@ -912,8 +911,8 @@ void KTools::initTableInDB(){
 	
 	bool isExisted_;
 	
-	sql=CCString::create("select count(*) from  CharRecord");
-	sqlite3_exec(pDB,sql->getCString(),isExisted,&isExisted_,&errorMsg);
+	sql="select count(*) from  CharRecord";
+	sqlite3_exec(pDB,sql.c_str(),isExisted,&isExisted_,&errorMsg);
 	
 	if(!isExisted_){
 
@@ -933,29 +932,25 @@ void KTools::initTableInDB(){
 
 			int key=rand()%50+40;
 			encode(name,key);
-			CCString* nameDB=CCString::create(name);
 		
 
 			std::string column1="0";
 			key=rand()%60+40;
 			encode(column1,key);
-			CCString* column1DB=CCString::create(column1);
 
 			std::string column2="0";
 			key=rand()%60+40;
 			encode(column2,key);
-			CCString* column2DB=CCString::create(column2);
 
 
 			std::string column3="";
 			key=rand()%60+40;
 			encode(column3,key);
-			CCString* column3DB=CCString::create(column3);
 
 
 
 
-			std::string insertSql=cocos2d::StringUtils::format("insert into  CharRecord values('%s','%s','%s','%s')",nameDB->getCString(),column1DB->getCString(),column2DB->getCString(),column3DB->getCString());
+			std::string insertSql=cocos2d::StringUtils::format("insert into  CharRecord values('%s','%s','%s','%s')",name.c_str(),column1.c_str(),column2.c_str(),column3.c_str());
 			sqlite3_exec(pDB,insertSql.c_str(),NULL,NULL,&errorMsg);
 
 			if(errorMsg!=NULL){
@@ -990,8 +985,8 @@ void KTools::initColumeInDB(){
 	int row=0;
 	int column=0;
 	
-	CCString* sql=CCString::create("select coin from GameRecord");
-	sqlite3_get_table(pDB,sql->getCString(),&result2,&row,&column,NULL);
+	std::string sql="select coin from GameRecord";
+	sqlite3_get_table(pDB,sql.c_str(),&result2,&row,&column,NULL);
 	std::string str2=result2[1];
 	decode(str2);
 
@@ -999,8 +994,8 @@ void KTools::initColumeInDB(){
 	std::string str3="uuuuu<";
 	decode(str3);
 	if(std::atoi(str2.c_str())>std::atoi(str3.c_str())){
-		CCString* coin=CCString::create("uuuuu<");
-		std::string updateSql=cocos2d::StringUtils::format("update GameRecord set coin='%s'",coin->getCString());
+		std::string coin="uuuuu<";
+		std::string updateSql=cocos2d::StringUtils::format("update GameRecord set coin='%s'",coin.c_str());
 		sqlite3_exec(pDB,updateSql.c_str(),NULL,NULL,&errorMsg);
 		this->updateData();
 	}
@@ -1297,8 +1292,7 @@ bool KTools::saveToSQLite(const char* table/* ="GameRecord"*/,const char* column
 
 
 		encode(str,key);
-		CCString* coin=CCString::create(str);
-		std::string sql=cocos2d::StringUtils::format("update %s set %s='%s'",table,column,coin->getCString());
+		std::string sql=cocos2d::StringUtils::format("update %s set %s='%s'",table,column,str.c_str());
 		sqlite3_exec(pDB,sql.c_str(),NULL,NULL,&errorMsg);
 
 		if(errorMsg!=NULL){
@@ -1334,10 +1328,9 @@ CCString* KTools::readFromSQLite(const char* table/* ="GameRecord" */,const char
 
 		std::string str=result[1];
 		decode(str);
-		CCString* coin=CCString::create(str);
 		sqlite3_free_table(result);
 		sqlite3_close(pDB);
-		return coin;
+		return CCString::create(str);
 	}
 	sqlite3_close(pDB);
 	return 0;
@@ -1373,18 +1366,17 @@ CCString* KTools::readSQLite(const char* table,const char* column,const char* va
 	
 		}
 
-		CCString* targetValue=CCString::create("");
+		std::string targetValue;
 
 
 		if(strcmp(targetColumn,"column3")==0 || strcmp(targetColumn,"column4")==0){
-		    targetValue=CCString::create(target);
+		    targetValue=target;
 		}else{
-			std::string targetText=cocos2d::StringUtils::format("%d",std::atoi(target.c_str()));
-			targetValue=CCString::create(targetText);
+			targetValue=cocos2d::StringUtils::format("%d",std::atoi(target.c_str()));
 		}
 		sqlite3_free_table(result);
 		sqlite3_close(pDB);
-		return targetValue;
+		return CCString::create(targetValue);
 		
 	}
 	sqlite3_close(pDB);
@@ -1447,8 +1439,8 @@ void KTools::saveSQLite(const char* table,const char* relatedColumn,const char* 
 			decode(str3);
 
 			if(std::atoi(str2.c_str())>std::atoi(str3.c_str())){
-				CCString* coin=CCString::create("uuuuu<");
-				sql=cocos2d::StringUtils::format("update GameRecord set coin='%s'",coin->getCString());
+				std::string coin="uuuuu<";
+				sql=cocos2d::StringUtils::format("update GameRecord set coin='%s'",coin.c_str());
 				sqlite3_exec(pDB,sql.c_str(),NULL,NULL,&errorMsg);
 			}
 		}
