@@ -185,7 +185,7 @@ void GameOver::listResult(){
 
 	float _totalSecond=_delegate->_minute*60+_delegate->_second;
 	float resultScore=0;
-	int killDead=std::atoi(_delegate->currentPlayer->getKillNum()->getCString())-_delegate->currentPlayer->_deadNum;
+	int killDead=_delegate->currentPlayer->getKillNum()-_delegate->currentPlayer->_deadNum;
 
 
 	if(!_delegate->_isDuelMode && !_delegate->_isTrainingMode && _totalSecond != _delegate->getTotalTM()){
@@ -297,7 +297,7 @@ void GameOver::listResult(){
 
 
 
-		int realKillNum=std::atoi(hero->getKillNum()->getCString());
+		int realKillNum=hero->getKillNum();
 
 		if(strcmp(hero->getGroup()->getCString(),"Konoha")==0){
 			konohaKill+=realKillNum;
@@ -384,7 +384,7 @@ void GameOver::listResult(){
 			return;
 		}
 
-	int realKillNum=std::atoi(_delegate->currentPlayer->getKillNum()->getCString());
+	int realKillNum=_delegate->currentPlayer->getKillNum();
 
 	std::string tempReward="";
 	if(_delegate->_isHardCoreGame){
@@ -509,7 +509,7 @@ void GameOver::listResult(){
 			this->addChild(upMenu,7);
 
 
-			detailRecord=cocos2d::StringUtils::format("%02d:%02d,%s,%d,%d",_minute,_delegate->_second,_delegate->currentPlayer->getKillNum()->getCString(),_delegate->currentPlayer->_deadNum,_delegate->currentPlayer->_flogNum);
+			detailRecord=cocos2d::StringUtils::format("%02d:%02d,%d,%d,%d",_minute,_delegate->_second,_delegate->currentPlayer->getKillNum(),_delegate->currentPlayer->_deadNum,_delegate->currentPlayer->_flogNum);
 
 		}
 

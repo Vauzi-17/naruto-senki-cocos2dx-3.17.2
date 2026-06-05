@@ -168,7 +168,7 @@ NarutoSenki::ActionManager::ActionManager(void)
 	_role=NULL;
 	_group=NULL;
 	_character=NULL;
-	_killNum=NULL;
+	_killNum=0;
 	_coin=NULL;
 
 	_master=NULL;

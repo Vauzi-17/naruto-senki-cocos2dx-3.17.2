@@ -41,7 +41,7 @@ namespace NarutoSenki {
 		virtual	void		setShadows();
 		unsigned int		_deadNum;
 		unsigned int		_flogNum;
-		CC_SYNTHESIZE_RETAIN(CCString*, _killNum, KillNum);
+		CC_SYNTHESIZE(int, _killNum, KillNum);
 
 
 

@@ -161,11 +161,6 @@ void HeroElement::setID(CCString* character,CCString* role,CCString* group){
 	this->setWalkSpeed(tmpSpeed);
 	_originSpeed=tmpSpeed;
 
-	//���ѱر�
-	if(this->getKillNum()==NULL){
-		this->setKillNum(CCString::create("0"));
-	}
-
 	if(!this->getCKR() && !this->getCKR2()){
 		this->setCKR(CCString::create("0"));
 		this->setCKR2(CCString::create("0"));
@@ -1016,7 +1011,7 @@ void Flog::setID(CCString* character,CCString* role,CCString* group){
 	this->setHeight(tmpHeight);
 	this->setWalkSpeed(tmpSpeed);
 
-	this->setKillNum(CCString::create("0"));
+	this->setKillNum(0);
 
 
 

@@ -204,7 +204,8 @@ void HPBar::loseHP(float percent){
 			}
 
 			if((strcmp(currentSlayer->getRole()->getCString(),"Flog")!=0)){
-				_delegate->getDelegate()->setReport(currentSlayer->getCharacter()->getCString(),"Tower",currentSlayer->getKillNum()->getCString()) ;
+				std::string killText=cocos2d::StringUtils::format("%d", currentSlayer->getKillNum());
+				_delegate->getDelegate()->setReport(currentSlayer->getCharacter()->getCString(),"Tower",killText.c_str()) ;
 
 
 				if(currentSlayer->getLV()!=6){
@@ -444,10 +445,10 @@ void HPBar::loseHP(float percent){
 
 				if(strcmp(currentSlayer->getRole()->getCString(),"Flog")!=0){
 
-					int realKillNum=std::atoi(currentSlayer->getKillNum()->getCString())+1;
-					std::string realKillText=cocos2d::StringUtils::format("%d",realKillNum);
-					currentSlayer->setKillNum(CCString::create(realKillText));
-					_delegate->getDelegate()->setReport(currentSlayer->getCharacter()->getCString(),_delegate->getCharacter()->getCString(),currentSlayer->getKillNum()->getCString());
+					int realKillNum=currentSlayer->getKillNum()+1;
+					currentSlayer->setKillNum(realKillNum);
+					std::string killText=cocos2d::StringUtils::format("%d", currentSlayer->getKillNum());
+					_delegate->getDelegate()->setReport(currentSlayer->getCharacter()->getCString(),_delegate->getCharacter()->getCString(),killText.c_str());
 
 
 					//º«∑÷≈∆

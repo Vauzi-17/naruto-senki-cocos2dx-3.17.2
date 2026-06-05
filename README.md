@@ -374,6 +374,9 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
 - `GameLayer`: counter match `totalKills` dan `totalTM` dipindah dari retained
   `CCString*` ke integer lokal; `LoadLayer`, `HPBar`, dan `GameOver` caller
   ikut memakai getter/setter integer.
+- `ActionManager`: counter kill `_killNum` dipindah dari retained `CCString*`
+  ke integer; `HPBar`, `GameOver`, dan init `Element` caller ikut memakai nilai
+  integer.
 - `GameOver`: blok komentar achievement lose lama yang masih membawa format
   `CCString` dead-code dihapus; flow result aktif tidak berubah.
 - `StartMenu`: simpan coin nameplate lokal memakai `StringUtils::format`/
@@ -1074,6 +1077,8 @@ Catatan progress terbaru:
 - `KTools::readFromSQLite` dan `KTools::readSQLite` melepas return
   `CCString*` ke `std::string`; caller UI/result/skill langsung memakai string
   native.
+- Counter kill `ActionManager::_killNum` melepas retained `CCString*` ke `int`;
+  tampilan report/result tetap memformat angka di caller UI.
 - `SelectLayer`, `SkillLayer`, `GearLayer`, dan `GameOver` ikut lepas dari
   `CCARRAY_FOREACH` aktif. Perubahan ini hanya mengganti iterator lokal pada
   daftar select button, gear, result character, dan rematch handoff tanpa
