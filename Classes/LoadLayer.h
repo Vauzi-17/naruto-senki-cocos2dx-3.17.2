@@ -58,7 +58,6 @@ public:
 	bool isPosting;
 	void onHttpRequestCompleted(Node *sender ,void *data);
 
-	CCArray* DLCArray;
 private:
 
 	void preloadPlist(Ref* obj);

@@ -29,7 +29,6 @@ LoadLayer::LoadLayer(void)
 	_isDuelMode=false;
 	_duelKillLimit=3;
 	isPosting=false;
-	DLCArray=NULL;
 }
 
 
@@ -377,8 +376,7 @@ void LoadLayer::preloadPlist(Ref* obj){
 
 	Ref* pObject=tempHeros->objectAtIndex(loadNum);
 	CCDictionary* tempdict=(CCDictionary *) pObject;
-	CCString* player=CCString::create(tempdict->valueForKey("character")->getCString());
-	const char* name=player->getCString();
+	const char* name=tempdict->valueForKey("character")->getCString();
 
     std::string path=cocos2d::StringUtils::format("Element/%s/%s.plist",name,name);
 	SpriteFrameCache::getInstance()->addSpriteFramesWithFile(path,texture);//ͨ��������.plist�ļ�����SpriteFrameCache

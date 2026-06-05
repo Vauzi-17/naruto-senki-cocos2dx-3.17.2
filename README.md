@@ -337,6 +337,8 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
 - `LoadLayer`: path plist/texture preload, avatar loading, tips, dan checksum
   lokal memakai `StringUtils::format`/`std::string`; kontrak `tempHeros` lama
   tetap `CCArray`/`CCDictionary`.
+- `LoadLayer`: field mati `DLCArray` dihapus dan nama hero preload plist
+  dibaca langsung dari dictionary lama tanpa membuat `CCString` sementara.
 - `RankingLayer`: label ranking, path nameplate/banner/blink, score, group,
   dan tombol hero lokal memakai `StringUtils::format`/`std::string`; field
   tombol rank lama tetap `CCString`.
@@ -1021,6 +1023,9 @@ Catatan progress terbaru:
 - `SelectButton` melepas nama hero `_charName` dari retained `CCString*` ke
   `std::string`, dan caller `SelectLayer`/`NetworkLayer`/`SkillLayer` memakai
   getter `const char*` untuk compare, preview, dan audio intro.
+- `LoadLayer` menghapus field mati `DLCArray` dan menghindari `CCString`
+  sementara saat membaca nama hero untuk preload plist; `tempHeros` tetap
+  menjadi kontrak lama dari scene pemilih ke loader.
 - `SelectLayer`, `SkillLayer`, `GearLayer`, dan `GameOver` ikut lepas dari
   `CCARRAY_FOREACH` aktif. Perubahan ini hanya mengganti iterator lokal pada
   daftar select button, gear, result character, dan rematch handoff tanpa
