@@ -286,6 +286,9 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
   lama tetap ditahan.
 - `GameOver`: path gear icon, path tombol pilihan hero result, dan label target
   change-character lokal memakai `StringUtils::format`/`std::string`.
+- `GameOver`: pilihan change-character lokal dipindah dari retained `CCString*`
+  ke `std::string`; payload rematch lama tetap dibangun sebagai
+  `CCArray`/`CCDictionary`.
 - `SkillLayer`: path full art hero dan label explain lokal dipindahkan dari
   `CCString` ke `std::string`, tanpa menyentuh data SQLite/record.
 - `GearLayer`: path icon/detail gear dan label coin lokal memakai
@@ -516,6 +519,8 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
   dipakai label/progress, tanpa mengubah return API `KTools`.
 - `RankingLayer` melepas field tombol rank lokal dari `CCString*` ke
   `std::string`, sambil menahan pembacaan `strings.xml` lama.
+- `GameOver` melepas state pilihan change-character dari retained `CCString*`
+  ke `std::string`, tanpa mengubah payload rematch ke loader.
 
 1. **Tutup helper compat kecil yang masih lokal**
    - Target file: `Cocos2dx2Compat.h`, `ActionButton`, `HPBar`, `HudLayer`,

@@ -3,6 +3,7 @@
 #include "SimpleAudioEngine.h"
 #include "Defines.h"
 #include "cocos-ext.h"
+#include <string>
 /*#if (CC_TARGET_PLATFORM==CC_PLATFORM_ANDROID)
 #include "platform/android/jni/JniHelper.h"
 #endif  */
@@ -29,8 +30,8 @@ public:
 	bool isPosting;
 	Sprite* refreshBtn;
 	Layer* changeCharLayer;
-	CCString* changePlayerPick;
-	CCString* changeEnemyPick;
+	std::string changePlayerPick;
+	std::string changeEnemyPick;
 	bool changeTargetEnemy;
 
 	MenuItem* upload_btn;

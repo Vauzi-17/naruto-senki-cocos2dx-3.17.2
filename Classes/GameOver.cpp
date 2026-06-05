@@ -30,8 +30,6 @@ GameOver::GameOver(void)
 	exitLayer=nullptr;
 	cheatLayer=nullptr;
 	changeCharLayer=nullptr;
-	changePlayerPick=nullptr;
-	changeEnemyPick=nullptr;
 	changeTargetEnemy=false;
 	isPosting=false;
 	refreshBtn=nullptr;
@@ -40,8 +38,6 @@ GameOver::GameOver(void)
 
 GameOver::~GameOver(void)
 {
-	CC_SAFE_RELEASE(changePlayerPick);
-	CC_SAFE_RELEASE(changeEnemyPick);
 	AnimationCache::destroyInstance();
 	SpriteFrameCache::getInstance()->removeUnusedSpriteFrames();
 	Director::getInstance()->getTextureCache()->removeUnusedTextures();
@@ -717,18 +713,16 @@ void GameOver::onChangeChar(Ref* sender){
 	if(!_delegate || !_delegate->currentPlayer){
 		return;
 	}
-	if(!changePlayerPick){
-		changePlayerPick=CCString::create(_delegate->currentPlayer->getCharacter()->getCString());
-		changePlayerPick->retain();
+	if(changePlayerPick.empty()){
+		changePlayerPick=_delegate->currentPlayer->getCharacter()->getCString();
 	}
-	if(!changeEnemyPick){
+	if(changeEnemyPick.empty()){
 		Ref* pObject=nullptr;
 		for(unsigned int characterIndex=0; characterIndex<_delegate->_CharacterArray->count(); ++characterIndex){
 		pObject=_delegate->_CharacterArray->objectAtIndex(characterIndex);
 			NarutoSenki::ActionManager* hero=(NarutoSenki::ActionManager*)pObject;
 			if(strcmp(hero->getRole()->getCString(),"Com")==0 && strcmp(hero->getGroup()->getCString(),_delegate->currentPlayer->getGroup()->getCString())!=0){
-				changeEnemyPick=CCString::create(hero->getCharacter()->getCString());
-				changeEnemyPick->retain();
+				changeEnemyPick=hero->getCharacter()->getCString();
 				break;
 			}
 		}
@@ -815,7 +809,7 @@ void GameOver::onChangeChar(Ref* sender){
 	heroScroll->setContentOffset(Vec2(0,viewSize.height-contentH));
 	changeCharLayer->addChild(heroScroll,2);
 
-	std::string pickText=cocos2d::StringUtils::format("%s: %s",changeTargetEnemy?"ENEMY":"PLAYER",changeTargetEnemy && changeEnemyPick?changeEnemyPick->getCString():changePlayerPick->getCString());
+	std::string pickText=cocos2d::StringUtils::format("%s: %s",changeTargetEnemy?"ENEMY":"PLAYER",changeTargetEnemy && !changeEnemyPick.empty()?changeEnemyPick.c_str():changePlayerPick.c_str());
 	Label* pickLabel=Label::createWithSystemFont(pickText,FONT_TYPE,10);
 	pickLabel->setColor(ccc3(72,55,40));
 	pickLabel->setPosition(Vec2(cx,cy-76));
@@ -843,21 +837,17 @@ void GameOver::onChangeCharPick(Ref* sender){
 	if(index<0 || index>=heroCount){
 		return;
 	}
-	CCString* picked=CCString::create(gResultHeroList[index]);
-	picked->retain();
 	if(changeTargetEnemy && _delegate && _delegate->_isDuelMode){
-		CC_SAFE_RELEASE(changeEnemyPick);
-		changeEnemyPick=picked;
+		changeEnemyPick=gResultHeroList[index];
 	}else{
-		CC_SAFE_RELEASE(changePlayerPick);
-		changePlayerPick=picked;
+		changePlayerPick=gResultHeroList[index];
 	}
 	onChangeChar(sender);
 }
 
 void GameOver::onChangeCharConfirm(Ref* sender){
 	SimpleAudioEngine::getInstance()->playEffect("Audio/Menu/confirm.ogg");
-	if(!_delegate || !changePlayerPick){
+	if(!_delegate || changePlayerPick.empty()){
 		return;
 	}
 	CCArray* rematchHeros=CCArray::create();
@@ -873,9 +863,9 @@ void GameOver::onChangeCharConfirm(Ref* sender){
 		}
 		const char* character=hero->getCharacter()->getCString();
 		if(strcmp(hero->getRole()->getCString(),"Player")==0){
-			character=changePlayerPick->getCString();
-		}else if(_delegate->_isDuelMode && changeEnemyPick && strcmp(hero->getGroup()->getCString(),_delegate->currentPlayer->getGroup()->getCString())!=0){
-			character=changeEnemyPick->getCString();
+			character=changePlayerPick.c_str();
+		}else if(_delegate->_isDuelMode && !changeEnemyPick.empty() && strcmp(hero->getGroup()->getCString(),_delegate->currentPlayer->getGroup()->getCString())!=0){
+			character=changeEnemyPick.c_str();
 		}
 		resultAddHero(rematchHeros,character,hero->getRole()->getCString(),hero->getGroup()->getCString());
 	}
