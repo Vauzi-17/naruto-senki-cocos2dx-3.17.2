@@ -299,6 +299,8 @@ namespace NarutoSenki {
 
 		void				update(float dt);
 		void				acceptAttack(Ref* object);
+		void				registerAcceptAttackListener();
+		void				unregisterAcceptAttackListener();
 
 
 		float				getHpPercent();
@@ -490,6 +492,8 @@ namespace NarutoSenki {
 
 		void				onEnter();
 		void				onExit();
+
+		EventListenerCustom* _acceptAttackListener;
 
 	};
 

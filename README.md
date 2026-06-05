@@ -141,9 +141,10 @@ Alasan estimasi:
   adalah tahap data-structure modernisasi yang lebih besar setelah build final
   pengguna aman.
 - Event mini map `updateMap` dipindah dari `NotificationCenter` lama ke
-  `EventDispatcher::dispatchCustomEvent`/`addCustomEventListener`; event core
-  `acceptAttack` masih ditahan sebagai kontrak lifecycle gameplay yang lebih
-  besar.
+  `EventDispatcher::dispatchCustomEvent`/`addCustomEventListener`.
+- Event core `acceptAttack` ikut dipindah dari `NotificationCenter` lama ke
+  custom event 3.x dengan helper register/unregister di `ActionManager`, agar
+  lifecycle hero/monster/tower tetap eksplisit.
 - UI perimeter berikutnya ikut dibersihkan dari `CCARRAY_FOREACH`:
   `SelectLayer`, `SkillLayer`, `GearLayer`, dan `GameOver` sekarang memakai
   loop indeks atau container STL lokal untuk iterator yang aman.
@@ -753,7 +754,7 @@ Target migrasi:
 - `CCAction` / `CCActionInterval` / `CCFiniteTimeAction` ke tipe action 3.x
 - `CCCallFunc` dan `callfunc_selector` ke `CallFunc` + `CC_CALLBACK_*`
 - `schedule_selector` ke `CC_SCHEDULE_SELECTOR`
-- `CCNotificationCenter` ke `NotificationCenter`
+- `CCNotificationCenter` / `NotificationCenter` lama ke `EventDispatcher`
 - `setDisplayFrame` ke `setSpriteFrame`
 - `sharedSpriteFrameCache()` ke `SpriteFrameCache::getInstance()`
 

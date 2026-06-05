@@ -1310,7 +1310,7 @@ void GameLayer::onLeft(){
 	for (auto pObject : childArray){
 		//�������
 		NarutoSenki::ActionManager* ac=(NarutoSenki::ActionManager*) pObject;
-		NotificationCenter::getInstance()->removeObserver(ac,"acceptAttack");
+		ac->unregisterAcceptAttackListener();
 	}
 
 	//�����ͼ����

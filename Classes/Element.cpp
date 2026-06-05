@@ -455,7 +455,7 @@ void HeroElement::setID(__String* character,__String* role,__String* group){
 
 
 	this->initAction();
-	NotificationCenter::getInstance()->addObserver(this, static_cast<cocos2d::SEL_CallFuncO>(&NarutoSenki::ActionManager::acceptAttack), "acceptAttack", NULL);
+	this->registerAcceptAttackListener();
 
 };
 
@@ -654,7 +654,7 @@ void HeroElement::dealloc(){
 				if(index>=0){
 					_delegate->_CharacterArray->removeObjectAtIndex(index);
 				}
-				NotificationCenter::getInstance()->removeObserver(mo,"acceptAttack");
+				mo->unregisterAcceptAttackListener();
 				mo->stopAllActions();
 				mo->unscheduleAllSelectors();
 				mo->setActionState(ACTION_STATE_DEAD);
@@ -674,7 +674,7 @@ void HeroElement::dealloc(){
 			strcmp(this->getRole()->getCString(),"Summon")==0
 			){
 			this->unschedule(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::setAI));
-			NotificationCenter::getInstance()->removeObserver(this,"acceptAttack");
+			this->unregisterAcceptAttackListener();
 
 			//�Ƴ�����ɫ��
 			int index=_delegate->_CharacterArray->indexOfObject(this);
@@ -797,7 +797,7 @@ void HeroElement::dealloc(){
 						if(index>=0){
 							_delegate->_CharacterArray->removeObjectAtIndex(index);
 						}
-						NotificationCenter::getInstance()->removeObserver(mo,"acceptAttack");
+						mo->unregisterAcceptAttackListener();
 						mo->stopAllActions();
 						mo->unscheduleAllSelectors();
 						mo->setActionState(ACTION_STATE_DEAD);
@@ -870,7 +870,7 @@ void HeroElement::reborn(float dt){
 
 	if(this->getPosition().equals(this->getSpawnPoint()))
 	{
-		NotificationCenter::getInstance()->addObserver(this, static_cast<cocos2d::SEL_CallFuncO>(&NarutoSenki::ActionManager::acceptAttack), "acceptAttack", NULL);
+		this->registerAcceptAttackListener();
 		this->setOpacity(255);
 		this->setHP(__String::create(this->getMaxHP()->getCString()));
 		if(_delegate && _delegate->_isDuelMode && _delegate->currentPlayer){
@@ -1064,7 +1064,7 @@ void Flog::setID(__String* character,__String* role,__String* group){
 
 
 	this->initAction();
-	NotificationCenter::getInstance()->addObserver(this, static_cast<cocos2d::SEL_CallFuncO>(&NarutoSenki::ActionManager::acceptAttack), "acceptAttack", NULL);
+	this->registerAcceptAttackListener();
 
 };
 
@@ -1296,7 +1296,7 @@ void Tower::setID(__String* character,__String* role,__String* group){
 
 	this->initAction();
 
-	NotificationCenter::getInstance()->addObserver(this, static_cast<cocos2d::SEL_CallFuncO>(&NarutoSenki::ActionManager::acceptAttack), "acceptAttack", NULL);
+	this->registerAcceptAttackListener();
 
 }
 

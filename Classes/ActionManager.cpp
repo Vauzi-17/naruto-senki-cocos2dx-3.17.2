@@ -269,13 +269,37 @@ NarutoSenki::ActionManager::ActionManager(void)
 	skillSPC3Array=NULL;
 	skillSPC4Array=NULL;
 	skillSPC5Array=NULL;
+	_acceptAttackListener=nullptr;
 
 }
 
 
 NarutoSenki::ActionManager::~ActionManager(void)
 {
-	
+	this->unregisterAcceptAttackListener();
+}
+
+
+void NarutoSenki::ActionManager::registerAcceptAttackListener()
+{
+	if(_acceptAttackListener){
+		return;
+	}
+	_acceptAttackListener=Director::getInstance()->getEventDispatcher()->addCustomEventListener("acceptAttack", [this](EventCustom* event) {
+		if(!event){
+			return;
+		}
+		Ref* object=(Ref*)event->getUserData();
+		this->acceptAttack(object);
+	});
+}
+
+void NarutoSenki::ActionManager::unregisterAcceptAttackListener()
+{
+	if(_acceptAttackListener){
+		Director::getInstance()->getEventDispatcher()->removeEventListener(_acceptAttackListener);
+		_acceptAttackListener=nullptr;
+	}
 }
 
 
@@ -2500,7 +2524,7 @@ void NarutoSenki::ActionManager::setAttackBox(Node* sender,void* date){
 	}
 	
 
-	NotificationCenter::getInstance()->postNotification("acceptAttack", this);
+	Director::getInstance()->getEventDispatcher()->dispatchCustomEvent("acceptAttack", this);
 
 	if(strcmp(_role->getCString(),"Player")==0){
 
@@ -4996,7 +5020,7 @@ void NarutoSenki::ActionManager::resumeAction(float dt){
 					_delegate->_CharacterArray->removeObjectAtIndex(index);
 				}
 				mo->setActionState(ACTION_STATE_DEAD);
-				NotificationCenter::getInstance()->removeObserver(mo,"acceptAttack");
+				mo->unregisterAcceptAttackListener();
 				mo->removeFromParent();	
 				mo=NULL;
 
@@ -5458,7 +5482,7 @@ void NarutoSenki::ActionManager::setActionResume(){
 					_delegate->_CharacterArray->removeObjectAtIndex(index);
 				}
 				mo->setActionState(ACTION_STATE_DEAD);
-				NotificationCenter::getInstance()->removeObserver(mo,"acceptAttack");
+				mo->unregisterAcceptAttackListener();
 				mo->removeFromParent();	
 				mo=NULL;
 
@@ -6632,7 +6656,7 @@ void NarutoSenki::ActionManager::setMonAttack(Node* sender,void* date){
 
 void NarutoSenki::ActionManager::setTransform(){
 
-	NotificationCenter::getInstance()->removeObserver(this,"acceptAttack");
+	this->unregisterAcceptAttackListener();
 	this->unschedule(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::dehealBuff));
 
 	if(strcmp(this->_character->getCString(),"Lee")==0 ||
@@ -7471,7 +7495,7 @@ void NarutoSenki::ActionManager::knockDown(){
 void NarutoSenki::ActionManager::dead(){
 
 
-	NotificationCenter::getInstance()->removeObserver(this,"acceptAttack");
+	this->unregisterAcceptAttackListener();
 
 	_isHitOne=false;
 	_isCatchOne=false;
