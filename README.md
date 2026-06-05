@@ -297,6 +297,8 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
   `StringUtils::format`/`std::string` tanpa menyentuh report dictionary.
 - `HudLayer`: start splash, display buff, report sprite, dan cut-in ougis lokal
   ikut memakai string 3.x/native; dictionary report dan CKR tetap ditahan.
+- `HudLayer`: render report cache membaca nilai dictionary lama ke
+  `std::string` lokal; struktur queue report tetap `CCArray`/`CCDictionary`.
 - `GameLayer`: path cleanup sprite frame, battle music, dan ougis effect lokal
   memakai `StringUtils::format`/`std::string` tanpa mengubah state gameplay.
 - `SkillLayer`: constructor tombol select, path intro voice, dan label bond
@@ -535,6 +537,8 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
   return API `CCString*`, dan lookup `strings.xml`.
 - `RankingLayer` memusatkan pembacaan `strings.xml` ke helper lokal sehingga
   sisa `CCDictionary`/`CCString` di file itu tinggal boundary lookup teks.
+- `HudLayer` melepas local `CCString*` sementara di render report cache,
+  sambil mempertahankan queue report lama sebagai dictionary.
 
 1. **Tutup helper compat kecil yang masih lokal**
    - Target file: `Cocos2dx2Compat.h`, `ActionButton`, `HPBar`, `HudLayer`,

@@ -1097,17 +1097,16 @@ void HudLayer::setReportCache(){
 	for(unsigned int reportIndex=0; reportIndex<_reportListArray->count(); ++reportIndex){
 		pObject=_reportListArray->objectAtIndex(reportIndex);
 		CCDictionary* tempdict=(CCDictionary *) pObject;
-		CCString* isDisplay=CCString::create(tempdict->valueForKey("isDisplay")->getCString());
+		std::string isDisplay=tempdict->valueForKey("isDisplay")->getCString();
 
-		if(strcmp(isDisplay->getCString(),"True")!=0){
+		if(strcmp(isDisplay.c_str(),"True")!=0){
 
-			CCString* name1=CCString::create(tempdict->valueForKey("name1")->getCString());
-			CCString* name2=CCString::create(tempdict->valueForKey("name2")->getCString());
-			CCString* num=CCString::create(tempdict->valueForKey("num")->getCString());
-			CCString* killnum=CCString::create(tempdict->valueForKey("kills")->getCString());
+			std::string name1=tempdict->valueForKey("name1")->getCString();
+			std::string name2=tempdict->valueForKey("name2")->getCString();
+			std::string killnum=tempdict->valueForKey("kills")->getCString();
 
 			float length;
-			reportSprite=this->createReport(name1->getCString(),name2->getCString(),length);
+			reportSprite=this->createReport(name1.c_str(),name2.c_str(),length);
 			reportSprite->setPosition(Vec2(winSize.width/2-length/2,winSize.height-80));
 			this->addChild(reportSprite,500);
 
@@ -1119,19 +1118,19 @@ void HudLayer::setReportCache(){
 			reportSprite->runAction(seq);
 
 
-			if(strcmp(name2->getCString(),"Tower")!=0){
+			if(strcmp(name2.c_str(),"Tower")!=0){
 				Ref* pObject2;
 				int num2=0;
 				for(unsigned int reportIndex2=0; reportIndex2<_reportListArray->count(); ++reportIndex2){
 					pObject2=_reportListArray->objectAtIndex(reportIndex2);
 					CCDictionary* tempdict2=(CCDictionary *) pObject2;
-					CCString* tempName=CCString::create(tempdict2->valueForKey("name1")->getCString());
-					CCString* tempName2=CCString::create(tempdict2->valueForKey("name2")->getCString());
-					CCString* isDisplay2=CCString::create(tempdict2->valueForKey("isDisplay")->getCString());
+					std::string tempName=tempdict2->valueForKey("name1")->getCString();
+					std::string tempName2=tempdict2->valueForKey("name2")->getCString();
+					std::string isDisplay2=tempdict2->valueForKey("isDisplay")->getCString();
 
-					if(strcmp(tempName->getCString(),name1->getCString())==0 &&
-						strcmp(tempName2->getCString(),"Tower")!=0 &&
-						strcmp(isDisplay2->getCString(),"True")==0
+					if(strcmp(tempName.c_str(),name1.c_str())==0 &&
+						strcmp(tempName2.c_str(),"Tower")!=0 &&
+						strcmp(isDisplay2.c_str(),"True")==0
 						){
 						num2+=1;
 					}
@@ -1144,7 +1143,7 @@ void HudLayer::setReportCache(){
 						reportSPCSprite->stopAllActions();
 						reportSPCSprite->removeFromParent();
 					}
-					reportSPCSprite=this->createSPCReport(killnum->getCString(),num2);
+					reportSPCSprite=this->createSPCReport(killnum.c_str(),num2);
 					reportSPCSprite->setPosition(Vec2(winSize.width/2,winSize.height-115));
 					this->addChild(reportSPCSprite,500);
 					FadeIn* fn=FadeIn::create(0.8f);
@@ -1161,7 +1160,7 @@ void HudLayer::setReportCache(){
 						reportSPCSprite->removeFromParent();
 					}
 
-					reportSPCSprite=this->createSPCReport(killnum->getCString(),num2);
+					reportSPCSprite=this->createSPCReport(killnum.c_str(),num2);
 					reportSPCSprite->setScale(2.0);
 					reportSPCSprite->setPosition(Vec2(winSize.width/2,winSize.height-105));
 					this->addChild(reportSPCSprite,500);
