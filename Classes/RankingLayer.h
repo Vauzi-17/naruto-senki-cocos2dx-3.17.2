@@ -5,6 +5,7 @@
 #include "cocos-ext.h"
 #include "MyUtils/CCScrewLayer.h"
 #include "MyUtils/CCStrokeLabel.h"
+#include <string>
 
 USING_NS_CC;
 
@@ -52,7 +53,7 @@ public:
 	Sprite* refreshBtn;
 	CC_SYNTHESIZE(NetworkLayer*,_delegate,Delegate);
 
-	void postRequest(int code,CCString* useChar=NULL);
+	void postRequest(int code,const char* useChar=NULL);
 
 	bool				isMemberSelect;
 	bool				isGroupSelect;
@@ -93,9 +94,9 @@ public:
 	static RankCharButton*	create(const char *szImage);
 
 	Rect				getRect();
-	void				setBtnType(CCString* buttonChar);
+	void				setBtnType(const char* buttonChar);
 
-	CC_SYNTHESIZE(CCString*,_btnType,btnType);
+	CC_SYNTHESIZE(std::string,_btnType,btnType);
 
 	CC_SYNTHESIZE(RakingLayer*,_delegate,Delegate);
 

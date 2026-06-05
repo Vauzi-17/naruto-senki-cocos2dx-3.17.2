@@ -317,6 +317,9 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
 - `RankingLayer`: label ranking, path nameplate/banner/blink, score, group,
   dan tombol hero lokal memakai `StringUtils::format`/`std::string`; field
   tombol rank lama tetap `CCString`.
+- `RankingLayer`: field tombol rank lokal dipindah dari retained `CCString*`
+  ke `std::string`; request ranking offline/dekoratif tetap menerima nama hero
+  yang sama.
 - `HPBar`: path heart-effect, label kill/team, total kill, dan reward coin
   lokal memakai `StringUtils::format`/`std::string`; field kill lama tetap
   `CCString`.
@@ -511,6 +514,8 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
   sehingga sisa format angka/path aktif tinggal di area core combat.
 - `SkillLayer` melepas local `CCString*` untuk hasil SQLite yang langsung
   dipakai label/progress, tanpa mengubah return API `KTools`.
+- `RankingLayer` melepas field tombol rank lokal dari `CCString*` ke
+  `std::string`, sambil menahan pembacaan `strings.xml` lama.
 
 1. **Tutup helper compat kecil yang masih lokal**
    - Target file: `Cocos2dx2Compat.h`, `ActionButton`, `HPBar`, `HudLayer`,

@@ -11,7 +11,6 @@ init RankCharButton
 ----------------------*/
 RankCharButton::RankCharButton(void)
 {
-	_btnType=NULL;
 }
 
 
@@ -64,9 +63,8 @@ bool  RankCharButton::containsTouchLocation(Touch *touch){
 }
 
 
-void RankCharButton::setBtnType(CCString* buttonChar){
+void RankCharButton::setBtnType(const char* buttonChar){
 	_btnType=buttonChar;
-	_btnType->retain();
 }
 
 
@@ -105,7 +103,7 @@ void RankCharButton::onTouchEnded(Touch* touch, Event* event){
 	}
 
 
-	_delegate->postRequest(300,_btnType);
+	_delegate->postRequest(300,_btnType.c_str());
 };
 
 
@@ -465,7 +463,7 @@ void RakingLayer::produceRanking(int type){
 	}
 }
 
-void RakingLayer::postRequest(int code,CCString* useChar/* =NULL */){
+void RakingLayer::postRequest(int code,const char* useChar/* =NULL */){
 
 	if(rankingDetail){
 		rankingDetail->removeFromParent();
@@ -910,7 +908,7 @@ void RakingLayer::makeCharList(){
 
 		RankCharButton* char_btn=RankCharButton::create(path.c_str());
 		char_btn->setDelegate(this);
-		char_btn->setBtnType(CCString::create(charName));
+		char_btn->setBtnType(charName);
 		char_btn->setAnchorPoint(Vec2(0,0));
 		int row=int(floor(float(i)/8));
 		int column=i-8*row;
