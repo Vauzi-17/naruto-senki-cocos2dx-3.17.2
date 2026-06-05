@@ -4,6 +4,7 @@
 #include "Characters.h"
 #include "BGLayer.h"
 #include "HudLayer.h"
+#include "HeroPayload.h"
 #include "StartMenu.h"
 #include "LoadLayer.h"
 #include "MyUtils/KTools.h"
@@ -1344,11 +1345,7 @@ void GameLayer::onLeft(){
 			if(strcmp(hero->getCharacter()->getCString(),"Roshi")==0 || strcmp(hero->getCharacter()->getCString(),"Han")==0){
 				continue;
 			}
-			__Dictionary* dic=__Dictionary::create();
-			dic->setObject(__String::create(hero->getCharacter()->getCString()),"character");
-			dic->setObject(__String::create(hero->getRole()->getCString()),"role");
-			dic->setObject(__String::create(hero->getGroup()->getCString()),"group");
-			rematchHeros->addObject(dic);
+			NarutoSenkiPayload::addHero(rematchHeros,hero->getCharacter()->getCString(),hero->getRole()->getCString(),hero->getGroup()->getCString());
 		}
 	}
 

@@ -155,9 +155,10 @@ Alasan estimasi:
   yang sama dengan roster random, sehingga string/dictionary lokal kecil di
   start battle training ikut hilang tanpa mengubah format `tempHeros`.
 - Helper payload hero scene awal/result (`StartMenu`, `NetworkLayer`,
-  `SelectLayer`, dan `GameOver`) dikonsolidasikan ke `HeroPayload.h`, sehingga
-  kontrak `__Array`/`__Dictionary`/`__String` lama tetap ada tetapi tidak lagi
-  tersebar sebagai helper duplikat di beberapa scene.
+  `SelectLayer`, `GameLayer`, dan `GameOver`) dikonsolidasikan ke
+  `HeroPayload.h`, sehingga kontrak `__Array`/`__Dictionary`/`__String` lama
+  tetap ada tetapi tidak lagi tersebar sebagai helper duplikat di beberapa
+  scene.
 - Area HUD gameplay yang lebih dekat runtime ikut dibersihkan:
   `HudLayer`/`HPBar` tidak lagi memakai `CCARRAY_FOREACH` aktif untuk map icon,
   gear button, report queue, enemy HP, dan pengecekan reward/share team.
@@ -417,9 +418,9 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
 - `NetworkLayer`: daftar hero cadangan lokal pada flow start battle memakai
   `std::vector<std::string>`; payload `tempHeros` ke `LoadLayer` tetap
   memakai kontrak lama agar perubahan tidak melebar ke gameplay core.
-- `StartMenu`/`NetworkLayer`/`SelectLayer`/`GameOver`: helper payload hero lama
-  yang duplikatif dikonsolidasikan ke `HeroPayload.h`; format payload loader
-  dan rematch tetap sama.
+- `StartMenu`/`NetworkLayer`/`SelectLayer`/`GameLayer`/`GameOver`: helper
+  payload hero lama yang duplikatif dikonsolidasikan ke `HeroPayload.h`; format
+  payload loader dan rematch tetap sama.
 - `NetworkLayer`: path tombol select, preview hero, map preview/label, dan slot
   team training lokal memakai `StringUtils::format`/`std::string`; payload hero
   ke loader tetap `CCString`/`CCArray`.
