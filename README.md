@@ -102,6 +102,9 @@ Alasan estimasi:
 - Daftar hero cadangan lokal di flow start battle `NetworkLayer` juga sudah
   memakai `std::vector<std::string>`; `CCArray`/`CCDictionary` tetap hanya
   dipakai sebagai payload akhir ke `LoadLayer`.
+- Payload random roster `StartMenu` untuk mode training/hard-core sekarang
+  dibangun lewat helper `trainingAddHero(...)`, sehingga konstruksi
+  `CCString`/`CCDictionary` manual di blok roster lokal ikut hilang.
 - UI perimeter berikutnya ikut dibersihkan dari `CCARRAY_FOREACH`:
   `SelectLayer`, `SkillLayer`, `GearLayer`, dan `GameOver` sekarang memakai
   loop indeks atau container STL lokal untuk iterator yang aman.
@@ -336,6 +339,9 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
 - `StartMenu`: roster random sementara untuk opsi hard-core/training dipindah
   dari `CCArray`/`CCString` lokal ke `std::vector<std::string>`; payload
   `tempHeros` ke loader tetap `CCArray`/`CCDictionary`.
+- `StartMenu`: payload random roster training/hard-core sekarang memakai helper
+  `trainingAddHero(...)`, sehingga blok lokal tidak lagi membuat
+  `CCDictionary`/`CCString` manual untuk setiap hero.
 - `GameOver`: `detailRecord` dan string angka win record aktif memakai
   `StringUtils::format`/`std::string`, tanpa mengubah isi nilai SQLite.
 - `GameOver`: hasil baca SQLite untuk coin, win count, dan best time disalin ke

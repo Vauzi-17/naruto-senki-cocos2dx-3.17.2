@@ -1846,22 +1846,13 @@ void StartMenu::onTrainingCallBack(){
 	SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Gears.plist");
 
 
-	CCDictionary* dic=CCDictionary::create();
-
-
 	char* heroList[]={"Lee","Shino","Kakashi","Kakuzu",
 		"Asuma"};
 
 	srand((int)time(0));
 	std::string tmpChar="Tsunade";
-	CCString* tmpRole=CCString::create("Player");
-	CCString* tmpGroup=CCString::create("Konoha");
-
-	dic->setObject(CCString::create(tmpChar.c_str()),"character");
-	dic->setObject(tmpRole,"role");
-	dic->setObject(tmpGroup,"group");
-
-	CCArray* tempHeros=CCArray::createWithObject(dic);
+	CCArray* tempHeros=CCArray::create();
+	trainingAddHero(tempHeros,tmpChar.c_str(),"Player","Konoha");
 
 	std::vector<std::string> realHero;
 	int num= sizeof(heroList)/sizeof(char*);
@@ -1889,16 +1880,7 @@ void StartMenu::onTrainingCallBack(){
 
 			std::string hero=realHero[index];
 
-			dic=CCDictionary::create();
-			tmpChar=hero;
-			tmpRole=CCString::create("Com");
-			tmpGroup=CCString::create("Konoha");
-
-			dic->setObject(CCString::create(tmpChar.c_str()),"character");
-			dic->setObject(tmpRole,"role");
-			dic->setObject(tmpGroup,"group");
-
-			tempHeros->addObject(dic);
+			trainingAddHero(tempHeros,hero.c_str(),"Com","Konoha");
 			realHero.erase(realHero.begin()+index);
 
 
@@ -1913,16 +1895,7 @@ void StartMenu::onTrainingCallBack(){
 
 			std::string hero=realHero[index];
 
-			dic=CCDictionary::create();
-			tmpChar=hero;
-			tmpRole=CCString::create("Com");
-			tmpGroup=CCString::create("Akatsuki");
-
-			dic->setObject(CCString::create(tmpChar.c_str()),"character");
-			dic->setObject(tmpRole,"role");
-			dic->setObject(tmpGroup,"group");
-
-			tempHeros->addObject(dic);
+			trainingAddHero(tempHeros,hero.c_str(),"Com","Akatsuki");
 			realHero.erase(realHero.begin()+index);
 
 
@@ -1954,9 +1927,6 @@ void StartMenu::onTrainingCallBack(){
 	SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Gears.plist");
 
 
-	CCDictionary* dic=CCDictionary::create();
-
-
 	char* heroList1[]={"Konan","Sakura","Naruto","Sai","Deidara",
 		"Kakashi","Itachi","Tenten","Jiraiya","Suigetsu",
 		"Tsunade","Tobirama","Shisui","Neji","Ino","Asuma","Gaara",
@@ -1969,14 +1939,8 @@ void StartMenu::onTrainingCallBack(){
 	srand((int)time(0));
 	int index2=random(sizeof(heroList1)/sizeof(char*));
 	std::string tmpChar=heroList1[index2];
-	CCString* tmpRole=CCString::create("Player");
-	CCString* tmpGroup=CCString::create("Konoha");
-
-	dic->setObject(CCString::create(tmpChar.c_str()),"character");
-	dic->setObject(tmpRole,"role");
-	dic->setObject(tmpGroup,"group");
-
-	CCArray* tempHeros=CCArray::createWithObject(dic);
+	CCArray* tempHeros=CCArray::create();
+	trainingAddHero(tempHeros,tmpChar.c_str(),"Player","Konoha");
 
 	std::vector<std::string> realHero;
 	int num= sizeof(heroList1)/sizeof(char*);
@@ -2004,16 +1968,7 @@ void StartMenu::onTrainingCallBack(){
 
 			std::string hero=realHero[index];
 
-			dic=CCDictionary::create();
-			tmpChar=hero;
-			tmpRole=CCString::create("Com");
-			tmpGroup=CCString::create("Konoha");
-
-			dic->setObject(CCString::create(tmpChar.c_str()),"character");
-			dic->setObject(tmpRole,"role");
-			dic->setObject(tmpGroup,"group");
-
-			tempHeros->addObject(dic);
+			trainingAddHero(tempHeros,hero.c_str(),"Com","Konoha");
 			realHero.erase(realHero.begin()+index);
 
 
@@ -2028,16 +1983,7 @@ void StartMenu::onTrainingCallBack(){
 
 			std::string hero=realHero[index];
 
-			dic=CCDictionary::create();
-			tmpChar=hero;
-			tmpRole=CCString::create("Com");
-			tmpGroup=CCString::create("Akatsuki");
-
-			dic->setObject(CCString::create(tmpChar.c_str()),"character");
-			dic->setObject(tmpRole,"role");
-			dic->setObject(tmpGroup,"group");
-
-			tempHeros->addObject(dic);
+			trainingAddHero(tempHeros,hero.c_str(),"Com","Akatsuki");
 			realHero.erase(realHero.begin()+index);
 
 		}
