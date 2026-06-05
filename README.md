@@ -22,7 +22,7 @@ masih memakai API 2.x seperti `CCLayer`, `CCSprite`, `CCMenu`, `CCPoint`,
 
 ## Estimasi Progress Migrasi
 
-Estimasi progress menuju kode full cocos2d-x 3.17.2: **sekitar 99%**.
+Estimasi progress menuju kode full cocos2d-x 3.17.2: **sekitar 99-100% kandidat final**.
 
 Alasan estimasi:
 
@@ -278,12 +278,13 @@ Urutan langkah berikutnya menuju 100%:
 Posisi saat ini: **langkah 7 menuju validasi akhir 100%**. Helper compat kecil
 yang benar-benar lokal sudah mulai ditutup (`visitNode`, `CCTime`/`cc_timeval`,
 `CCDictElement`, sebagian state cooldown `ActionButton`, `CCScale9Sprite`,
-`CCScrollView`, `CCEditBox`, macro `atoi`, dan alias HTTP `CCHttp*`). Area
+`CCScrollView`, `CCEditBox`, macro `atoi`, dan alias HTTP `CCHttp*`). Forced
+include `Cocos2dx2Compat.h` juga sudah dilepas dari CMake dan project Win32,
+lalu file compat kosong tersebut dihapus. Area
 UI/menu, HUD, parser XML lokal, `Element`, dan `ActionManager` sudah lepas dari
 alias source lama `CCArray`, `CCDictionary`, `CCString`, dan
 `CCARRAY_FOREACH`; pekerjaan berikutnya adalah validasi build Android/Win32
-pengguna serta audit final compatibility bridge yang masih dipaksa oleh
-konfigurasi build.
+pengguna serta audit final konfigurasi build setelah compat bridge dihapus.
 
 Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
 
@@ -507,8 +508,8 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
 - `NetworkLayer`: audio klik page selector memakai
   `SimpleAudioEngine::getInstance()`; flow training/5v5 dan payload hero tetap
   memakai kontrak lama.
-- `Cocos2dx2Compat.h`: belum dihapus walaupun isinya minimal, karena CMake dan
-  project Win32 masih memaksa include file ini untuk semua compile unit.
+- `Cocos2dx2Compat.h`: forced include CMake/Win32 sudah dilepas dan file compat
+  kosong dihapus setelah source aktif tidak lagi memakai alias/helper lama.
 - `ActionManager`: callback action tanpa payload seperti `getCollider`,
   `setActionResume`, `setActionResume2`, `setTransform`, `setOugis`,
   `setCharFlip`, shadow helper, damage display, dan coin display memakai
@@ -1161,17 +1162,14 @@ Catatan progress terbaru:
   Loop core pada tower, monster, karakter, target search, dealloc, dan AI kecil
   sekarang memakai indeks eksplisit sambil tetap membaca container lama agar
   behavior gameplay tidak ikut diubah.
-- Audit menunjukkan `Cocos2dx2Compat.h` masih dipaksa lewat CMake dan project
-  Win32, jadi penghapusan file/forced include ditunda sampai sisa alias legacy
-  di source lebih kecil dan bisa diuji sebagai potongan final.
-- Setelah commit payload callback dan macro dictionary parser terbaru ini lulus
-  build Android/Win32 pengguna, langkah berikutnya adalah masuk bertahap ke
-  kontrak data besar di loader XML, ranking/string XML, `ActionManager`,
-  `Element`, dan parser XML.
-- Alias HTTP, EditBox, Scale9, Scroll, macro `atoi`, dan beberapa helper compat
-  lokal sudah dihapus setelah audit pemakai source menunjukkan helper tersebut
-  tidak perlu lagi disimpan di compat header. `Cocos2dx2Compat.h` tetap ada
-  karena masih dipaksa oleh konfigurasi build/CMake/Win32.
+- Audit terbaru menunjukkan `Cocos2dx2Compat.h` tidak lagi dipakai source aktif;
+  forced include CMake/Win32 sudah dilepas dan file compat kosong dihapus.
+- Setelah commit final alias/compat ini lulus build Android/Win32 pengguna,
+  tahap migrasi source dapat dianggap masuk validasi akhir 100%.
+- Alias HTTP, EditBox, Scale9, Scroll, macro `atoi`, dan helper compat lokal
+  sudah dihapus setelah audit pemakai source menunjukkan helper tersebut tidak
+  perlu lagi disimpan. File `Cocos2dx2Compat.h` juga sudah tidak menjadi forced
+  include build.
 - Dead code HTTP di `SkillLayer` dan upload `GameOver` dibersihkan agar jalur
   offline tidak lagi membawa parsing response/request lama yang sudah tidak
   berjalan.

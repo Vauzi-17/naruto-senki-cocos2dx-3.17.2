@@ -122,9 +122,6 @@
     <ClInclude Include="..\Classes\Characters.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\Cocos2dx2Compat.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="..\Classes\CreditsLayer.h">
       <Filter>src</Filter>
     </ClInclude>
