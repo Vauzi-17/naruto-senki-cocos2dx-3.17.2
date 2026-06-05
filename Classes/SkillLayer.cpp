@@ -93,9 +93,7 @@ void SelectButton::click(){
 			}else if( strcmp(_charName->getCString(),"None")!=0){
 			if(!_isAviable && _delegate2 && _delegate2->isHeroConfirmedSelected(_charName->getCString())){
 				SimpleAudioEngine::getInstance()->stopAllEffects();
-				for(unsigned int selectIndex=0; selectIndex<_delegate2->selectArray->count(); ++selectIndex){
-					Ref* pObject=_delegate2->selectArray->objectAtIndex(selectIndex);
-					SelectButton* selectBtn=(SelectButton*) pObject;
+				for(SelectButton* selectBtn : _delegate2->selectArray){
 					if(strcmp(selectBtn->getCharName()->getCString(),this->getCharName()->getCString())!=0){
 						selectBtn->_clickTime=0;
 					}
@@ -129,9 +127,7 @@ void SelectButton::click(){
 						}
 					}
 
-					for(unsigned int selectIndex=0; selectIndex<_delegate2->selectArray->count(); ++selectIndex){
-						Ref* pObject=_delegate2->selectArray->objectAtIndex(selectIndex);
-						SelectButton* selectBtn=(SelectButton*) pObject;
+					for(SelectButton* selectBtn : _delegate2->selectArray){
 						if (strcmp(selectBtn->getCharName()->getCString(),this->getCharName()->getCString())!=0){
 							selectBtn->_clickTime=0;
 						}
@@ -160,9 +156,7 @@ void SelectButton::click(){
 				}
 				if(!_delegate2->_com2Select || _delegate2->isHeroConfirmedSelected(this->getCharName()->getCString())){
 
-					for(unsigned int selectIndex=0; selectIndex<_delegate2->selectArray->count(); ++selectIndex){
-						Ref* pObject=_delegate2->selectArray->objectAtIndex(selectIndex);
-						SelectButton* selectBtn=(SelectButton*) pObject;
+					for(SelectButton* selectBtn : _delegate2->selectArray){
 						if (strcmp(selectBtn->getCharName()->getCString(),this->getCharName()->getCString())!=0){
 							selectBtn->_clickTime=0;
 						}

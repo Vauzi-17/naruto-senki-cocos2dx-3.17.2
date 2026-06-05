@@ -324,7 +324,8 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
   tetap `CCArray`/`CCDictionary`.
 - `NetworkLayer`: container tombol UI lokal `selectArray` dipindah dari
   retained `CCArray*` ke `std::vector<SelectButton*>`; `_selectList` nama hero
-  dan payload loader lama tetap `CCArray`.
+  dan payload loader lama tetap `CCArray`. Caller `SkillLayer` yang mereset
+  klik select juga sudah memakai range-for vector.
 - `NetworkLayer`: path tombol select, preview hero, map preview/label, dan slot
   team training lokal memakai `StringUtils::format`/`std::string`; payload hero
   ke loader tetap `CCString`/`CCArray`.
