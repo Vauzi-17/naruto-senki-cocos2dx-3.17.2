@@ -331,9 +331,9 @@ void GameLayer::initGard(){
 		groupName="Konoha";
 	}
 	if(index==0){
-		Guardian->setID(__String::create("Roshi"),__String::create("Com"),__String::create(groupName));
+		NarutoSenkiPayload::setId(Guardian,"Roshi","Com",groupName);
 	}else if(index==1){
-		Guardian->setID(__String::create("Han"),__String::create("Com"),__String::create(groupName));
+		NarutoSenkiPayload::setId(Guardian,"Han","Com",groupName);
 	}
 
 
@@ -629,8 +629,8 @@ void GameLayer::onGameStart(float dt){
 
 void GameLayer::initFlogs(){
 
-	__String* KonohaFlogName=__String::create("KotetsuFlog");
-	__String* AkatsukiFlogName=__String::create("FemalePainFlog");
+	const char* KonohaFlogName="KotetsuFlog";
+	const char* AkatsukiFlogName="FemalePainFlog";
 
 	kName="KotetsuFlog";
 	aName="FemalePainFlog";
@@ -647,7 +647,7 @@ void GameLayer::initFlogs(){
 	for(i= 0;i<6;i++){
 		aiFlog=Flog::create();
 		aiFlog->setDelegate(this);
-		aiFlog->setID(KonohaFlogName,__String::create("Flog"),__String::create("Konoha"));
+		NarutoSenkiPayload::setId(aiFlog,KonohaFlogName,"Flog","Konoha");
 		if(i<3){
 			mainPosY=(5.5-i/1.5)*32;
 
@@ -669,7 +669,7 @@ void GameLayer::initFlogs(){
 	for(i= 0;i<6;i++){
 		aiFlog=Flog::create();
 		aiFlog->setDelegate(this);
-		aiFlog->setID(AkatsukiFlogName,__String::create("Flog"),__String::create("Akatsuki"));
+		NarutoSenkiPayload::setId(aiFlog,AkatsukiFlogName,"Flog","Akatsuki");
 		if(i<3){
 			mainPosY=(5.5-i/1.5)*32 ;
 
@@ -691,8 +691,8 @@ void GameLayer::initFlogs(){
 };
 void GameLayer::addFlog(float dt){
 
-	__String* KonohaFlogName=__String::create(kName);
-	__String* AkatsukiFlogName=__String::create(aName);
+	const char* KonohaFlogName=kName;
+	const char* AkatsukiFlogName=aName;
 
 
 	int i;
@@ -701,7 +701,7 @@ void GameLayer::addFlog(float dt){
 	for(i= 0;i<6;i++){
 		aiFlog=Flog::create();
 		aiFlog->setDelegate(this);
-		aiFlog->setID(KonohaFlogName,__String::create("Flog"),__String::create("Konoha"));
+		NarutoSenkiPayload::setId(aiFlog,KonohaFlogName,"Flog","Konoha");
 		if(i<3){
 			mainPosY=(5.5-i/1.5)*32;
 
@@ -720,7 +720,7 @@ void GameLayer::addFlog(float dt){
 	for(i= 0;i<6;i++){
 		aiFlog=Flog::create();
 		aiFlog->setDelegate(this);
-		aiFlog->setID(AkatsukiFlogName,__String::create("Flog"),__String::create("Akatsuki"));
+		NarutoSenkiPayload::setId(aiFlog,AkatsukiFlogName,"Flog","Akatsuki");
 		if(i<3){
 			mainPosY=(5.5-i/1.5)*32 ;
 
@@ -777,17 +777,17 @@ void GameLayer::initTower(){
 		int metaY=dict.at("y").asInt();
 		int metaWidth=dict.at("width").asInt();
 		int metaHeight=dict.at("height").asInt();
-		__String* name=__String::create(dict.at("name").asString().c_str());
+		std::string name=dict.at("name").asString();
 
 
 		Tower* tower=Tower::create();
 		tower->setDelegate(this);
 		char towerName[7]="abcdef";
-		strncpy(towerName,name->getCString(),6);
+		strncpy(towerName,name.c_str(),6);
 		if(strcmp(towerName,"Konoha")==0){
-			tower->setID(name,__String::create("Tower"),__String::create("Konoha"));
+			NarutoSenkiPayload::setId(tower,name.c_str(),"Tower","Konoha");
 		}else{
-			tower->setID(name,__String::create("Tower"),__String::create("Akatsuki"));
+			NarutoSenkiPayload::setId(tower,name.c_str(),"Tower","Akatsuki");
 			tower->setFlipX(true);
 			tower->_isFlipped=true;
 		}

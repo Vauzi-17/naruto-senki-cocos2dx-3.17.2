@@ -49,12 +49,18 @@ inline void addHero(cocos2d::__Array* heros, const char* character, const char* 
 }
 
 template <typename HeroT>
-inline void setHeroId(HeroT* hero, cocos2d::Ref* payload)
+inline void setId(HeroT* hero, const char* character, const char* role, const char* group)
 {
 	hero->setID(
-		cocos2d::__String::create(character(payload)),
-		cocos2d::__String::create(role(payload)),
-		cocos2d::__String::create(group(payload)));
+		cocos2d::__String::create(character),
+		cocos2d::__String::create(role),
+		cocos2d::__String::create(group));
+}
+
+template <typename HeroT>
+inline void setHeroId(HeroT* hero, cocos2d::Ref* payload)
+{
+	setId(hero, character(payload), role(payload), group(payload));
 }
 
 }
