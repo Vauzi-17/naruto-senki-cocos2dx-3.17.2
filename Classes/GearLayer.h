@@ -2,6 +2,7 @@
 #include "cocos2d.h"
 #include "SimpleAudioEngine.h"
 #include "Defines.h"
+#include <vector>
 
 USING_NS_CC;
 
@@ -107,7 +108,7 @@ public:
 
 	int totalRow;
 	int gearNum;
-	CC_SYNTHESIZE_RETAIN(CCArray*,_gearArray,GearArray);
+	std::vector<GearButton*> _gearArray;
 
 protected:
 

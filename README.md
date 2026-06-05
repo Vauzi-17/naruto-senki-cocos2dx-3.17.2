@@ -293,6 +293,9 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
   `CCString` ke `std::string`, tanpa menyentuh data SQLite/record.
 - `GearLayer`: path icon/detail gear dan label coin lokal memakai
   `StringUtils::format`/`std::string`, sementara isi gear array lama ditahan.
+- `GearLayer`: container tombol gear lokal `ScrewLayer::_gearArray` dipindah
+  dari retained `CCArray*` ke `std::vector<GearButton*>`; gear array milik
+  hero/core tetap `CCArray`.
 - `HudLayer`: path avatar/skill button dan label HP/EXP lokal mulai memakai
   `StringUtils::format`/`std::string` tanpa menyentuh report dictionary.
 - `HudLayer`: start splash, display buff, report sprite, dan cut-in ougis lokal
@@ -1032,6 +1035,9 @@ Catatan progress terbaru:
 - `GameLayer` melepas counter match `totalKills`/`totalTM` dari retained
   `CCString*` ke `int`; validasi result `GameOver`, increment kill `HPBar`,
   dan reset loader ikut memakai nilai integer.
+- `GearLayer` melepas container tombol gear lokal `ScrewLayer::_gearArray`
+  dari retained `CCArray*` ke `std::vector<GearButton*>`; data gear hero tetap
+  ditahan sebagai kontrak core.
 - `SelectLayer`, `SkillLayer`, `GearLayer`, dan `GameOver` ikut lepas dari
   `CCARRAY_FOREACH` aktif. Perubahan ini hanya mengganti iterator lokal pada
   daftar select button, gear, result character, dan rematch handoff tanpa

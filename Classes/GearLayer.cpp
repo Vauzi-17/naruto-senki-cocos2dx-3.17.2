@@ -174,7 +174,6 @@ GearButton* GearButton::create( const char *szImage ){
 ScrewLayer::ScrewLayer(void)
 {
 	_delegate=nullptr;
-	_gearArray=nullptr;
 
 }
 
@@ -480,16 +479,10 @@ void GearLayer::updatePlayerGear(){
 
 void GearLayer::updateGearList(){
 
-		if(!_screwLayer->getGearArray()){
-			_screwLayer->setGearArray(CCArray::create());
-		}else{
-
-			for(unsigned int gearIndex=0; gearIndex<_screwLayer->getGearArray()->count(); ++gearIndex){
-				Ref* pObject=_screwLayer->getGearArray()->objectAtIndex(gearIndex);
-				GearButton* btn=(GearButton*) pObject;
-				btn->removeFromParentAndCleanup(true);
-			}
+		for(GearButton* btn : _screwLayer->_gearArray){
+			btn->removeFromParentAndCleanup(true);
 		}
+		_screwLayer->_gearArray.clear();
 		currentGear=None;
 		_screwLayer->totalRow=3;
 		for(int i=0;i<_screwLayer->gearNum;i++){
@@ -524,7 +517,7 @@ void GearLayer::updateGearList(){
 			btn->setAnchorPoint(Vec2(0,0));
 			btn->setBtnType(gearType(i),gearbtnType(0),isBuyed);
 			btn->setDelegate(this);
-			_screwLayer->getGearArray()->addObject(btn);
+			_screwLayer->_gearArray.push_back(btn);
 			_screwLayer->addChild(btn);
 
 		}
