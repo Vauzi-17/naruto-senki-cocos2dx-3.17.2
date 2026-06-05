@@ -323,6 +323,9 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
 - `RankingLayer`: field tombol rank lokal dipindah dari retained `CCString*`
   ke `std::string`; request ranking offline/dekoratif tetap menerima nama hero
   yang sama.
+- `RankingLayer`: lookup teks ranking dari `strings.xml` dipusatkan ke helper
+  lokal yang mengembalikan `std::string`; cast `CCString*` lama tidak lagi
+  tersebar di flow ranking.
 - `HPBar`: path heart-effect, label kill/team, total kill, dan reward coin
   lokal memakai `StringUtils::format`/`std::string`; field kill lama tetap
   `CCString`.
@@ -530,6 +533,8 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
 - `KTools` SQLite helper melepas `CCString` lokal untuk query/encoded value
   yang tidak perlu menjadi kontrak caller; sisa `KTools` tinggal XML parser,
   return API `CCString*`, dan lookup `strings.xml`.
+- `RankingLayer` memusatkan pembacaan `strings.xml` ke helper lokal sehingga
+  sisa `CCDictionary`/`CCString` di file itu tinggal boundary lookup teks.
 
 1. **Tutup helper compat kecil yang masih lokal**
    - Target file: `Cocos2dx2Compat.h`, `ActionButton`, `HPBar`, `HudLayer`,

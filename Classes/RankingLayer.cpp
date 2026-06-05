@@ -5,6 +5,15 @@
 USING_NS_CC_EXT;
 using namespace CocosDenshion;
 
+namespace
+{
+std::string rankingText(const char* key)
+{
+	CCDictionary* strings=CCDictionary::createWithContentsOfFile("Element/strings.xml");
+	CCString* value=(CCString*)strings->objectForKey(key);
+	return value ? value->getCString() : "";
+}
+}
 
 /*----------------------
 init RankCharButton
@@ -504,12 +513,11 @@ void RakingLayer::postRequest(int code,const char* useChar/* =NULL */){
 
 				if(sortNO==0){
 
-					CCDictionary *strings = CCDictionary::createWithContentsOfFile("Element/strings.xml");
-					const char *reply;
+					std::string reply;
 					if(postingCode==400){
-						reply= ((CCString*)strings->objectForKey("RankingNull"))->getCString();
+						reply=rankingText("RankingNull");
 					}else{
-						reply= ((CCString*)strings->objectForKey("RankingNull2"))->getCString();
+						reply=rankingText("RankingNull2");
 					}
 
 					rankingDetail=Label::createWithSystemFont(reply,FONT_TYPE,12);
@@ -518,10 +526,9 @@ void RakingLayer::postRequest(int code,const char* useChar/* =NULL */){
 					ranking_layer->addChild(rankingDetail,500);
 
 				}else{
-					CCDictionary *strings = CCDictionary::createWithContentsOfFile("Element/strings.xml");
-					const char *reply = ((CCString*)strings->objectForKey("RankingDetail"))->getCString();
-					const char *reply2 = ((CCString*)strings->objectForKey("RankingDetail2"))->getCString();
-					std::string detailText=cocos2d::StringUtils::format("%s %d %s",reply,sortNO,reply2);
+					std::string reply=rankingText("RankingDetail");
+					std::string reply2=rankingText("RankingDetail2");
+					std::string detailText=cocos2d::StringUtils::format("%s %d %s",reply.c_str(),sortNO,reply2.c_str());
 					rankingDetail=Label::createWithSystemFont(detailText,FONT_TYPE,12);
 					rankingDetail->setAnchorPoint(Vec2(0,0.5f));
 					rankingDetail->setPosition(Vec2(ranking_bg->getPositionX()-ranking_bg->getContentSize().width/2 +20,ranking_bg->getPositionY()-ranking_bg->getContentSize().height/2+14));
@@ -942,8 +949,7 @@ void RakingLayer::onSelectGroupBtn(Ref* sender){
 		ranking_title->setPosition(Vec2(ranking_bg->getPositionX()-96,ranking_bg->getPositionY()+ranking_bg->getContentSize().height/2-16));
 	}
 
-	CCDictionary *strings = CCDictionary::createWithContentsOfFile("Element/strings.xml");
-	const char *reply = ((CCString*)strings->objectForKey("RankingNull2"))->getCString();
+	std::string reply=rankingText("RankingNull2");
 	rankingDetail=Label::createWithSystemFont(reply,FONT_TYPE,12);
 	rankingDetail->setAnchorPoint(Vec2(0,0.5f));
 	rankingDetail->setPosition(Vec2(ranking_bg->getPositionX()-ranking_bg->getContentSize().width/2 +20,ranking_bg->getPositionY()-ranking_bg->getContentSize().height/2+14));
