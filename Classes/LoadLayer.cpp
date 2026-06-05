@@ -108,7 +108,7 @@ void LoadLayer::preloadIMG(){
 	for(unsigned int heroIndex=0; heroIndex<tempHeros->count(); ++heroIndex){
 		Ref* pObject=tempHeros->objectAtIndex(heroIndex);
 
-		CCDictionary* tempdict=(CCDictionary *) pObject;
+		__Dictionary* tempdict=(__Dictionary*) pObject;
 
 		const char* player=tempdict->valueForKey("character")->getCString();
 
@@ -375,7 +375,7 @@ void LoadLayer::preloadPlist(Ref* obj){
 	}
 
 	Ref* pObject=tempHeros->objectAtIndex(loadNum);
-	CCDictionary* tempdict=(CCDictionary *) pObject;
+	__Dictionary* tempdict=(__Dictionary*) pObject;
 	const char* name=tempdict->valueForKey("character")->getCString();
 
     std::string path=cocos2d::StringUtils::format("Element/%s/%s.plist",name,name);

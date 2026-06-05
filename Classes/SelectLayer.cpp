@@ -55,10 +55,10 @@ static const char* selectPickHero(std::vector<std::string>& used, const char** a
 
 static void selectAddHero(CCArray* heros, const char* character, const char* role, const char* group)
 {
-	CCDictionary* dic=CCDictionary::create();
-	dic->setObject(CCString::create(character),"character");
-	dic->setObject(CCString::create(role),"role");
-	dic->setObject(CCString::create(group),"group");
+	__Dictionary* dic=__Dictionary::create();
+	dic->setObject(__String::create(character),"character");
+	dic->setObject(__String::create(role),"role");
+	dic->setObject(__String::create(group),"group");
 	heros->addObject(dic);
 }
 

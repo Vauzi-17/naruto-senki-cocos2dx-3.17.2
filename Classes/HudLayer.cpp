@@ -1335,7 +1335,7 @@ void HudLayer::costCKR(int value,bool isCKR2){
 		}
 
 		std::string ckrText=cocos2d::StringUtils::format("%f",ckr);
-		_delegate->currentPlayer->setCKR(CCString::create(ckrText));
+		_delegate->currentPlayer->setCKR(__String::create(ckrText));
 		this->setCKRLose(false);
 
 	}else{
@@ -1349,7 +1349,7 @@ void HudLayer::costCKR(int value,bool isCKR2){
 		}
 
 		std::string ckrText=cocos2d::StringUtils::format("%f",ckr);
-		_delegate->currentPlayer->setCKR2(CCString::create(ckrText));
+		_delegate->currentPlayer->setCKR2(__String::create(ckrText));
 		this->setCKRLose(true);
 
 	}

@@ -353,7 +353,7 @@ void GameLayer::initGard(){
 	Guardian->setCharNO(7);
 
 	Guardian->idle();
-	CCDictionary* callValue = CCDictionary::create();
+	__Dictionary* callValue = __Dictionary::create();
 	callValue->setObject(__String::create("smk"), 1);
 	Guardian->setSkillEffect(Guardian,callValue);
 
@@ -401,7 +401,7 @@ void GameLayer::initHeros(){
 		for(unsigned int heroIndex=0; heroIndex<Heros->count(); ++heroIndex){
 			pObject=Heros->objectAtIndex(heroIndex);
 
-			CCDictionary* tempdict=(CCDictionary *) pObject;
+			__Dictionary* tempdict=(__Dictionary*) pObject;
 
 			__String* player=__String::create(tempdict->valueForKey("character")->getCString());
 			__String* role=__String::create(tempdict->valueForKey("role")->getCString());
@@ -483,7 +483,7 @@ void GameLayer::initHeros(){
 		for(unsigned int heroIndex=0; heroIndex<Heros->count(); ++heroIndex){
 			pObject=Heros->objectAtIndex(heroIndex);
 
-			CCDictionary* tempdict=(CCDictionary *) pObject;
+			__Dictionary* tempdict=(__Dictionary*) pObject;
 
 			__String* player=__String::create(tempdict->valueForKey("character")->getCString());
 			__String* role=__String::create(tempdict->valueForKey("role")->getCString());
@@ -1344,7 +1344,7 @@ void GameLayer::onLeft(){
 			if(strcmp(hero->getCharacter()->getCString(),"Roshi")==0 || strcmp(hero->getCharacter()->getCString(),"Han")==0){
 				continue;
 			}
-			CCDictionary* dic=CCDictionary::create();
+			__Dictionary* dic=__Dictionary::create();
 			dic->setObject(__String::create(hero->getCharacter()->getCString()),"character");
 			dic->setObject(__String::create(hero->getRole()->getCString()),"role");
 			dic->setObject(__String::create(hero->getGroup()->getCString()),"group");

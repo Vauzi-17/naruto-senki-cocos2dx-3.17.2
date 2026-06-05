@@ -113,6 +113,9 @@ Alasan estimasi:
 - Alias string lokal di `GameLayer` untuk guardian, spawn hero, flog/tower,
   CKR refill, dan payload rematch diganti dari `CCString` ke `__String`
   langsung; kontrak `CCArray`/`CCDictionary` gameplay tetap ditahan.
+- Helper payload scene awal/result dan cast dictionary loader memakai
+  `__Dictionary`/`__String` langsung, sehingga alias deprecated `CCDictionary`
+  dan `CCString` makin terkonsentrasi di core/parser.
 - UI perimeter berikutnya ikut dibersihkan dari `CCARRAY_FOREACH`:
   `SelectLayer`, `SkillLayer`, `GearLayer`, dan `GameOver` sekarang memakai
   loop indeks atau container STL lokal untuk iterator yang aman.
