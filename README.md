@@ -353,6 +353,9 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
   `CCString`.
 - `GameLayer`: nilai tower HP lokal dan update `TotalTM` tidak lagi memakai
   `CCString::createWithFormat`; field lama tetap `CCString`.
+- `GameLayer`: counter match `totalKills` dan `totalTM` dipindah dari retained
+  `CCString*` ke integer lokal; `LoadLayer`, `HPBar`, dan `GameOver` caller
+  ikut memakai getter/setter integer.
 - `GameOver`: blok komentar achievement lose lama yang masih membawa format
   `CCString` dead-code dihapus; flow result aktif tidak berubah.
 - `StartMenu`: simpan coin nameplate lokal memakai `StringUtils::format`/
@@ -1026,6 +1029,9 @@ Catatan progress terbaru:
 - `LoadLayer` menghapus field mati `DLCArray` dan menghindari `CCString`
   sementara saat membaca nama hero untuk preload plist; `tempHeros` tetap
   menjadi kontrak lama dari scene pemilih ke loader.
+- `GameLayer` melepas counter match `totalKills`/`totalTM` dari retained
+  `CCString*` ke `int`; validasi result `GameOver`, increment kill `HPBar`,
+  dan reset loader ikut memakai nilai integer.
 - `SelectLayer`, `SkillLayer`, `GearLayer`, dan `GameOver` ikut lepas dari
   `CCARRAY_FOREACH` aktif. Perubahan ini hanya mengganti iterator lokal pada
   daftar select button, gear, result character, dan rematch handoff tanpa

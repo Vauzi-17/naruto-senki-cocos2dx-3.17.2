@@ -477,9 +477,8 @@ void HPBar::loseHP(float percent){
 					if(strcmp(currentSlayer->getCharacter()->getCString(),"Han")!=0 &&
 						strcmp(currentSlayer->getCharacter()->getCString(),"Roshi")!=0
 						){
-							int newValue=std::atoi(_delegate->getDelegate()->getTotalKills()->getCString())+1;
-							std::string totalKillText=cocos2d::StringUtils::format("%d",newValue);
-							_delegate->getDelegate()->setTotalKills(CCString::create(totalKillText));
+							int newValue=_delegate->getDelegate()->getTotalKills()+1;
+							_delegate->getDelegate()->setTotalKills(newValue);
 					}
 
 

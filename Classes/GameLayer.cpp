@@ -28,8 +28,8 @@ GameLayer::GameLayer(void)
 	kEXPBound=25;
 	aEXPBound=25;
 
-	totalKills=NULL;
-	totalTM=NULL;
+	totalKills=0;
+	totalTM=0;
 	_isShacking=false;
 	_isSurrender=false;
 	_isGuardian=false;
@@ -65,8 +65,6 @@ GameLayer::GameLayer(void)
 
 GameLayer::~GameLayer(void)
 {
-	//CC_SAFE_RELEASE(totalKills);
-	CC_SAFE_RELEASE(totalTM);
 	CC_SAFE_RELEASE(_rematchHerosOverride);
 
 }
@@ -855,9 +853,7 @@ void GameLayer::updateGameTime(float dt)
 	std::string tempTime=cocos2d::StringUtils::format("%02d:%02d",_minute,_second);
 	this->_hudLayer->gameClock->setString(tempTime);
 
-	int newValue=std::atoi(this->getTotalTM()->getCString())+1;
-	std::string totalTimeText=cocos2d::StringUtils::format("%d",newValue);
-	this->setTotalTM(CCString::create(totalTimeText));
+	this->setTotalTM(this->getTotalTM()+1);
 }
 
 

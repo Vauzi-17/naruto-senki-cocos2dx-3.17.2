@@ -351,8 +351,8 @@ void LoadLayer::onLoadFinish(float dt){
 	//_hudLayer->initHeroInterface();
 
 	_gameLayer->setHudLayer(_hudLayer);
-	_gameLayer->setTotalKills(CCString::create("0"));
-	_gameLayer->setTotalTM(CCString::create("0"));
+	_gameLayer->setTotalKills(0);
+	_gameLayer->setTotalTM(0);
 
 	gameScene->addChild(_gameLayer,GlTag);
 	gameScene->addChild(_bgLayer,BgTag);

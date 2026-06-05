@@ -60,8 +60,8 @@ public:
 
 	CC_SYNTHESIZE(HudLayer*,_hudLayer,HudLayer);
 
-	CC_SYNTHESIZE_RETAIN(CCString*,totalKills,TotalKills);
-	CC_SYNTHESIZE_RETAIN(CCString*,totalTM,TotalTM);
+	CC_SYNTHESIZE(int,totalKills,TotalKills);
+	CC_SYNTHESIZE(int,totalTM,TotalTM);
 
 	SpriteBatchNode* skillEffectBatch;
 	SpriteBatchNode* damageEffectBatch;

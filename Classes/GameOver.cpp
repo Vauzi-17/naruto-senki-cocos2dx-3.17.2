@@ -188,7 +188,7 @@ void GameOver::listResult(){
 	int killDead=std::atoi(_delegate->currentPlayer->getKillNum()->getCString())-_delegate->currentPlayer->_deadNum;
 
 
-	if(!_delegate->_isDuelMode && !_delegate->_isTrainingMode && _totalSecond != std::atoi(_delegate->getTotalTM()->getCString())){
+	if(!_delegate->_isDuelMode && !_delegate->_isTrainingMode && _totalSecond != _delegate->getTotalTM()){
 		SimpleAudioEngine::getInstance()->stopBackgroundMusic();
 		Director::getInstance()->end();
 		return;
@@ -378,7 +378,7 @@ void GameOver::listResult(){
 
 	if(Cheats<=10 && !_delegate->_isDuelMode && !_delegate->_isTrainingMode){
 
-		if(akatsukiKill+konohaKill !=std::atoi(_delegate->getTotalKills()->getCString())){
+		if(akatsukiKill+konohaKill !=_delegate->getTotalKills()){
 			SimpleAudioEngine::getInstance()->stopBackgroundMusic();
 			Director::getInstance()->end();
 			return;
