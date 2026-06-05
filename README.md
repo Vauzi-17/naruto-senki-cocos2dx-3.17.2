@@ -22,7 +22,7 @@ masih memakai API 2.x seperti `CCLayer`, `CCSprite`, `CCMenu`, `CCPoint`,
 
 ## Estimasi Progress Migrasi
 
-Estimasi progress menuju kode full cocos2d-x 3.17.2: **sekitar 96-97%**.
+Estimasi progress menuju kode full cocos2d-x 3.17.2: **sekitar 98%**.
 
 Alasan estimasi:
 
@@ -237,7 +237,7 @@ Roadmap menuju 100%:
 
 Urutan langkah berikutnya menuju 100%:
 
-Posisi saat ini: **sedang di langkah 5 menuju langkah 6**. Helper compat kecil
+Posisi saat ini: **akhir langkah 5 menuju langkah 6**. Helper compat kecil
 yang benar-benar lokal sudah mulai ditutup (`visitNode`, `CCTime`/`cc_timeval`,
 `CCDictElement`, sebagian state cooldown `ActionButton`, `CCScale9Sprite`,
 `CCScrollView`, `CCEditBox`, macro `atoi`, dan alias HTTP `CCHttp*`). Area
@@ -341,6 +341,9 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
   `std::string`; builder SQL lama tetap ditahan.
 - `KTools`: helper read SQLite lokal mulai memakai `std::string` untuk query
   select dan hasil decode; return type lama tetap `CCString*`.
+- `KTools`: sisa builder SQL update/insert lokal sudah tidak memakai
+  `CCString::createWithFormat`; jalur SQLite lama tetap memakai query yang sama
+  dan return/caller lama tidak diubah.
 - `NetworkLayer`: komentar request list hero lama dan parsing response callback
   yang sudah tidak punya caller aktif dibersihkan; flow pemilihan hero tetap
   memakai daftar offline statis.
@@ -474,6 +477,8 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
   SQL/SQLite helper yang masih menjadi kontrak utility lama.
 - `KTools` read helper mulai melepas format `CCString` pada query/result yang
   lokal, sambil menahan update/insert SQL lama untuk slice berikutnya.
+- `KTools` menutup sisa format `CCString` pada builder SQL update/insert lokal,
+  sehingga sisa format angka/path aktif tinggal di area core combat.
 
 1. **Tutup helper compat kecil yang masih lokal**
    - Target file: `Cocos2dx2Compat.h`, `ActionButton`, `HPBar`, `HudLayer`,
