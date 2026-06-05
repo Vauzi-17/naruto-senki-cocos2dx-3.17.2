@@ -302,6 +302,7 @@ alias source lama `CCArray`, `CCDictionary`, `CCString`, dan
 payload, pembacaan payload loader, pembacaan gear UI, set ID spawn lokal, dan
 payload efek kecil juga sudah dikonsolidasikan ke helper kecil. Setter stat
 lokal di `GameLayer`/`HudLayer` mulai ikut dipusatkan ke helper yang sama.
+Helper lokal parser XML juga mulai mengurangi duplikasi entry data lama.
 Pekerjaan berikutnya adalah validasi build Android/Win32 pengguna serta audit
 final konfigurasi build setelah compat bridge dihapus.
 
@@ -442,6 +443,9 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
 - `GameLayer`/`HudLayer`: setter stat lokal untuk tower HP dan CKR training/duel
   memakai helper string-to-stat bersama, sehingga caller luar core tidak lagi
   membuat `__String::create(...)` langsung untuk nilai kecil tersebut.
+- `KTools::readXMLToArray`: pembuatan array action dan entry string/dictionary
+  XML dipusatkan ke helper lokal parser, sehingga output lama tetap sama tetapi
+  duplikasi `__Array`/`__Dictionary`/`__String` di loop parser berkurang.
 - `NetworkLayer`: path tombol select, preview hero, map preview/label, dan slot
   team training lokal memakai `StringUtils::format`/`std::string`; payload hero
   ke loader tetap `CCString`/`CCArray`.

@@ -22,6 +22,22 @@
 using namespace tinyxml2;
 using namespace CocosDenshion;
 
+namespace {
+
+__Array* createLegacyArray()
+{
+	return __Array::create();
+}
+
+void addStringEntry(__Array* target, const char* key, const char* value)
+{
+	auto entry = __Dictionary::create();
+	entry->setObject(__String::create(value), key);
+	target->addObject(entry);
+}
+
+}
+
 KTools::KTools(void)
 {
 	_delegate=NULL;
@@ -765,9 +781,9 @@ bool KTools::readXMLToArray(const char* filePath,__Array* &array)
 		//CCLOG("[%s]",actionName);
 
 		XMLElement *actionNodeEle=actionEle->FirstChildElement();
-        __Array* actionArray=__Array::create();
-		__Array* actionDate=__Array::create();
-		__Array* actionFrame=__Array::create();
+        auto actionArray=createLegacyArray();
+		auto actionDate=createLegacyArray();
+		auto actionFrame=createLegacyArray();
 		while(actionNodeEle){
 			//CCLOG("+[%s]",actionNodeEle->Name());
 			if(strcmp(actionNodeEle->Name(),"frame")){
@@ -776,13 +792,8 @@ bool KTools::readXMLToArray(const char* filePath,__Array* &array)
 				while(dateEle){
 
 					const char* nodeKey=dateEle->FirstAttribute()->Value();
-					__String* nodeValue=__String::create(dateEle->GetText());
-
-					//CCLOG("%s:%s",nodeKey,nodeValue->getCString());
-					__Dictionary* dateDic=__Dictionary::create();
-					dateDic->setObject(nodeValue,nodeKey);
-
-					actionDate->addObject(dateDic);
+					//CCLOG("%s:%s",nodeKey,dateEle->GetText());
+					addStringEntry(actionDate,nodeKey,dateEle->GetText());
 					dateEle=dateEle->NextSiblingElement();
 				}
 
@@ -799,12 +810,8 @@ bool KTools::readXMLToArray(const char* filePath,__Array* &array)
 						nodeKey=frameEle->Name();
 					}
 					
-					__String* nodeValue=__String::create(frameEle->GetText());
-
-					//CCLOG("%s:%s",nodeKey,nodeValue->getCString());
-					__Dictionary* frameDic=__Dictionary::create();
-					frameDic->setObject(nodeValue,nodeKey);
-					actionFrame->addObject(frameDic);
+					//CCLOG("%s:%s",nodeKey,frameEle->GetText());
+					addStringEntry(actionFrame,nodeKey,frameEle->GetText());
 
 					frameEle=frameEle->NextSiblingElement();
 				}
