@@ -330,9 +330,9 @@ void GameLayer::initGard(){
 		groupName="Konoha";
 	}
 	if(index==0){
-		Guardian->setID(CCString::create("Roshi"),CCString::create("Com"),CCString::create(groupName));
+		Guardian->setID(__String::create("Roshi"),__String::create("Com"),__String::create(groupName));
 	}else if(index==1){
-		Guardian->setID(CCString::create("Han"),CCString::create("Com"),CCString::create(groupName));
+		Guardian->setID(__String::create("Han"),__String::create("Com"),__String::create(groupName));
 	}
 
 
@@ -354,7 +354,7 @@ void GameLayer::initGard(){
 
 	Guardian->idle();
 	CCDictionary* callValue = CCDictionary::create();
-	callValue->setObject(CCString::create("smk"), 1);
+	callValue->setObject(__String::create("smk"), 1);
 	Guardian->setSkillEffect(Guardian,callValue);
 
 	Guardian->doAI();
@@ -403,9 +403,9 @@ void GameLayer::initHeros(){
 
 			CCDictionary* tempdict=(CCDictionary *) pObject;
 
-			CCString* player=CCString::create(tempdict->valueForKey("character")->getCString());
-			CCString* role=CCString::create(tempdict->valueForKey("role")->getCString());
-			CCString* group=CCString::create(tempdict->valueForKey("group")->getCString());
+			__String* player=__String::create(tempdict->valueForKey("character")->getCString());
+			__String* role=__String::create(tempdict->valueForKey("role")->getCString());
+			__String* group=__String::create(tempdict->valueForKey("group")->getCString());
 
 			int mapPos;
 			if(strcmp(group->getCString(),"Akatsuki")==0){
@@ -485,9 +485,9 @@ void GameLayer::initHeros(){
 
 			CCDictionary* tempdict=(CCDictionary *) pObject;
 
-			CCString* player=CCString::create(tempdict->valueForKey("character")->getCString());
-			CCString* role=CCString::create(tempdict->valueForKey("role")->getCString());
-			CCString* group=CCString::create(tempdict->valueForKey("group")->getCString());
+			__String* player=__String::create(tempdict->valueForKey("character")->getCString());
+			__String* role=__String::create(tempdict->valueForKey("role")->getCString());
+			__String* group=__String::create(tempdict->valueForKey("group")->getCString());
 
 			if(useCenterSpawn){
 				if(strcmp(group->getCString(),"Akatsuki")==0){
@@ -636,8 +636,8 @@ void GameLayer::onGameStart(float dt){
 
 void GameLayer::initFlogs(){
 
-	CCString* KonohaFlogName=CCString::create("KotetsuFlog");
-	CCString* AkatsukiFlogName=CCString::create("FemalePainFlog");
+	__String* KonohaFlogName=__String::create("KotetsuFlog");
+	__String* AkatsukiFlogName=__String::create("FemalePainFlog");
 
 	kName="KotetsuFlog";
 	aName="FemalePainFlog";
@@ -654,7 +654,7 @@ void GameLayer::initFlogs(){
 	for(i= 0;i<6;i++){
 		aiFlog=Flog::create();
 		aiFlog->setDelegate(this);
-		aiFlog->setID(KonohaFlogName,CCString::create("Flog"),CCString::create("Konoha"));
+		aiFlog->setID(KonohaFlogName,__String::create("Flog"),__String::create("Konoha"));
 		if(i<3){
 			mainPosY=(5.5-i/1.5)*32;
 
@@ -676,7 +676,7 @@ void GameLayer::initFlogs(){
 	for(i= 0;i<6;i++){
 		aiFlog=Flog::create();
 		aiFlog->setDelegate(this);
-		aiFlog->setID(AkatsukiFlogName,CCString::create("Flog"),CCString::create("Akatsuki"));
+		aiFlog->setID(AkatsukiFlogName,__String::create("Flog"),__String::create("Akatsuki"));
 		if(i<3){
 			mainPosY=(5.5-i/1.5)*32 ;
 
@@ -698,8 +698,8 @@ void GameLayer::initFlogs(){
 };
 void GameLayer::addFlog(float dt){
 
-	CCString* KonohaFlogName=CCString::create(kName);
-	CCString* AkatsukiFlogName=CCString::create(aName);
+	__String* KonohaFlogName=__String::create(kName);
+	__String* AkatsukiFlogName=__String::create(aName);
 
 
 	int i;
@@ -708,7 +708,7 @@ void GameLayer::addFlog(float dt){
 	for(i= 0;i<6;i++){
 		aiFlog=Flog::create();
 		aiFlog->setDelegate(this);
-		aiFlog->setID(KonohaFlogName,CCString::create("Flog"),CCString::create("Konoha"));
+		aiFlog->setID(KonohaFlogName,__String::create("Flog"),__String::create("Konoha"));
 		if(i<3){
 			mainPosY=(5.5-i/1.5)*32;
 
@@ -727,7 +727,7 @@ void GameLayer::addFlog(float dt){
 	for(i= 0;i<6;i++){
 		aiFlog=Flog::create();
 		aiFlog->setDelegate(this);
-		aiFlog->setID(AkatsukiFlogName,CCString::create("Flog"),CCString::create("Akatsuki"));
+		aiFlog->setID(AkatsukiFlogName,__String::create("Flog"),__String::create("Akatsuki"));
 		if(i<3){
 			mainPosY=(5.5-i/1.5)*32 ;
 
@@ -784,7 +784,7 @@ void GameLayer::initTower(){
 		int metaY=dict.at("y").asInt();
 		int metaWidth=dict.at("width").asInt();
 		int metaHeight=dict.at("height").asInt();
-		CCString* name=CCString::create(dict.at("name").asString().c_str());
+		__String* name=__String::create(dict.at("name").asString().c_str());
 
 
 		Tower* tower=Tower::create();
@@ -792,9 +792,9 @@ void GameLayer::initTower(){
 		char towerName[7]="abcdef";
 		strncpy(towerName,name->getCString(),6);
 		if(strcmp(towerName,"Konoha")==0){
-			tower->setID(name,CCString::create("Tower"),CCString::create("Konoha"));
+			tower->setID(name,__String::create("Tower"),__String::create("Konoha"));
 		}else{
-			tower->setID(name,CCString::create("Tower"),CCString::create("Akatsuki"));
+			tower->setID(name,__String::create("Tower"),__String::create("Akatsuki"));
 			tower->setFlipX(true);
 			tower->_isFlipped=true;
 		}
@@ -807,11 +807,11 @@ void GameLayer::initTower(){
 		if(i==1 || i==4 ){
 			//4v4
 			if(Cheats>10){
-				tower->setMaxHP(CCString::create("80000"));
+				tower->setMaxHP(__String::create("80000"));
 			}else{
-				tower->setMaxHP(CCString::create("50000"));
+				tower->setMaxHP(__String::create("50000"));
 			}
-			tower->setHP(CCString::create(tower->getMaxHP()->getCString()));
+			tower->setHP(__String::create(tower->getMaxHP()->getCString()));
 		}
 		tower->setHPbar();
 		tower->_hpBar->setVisible(false);
@@ -963,8 +963,8 @@ void GameLayer::fillCKRToMax(NarutoSenki::ActionManager* hero){
 	if(!hero){
 		return;
 	}
-	hero->setCKR(CCString::create("45000"));
-	hero->setCKR2(CCString::create("50000"));
+	hero->setCKR(__String::create("45000"));
+	hero->setCKR2(__String::create("50000"));
 	hero->_isCanOugis1=true;
 	hero->_isCanOugis2=true;
 }
@@ -1345,9 +1345,9 @@ void GameLayer::onLeft(){
 				continue;
 			}
 			CCDictionary* dic=CCDictionary::create();
-			dic->setObject(CCString::create(hero->getCharacter()->getCString()),"character");
-			dic->setObject(CCString::create(hero->getRole()->getCString()),"role");
-			dic->setObject(CCString::create(hero->getGroup()->getCString()),"group");
+			dic->setObject(__String::create(hero->getCharacter()->getCString()),"character");
+			dic->setObject(__String::create(hero->getRole()->getCString()),"role");
+			dic->setObject(__String::create(hero->getGroup()->getCString()),"group");
 			rematchHeros->addObject(dic);
 		}
 	}
