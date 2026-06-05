@@ -1346,7 +1346,7 @@ void HudLayer::costCKR(int value,bool isCKR2){
 		}
 
 		std::string ckrText=cocos2d::StringUtils::format("%f",ckr);
-		_delegate->currentPlayer->setCKR(__String::create(ckrText));
+		NarutoSenkiPayload::setCKR(_delegate->currentPlayer,ckrText.c_str());
 		this->setCKRLose(false);
 
 	}else{
@@ -1360,7 +1360,7 @@ void HudLayer::costCKR(int value,bool isCKR2){
 		}
 
 		std::string ckrText=cocos2d::StringUtils::format("%f",ckr);
-		_delegate->currentPlayer->setCKR2(__String::create(ckrText));
+		NarutoSenkiPayload::setCKR2(_delegate->currentPlayer,ckrText.c_str());
 		this->setCKRLose(true);
 
 	}

@@ -300,9 +300,10 @@ UI/menu, HUD, parser XML lokal, `Element`, dan `ActionManager` sudah lepas dari
 alias source lama `CCArray`, `CCDictionary`, `CCString`, dan
 `CCARRAY_FOREACH`; helper payload hero scene awal/result, pembuatan list
 payload, pembacaan payload loader, pembacaan gear UI, set ID spawn lokal, dan
-payload efek kecil juga sudah dikonsolidasikan ke helper kecil. Pekerjaan
-berikutnya adalah validasi build Android/Win32 pengguna serta audit final
-konfigurasi build setelah compat bridge dihapus.
+payload efek kecil juga sudah dikonsolidasikan ke helper kecil. Setter stat
+lokal di `GameLayer`/`HudLayer` mulai ikut dipusatkan ke helper yang sama.
+Pekerjaan berikutnya adalah validasi build Android/Win32 pengguna serta audit
+final konfigurasi build setelah compat bridge dihapus.
 
 Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
 
@@ -438,6 +439,9 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
 - `GameLayer`: payload efek guardian dan pointer rematch lokal ikut dirapikan
   lewat helper payload/`auto`, sehingga dictionary payload kecil tidak lagi
   dibuat langsung di blok guardian.
+- `GameLayer`/`HudLayer`: setter stat lokal untuk tower HP dan CKR training/duel
+  memakai helper string-to-stat bersama, sehingga caller luar core tidak lagi
+  membuat `__String::create(...)` langsung untuk nilai kecil tersebut.
 - `NetworkLayer`: path tombol select, preview hero, map preview/label, dan slot
   team training lokal memakai `StringUtils::format`/`std::string`; payload hero
   ke loader tetap `CCString`/`CCArray`.

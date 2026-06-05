@@ -70,4 +70,28 @@ inline void setHeroId(HeroT* hero, cocos2d::Ref* payload)
 	setId(hero, character(payload), role(payload), group(payload));
 }
 
+template <typename HeroT>
+inline void setMaxHP(HeroT* hero, const char* value)
+{
+	hero->setMaxHP(cocos2d::__String::create(value));
+}
+
+template <typename HeroT>
+inline void setHP(HeroT* hero, const char* value)
+{
+	hero->setHP(cocos2d::__String::create(value));
+}
+
+template <typename HeroT>
+inline void setCKR(HeroT* hero, const char* value)
+{
+	hero->setCKR(cocos2d::__String::create(value));
+}
+
+template <typename HeroT>
+inline void setCKR2(HeroT* hero, const char* value)
+{
+	hero->setCKR2(cocos2d::__String::create(value));
+}
+
 }

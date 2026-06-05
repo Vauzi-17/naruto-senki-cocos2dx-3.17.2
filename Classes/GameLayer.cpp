@@ -799,11 +799,11 @@ void GameLayer::initTower(){
 		if(i==1 || i==4 ){
 			//4v4
 			if(Cheats>10){
-				tower->setMaxHP(__String::create("80000"));
+				NarutoSenkiPayload::setMaxHP(tower,"80000");
 			}else{
-				tower->setMaxHP(__String::create("50000"));
+				NarutoSenkiPayload::setMaxHP(tower,"50000");
 			}
-			tower->setHP(__String::create(tower->getMaxHP()->getCString()));
+			NarutoSenkiPayload::setHP(tower,tower->getMaxHP()->getCString());
 		}
 		tower->setHPbar();
 		tower->_hpBar->setVisible(false);
@@ -955,8 +955,8 @@ void GameLayer::fillCKRToMax(NarutoSenki::ActionManager* hero){
 	if(!hero){
 		return;
 	}
-	hero->setCKR(__String::create("45000"));
-	hero->setCKR2(__String::create("50000"));
+	NarutoSenkiPayload::setCKR(hero,"45000");
+	NarutoSenkiPayload::setCKR2(hero,"50000");
 	hero->_isCanOugis1=true;
 	hero->_isCanOugis2=true;
 }
