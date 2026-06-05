@@ -169,7 +169,7 @@ NarutoSenki::ActionManager::ActionManager(void)
 	_group=NULL;
 	_character=NULL;
 	_killNum=0;
-	_coin=NULL;
+	_coin=0;
 
 	_master=NULL;
 	_controler=NULL;
@@ -2032,7 +2032,7 @@ bool NarutoSenki::ActionManager::setGear(gearType type){
 		gearCost=1000;
 	}
 	
-	if( this->getGearArray()->count()<=2 && std::atoi(this->getCoin()->getCString())>=gearCost){
+	if( this->getGearArray()->count()<=2 && this->getCoin()>=gearCost){
 		std::string gearItemText=cocos2d::StringUtils::format("%d",gearType(type));
 		CCString* gearItem=CCString::create(gearItemText);
 		this->getGearArray()->addObject(gearItem);
@@ -2296,14 +2296,14 @@ void NarutoSenki::ActionManager::enableGear06(float dt){
 
 
 void NarutoSenki::ActionManager::addCoin(int num){
-	this->setCoin(createActionIntString(std::atoi(this->getCoin()->getCString())+num));
+	this->setCoin(this->getCoin()+num);
 }
 
 void NarutoSenki::ActionManager::minusCoin(int num){
-	if( std::atoi(this->getCoin()->getCString()) > num){
-		this->setCoin(createActionIntString(std::atoi(this->getCoin()->getCString())-num));
+	if( this->getCoin() > num){
+		this->setCoin(this->getCoin()-num);
 	}else{
-		this->setCoin(CCString::create("0"));
+		this->setCoin(0);
 	}
 	
 }
@@ -8113,7 +8113,7 @@ void NarutoSenki::ActionManager::stepOn(){
 
 }
 bool NarutoSenki::ActionManager::checkRetri(){
-	if(_isCanItem1 &&std::atoi(this->getCoin()->getCString())>=50){
+	if(_isCanItem1 &&this->getCoin()>=50){
 		if(_delegate->_isHardCoreGame){
 			if(battleCondiction>=0){
 				if(!_isHealling){

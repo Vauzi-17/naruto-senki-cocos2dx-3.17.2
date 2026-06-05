@@ -471,7 +471,7 @@ void GearLayer::updatePlayerGear(){
 	}
 
 
-	std::string coinText=cocos2d::StringUtils::format("%d",std::atoi(_delegate->currentPlayer->getCoin()->getCString()));
+	std::string coinText=cocos2d::StringUtils::format("%d",_delegate->currentPlayer->getCoin());
 	coinLabel->setString(coinText);
 	this->updateGearList();
 

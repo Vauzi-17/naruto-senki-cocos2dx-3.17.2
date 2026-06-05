@@ -609,7 +609,7 @@ void GameLayer::onGameStart(float dt){
 	this->getHudLayer()->initHeroInterface();
 	this->applyDuelTrainStartSetup();
 	if((_isDuelMode || _isTrainingMode) && currentPlayer){
-		currentPlayer->setCoin(CCString::create("10000"));
+		currentPlayer->setCoin(10000);
 		if(_hudLayer && _hudLayer->coinLabel){
 			_hudLayer->coinLabel->setString("10000");
 		}

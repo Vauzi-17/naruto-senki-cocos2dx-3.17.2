@@ -380,6 +380,9 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
 - `ActionManager`: counter kill `_killNum` dipindah dari retained `CCString*`
   ke integer; `HPBar`, `GameOver`, dan init `Element` caller ikut memakai nilai
   integer.
+- `ActionManager`: counter coin `_coin` dipindah dari retained `CCString*` ke
+  integer; AI `Characters`, gear cost, HUD coin display, dan init `Element`
+  caller ikut memakai nilai integer.
 - `GameOver`: blok komentar achievement lose lama yang masih membawa format
   `CCString` dead-code dihapus; flow result aktif tidak berubah.
 - `StartMenu`: simpan coin nameplate lokal memakai `StringUtils::format`/
@@ -1082,6 +1085,9 @@ Catatan progress terbaru:
   native.
 - Counter kill `ActionManager::_killNum` melepas retained `CCString*` ke `int`;
   tampilan report/result tetap memformat angka di caller UI.
+- Counter coin `ActionManager::_coin` melepas retained `CCString*` ke `int`;
+  AI hard-core item/gear checks dan reward coin tetap memakai nilai numerik
+  yang sama.
 - `NetworkLayer::_selectList` melepas daftar nama hero dari retained
   `CCArray*` ke `std::vector<std::string>`; random player pick memakai storage
   string lokal agar pointer `_playerSelect` tetap stabil.

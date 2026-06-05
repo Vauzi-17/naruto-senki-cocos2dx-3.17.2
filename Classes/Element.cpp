@@ -448,7 +448,7 @@ void HeroElement::setID(CCString* character,CCString* role,CCString* group){
 
 	if(this->getLV()==1 && !this->getCoin()){
 		this->setGearArray(CCArray::create());
-		this->setCoin(CCString::create("50"));
+		this->setCoin(50);
 	}
 
 
@@ -1060,7 +1060,7 @@ void Flog::setID(CCString* character,CCString* role,CCString* group){
 	_damageArray=CCArray::create();
 	_damageArray->retain();
 
-	this->setCoin(CCString::create("50"));
+	this->setCoin(50);
 
 
 	this->initAction();
@@ -1292,7 +1292,7 @@ void Tower::setID(CCString* character,CCString* role,CCString* group){
 	tmpAction=(CCArray*)(animationArray->objectAtIndex(6));
 	deadArray=(CCArray*)(tmpAction->objectAtIndex(1));
 
-	this->setCoin(CCString::create("50"));
+	this->setCoin(50);
 
 	this->initAction();
 
@@ -1456,7 +1456,7 @@ void Monster::setID(CCString* character,CCString* role,CCString* group){
 	_nattackType->retain();
 	nattackArray=(CCArray *)(tmpAction->objectAtIndex(1));
 
-	this->setCoin(CCString::create("50"));
+	this->setCoin(50);
 
 	this->initAction();
 
@@ -1945,7 +1945,7 @@ void Bullet::setID(CCString* character,CCString* role,CCString* group){
 		deadArray=(CCArray*)(tmpAction->objectAtIndex(1));
 	}
 
-	this->setCoin(CCString::create("50"));
+	this->setCoin(50);
 
 	this->initAction();
 

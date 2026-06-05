@@ -46,7 +46,7 @@ namespace NarutoSenki {
 
 
 
-		CC_SYNTHESIZE_RETAIN(CCString*, _coin, Coin);
+		CC_SYNTHESIZE(int, _coin, Coin);
 
 
 		Ref* _slayer;
