@@ -32,7 +32,7 @@ bool MiniIcon::init(const char *szImage,bool isNotification){
 
 		if(isNotification){
 			this->setAnchorPoint(Vec2(0.5f,0));
-			NotificationCenter::getInstance()->addObserver(this, callfuncO_selector(MiniIcon::updateMap), "updateMap", nullptr);
+			NotificationCenter::getInstance()->addObserver(this, static_cast<cocos2d::SEL_CallFuncO>(&MiniIcon::updateMap), "updateMap", nullptr);
 		}else{
 			this->setAnchorPoint(Vec2(0.5f,0.5f));
 

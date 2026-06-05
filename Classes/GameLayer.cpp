@@ -1548,7 +1548,7 @@ void GameLayer::setOugis(Node* sender){
 		Vec2 zoomPos=Vec2(winSize.width/2-ougisPoint.x*ougisZoom,winSize.height/2-ougisPoint.y*ougisZoom);
 
 		this->stopAllActions();
-		this->runAction(cocos2d::cocos2dx2_compat::createSequence(
+		this->runAction(Sequence::create(
 			EaseSineInOut::create(Spawn::create(
 				ScaleTo::create(0.28f,ougisZoom),
 				MoveTo::create(0.28f,zoomPos),

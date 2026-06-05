@@ -455,7 +455,7 @@ void HeroElement::setID(__String* character,__String* role,__String* group){
 
 
 	this->initAction();
-	NotificationCenter::getInstance()->addObserver(this, callfuncO_selector(NarutoSenki::ActionManager::acceptAttack), "acceptAttack", NULL);
+	NotificationCenter::getInstance()->addObserver(this, static_cast<cocos2d::SEL_CallFuncO>(&NarutoSenki::ActionManager::acceptAttack), "acceptAttack", NULL);
 
 };
 
@@ -870,7 +870,7 @@ void HeroElement::reborn(float dt){
 
 	if(this->getPosition().equals(this->getSpawnPoint()))
 	{
-		NotificationCenter::getInstance()->addObserver(this, callfuncO_selector(NarutoSenki::ActionManager::acceptAttack), "acceptAttack", NULL);
+		NotificationCenter::getInstance()->addObserver(this, static_cast<cocos2d::SEL_CallFuncO>(&NarutoSenki::ActionManager::acceptAttack), "acceptAttack", NULL);
 		this->setOpacity(255);
 		this->setHP(__String::create(this->getMaxHP()->getCString()));
 		if(_delegate && _delegate->_isDuelMode && _delegate->currentPlayer){
@@ -1064,7 +1064,7 @@ void Flog::setID(__String* character,__String* role,__String* group){
 
 
 	this->initAction();
-	NotificationCenter::getInstance()->addObserver(this, callfuncO_selector(NarutoSenki::ActionManager::acceptAttack), "acceptAttack", NULL);
+	NotificationCenter::getInstance()->addObserver(this, static_cast<cocos2d::SEL_CallFuncO>(&NarutoSenki::ActionManager::acceptAttack), "acceptAttack", NULL);
 
 };
 
@@ -1296,7 +1296,7 @@ void Tower::setID(__String* character,__String* role,__String* group){
 
 	this->initAction();
 
-	NotificationCenter::getInstance()->addObserver(this, callfuncO_selector(NarutoSenki::ActionManager::acceptAttack), "acceptAttack", NULL);
+	NotificationCenter::getInstance()->addObserver(this, static_cast<cocos2d::SEL_CallFuncO>(&NarutoSenki::ActionManager::acceptAttack), "acceptAttack", NULL);
 
 }
 

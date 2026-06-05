@@ -131,6 +131,9 @@ Alasan estimasi:
   `KTools`) diganti ke `__Array`. Audit source aktif di `Classes` sekarang
   tidak lagi menemukan `CCArray`, `CCDictionary`, `CCString`, atau
   `CCARRAY_FOREACH` di luar file third-party/abaian.
+- Sisa teks helper compat sequence di komentar lama `GameLayer` dibersihkan,
+  dan pemakaian `callfuncO_selector` aktif di `Element`/`HudLayer` diganti ke
+  cast `SEL_CallFuncO` eksplisit.
 - UI perimeter berikutnya ikut dibersihkan dari `CCARRAY_FOREACH`:
   `SelectLayer`, `SkillLayer`, `GearLayer`, dan `GameOver` sekarang memakai
   loop indeks atau container STL lokal untuk iterator yang aman.
