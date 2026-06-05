@@ -58,10 +58,16 @@ namespace
 		return Sequence::create(actionVector);
 	}
 
-	FiniteTimeAction* createPayloadCall(ActionManager* target, void (ActionManager::*callback)(Node*, void*), void* payload)
+	cocos2d::FiniteTimeAction* createPayloadCall(
+		NarutoSenki::ActionManager* target,
+		void (NarutoSenki::ActionManager::* callback)(cocos2d::Node*, void*),
+		void* payload
+	)
 	{
-		return CallFunc::create([target, callback, payload]() {
-			(target->*callback)(target, payload);
+		return cocos2d::CallFuncN::create([target, callback, payload](cocos2d::Node* node) {
+			if (target && callback) {
+				(target->*callback)(node, payload);
+			}
 		});
 	}
 }

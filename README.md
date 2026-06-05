@@ -335,6 +335,8 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
 - `ActionManager`: path heart-effect, reward coin display, damage font, gear
   item/cost, dan extern frame lokal memakai string native; kontrak gear array
   dan stat combat lama tetap `CCString`.
+- `ActionManager`: helper payload callback lokal memakai `CallFuncN` 3.x dengan
+  `Node*` runtime dan guard null; payload XML lama tetap dipertahankan.
 - `NetworkLayer`: komentar request list hero lama dan parsing response callback
   yang sudah tidak punya caller aktif dibersihkan; flow pemilihan hero tetap
   memakai daftar offline statis.
@@ -462,6 +464,8 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
   `CCString::createWithFormat`, sambil menahan migrasi stat gameplay besar.
 - `ActionManager` mulai mengurangi format string display/path lokal tanpa
   menyentuh nilai HP/CKR/attack yang masih menjadi kontrak combat utama.
+- `ActionManager` helper `createPayloadCall(...)` dirapikan ke `CallFuncN`
+  sehingga callback payload tetap menerima node action 3.x.
 
 1. **Tutup helper compat kecil yang masih lokal**
    - Target file: `Cocos2dx2Compat.h`, `ActionButton`, `HPBar`, `HudLayer`,
