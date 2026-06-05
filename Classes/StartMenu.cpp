@@ -1853,91 +1853,77 @@ void StartMenu::onTrainingCallBack(){
 		"Asuma"};
 
 	srand((int)time(0));
-	CCString* tmpChar=CCString::create("Tsunade");
+	std::string tmpChar="Tsunade";
 	CCString* tmpRole=CCString::create("Player");
 	CCString* tmpGroup=CCString::create("Konoha");
 
-	dic->setObject(tmpChar,"character");
+	dic->setObject(CCString::create(tmpChar.c_str()),"character");
 	dic->setObject(tmpRole,"role");
 	dic->setObject(tmpGroup,"group");
 
 	CCArray* tempHeros=CCArray::createWithObject(dic);
 
-	CCArray* realHero=CCArray::create();
+	std::vector<std::string> realHero;
 	int num= sizeof(heroList)/sizeof(char*);
 	for(int i=0;i<num;i++){
-		if(strcmp(tmpChar->getCString(),heroList[i])==0){
+		if(strcmp(tmpChar.c_str(),heroList[i])==0){
 			continue;
 		}
-		CCString* hero=CCString::create(heroList[i]);
-		realHero->addObject(hero);
+		realHero.push_back(heroList[i]);
 	}
 
 	//�������
-	/*char* heroList2[]={"Naruto","Deidara","Konan"};
-
-	CCArray* enemyHero=CCArray::create();
-	int num2= sizeof(heroList2)/sizeof(char*);
-	for(int x=0;x<num2;x++){
-	if(strcmp(tmpChar->getCString(),heroList2[x])==0){
-	continue;
-	}
-	CCString* hero=CCString::create(heroList2[x]);
-	enemyHero->addObject(hero);
-	}*/
 	//--------------
 
 	for(int i=0;i<5;i++){
 
 		if(i<2){
-			int length=realHero->count();
+			int length=(int)realHero.size();
 			srand((int)time(0));
 			int index=random(length);
-			if(index==(int)realHero->count()){
+			if(index==(int)realHero.size()){
 
-				index=realHero->count()-1;
+				index=(int)realHero.size()-1;
 			}
 
 
-			Ref* tempObject=realHero->objectAtIndex(index);
-			CCString* hero=(CCString*) tempObject;
+			std::string hero=realHero[index];
 
 			dic=CCDictionary::create();
-			tmpChar=CCString::create(hero->getCString());
+			tmpChar=hero;
 			tmpRole=CCString::create("Com");
 			tmpGroup=CCString::create("Konoha");
 
-			dic->setObject(tmpChar,"character");
+			dic->setObject(CCString::create(tmpChar.c_str()),"character");
 			dic->setObject(tmpRole,"role");
 			dic->setObject(tmpGroup,"group");
 
 			tempHeros->addObject(dic);
-			realHero->removeObjectAtIndex(index);
+			realHero.erase(realHero.begin()+index);
 
 
 		}else{
 
-			int length=realHero->count();
+			int length=(int)realHero.size();
 			srand((int)time(0));
 			int index=random(length);
-			if(index==(int)realHero->count()){
-				index=realHero->count()-1;
+			if(index==(int)realHero.size()){
+				index=(int)realHero.size()-1;
 			}
 
-			Ref* tempObject=realHero->objectAtIndex(index);
-			CCString* hero=(CCString*) tempObject;
+			std::string hero=realHero[index];
 
 			dic=CCDictionary::create();
-			tmpChar=CCString::create(hero->getCString());
+			tmpChar=hero;
 			tmpRole=CCString::create("Com");
 			tmpGroup=CCString::create("Akatsuki");
 
-			dic->setObject(tmpChar,"character");
+			dic->setObject(CCString::create(tmpChar.c_str()),"character");
 			dic->setObject(tmpRole,"role");
 			dic->setObject(tmpGroup,"group");
 
 			tempHeros->addObject(dic);
-			realHero->removeObjectAtIndex(index);
+			realHero.erase(realHero.begin()+index);
 
 
 
@@ -1982,91 +1968,77 @@ void StartMenu::onTrainingCallBack(){
 
 	srand((int)time(0));
 	int index2=random(sizeof(heroList1)/sizeof(char*));
-	CCString* tmpChar=CCString::create(heroList1[index2]);
+	std::string tmpChar=heroList1[index2];
 	CCString* tmpRole=CCString::create("Player");
 	CCString* tmpGroup=CCString::create("Konoha");
 
-	dic->setObject(tmpChar,"character");
+	dic->setObject(CCString::create(tmpChar.c_str()),"character");
 	dic->setObject(tmpRole,"role");
 	dic->setObject(tmpGroup,"group");
 
 	CCArray* tempHeros=CCArray::createWithObject(dic);
 
-	CCArray* realHero=CCArray::create();
+	std::vector<std::string> realHero;
 	int num= sizeof(heroList1)/sizeof(char*);
 	for(int i=0;i<num;i++){
-		if(strcmp(tmpChar->getCString(),heroList1[i])==0){
+		if(strcmp(tmpChar.c_str(),heroList1[i])==0){
 			continue;
 		}
-		CCString* hero=CCString::create(heroList1[i]);
-		realHero->addObject(hero);
+		realHero.push_back(heroList1[i]);
 	}
 
 	//�������
-	/*char* heroList2[]={"Naruto","Deidara","Konan"};
-
-	CCArray* enemyHero=CCArray::create();
-	int num2= sizeof(heroList2)/sizeof(char*);
-	for(int x=0;x<num2;x++){
-	if(strcmp(tmpChar->getCString(),heroList2[x])==0){
-	continue;
-	}
-	CCString* hero=CCString::create(heroList2[x]);
-	enemyHero->addObject(hero);
-	}*/
 	//--------------
 
 	for(int i=0;i<7;i++){
 
 		if(i<3){
-			int length=realHero->count();
+			int length=(int)realHero.size();
 			srand((int)time(0));
 			int index=random(length);
-			if(index==(int)realHero->count()){
+			if(index==(int)realHero.size()){
 
-				index=realHero->count()-1;
+				index=(int)realHero.size()-1;
 			}
 
 
-			Ref* tempObject=realHero->objectAtIndex(index);
-			CCString* hero=(CCString*) tempObject;
+			std::string hero=realHero[index];
 
 			dic=CCDictionary::create();
-			tmpChar=CCString::create(hero->getCString());
+			tmpChar=hero;
 			tmpRole=CCString::create("Com");
 			tmpGroup=CCString::create("Konoha");
 
-			dic->setObject(tmpChar,"character");
+			dic->setObject(CCString::create(tmpChar.c_str()),"character");
 			dic->setObject(tmpRole,"role");
 			dic->setObject(tmpGroup,"group");
 
 			tempHeros->addObject(dic);
-			realHero->removeObjectAtIndex(index);
+			realHero.erase(realHero.begin()+index);
 
 
 		}else{
 
-			int length=realHero->count();
+			int length=(int)realHero.size();
 			srand((int)time(0));
 			int index=random(length);
-			if(index==(int)realHero->count()){
-				index=realHero->count()-1;
+			if(index==(int)realHero.size()){
+				index=(int)realHero.size()-1;
 			}
 
-			Ref* tempObject=realHero->objectAtIndex(index);
-			CCString* hero=(CCString*) tempObject;
+			std::string hero=realHero[index];
 
 			dic=CCDictionary::create();
-			tmpChar=CCString::create(hero->getCString());
+			tmpChar=hero;
 			tmpRole=CCString::create("Com");
 			tmpGroup=CCString::create("Akatsuki");
 
-			dic->setObject(tmpChar,"character");
+			dic->setObject(CCString::create(tmpChar.c_str()),"character");
 			dic->setObject(tmpRole,"role");
 			dic->setObject(tmpGroup,"group");
 
 			tempHeros->addObject(dic);
-			realHero->removeObjectAtIndex(index);
+			realHero.erase(realHero.begin()+index);
 
 		}
 

@@ -326,6 +326,9 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
 - `StartMenu`: container tombol menu lokal `_menu_array` dipindah dari retained
   `CCArray*` ke `std::vector<MenuButton*>`; flow training/battle payload lama
   tetap `CCArray`/`CCDictionary`.
+- `StartMenu`: roster random sementara untuk opsi hard-core/training dipindah
+  dari `CCArray`/`CCString` lokal ke `std::vector<std::string>`; payload
+  `tempHeros` ke loader tetap `CCArray`/`CCDictionary`.
 - `GameOver`: `detailRecord` dan string angka win record aktif memakai
   `StringUtils::format`/`std::string`, tanpa mengubah isi nilai SQLite.
 - `GameOver`: hasil baca SQLite untuk coin, win count, dan best time disalin ke
@@ -1088,6 +1091,9 @@ Catatan progress terbaru:
 - Counter coin `ActionManager::_coin` melepas retained `CCString*` ke `int`;
   AI hard-core item/gear checks dan reward coin tetap memakai nilai numerik
   yang sama.
+- Roster random sementara `StartMenu` untuk opsi hard-core/training memakai
+  `std::vector<std::string>`; hanya payload akhir `tempHeros` yang masih
+  memakai kontrak lama ke `LoadLayer`.
 - `NetworkLayer::_selectList` melepas daftar nama hero dari retained
   `CCArray*` ke `std::vector<std::string>`; random player pick memakai storage
   string lokal agar pointer `_playerSelect` tetap stabil.
