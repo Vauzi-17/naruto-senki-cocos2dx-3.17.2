@@ -24,13 +24,22 @@ SelectButton::SelectButton(void)
 	_delegate1=NULL;
 	_delegate2=NULL;
 	_delegate3=NULL;
-	_charName=NULL;
 }
 
 
 SelectButton::~SelectButton(void)
 {
 
+}
+
+const char* SelectButton::getCharName() const
+{
+	return _charName.c_str();
+}
+
+void SelectButton::setCharName(const char* charName)
+{
+	_charName=charName ? charName : "";
 }
 
 bool SelectButton::init(const char *szImage){
@@ -87,14 +96,14 @@ void SelectButton::ccTouchEnded(Touch* touch,Event* event){
 void SelectButton::click(){
 
 	if(this->getBtnType()==SkillMenu){
-			if(strcmp(_charName->getCString(),"None2")==0 ){
+			if(strcmp(getCharName(),"None2")==0 ){
 				CCTips *tip=CCTips::create("LimitedChar");
 				this->_delegate2->addChild(tip,5000);
-			}else if( strcmp(_charName->getCString(),"None")!=0){
-			if(!_isAviable && _delegate2 && _delegate2->isHeroConfirmedSelected(_charName->getCString())){
+			}else if( strcmp(getCharName(),"None")!=0){
+			if(!_isAviable && _delegate2 && _delegate2->isHeroConfirmedSelected(getCharName())){
 				SimpleAudioEngine::getInstance()->stopAllEffects();
 				for(SelectButton* selectBtn : _delegate2->selectArray){
-					if(strcmp(selectBtn->getCharName()->getCString(),this->getCharName()->getCString())!=0){
+					if(strcmp(selectBtn->getCharName(),this->getCharName())!=0){
 						selectBtn->_clickTime=0;
 					}
 				}
@@ -104,7 +113,7 @@ void SelectButton::click(){
 					_delegate2->setSelected(this);
 				}else if(this->_clickTime==20){
 					SimpleAudioEngine::getInstance()->playEffect("Audio/Menu/cancel.ogg");
-					_delegate2->unselectHero(_charName->getCString());
+					_delegate2->unselectHero(getCharName());
 				}
 				return;
 			}
@@ -122,20 +131,20 @@ void SelectButton::click(){
 					bool teamFull=_delegate2->_trainingRandomTeam || (int)_delegate2->_trainingTeamPicks.size()>=teamNeed;
 					bool enemyFull=_delegate2->_trainingRandomEnemy || (int)_delegate2->_trainingEnemyPicks.size()>=_delegate2->_trainingTeamSize;
 					if(_delegate2->_playerSelect && teamFull && enemyFull){
-						if(!_delegate2->isHeroConfirmedSelected(this->getCharName()->getCString())){
+						if(!_delegate2->isHeroConfirmedSelected(this->getCharName())){
 							return;
 						}
 					}
 
 					for(SelectButton* selectBtn : _delegate2->selectArray){
-						if (strcmp(selectBtn->getCharName()->getCString(),this->getCharName()->getCString())!=0){
+						if (strcmp(selectBtn->getCharName(),this->getCharName())!=0){
 							selectBtn->_clickTime=0;
 						}
 					}
 					if(this->_clickTime==0){
 						if(UserDefault::getInstance()->getBoolForKey("isVoice")!=false){
 							SimpleAudioEngine::getInstance()->stopAllEffects();
-							std::string introSRC=cocos2d::StringUtils::format("Audio/Intro/%s.mp3",this->getCharName()->getCString());
+							std::string introSRC=cocos2d::StringUtils::format("Audio/Intro/%s.mp3",this->getCharName());
 							SimpleAudioEngine::getInstance()->playEffect(introSRC.c_str());
 						}
 						SimpleAudioEngine::getInstance()->playEffect(SELECT_SOUND);
@@ -150,21 +159,21 @@ void SelectButton::click(){
 					return;
 				}
 				if(_delegate2->_playerSelect && adResult!=1){
-					if(!_delegate2->isHeroConfirmedSelected(this->getCharName()->getCString())){
+					if(!_delegate2->isHeroConfirmedSelected(this->getCharName())){
 						return;
 					}
 				}
-				if(!_delegate2->_com2Select || _delegate2->isHeroConfirmedSelected(this->getCharName()->getCString())){
+				if(!_delegate2->_com2Select || _delegate2->isHeroConfirmedSelected(this->getCharName())){
 
 					for(SelectButton* selectBtn : _delegate2->selectArray){
-						if (strcmp(selectBtn->getCharName()->getCString(),this->getCharName()->getCString())!=0){
+						if (strcmp(selectBtn->getCharName(),this->getCharName())!=0){
 							selectBtn->_clickTime=0;
 						}
 					}
 					if(this->_clickTime==0){
 						if(UserDefault::getInstance()->getBoolForKey("isVoice")!=false){
 							SimpleAudioEngine::getInstance()->stopAllEffects();
-							std::string introSRC=cocos2d::StringUtils::format("Audio/Intro/%s.mp3",this->getCharName()->getCString());
+							std::string introSRC=cocos2d::StringUtils::format("Audio/Intro/%s.mp3",this->getCharName());
 							SimpleAudioEngine::getInstance()->playEffect(introSRC.c_str());
 						}
 						SimpleAudioEngine::getInstance()->playEffect(SELECT_SOUND);
@@ -175,7 +184,7 @@ void SelectButton::click(){
 						this->getParent()->reorderChild(this,500);
 					}
 
-					if(strcmp(_charName->getCString(),"Pain")==0 ||strcmp(_charName->getCString(),"Orochimaru")==0
+					if(strcmp(getCharName(),"Pain")==0 ||strcmp(getCharName(),"Orochimaru")==0
 						){
 							CCTips *tip=CCTips::create("LimitedChar");
 							this->_delegate2->addChild(tip,5000);

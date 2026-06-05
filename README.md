@@ -317,8 +317,11 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
 - `GameOver`: state nama hero untuk record result `resultChar` dipindah dari
   retained `CCString*` ke `std::string`; payload rematch lama tetap
   `CCArray`/`CCDictionary`.
+- `SelectLayer`/`NetworkLayer`/`SkillLayer`: field nama hero tombol select
+  `SelectButton::_charName` dipindah dari retained `CCString*` ke
+  `std::string`; caller UI memakai `const char*` dari getter kecil.
 - `SelectLayer`: path tombol select dan preview hero lokal memakai
-  `StringUtils::format`/`std::string`; field `charName` lama tetap `CCString`.
+  `StringUtils::format`/`std::string`.
 - `SelectLayer`: container tombol UI lokal `selectArray` dipindah dari
   retained `CCArray*` ke `std::vector<SelectButton*>`; payload hero ke loader
   tetap `CCArray`/`CCDictionary`.
@@ -1015,6 +1018,9 @@ Catatan progress terbaru:
 - `StartMenu` melepas container tombol menu lokal `_menu_array` dari retained
   `CCArray*` ke `std::vector<MenuButton*>`; menu button tetap dimiliki oleh
   scene sebagai child node.
+- `SelectButton` melepas nama hero `_charName` dari retained `CCString*` ke
+  `std::string`, dan caller `SelectLayer`/`NetworkLayer`/`SkillLayer` memakai
+  getter `const char*` untuk compare, preview, dan audio intro.
 - `SelectLayer`, `SkillLayer`, `GearLayer`, dan `GameOver` ikut lepas dari
   `CCARRAY_FOREACH` aktif. Perubahan ini hanya mengganti iterator lokal pada
   daftar select button, gear, result character, dan rematch handoff tanpa

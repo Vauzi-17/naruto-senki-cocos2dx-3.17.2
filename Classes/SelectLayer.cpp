@@ -222,7 +222,7 @@ bool SelectLayer::init(){
 					select_btn->setPosition(Vec2(winSize.width/2-64+(i%3)*27+i%3*10,winSize.height-256));
 
 				}
-				select_btn->setCharName(CCString::create(charName));
+				select_btn->setCharName(charName);
 				this->addChild(select_btn,2);
 				selectArray.push_back(select_btn);
 
@@ -251,7 +251,7 @@ bool SelectLayer::init(){
 			_selectImg->setPosition(Vec2(pObject->getPositionX()-2,pObject->getPositionY()-2));
 			this->addChild(_selectImg,500);
 
-			_selectHero=pObject->getCharName()->getCString();
+			_selectHero=pObject->getCharName();
 
 			ActionInterval* blink=Blink::create(0.6f,1);
 			_selectImg->runAction(RepeatForever::create(blink));
@@ -306,7 +306,7 @@ void SelectLayer::setSelected(Ref* sender){
 	 _selectImg->setPosition(Vec2(btn->getPositionX()-2,btn->getPositionY()-2));
 
 	 _heroHalf->removeFromParent();
-	 std::string path=cocos2d::StringUtils::format("%s_half.png",btn->getCharName()->getCString());
+	 std::string path=cocos2d::StringUtils::format("%s_half.png",btn->getCharName());
 	 _heroHalf=Sprite::createWithSpriteFrameName(path);
 
 	 _heroHalf->setAnchorPoint(Vec2(0,0));
@@ -314,13 +314,13 @@ void SelectLayer::setSelected(Ref* sender){
 	 this->addChild(_heroHalf,1);
 
 	 _heroName->removeFromParent();
-	 std::string namePath=cocos2d::StringUtils::format("%s_font.png",btn->getCharName()->getCString());
+	 std::string namePath=cocos2d::StringUtils::format("%s_font.png",btn->getCharName());
 	 _heroName=Sprite::createWithSpriteFrameName(namePath);
 	 _heroName->setAnchorPoint(Vec2(0.5f,0));
 	 _heroName->setPosition(Vec2(100,20));
 	 this->addChild(_heroName,5);
 
-	_selectHero=btn->getCharName()->getCString();
+	_selectHero=btn->getCharName();
 
 }
 

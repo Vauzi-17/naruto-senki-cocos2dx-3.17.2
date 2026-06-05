@@ -298,7 +298,7 @@ bool NetworkLayer::init(){
 				Page=int(i/21);
 				SelectButton* select_btn=SelectButton::create(path.c_str());
 				select_btn->setDelegate2(this);
-				select_btn->setCharName(CCString::create(charName));
+				select_btn->setCharName(charName);
 				if(Page==0){
 					select_btn->setPosition(Vec2(winSize.width/2-36+(Column-1)*27+Column/4*10,winSize.height-112-(72*Row)));
 					_pageLayer1->addChild(select_btn,-Column);
@@ -363,7 +363,7 @@ bool NetworkLayer::init(){
 			_selectImg->setPosition(Vec2(pObject->getPositionX()-2,pObject->getPositionY()-2));
 			this->addChild(_selectImg,500);
 
-			_selectHero=pObject->getCharName()->getCString();
+			_selectHero=pObject->getCharName();
 
 			ActionInterval* blink=Blink::create(0.6f,1);
 			_selectImg->runAction(RepeatForever::create(blink));
@@ -637,7 +637,7 @@ SelectButton* NetworkLayer::findSelectButton(const char* heroName){
 	}
 
 	for(SelectButton* btn : selectArray){
-		if(strcmp(btn->getCharName()->getCString(),heroName)==0){
+		if(strcmp(btn->getCharName(),heroName)==0){
 			return btn;
 		}
 	}
@@ -871,12 +871,12 @@ void NetworkLayer::setSelected(Ref* sender){
 		_selectImg->setPosition(Vec2(btn->getPositionX()-2,btn->getPositionY()-2));
 	 }
 
-	if(adResult!=1 && !_isTrainingSelect && _playerSelect && !isHeroConfirmedSelected(btn->getCharName()->getCString())){
+	if(adResult!=1 && !_isTrainingSelect && _playerSelect && !isHeroConfirmedSelected(btn->getCharName())){
 		return;
 	}
 
 
-	_selectHero=btn->getCharName()->getCString();
+	_selectHero=btn->getCharName();
 
 	if(_isTrainingSelect){
 		if(!_selectHero || strcmp(_selectHero,"None")==0){
@@ -974,7 +974,7 @@ void NetworkLayer::setSelected(Ref* sender){
 
 		if(isHeroConfirmedSelected(_selectHero)){
 			_heroHalf->removeFromParent();
-			const char* charName=btn->getCharName()->getCString();
+			const char* charName=btn->getCharName();
 			std::string path=cocos2d::StringUtils::format("%s_half.png", charName);
 			_heroHalf=Sprite::createWithSpriteFrameName(path);
 			_heroHalf->setAnchorPoint(Vec2(0,0));
@@ -1005,7 +1005,7 @@ void NetworkLayer::setSelected(Ref* sender){
 			}
 
 			_heroHalf->removeFromParent();
-			const char* charName=btn->getCharName()->getCString();
+			const char* charName=btn->getCharName();
 
 
 			std::string path=cocos2d::StringUtils::format("%s_half.png", charName);

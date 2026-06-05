@@ -1,6 +1,7 @@
 #pragma once
 #include "cocos2d.h"
 #include "SimpleAudioEngine.h"
+#include <string>
 USING_NS_CC;
 
 
@@ -75,7 +76,9 @@ public:
 	SelectButton(void);
 	~SelectButton(void);
 
-	CC_SYNTHESIZE_RETAIN(CCString* ,_charName,CharName);
+	std::string _charName;
+	const char* getCharName() const;
+	void setCharName(const char* charName);
 
 	bool _isAviable;
 	virtual bool		init(const char *szImage);
