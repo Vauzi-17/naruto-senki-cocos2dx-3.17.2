@@ -843,7 +843,7 @@ void GameOver::onChangeCharConfirm(Ref* sender){
 	if(!_delegate || changePlayerPick.empty()){
 		return;
 	}
-	__Array* rematchHeros=__Array::create();
+	auto rematchHeros=NarutoSenkiPayload::createHeroList();
 	Ref* pObject=nullptr;
 	for(unsigned int characterIndex=0; characterIndex<_delegate->_CharacterArray->count(); ++characterIndex){
 		pObject=_delegate->_CharacterArray->objectAtIndex(characterIndex);

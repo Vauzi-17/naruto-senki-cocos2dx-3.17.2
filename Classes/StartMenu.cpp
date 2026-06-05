@@ -1844,7 +1844,7 @@ void StartMenu::onTrainingCallBack(){
 
 	srand((int)time(0));
 	std::string tmpChar="Tsunade";
-	__Array* tempHeros=__Array::create();
+	auto tempHeros=NarutoSenkiPayload::createHeroList();
 	NarutoSenkiPayload::addHero(tempHeros,tmpChar.c_str(),"Player","Konoha");
 
 	std::vector<std::string> realHero;
@@ -1932,7 +1932,7 @@ void StartMenu::onTrainingCallBack(){
 	srand((int)time(0));
 	int index2=random(sizeof(heroList1)/sizeof(char*));
 	std::string tmpChar=heroList1[index2];
-	__Array* tempHeros=__Array::create();
+	auto tempHeros=NarutoSenkiPayload::createHeroList();
 	NarutoSenkiPayload::addHero(tempHeros,tmpChar.c_str(),"Player","Konoha");
 
 	std::vector<std::string> realHero;

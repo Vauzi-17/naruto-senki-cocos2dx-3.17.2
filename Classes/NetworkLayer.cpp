@@ -1144,7 +1144,7 @@ void NetworkLayer::onGameStart(Ref* sender){
 				teamSize=5;
 			}
 
-			__Array* tempHeros=__Array::create();
+			auto tempHeros=NarutoSenkiPayload::createHeroList();
 			std::vector<std::string> used;
 			const char* playerName=!_trainingPlayerPick.empty() ? _trainingPlayerPick.c_str() : (_playerSelect ? _playerSelect : _selectHero);
 			if(!playerName || strcmp(playerName,"None")==0){
@@ -1253,7 +1253,7 @@ void NetworkLayer::onGameStart(Ref* sender){
 		}
 
 
-		__Array* tempHeros=__Array::create();
+		auto tempHeros=NarutoSenkiPayload::createHeroList();
 		NarutoSenkiPayload::addHero(tempHeros,tmpChar.c_str(),"Player",groupName);
 
 

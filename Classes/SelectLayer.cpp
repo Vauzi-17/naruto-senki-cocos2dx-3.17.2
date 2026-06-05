@@ -368,7 +368,7 @@ void SelectLayer::onGameStart(Ref* sender){
 		int num= sizeof(heroList)/sizeof(char*);
 
 
-		__Array* tempHeros=__Array::create();
+		auto tempHeros=NarutoSenkiPayload::createHeroList();
 		NarutoSenkiPayload::addHero(tempHeros,_selectHero,"Player","Konoha");
 
 

@@ -1326,7 +1326,7 @@ void GameLayer::onLeft(){
 	if(_isRematching && _rematchHerosOverride){
 		rematchHeros=_rematchHerosOverride;
 	}else if(_isRematching && _CharacterArray){
-		rematchHeros=__Array::create();
+		rematchHeros=NarutoSenkiPayload::createHeroList();
 		Ref* heroObject;
 		for(unsigned int heroIndex=0; heroIndex<_CharacterArray->count(); ++heroIndex){
 			heroObject=_CharacterArray->objectAtIndex(heroIndex);

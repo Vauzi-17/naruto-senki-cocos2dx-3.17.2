@@ -298,10 +298,11 @@ include `Cocos2dx2Compat.h` juga sudah dilepas dari CMake dan project Win32,
 lalu file compat kosong tersebut dihapus. Area
 UI/menu, HUD, parser XML lokal, `Element`, dan `ActionManager` sudah lepas dari
 alias source lama `CCArray`, `CCDictionary`, `CCString`, dan
-`CCARRAY_FOREACH`; helper payload hero scene awal/result, pembacaan payload
-loader, dan pembacaan gear UI juga sudah dikonsolidasikan ke helper kecil.
-Pekerjaan berikutnya adalah validasi build Android/Win32 pengguna serta audit
-final konfigurasi build setelah compat bridge dihapus.
+`CCARRAY_FOREACH`; helper payload hero scene awal/result, pembuatan list
+payload, pembacaan payload loader, dan pembacaan gear UI juga sudah
+dikonsolidasikan ke helper kecil. Pekerjaan berikutnya adalah validasi build
+Android/Win32 pengguna serta audit final konfigurasi build setelah compat bridge
+dihapus.
 
 Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
 
@@ -428,6 +429,9 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
 - `GearLayer`, `HudLayer`, dan `GameOver`: pembacaan nilai gear dari array lama
   ikut lewat helper payload kecil, sehingga cast `__String*` gear tidak lagi
   tersebar di UI gear/result.
+- `StartMenu`, `NetworkLayer`, `SelectLayer`, `GameLayer`, dan `GameOver`:
+  pembuatan list payload hero/rematch dipusatkan lewat `HeroPayload.h`, sehingga
+  caller scene tidak lagi membuat `__Array::create()` payload secara langsung.
 - `NetworkLayer`: path tombol select, preview hero, map preview/label, dan slot
   team training lokal memakai `StringUtils::format`/`std::string`; payload hero
   ke loader tetap `CCString`/`CCArray`.
