@@ -32,7 +32,7 @@ public:
 	~LoadLayer(void);
 
 
-	CCArray* tempHeros;
+	__Array* tempHeros;
 	bool init();
 
 	//void dfsFolder(std::string folderPath, int depth);

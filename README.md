@@ -22,7 +22,7 @@ masih memakai API 2.x seperti `CCLayer`, `CCSprite`, `CCMenu`, `CCPoint`,
 
 ## Estimasi Progress Migrasi
 
-Estimasi progress menuju kode full cocos2d-x 3.17.2: **sekitar 98-99%**.
+Estimasi progress menuju kode full cocos2d-x 3.17.2: **sekitar 99%**.
 
 Alasan estimasi:
 
@@ -126,6 +126,11 @@ Alasan estimasi:
   alias-only dari `CCArray`, `CCDictionary`, dan `CCString` ke tipe
   `__Array`, `__Dictionary`, dan `__String`; macro ownership dan alur combat
   lama tidak diubah.
+- Sisa alias `CCArray` di boundary scene/loader/helper (`GameLayer`,
+  `LoadLayer`, `StartMenu`, `NetworkLayer`, `SelectLayer`, `GameOver`, dan
+  `KTools`) diganti ke `__Array`. Audit source aktif di `Classes` sekarang
+  tidak lagi menemukan `CCArray`, `CCDictionary`, `CCString`, atau
+  `CCARRAY_FOREACH` di luar file third-party/abaian.
 - UI perimeter berikutnya ikut dibersihkan dari `CCARRAY_FOREACH`:
   `SelectLayer`, `SkillLayer`, `GearLayer`, dan `GameOver` sekarang memakai
   loop indeks atau container STL lokal untuk iterator yang aman.
@@ -267,14 +272,15 @@ Roadmap menuju 100%:
 
 Urutan langkah berikutnya menuju 100%:
 
-Posisi saat ini: **langkah 6, pembersihan container/data lokal sebelum parser
-XML dan core penuh**. Helper compat kecil yang benar-benar lokal sudah mulai
-ditutup (`visitNode`, `CCTime`/`cc_timeval`, `CCDictElement`, sebagian state
-cooldown `ActionButton`, `CCScale9Sprite`, `CCScrollView`, `CCEditBox`, macro
-`atoi`, dan alias HTTP `CCHttp*`). Area UI/menu dan HUD lokal juga sudah banyak
-lepas dari `CCARRAY_FOREACH`; pekerjaan berikutnya bergeser ke kontrak data
-lebih besar seperti parser XML, ranking string/XML, dan kontrak data
-`ActionManager`/`Element`.
+Posisi saat ini: **langkah 7 menuju validasi akhir 100%**. Helper compat kecil
+yang benar-benar lokal sudah mulai ditutup (`visitNode`, `CCTime`/`cc_timeval`,
+`CCDictElement`, sebagian state cooldown `ActionButton`, `CCScale9Sprite`,
+`CCScrollView`, `CCEditBox`, macro `atoi`, dan alias HTTP `CCHttp*`). Area
+UI/menu, HUD, parser XML lokal, `Element`, dan `ActionManager` sudah lepas dari
+alias source lama `CCArray`, `CCDictionary`, `CCString`, dan
+`CCARRAY_FOREACH`; pekerjaan berikutnya adalah validasi build Android/Win32
+pengguna serta audit final compatibility bridge yang masih dipaksa oleh
+konfigurasi build.
 
 Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
 

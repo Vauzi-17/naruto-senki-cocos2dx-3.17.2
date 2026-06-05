@@ -43,13 +43,13 @@ public:
     int kEXPBound;
 	int aEXPBound;
 
-	CCArray* Heros;
+	__Array* Heros;
 	bool	_isAttackButtonRelease;
 	bool	_isGuardian;
-	CCArray* _KonohaFlogArray;
-	CCArray* _AkatsukiFlogArray;
-	CCArray* _TowerArray;
-	CCArray* _CharacterArray;
+	__Array* _KonohaFlogArray;
+	__Array* _AkatsukiFlogArray;
+	__Array* _TowerArray;
+	__Array* _CharacterArray;
 
 	
 	bool _isShacking;
@@ -141,7 +141,7 @@ public:
 	bool _isDuelMode;
 	bool _isDuelFinished;
 	bool _isRematching;
-	CCArray* _rematchHerosOverride;
+	__Array* _rematchHerosOverride;
 	int _duelKillLimit;
 	int _duelPlayerScore;
 	int _duelEnemyScore;

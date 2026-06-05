@@ -72,7 +72,7 @@ static const char* trainingPickHero(std::vector<std::string>& used, const char**
 	return gTrainingHeroList[0];
 }
 
-static void trainingAddHero(CCArray* heros, const char* character, const char* role, const char* group)
+static void trainingAddHero(__Array* heros, const char* character, const char* role, const char* group)
 {
 	__Dictionary* dic = __Dictionary::create();
 	dic->setObject(__String::create(character), "character");
@@ -1851,7 +1851,7 @@ void StartMenu::onTrainingCallBack(){
 
 	srand((int)time(0));
 	std::string tmpChar="Tsunade";
-	CCArray* tempHeros=CCArray::create();
+	__Array* tempHeros=__Array::create();
 	trainingAddHero(tempHeros,tmpChar.c_str(),"Player","Konoha");
 
 	std::vector<std::string> realHero;
@@ -1939,7 +1939,7 @@ void StartMenu::onTrainingCallBack(){
 	srand((int)time(0));
 	int index2=random(sizeof(heroList1)/sizeof(char*));
 	std::string tmpChar=heroList1[index2];
-	CCArray* tempHeros=CCArray::create();
+	__Array* tempHeros=__Array::create();
 	trainingAddHero(tempHeros,tmpChar.c_str(),"Player","Konoha");
 
 	std::vector<std::string> realHero;

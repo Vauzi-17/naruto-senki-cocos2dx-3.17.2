@@ -373,11 +373,11 @@ void GameLayer::initHeros(){
 	this->initTileMap();
 	this->initEffects();
 
-	_CharacterArray=CCArray::create();
+	_CharacterArray=__Array::create();
 	if(_isDuelMode){
-		_KonohaFlogArray=CCArray::create();
+		_KonohaFlogArray=__Array::create();
 		_KonohaFlogArray->retain();
-		_AkatsukiFlogArray=CCArray::create();
+		_AkatsukiFlogArray=__Array::create();
 		_AkatsukiFlogArray->retain();
 	}
 	SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Element/hpBar/hpBar.plist");
@@ -642,8 +642,8 @@ void GameLayer::initFlogs(){
 	kName="KotetsuFlog";
 	aName="FemalePainFlog";
 
-	_KonohaFlogArray=CCArray::create();
-	_AkatsukiFlogArray=CCArray::create();
+	_KonohaFlogArray=__Array::create();
+	_AkatsukiFlogArray=__Array::create();
 
 
 	SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Element/hpBar/flogBar.plist");
@@ -751,7 +751,7 @@ void GameLayer::addFlog(float dt){
 void GameLayer::initTower(){
 
 	if(_isDuelMode){
-		_TowerArray=CCArray::create();
+		_TowerArray=__Array::create();
 		_TowerArray->retain();
 		return;
 	}
@@ -773,7 +773,7 @@ void GameLayer::initTower(){
 	TMXObjectGroup* metaGroup = currentMap->objectGroupNamed("meta");
 	const auto& metaArray = metaGroup->getObjects();
 
-	_TowerArray=CCArray::create();
+	_TowerArray=__Array::create();
 
 	int i=0;
 
@@ -1329,11 +1329,11 @@ void GameLayer::onLeft(){
 
 	KTools* tool=KTools::create();
 
-	CCArray* rematchHeros=NULL;
+	__Array* rematchHeros=NULL;
 	if(_isRematching && _rematchHerosOverride){
 		rematchHeros=_rematchHerosOverride;
 	}else if(_isRematching && _CharacterArray){
-		rematchHeros=CCArray::create();
+		rematchHeros=__Array::create();
 		Ref* heroObject;
 		for(unsigned int heroIndex=0; heroIndex<_CharacterArray->count(); ++heroIndex){
 			heroObject=_CharacterArray->objectAtIndex(heroIndex);

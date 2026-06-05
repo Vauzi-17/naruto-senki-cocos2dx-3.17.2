@@ -53,7 +53,7 @@ static const char* selectPickHero(std::vector<std::string>& used, const char** a
 	return allHeroes[0];
 }
 
-static void selectAddHero(CCArray* heros, const char* character, const char* role, const char* group)
+static void selectAddHero(__Array* heros, const char* character, const char* role, const char* group)
 {
 	__Dictionary* dic=__Dictionary::create();
 	dic->setObject(__String::create(character),"character");
@@ -375,7 +375,7 @@ void SelectLayer::onGameStart(Ref* sender){
 		int num= sizeof(heroList)/sizeof(char*);
 
 
-		CCArray* tempHeros=CCArray::create();
+		__Array* tempHeros=__Array::create();
 		selectAddHero(tempHeros,_selectHero,"Player","Konoha");
 
 

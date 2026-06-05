@@ -68,7 +68,7 @@ static bool networkArrayHasHero(const std::vector<std::string>& list, const char
 	return false;
 }
 
-static void networkAddHero(CCArray* heros, const char* character, const char* role, const char* group)
+static void networkAddHero(__Array* heros, const char* character, const char* role, const char* group)
 {
 	__Dictionary* dic=__Dictionary::create();
 	dic->setObject(__String::create(character),"character");
@@ -1151,7 +1151,7 @@ void NetworkLayer::onGameStart(Ref* sender){
 				teamSize=5;
 			}
 
-			CCArray* tempHeros=CCArray::create();
+			__Array* tempHeros=__Array::create();
 			std::vector<std::string> used;
 			const char* playerName=!_trainingPlayerPick.empty() ? _trainingPlayerPick.c_str() : (_playerSelect ? _playerSelect : _selectHero);
 			if(!playerName || strcmp(playerName,"None")==0){
@@ -1260,7 +1260,7 @@ void NetworkLayer::onGameStart(Ref* sender){
 		}
 
 
-		CCArray* tempHeros=CCArray::create();
+		__Array* tempHeros=__Array::create();
 		networkAddHero(tempHeros,tmpChar.c_str(),"Player",groupName);
 
 

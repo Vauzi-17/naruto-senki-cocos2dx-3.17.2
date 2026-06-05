@@ -745,7 +745,7 @@ void KTools::updateData(){
 }
 
 
-bool KTools::readXMLToArray(const char* filePath,CCArray* &array)
+bool KTools::readXMLToArray(const char* filePath,__Array* &array)
 {
 
 	tinyxml2::XMLDocument* doc = new tinyxml2::XMLDocument();  

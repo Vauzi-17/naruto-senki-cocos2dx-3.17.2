@@ -17,7 +17,7 @@ static const char* gResultHeroList[] = {
 	"Hiruzen","Kiba","Jugo","Lee"
 };
 
-static void resultAddHero(CCArray* heros, const char* character, const char* role, const char* group)
+static void resultAddHero(__Array* heros, const char* character, const char* role, const char* group)
 {
 	__Dictionary* dic = __Dictionary::create();
 	dic->setObject(__String::create(character), "character");
@@ -850,7 +850,7 @@ void GameOver::onChangeCharConfirm(Ref* sender){
 	if(!_delegate || changePlayerPick.empty()){
 		return;
 	}
-	CCArray* rematchHeros=CCArray::create();
+	__Array* rematchHeros=__Array::create();
 	Ref* pObject=nullptr;
 	for(unsigned int characterIndex=0; characterIndex<_delegate->_CharacterArray->count(); ++characterIndex){
 		pObject=_delegate->_CharacterArray->objectAtIndex(characterIndex);

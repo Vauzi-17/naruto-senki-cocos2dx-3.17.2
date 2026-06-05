@@ -22,7 +22,7 @@ public:
 	void prepareFileMD5();
 	void prepareFileSHA();
 
-	bool readXMLToArray(const char* filePath,CCArray* &array);
+	bool readXMLToArray(const char* filePath,__Array* &array);
 	void	initTableInDB();
 	void	initColumeInDB();
 
