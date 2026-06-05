@@ -298,6 +298,9 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
   hero/core tetap `CCArray`.
 - `HudLayer`: path avatar/skill button dan label HP/EXP lokal mulai memakai
   `StringUtils::format`/`std::string` tanpa menyentuh report dictionary.
+- `HudLayer`: container icon tower mini map `_towerIconArray` dipindah dari
+  retained `CCArray*` ke `std::vector<MiniIcon*>`; report queue dictionary
+  tetap ditahan.
 - `HudLayer`: start splash, display buff, report sprite, dan cut-in ougis lokal
   ikut memakai string 3.x/native; dictionary report dan CKR tetap ditahan.
 - `HudLayer`: render report cache membaca nilai dictionary lama ke
@@ -1038,6 +1041,9 @@ Catatan progress terbaru:
 - `GearLayer` melepas container tombol gear lokal `ScrewLayer::_gearArray`
   dari retained `CCArray*` ke `std::vector<GearButton*>`; data gear hero tetap
   ditahan sebagai kontrak core.
+- `HudLayer` melepas container icon tower mini map `_towerIconArray` dari
+  retained `CCArray*` ke `std::vector<MiniIcon*>`; queue report lama tetap
+  `CCArray`/`CCDictionary`.
 - `SelectLayer`, `SkillLayer`, `GearLayer`, dan `GameOver` ikut lepas dari
   `CCARRAY_FOREACH` aktif. Perubahan ini hanya mengganti iterator lokal pada
   daftar select button, gear, result character, dan rematch handoff tanpa

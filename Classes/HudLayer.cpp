@@ -97,7 +97,6 @@ HudLayer::HudLayer(void)
 
 	_reportListArray=nullptr;
 	_buffCount=0;
-	_towerIconArray=nullptr;
 	reportSPCSprite=nullptr;
 
 	_isAllButtonLocked=false;
@@ -144,7 +143,6 @@ void HudLayer::onExit(){
 	if(_delegate->_isExiting){
 
 	CC_SAFE_RELEASE(_reportListArray);
-	CC_SAFE_RELEASE(_towerIconArray);
 	}
 };
 
@@ -614,11 +612,7 @@ void HudLayer::initHeroInterface(){
 		mi->updatePosition(player->getSpawnPoint());
 		mi->setCharNO(player->getCharNO());
 
-		if(!_towerIconArray){
-			_towerIconArray=CCArray::create();
-			_towerIconArray->retain();
-		}
-		_towerIconArray->addObject(mi);
+		_towerIconArray.push_back(mi);
 
 	}
 
@@ -868,14 +862,10 @@ void HudLayer::setEXPLose(float percent){
 }
 
 void HudLayer::setTowerState(unsigned int charNO){
-	Ref* pObject;
-	for(unsigned int towerIconIndex=0; towerIconIndex<_towerIconArray->count(); ++towerIconIndex){
-	pObject=_towerIconArray->objectAtIndex(towerIconIndex);
-		MiniIcon* mi=(MiniIcon *) pObject;
+	for(MiniIcon* mi : _towerIconArray){
 		if(mi->getCharNO()==charNO){
 			mi->updateState();
 		}
-
 	}
 }
 

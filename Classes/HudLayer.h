@@ -7,6 +7,7 @@
 #include "Defines.h"
 #include "ActionButton.h"
 #include "SimpleAudioEngine.h"
+#include <vector>
 
 USING_NS_CC;
 
@@ -93,7 +94,7 @@ public:
     LabelBMFont*		gameClock;
 	Menu*				pauseNenu;
 	Menu*				gearMenu;
-	CC_SYNTHESIZE(CCArray*,_towerIconArray,TowerIconArray);
+	std::vector<MiniIcon*> _towerIconArray;
 
 	GameLayer*			_delegate;
 	Layer*			miniLayer;
