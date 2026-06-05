@@ -655,7 +655,7 @@ int KTools::checkMD5(std::string findPath /* ="" */){
 
 std::string  KTools::getKeycode(std::string path){
 	std::string strKey =CMD5Checksum::GetMD5(path);
-	std::string strKeyCode=CCString::createWithFormat("%s,%s",strKey.substr(16,5).c_str(),strKey.substr(6,5).c_str())->getCString();
+	std::string strKeyCode=cocos2d::StringUtils::format("%s,%s",strKey.substr(16,5).c_str(),strKey.substr(6,5).c_str());
 	return strKeyCode ;
 }
 
