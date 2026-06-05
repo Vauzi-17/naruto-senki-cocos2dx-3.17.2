@@ -1,4 +1,5 @@
 #include "LoadLayer.h"
+#include "HeroPayload.h"
 
 
 #include<time.h>
@@ -108,9 +109,7 @@ void LoadLayer::preloadIMG(){
 	for(unsigned int heroIndex=0; heroIndex<tempHeros->count(); ++heroIndex){
 		Ref* pObject=tempHeros->objectAtIndex(heroIndex);
 
-		__Dictionary* tempdict=(__Dictionary*) pObject;
-
-		const char* player=tempdict->valueForKey("character")->getCString();
+		const char* player=NarutoSenkiPayload::character(pObject);
 
 
 		//���ؼ���ͼ��
@@ -375,8 +374,7 @@ void LoadLayer::preloadPlist(Ref* obj){
 	}
 
 	Ref* pObject=tempHeros->objectAtIndex(loadNum);
-	__Dictionary* tempdict=(__Dictionary*) pObject;
-	const char* name=tempdict->valueForKey("character")->getCString();
+	const char* name=NarutoSenkiPayload::character(pObject);
 
     std::string path=cocos2d::StringUtils::format("Element/%s/%s.plist",name,name);
 	SpriteFrameCache::getInstance()->addSpriteFramesWithFile(path,texture);//ͨ��������.plist�ļ�����SpriteFrameCache

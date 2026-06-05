@@ -402,14 +402,10 @@ void GameLayer::initHeros(){
 		for(unsigned int heroIndex=0; heroIndex<Heros->count(); ++heroIndex){
 			pObject=Heros->objectAtIndex(heroIndex);
 
-			__Dictionary* tempdict=(__Dictionary*) pObject;
-
-			__String* player=__String::create(tempdict->valueForKey("character")->getCString());
-			__String* role=__String::create(tempdict->valueForKey("role")->getCString());
-			__String* group=__String::create(tempdict->valueForKey("group")->getCString());
+			const char* group=NarutoSenkiPayload::group(pObject);
 
 			int mapPos;
-			if(strcmp(group->getCString(),"Akatsuki")==0){
+			if(strcmp(group,"Akatsuki")==0){
 				int spawnIndex=akatsukiSpawnIndex++;
 				if(spawnIndex>4){
 					spawnIndex=4;
@@ -430,13 +426,13 @@ void GameLayer::initHeros(){
 
 			if(i==0){
 
-				if(strcmp(group->getCString(),"Akatsuki")==0){
+				if(strcmp(group,"Akatsuki")==0){
 					zhenying=0;
 				}
 
 				currentPlayer=Hero::create();
 				currentPlayer->setDelegate(this);
-				currentPlayer->setID(player,role,group);
+				NarutoSenkiPayload::setHeroId(currentPlayer,pObject);
 				currentPlayer->setPosition(spawnPoint);
 				currentPlayer->setSpawnPoint(spawnPoint);
 				this->addChild(currentPlayer,-currentPlayer->getPositionY());
@@ -455,7 +451,7 @@ void GameLayer::initHeros(){
 
 				Hero* Com=Hero::create();
 				Com->setDelegate(this);
-				Com->setID(player,role,group);
+				NarutoSenkiPayload::setHeroId(Com,pObject);
 				Com->setPosition(spawnPoint);
 				Com->setSpawnPoint(spawnPoint);
 				this->addChild(Com,-Com->getPositionY());
@@ -484,21 +480,17 @@ void GameLayer::initHeros(){
 		for(unsigned int heroIndex=0; heroIndex<Heros->count(); ++heroIndex){
 			pObject=Heros->objectAtIndex(heroIndex);
 
-			__Dictionary* tempdict=(__Dictionary*) pObject;
-
-			__String* player=__String::create(tempdict->valueForKey("character")->getCString());
-			__String* role=__String::create(tempdict->valueForKey("role")->getCString());
-			__String* group=__String::create(tempdict->valueForKey("group")->getCString());
+			const char* group=NarutoSenkiPayload::group(pObject);
 
 			if(useCenterSpawn){
-				if(strcmp(group->getCString(),"Akatsuki")==0){
+				if(strcmp(group,"Akatsuki")==0){
 					spawnPoint=Vec2(mapCenterX+centerSpawnOffsetX,centerSpawnY);
 				}else{
 					spawnPoint=Vec2(mapCenterX-centerSpawnOffsetX,centerSpawnY);
 				}
 			}else{
 				int mapPos=i;
-				if(strcmp(group->getCString(),"Akatsuki")==0){
+				if(strcmp(group,"Akatsuki")==0){
 					if(mapPos<=2){
 						mapPos+=3;
 					}
@@ -519,13 +511,13 @@ void GameLayer::initHeros(){
 
 			if(i==0){
 
-				if(strcmp(group->getCString(),"Akatsuki")==0){
+				if(strcmp(group,"Akatsuki")==0){
 					zhenying=0;
 				}
 
 				currentPlayer=Hero::create();
 				currentPlayer->setDelegate(this);
-				currentPlayer->setID(player,role,group);
+				NarutoSenkiPayload::setHeroId(currentPlayer,pObject);
 				currentPlayer->setPosition(spawnPoint);
 				currentPlayer->setSpawnPoint(spawnPoint);
 				this->addChild(currentPlayer,-currentPlayer->getPositionY());
@@ -544,7 +536,7 @@ void GameLayer::initHeros(){
 
 				Hero* Com=Hero::create();
 				Com->setDelegate(this);
-				Com->setID(player,role,group);
+				NarutoSenkiPayload::setHeroId(Com,pObject);
 				Com->setPosition(spawnPoint);
 				Com->setSpawnPoint(spawnPoint);
 				this->addChild(Com,-Com->getPositionY());

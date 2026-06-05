@@ -113,9 +113,9 @@ Alasan estimasi:
 - Alias string lokal di `GameLayer` untuk guardian, spawn hero, flog/tower,
   CKR refill, dan payload rematch diganti dari `CCString` ke `__String`
   langsung; kontrak `CCArray`/`CCDictionary` gameplay tetap ditahan.
-- Helper payload scene awal/result dan cast dictionary loader memakai
-  `__Dictionary`/`__String` langsung, sehingga alias deprecated `CCDictionary`
-  dan `CCString` makin terkonsentrasi di core/parser.
+- Helper payload scene awal/result dan pembacaan payload loader memakai
+  `HeroPayload.h`, sehingga alias deprecated `CCDictionary` dan `CCString`
+  makin terkonsentrasi di core/parser.
 - Parser XML `KTools::readXMLToArray` masih mempertahankan signature
   `CCArray*&`, tetapi container/dictionary/string lokal di dalam parser sudah
   memakai `__Array`, `__Dictionary`, dan `__String` langsung.
@@ -298,10 +298,10 @@ include `Cocos2dx2Compat.h` juga sudah dilepas dari CMake dan project Win32,
 lalu file compat kosong tersebut dihapus. Area
 UI/menu, HUD, parser XML lokal, `Element`, dan `ActionManager` sudah lepas dari
 alias source lama `CCArray`, `CCDictionary`, `CCString`, dan
-`CCARRAY_FOREACH`; helper payload hero scene awal/result juga sudah
-dikonsolidasikan ke satu header kecil. Pekerjaan berikutnya adalah validasi
-build Android/Win32 pengguna serta audit final konfigurasi build setelah compat
-bridge dihapus.
+`CCARRAY_FOREACH`; helper payload hero scene awal/result dan pembacaan payload
+loader juga sudah dikonsolidasikan ke satu header kecil. Pekerjaan berikutnya
+adalah validasi build Android/Win32 pengguna serta audit final konfigurasi build
+setelah compat bridge dihapus.
 
 Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
 
@@ -421,6 +421,10 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
 - `StartMenu`/`NetworkLayer`/`SelectLayer`/`GameLayer`/`GameOver`: helper
   payload hero lama yang duplikatif dikonsolidasikan ke `HeroPayload.h`; format
   payload loader dan rematch tetap sama.
+- `LoadLayer` dan spawn awal `GameLayer`: pembacaan payload
+  `character`/`role`/`group` ikut memakai `HeroPayload.h`, sehingga cast
+  dictionary lokal di loader/spawn makin terkunci di satu helper tanpa mengubah
+  isi payload lama.
 - `NetworkLayer`: path tombol select, preview hero, map preview/label, dan slot
   team training lokal memakai `StringUtils::format`/`std::string`; payload hero
   ke loader tetap `CCString`/`CCArray`.
