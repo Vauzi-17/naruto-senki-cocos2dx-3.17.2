@@ -4,6 +4,18 @@
 #include "HudLayer.h"
 USING_NS_CC;
 
+namespace
+{
+CCString* createElementIntString(int value)
+{
+	return CCString::create(cocos2d::StringUtils::format("%d", value));
+}
+
+CCString* createElementFloatString(float value)
+{
+	return CCString::create(cocos2d::StringUtils::format("%f", value));
+}
+}
 
 HeroElement::HeroElement(void)
 {
@@ -142,7 +154,7 @@ void HeroElement::setID(CCString* character,CCString* role,CCString* group){
 	unsigned int tmpSpeed;
 	int tmpCombatPoint;
 	this->readDate(tmpDate,tmpName,tmpHpMax,tmpWidth,tmpHeight,tmpSpeed,tmpCombatPoint);
-	this->setMaxHP(CCString::createWithFormat("%d",std::atoi(tmpHpMax->getCString())));
+	this->setMaxHP(createElementIntString(std::atoi(tmpHpMax->getCString())));
 	this->setHP(CCString::create(this->getMaxHP()->getCString()));
 
 	this->setHeight(tmpHeight);
@@ -528,7 +540,7 @@ void HeroElement::changeHPbar(){
 		if(_exp>=500 && _level==1){
 			_level=2;
 			float newValue=atof(this->getCKR()->getCString())+15001;
-			this->setCKR(CCString::createWithFormat("%f",newValue));
+			this->setCKR(createElementFloatString(newValue));
 			_isCanOugis1=true;
 			if(strcmp(this->getRole()->getCString(),"Player")==0){
 
@@ -551,20 +563,20 @@ void HeroElement::changeHPbar(){
 			}
 			int tempMaxHP=std::atoi(this->getMaxHP()->getCString());
 			tempMaxHP+=500;
-			this->setMaxHP(CCString::createWithFormat("%d",tempMaxHP));
-			this->setnAttackValue(CCString::createWithFormat("%d",std::atoi(this->getnAttackValue()->getCString())+9));
+			this->setMaxHP(createElementIntString(tempMaxHP));
+			this->setnAttackValue(createElementIntString(std::atoi(this->getnAttackValue()->getCString())+9));
 			_rebornTime+=1;
 		}else if(_exp>=1000 && _level==2){
 			_level=3;
 			int tempMaxHP=std::atoi(this->getMaxHP()->getCString());
 			tempMaxHP+=1000;
-			this->setMaxHP(CCString::createWithFormat("%d",tempMaxHP));
-				this->setnAttackValue(CCString::createWithFormat("%d",std::atoi(this->getnAttackValue()->getCString())+18));
+			this->setMaxHP(createElementIntString(tempMaxHP));
+				this->setnAttackValue(createElementIntString(std::atoi(this->getnAttackValue()->getCString())+18));
 			_rebornTime+=2;
 		}else if(_exp>=1500 && _level==3){
 			_level=4;
 			float newValue=atof(this->getCKR2()->getCString())+25001;
-			this->setCKR2(CCString::createWithFormat("%f",newValue));
+			this->setCKR2(createElementFloatString(newValue));
 			_isCanOugis2=true;
 			if(strcmp(this->getRole()->getCString(),"Player")==0){
 
@@ -586,23 +598,23 @@ void HeroElement::changeHPbar(){
 			}
 			int tempMaxHP=std::atoi(this->getMaxHP()->getCString());
 			tempMaxHP+=2000;
-			this->setMaxHP(CCString::createWithFormat("%d",tempMaxHP));
-				this->setnAttackValue(CCString::createWithFormat("%d",std::atoi(this->getnAttackValue()->getCString())+27));
+			this->setMaxHP(createElementIntString(tempMaxHP));
+				this->setnAttackValue(createElementIntString(std::atoi(this->getnAttackValue()->getCString())+27));
 			_rebornTime+=3;
 
 		}else if(_exp>=2000 && _level==4){
 			_level=5;
 			int tempMaxHP=std::atoi(this->getMaxHP()->getCString());
 			tempMaxHP+=2500;
-			this->setMaxHP(CCString::createWithFormat("%d",tempMaxHP));
-				this->setnAttackValue(CCString::createWithFormat("%d",std::atoi(this->getnAttackValue()->getCString())+36));;
+			this->setMaxHP(createElementIntString(tempMaxHP));
+				this->setnAttackValue(createElementIntString(std::atoi(this->getnAttackValue()->getCString())+36));;
 			_rebornTime+=4;
 		}else if(_exp>=2500 && _level==5){
 			_level=6;
 			int tempMaxHP=std::atoi(this->getMaxHP()->getCString());
 			tempMaxHP+=3000;
-			this->setMaxHP(CCString::createWithFormat("%d",tempMaxHP));
-				this->setnAttackValue(CCString::createWithFormat("%d",std::atoi(this->getnAttackValue()->getCString())+45));
+			this->setMaxHP(createElementIntString(tempMaxHP));
+				this->setnAttackValue(createElementIntString(std::atoi(this->getnAttackValue()->getCString())+45));
 			_rebornTime+=5;
 		}
 
@@ -999,7 +1011,7 @@ void Flog::setID(CCString* character,CCString* role,CCString* group){
 	int tmpCombatPoint;
 
 	this->readDate(tmpDate,tmpName,tmpHpMax,tmpWidth,tmpHeight,tmpSpeed,tmpCombatPoint);
-	this->setMaxHP(CCString::createWithFormat("%d",std::atoi(tmpHpMax->getCString())));
+	this->setMaxHP(createElementIntString(std::atoi(tmpHpMax->getCString())));
 	this->setHP(CCString::create(this->getMaxHP()->getCString()));
 	this->setHeight(tmpHeight);
 	this->setWalkSpeed(tmpSpeed);
@@ -1269,7 +1281,7 @@ void Tower::setID(CCString* character,CCString* role,CCString* group){
 	int tmpCombatPoint;
 
 	this->readDate(tmpDate,tmpName,tmpHpMax,tmpWidth,tmpHeight,tmpSpeed, tmpCombatPoint);
-	this->setMaxHP(CCString::createWithFormat("%d",std::atoi(tmpHpMax->getCString())));
+	this->setMaxHP(createElementIntString(std::atoi(tmpHpMax->getCString())));
 	this->setHP(CCString::create(this->getMaxHP()->getCString()));
 
 	this->setHeight(tmpHeight);
@@ -1416,7 +1428,7 @@ void Monster::setID(CCString* character,CCString* role,CCString* group){
 	int  tmpCombatPoint;
 
 	this->readDate(tmpDate,tmpName,tmpHpMax,tmpWidth,tmpHeight,tmpSpeed, tmpCombatPoint);
-	this->setMaxHP(CCString::createWithFormat("%d",std::atoi(tmpHpMax->getCString())));
+	this->setMaxHP(createElementIntString(std::atoi(tmpHpMax->getCString())));
 	this->setHP(CCString::create(this->getMaxHP()->getCString()));
 
 	this->setHeight(tmpHeight);
@@ -1497,35 +1509,35 @@ void Monster::changeHPbar(){
 		_level=2;
 		int tempMaxHP=std::atoi(this->getMaxHP()->getCString());
 		tempMaxHP+=1000;
-		this->setMaxHP(CCString::createWithFormat("%d",tempMaxHP));
-			this->setnAttackValue(CCString::createWithFormat("%d",std::atoi(this->getnAttackValue()->getCString())+9));
+		this->setMaxHP(createElementIntString(tempMaxHP));
+			this->setnAttackValue(createElementIntString(std::atoi(this->getnAttackValue()->getCString())+9));
 	}else if(_exp>=1000 && _level==2){
 		_level=3;
 		int tempMaxHP=std::atoi(this->getMaxHP()->getCString());
 		tempMaxHP+=1500;
-		this->setMaxHP(CCString::createWithFormat("%d",tempMaxHP));
-		this->setnAttackValue(CCString::createWithFormat("%d",std::atoi(this->getnAttackValue()->getCString())+18));
+		this->setMaxHP(createElementIntString(tempMaxHP));
+		this->setnAttackValue(createElementIntString(std::atoi(this->getnAttackValue()->getCString())+18));
 
 	}else if(_exp>=1500 && _level==3){
 		_level=4;
 		int tempMaxHP=std::atoi(this->getMaxHP()->getCString());
 		tempMaxHP+=2000;
-		this->setMaxHP(CCString::createWithFormat("%d",tempMaxHP));
-		this->setnAttackValue(CCString::createWithFormat("%d",std::atoi(this->getnAttackValue()->getCString())+27));
+		this->setMaxHP(createElementIntString(tempMaxHP));
+		this->setnAttackValue(createElementIntString(std::atoi(this->getnAttackValue()->getCString())+27));
 
 	}else if(_exp>=2000 && _level==4){
 		_level=5;
 		int tempMaxHP=std::atoi(this->getMaxHP()->getCString());
 		tempMaxHP+=2500;
-		this->setMaxHP(CCString::createWithFormat("%d",tempMaxHP));
-		this->setnAttackValue(CCString::createWithFormat("%d",std::atoi(this->getnAttackValue()->getCString())+36));
+		this->setMaxHP(createElementIntString(tempMaxHP));
+		this->setnAttackValue(createElementIntString(std::atoi(this->getnAttackValue()->getCString())+36));
 
 	}else if(_exp>=2500 && _level==5){
 		_level=6;
 		int tempMaxHP=std::atoi(this->getMaxHP()->getCString());
 		tempMaxHP+=3000;
-		this->setMaxHP(CCString::createWithFormat("%d",tempMaxHP));
-		this->setnAttackValue(CCString::createWithFormat("%d",std::atoi(this->getnAttackValue()->getCString())+48));
+		this->setMaxHP(createElementIntString(tempMaxHP));
+		this->setnAttackValue(createElementIntString(std::atoi(this->getnAttackValue()->getCString())+48));
 	}
 
 	if(_hpBar){

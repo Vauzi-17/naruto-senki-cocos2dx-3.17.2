@@ -332,6 +332,9 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
 - `Element`: path XML lokal untuk hero/flog/tower/monster/bullet, frame
   `hp_bottom`, label reborn, dan kill count awal memakai string native/literal;
   kontrak stat HP/attack lama tetap `CCString`.
+- `Element`: formatter stat lokal (`MaxHP`, `CKR`, `CKR2`, dan attack value)
+  dipindah dari `CCString::createWithFormat` ke helper lokal berbasis
+  `StringUtils::format`, sehingga file ini tidak lagi memakai formatter lama.
 - `ActionManager`: path heart-effect, reward coin display, damage font, gear
   item/cost, dan extern frame lokal memakai string native; kontrak gear array
   dan stat combat lama tetap `CCString`.
@@ -475,6 +478,9 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
   mengubah dictionary report atau field chakra lama.
 - `Element` mulai melepas path XML dan display kecil dari
   `CCString::createWithFormat`, sambil menahan migrasi stat gameplay besar.
+- `Element` menutup sisa `CCString::createWithFormat` aktif dengan helper lokal
+  `StringUtils::format`, tetap mempertahankan field stat lama sebagai
+  `CCString*`.
 - `ActionManager` mulai mengurangi format string display/path lokal tanpa
   menyentuh nilai HP/CKR/attack yang masih menjadi kontrak combat utama.
 - `ActionManager` helper `createPayloadCall(...)` dirapikan ke `CallFuncN`
