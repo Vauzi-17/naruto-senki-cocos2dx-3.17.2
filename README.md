@@ -309,6 +309,8 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
   lokal memakai `StringUtils::format`/`std::string`; coin SQLite tetap ditahan.
 - `GameOver`: `detailRecord` dan string angka win record aktif memakai
   `StringUtils::format`/`std::string`, tanpa mengubah isi nilai SQLite.
+- `GameOver`: hasil baca SQLite untuk coin, win count, dan best time disalin ke
+  `std::string` lokal; API `KTools` lama tetap dipertahankan.
 - `SelectLayer`: path tombol select dan preview hero lokal memakai
   `StringUtils::format`/`std::string`; field `charName` lama tetap `CCString`.
 - `NetworkLayer`: path tombol select, preview hero, map preview/label, dan slot
@@ -539,6 +541,8 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
   sisa `CCDictionary`/`CCString` di file itu tinggal boundary lookup teks.
 - `HudLayer` melepas local `CCString*` sementara di render report cache,
   sambil mempertahankan queue report lama sebagai dictionary.
+- `GameOver` melepas local `CCString*` untuk hasil SQLite result/record yang
+  langsung dipakai sebagai angka/string lokal.
 
 1. **Tutup helper compat kecil yang masih lokal**
    - Target file: `Cocos2dx2Compat.h`, `ActionButton`, `HPBar`, `HudLayer`,

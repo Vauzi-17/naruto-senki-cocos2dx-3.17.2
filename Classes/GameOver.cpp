@@ -395,7 +395,7 @@ void GameOver::listResult(){
 
 	tool->decode(tempReward);
 
-	CCString* cl=tool->readFromSQLite();
+	std::string coinRecord=tool->readFromSQLite()->getCString();
 	int rewardNum;
 	if(_isWin){
 		rewardNum=realKillNum*75+std::atoi(tempReward.c_str());
@@ -420,10 +420,10 @@ void GameOver::listResult(){
 	if(adResult==1 && _isWin ){
 		std::string tempEtra="idd4";
 		tool->decode(tempEtra);
-		tempCoin=rewardNum+std::atoi(cl->getCString())+std::atoi(tempEtra.c_str());
+		tempCoin=rewardNum+std::atoi(coinRecord.c_str())+std::atoi(tempEtra.c_str());
 		extraCoin=cocos2d::StringUtils::format("+%d",500);
 	}else{
-		tempCoin=rewardNum+std::atoi(cl->getCString());
+		tempCoin=rewardNum+std::atoi(coinRecord.c_str());
 		extraCoin=cocos2d::StringUtils::format("+%d",0);
 	}
 
@@ -533,15 +533,15 @@ void GameOver::listResult(){
 
 
 			if(_isWin ){
-				CCString* winNum=tool->readSQLite("CharRecord","name",resultChar->getCString(),"column1");
+				std::string winNum=tool->readSQLite("CharRecord","name",resultChar->getCString(),"column1")->getCString();
 				int tempWin=0;
 
 				if(resultScore>=140){
-					tempWin=std::atoi(winNum->getCString())+3;
+					tempWin=std::atoi(winNum.c_str())+3;
 				}else if(resultScore>=120){
-					tempWin=std::atoi(winNum->getCString())+2;
+					tempWin=std::atoi(winNum.c_str())+2;
 				}else{
-					tempWin=std::atoi(winNum->getCString())+1;
+					tempWin=std::atoi(winNum.c_str())+1;
 				}
 
 				std::string realWin=cocos2d::StringUtils::format("%d",tempWin);
@@ -580,12 +580,12 @@ void GameOver::listResult(){
 
 						if(strcmp(hero->getGroup()->getCString(),_delegate->currentPlayer->getGroup()->getCString())==0){
 
-							CCString* winNum=tool->readSQLite("CharRecord","name",hero->getCharacter()->getCString(),"column1");
+							std::string winNum=tool->readSQLite("CharRecord","name",hero->getCharacter()->getCString(),"column1")->getCString();
 							int tempWin=0;
 							if(resultScore>=140){
-								tempWin=std::atoi(winNum->getCString())+2;
+								tempWin=std::atoi(winNum.c_str())+2;
 							}else{
-								tempWin=std::atoi(winNum->getCString())+1;
+								tempWin=std::atoi(winNum.c_str())+1;
 							}
 
 							std::string realWin=cocos2d::StringUtils::format("%d",tempWin);
@@ -601,13 +601,13 @@ void GameOver::listResult(){
 				}
 
 				//×îËÙ¼ÇÂ¼
-				CCString* recordTime=tool->readSQLite("CharRecord","name",resultChar->getCString(),"column3");
-				if(recordTime->length()==0){
+				std::string recordTime=tool->readSQLite("CharRecord","name",resultChar->getCString(),"column3")->getCString();
+				if(recordTime.empty()){
 					if(CError!=1){
 						tool->saveSQLite("CharRecord","name",resultChar->getCString(),"column3",(char*) tempTime->getCString(),false);
 					}
 				}else{
-					std::string bestTime=(std::string) recordTime->getCString();
+					std::string bestTime=recordTime;
 					std::string recordHour=bestTime.substr(0,2);
 					std::string recordMinute=bestTime.substr(3,2);
 					std::string recordSecond=bestTime.substr(6,2);
