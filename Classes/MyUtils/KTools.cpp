@@ -1326,15 +1326,15 @@ CCString* KTools::readFromSQLite(const char* table/* ="GameRecord" */,const char
 	if(pDB!=NULL){
 
 		char **result;
-		CCString* sql=CCString::createWithFormat("select %s from  GameRecord","coin");
+		std::string sql="select coin from  GameRecord";
 		int row=0;
 		int column=0;
 
-		sqlite3_get_table(pDB,sql->getCString(),&result,&row,&column,NULL);
+		sqlite3_get_table(pDB,sql.c_str(),&result,&row,&column,NULL);
 
 		std::string str=result[1];
 		decode(str);
-		CCString* coin=CCString::createWithFormat("%s",str.c_str());
+		CCString* coin=CCString::create(str);
 		sqlite3_free_table(result);
 		sqlite3_close(pDB);
 		return coin;
@@ -1353,11 +1353,11 @@ CCString* KTools::readSQLite(const char* table,const char* column,const char* va
 
 		char **result;
 
-		CCString* sql=CCString::createWithFormat(("select %s,%s from  %s "),column,targetColumn,table);
+		std::string sql=cocos2d::StringUtils::format("select %s,%s from  %s ",column,targetColumn,table);
 		int row=0;
 		int column=0;
 
-		sqlite3_get_table(pDB,sql->getCString(),&result,&row,&column,NULL);
+		sqlite3_get_table(pDB,sql.c_str(),&result,&row,&column,NULL);
 		 
 		std::string target;
 		for( int i = 0; i <= row*2 ; i++ ){
@@ -1377,9 +1377,10 @@ CCString* KTools::readSQLite(const char* table,const char* column,const char* va
 
 
 		if(strcmp(targetColumn,"column3")==0 || strcmp(targetColumn,"column4")==0){
-		    targetValue=CCString::createWithFormat("%s",target.c_str());
+		    targetValue=CCString::create(target);
 		}else{
-			targetValue=CCString::createWithFormat("%d",std::atoi(target.c_str()));
+			std::string targetText=cocos2d::StringUtils::format("%d",std::atoi(target.c_str()));
+			targetValue=CCString::create(targetText);
 		}
 		sqlite3_free_table(result);
 		sqlite3_close(pDB);

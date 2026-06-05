@@ -339,6 +339,8 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
   `Node*` runtime dan guard null; payload XML lama tetap dipertahankan.
 - `KTools`: helper keycode MD5 lokal memakai `StringUtils::format`/
   `std::string`; builder SQL lama tetap ditahan.
+- `KTools`: helper read SQLite lokal mulai memakai `std::string` untuk query
+  select dan hasil decode; return type lama tetap `CCString*`.
 - `NetworkLayer`: komentar request list hero lama dan parsing response callback
   yang sudah tidak punya caller aktif dibersihkan; flow pemilihan hero tetap
   memakai daftar offline statis.
@@ -470,6 +472,8 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
   sehingga callback payload tetap menerima node action 3.x.
 - `KTools::getKeycode(...)` melepas format `CCString` lokal tanpa menyentuh
   SQL/SQLite helper yang masih menjadi kontrak utility lama.
+- `KTools` read helper mulai melepas format `CCString` pada query/result yang
+  lokal, sambil menahan update/insert SQL lama untuk slice berikutnya.
 
 1. **Tutup helper compat kecil yang masih lokal**
    - Target file: `Cocos2dx2Compat.h`, `ActionButton`, `HPBar`, `HudLayer`,
