@@ -38,7 +38,7 @@ public:
 
 	 std::string detailRecord;
 	float finnalScore;
-	CC_SYNTHESIZE_RETAIN(CCString*,resultChar,ResultChar);
+	std::string resultChar;
 
 private:
 	void	onBackToMenu(Ref* sender);

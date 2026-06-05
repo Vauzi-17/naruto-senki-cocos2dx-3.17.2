@@ -516,24 +516,24 @@ void GameOver::listResult(){
 		//记录 最速获胜时间
 		if(Cheats<=10 && !_delegate->_isDuelMode && !_delegate->_isTrainingMode){
 
-			resultChar=_delegate->currentPlayer->getCharacter();
+			resultChar=_delegate->currentPlayer->getCharacter()->getCString();
 
 			//觉醒必备
 			if(strcmp(_delegate->currentPlayer->getCharacter()->getCString(),"SageNaruto")==0){
-				resultChar=CCString::create("Naruto");
+				resultChar="Naruto";
 			}else if(strcmp(_delegate->currentPlayer->getCharacter()->getCString(),"RikudoNaruto")==0){
-				resultChar=CCString::create("Naruto");
+				resultChar="Naruto";
 			}else if(strcmp(_delegate->currentPlayer->getCharacter()->getCString(),"SageJiraiya")==0){
-				resultChar=CCString::create("Jiraiya");
+				resultChar="Jiraiya";
 			}else if(strcmp(_delegate->currentPlayer->getCharacter()->getCString(),"ImmortalSasuke")==0){
-				resultChar=CCString::create("Sasuke");
+				resultChar="Sasuke";
 			}else if(strcmp(_delegate->currentPlayer->getCharacter()->getCString(),"RockLee")==0){
-				resultChar=CCString::create("Lee");
+				resultChar="Lee";
 			}
 
 
 			if(_isWin ){
-				std::string winNum=tool->readSQLite("CharRecord","name",resultChar->getCString(),"column1")->getCString();
+				std::string winNum=tool->readSQLite("CharRecord","name",resultChar.c_str(),"column1")->getCString();
 				int tempWin=0;
 
 				if(resultScore>=140){
@@ -546,7 +546,7 @@ void GameOver::listResult(){
 
 				std::string realWin=cocos2d::StringUtils::format("%d",tempWin);
 				if(CError!=1){
-					tool->saveSQLite("CharRecord","name",resultChar->getCString(),"column1",(char*) realWin.c_str(),false);
+					tool->saveSQLite("CharRecord","name",resultChar.c_str(),"column1",(char*) realWin.c_str(),false);
 				}
 				//
 				if(_delegate->_isRandomChar && resultScore>=120 ){
@@ -601,10 +601,10 @@ void GameOver::listResult(){
 				}
 
 				//最速记录
-				std::string recordTime=tool->readSQLite("CharRecord","name",resultChar->getCString(),"column3")->getCString();
+				std::string recordTime=tool->readSQLite("CharRecord","name",resultChar.c_str(),"column3")->getCString();
 				if(recordTime.empty()){
 					if(CError!=1){
-						tool->saveSQLite("CharRecord","name",resultChar->getCString(),"column3",(char*) tempTime->getCString(),false);
+						tool->saveSQLite("CharRecord","name",resultChar.c_str(),"column3",(char*) tempTime->getCString(),false);
 					}
 				}else{
 					std::string bestTime=recordTime;
@@ -635,7 +635,7 @@ void GameOver::listResult(){
 
 					if(isNewRecord){
 						if(CError!=1){
-							tool->saveSQLite("CharRecord","name",resultChar->getCString(),"column3",(char*) tempTime->getCString(),false);
+							tool->saveSQLite("CharRecord","name",resultChar.c_str(),"column3",(char*) tempTime->getCString(),false);
 						}
 					}
 

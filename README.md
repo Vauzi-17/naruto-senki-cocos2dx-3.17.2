@@ -311,6 +311,9 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
   `StringUtils::format`/`std::string`, tanpa mengubah isi nilai SQLite.
 - `GameOver`: hasil baca SQLite untuk coin, win count, dan best time disalin ke
   `std::string` lokal; API `KTools` lama tetap dipertahankan.
+- `GameOver`: state nama hero untuk record result `resultChar` dipindah dari
+  retained `CCString*` ke `std::string`; payload rematch lama tetap
+  `CCArray`/`CCDictionary`.
 - `SelectLayer`: path tombol select dan preview hero lokal memakai
   `StringUtils::format`/`std::string`; field `charName` lama tetap `CCString`.
 - `SelectLayer`: container tombol UI lokal `selectArray` dipindah dari
@@ -1002,6 +1005,9 @@ Catatan progress terbaru:
 - `NetworkLayer` ikut melepas container tombol select UI lokal dari retained
   `CCArray*` ke `std::vector<SelectButton*>`, sambil menahan `_selectList` dan
   payload hero battle lama sebagai kontrak loader/gameplay.
+- `GameOver` melepas field record result `resultChar` dari retained
+  `CCString*` ke `std::string`; jalur record SQLite memakai `c_str()` dan
+  payload rematch tetap memakai struktur lama.
 - `SelectLayer`, `SkillLayer`, `GearLayer`, dan `GameOver` ikut lepas dari
   `CCARRAY_FOREACH` aktif. Perubahan ini hanya mengganti iterator lokal pada
   daftar select button, gear, result character, dan rematch handoff tanpa
