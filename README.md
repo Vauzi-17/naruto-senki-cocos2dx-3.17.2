@@ -308,6 +308,7 @@ Helper payload sekarang memakai alias lokal untuk tipe deprecated internal.
 Helper parser/gameplay lokal ikut memakai alias boundary yang sama.
 Header core `ActionManager` mulai memakai alias boundary untuk kontrak lama.
 Header turunan `Element` juga mulai mengikuti alias boundary yang sama.
+Header scene `GameLayer`/`LoadLayer` ikut melepas penyebutan langsung `__Array*`.
 Pekerjaan berikutnya adalah validasi build Android/Win32 pengguna serta audit
 final konfigurasi build setelah compat bridge dihapus.
 
@@ -466,6 +467,9 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
 - `Element.h`: deklarasi `setID(...)` turunan `HeroElement`/`Flog`/`Tower`/
   `Monster`/`Bullet` ikut memakai alias `NarutoSenki::LegacyString`, tanpa
   mengubah tipe dasar atau implementasi runtime.
+- `GameLayer.h` dan `LoadLayer.h`: field array gameplay/loader memakai alias
+  header-spesifik, sehingga kontrak lama tetap sama tetapi penyebutan
+  `__Array*` langsung di header scene ikut hilang.
 - `NetworkLayer`: path tombol select, preview hero, map preview/label, dan slot
   team training lokal memakai `StringUtils::format`/`std::string`; payload hero
   ke loader tetap `CCString`/`CCArray`.

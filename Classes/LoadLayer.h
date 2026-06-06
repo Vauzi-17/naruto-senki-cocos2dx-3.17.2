@@ -25,6 +25,8 @@
 USING_NS_CC;
 using namespace rapidjson;
 
+using LoadLayerLegacyArray = __Array;
+
 class LoadLayer : public Layer{
 
 public:
@@ -32,7 +34,7 @@ public:
 	~LoadLayer(void);
 
 
-	__Array* tempHeros;
+	LoadLayerLegacyArray* tempHeros;
 	bool init();
 
 	//void dfsFolder(std::string folderPath, int depth);

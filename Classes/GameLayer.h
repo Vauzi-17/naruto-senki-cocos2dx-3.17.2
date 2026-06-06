@@ -24,6 +24,8 @@ namespace NarutoSenki { class ActionManager; }
 class BGLayer;
 class HudLayer;
 
+using GameLayerLegacyArray = __Array;
+
 class GameLayer :public Layer{
 public:
 	GameLayer(void);
@@ -43,13 +45,13 @@ public:
     int kEXPBound;
 	int aEXPBound;
 
-	__Array* Heros;
+	GameLayerLegacyArray* Heros;
 	bool	_isAttackButtonRelease;
 	bool	_isGuardian;
-	__Array* _KonohaFlogArray;
-	__Array* _AkatsukiFlogArray;
-	__Array* _TowerArray;
-	__Array* _CharacterArray;
+	GameLayerLegacyArray* _KonohaFlogArray;
+	GameLayerLegacyArray* _AkatsukiFlogArray;
+	GameLayerLegacyArray* _TowerArray;
+	GameLayerLegacyArray* _CharacterArray;
 
 	
 	bool _isShacking;
@@ -141,7 +143,7 @@ public:
 	bool _isDuelMode;
 	bool _isDuelFinished;
 	bool _isRematching;
-	__Array* _rematchHerosOverride;
+	GameLayerLegacyArray* _rematchHerosOverride;
 	int _duelKillLimit;
 	int _duelPlayerScore;
 	int _duelEnemyScore;
