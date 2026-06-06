@@ -304,6 +304,7 @@ payload efek kecil juga sudah dikonsolidasikan ke helper kecil. Setter stat
 lokal di `GameLayer`/`HudLayer` mulai ikut dipusatkan ke helper yang sama.
 Helper lokal parser XML juga mulai mengurangi duplikasi entry data lama.
 Array gameplay lokal `GameLayer` juga mulai dipusatkan di helper file-scope.
+Helper payload sekarang memakai alias lokal untuk tipe deprecated internal.
 Pekerjaan berikutnya adalah validasi build Android/Win32 pengguna serta audit
 final konfigurasi build setelah compat bridge dihapus.
 
@@ -450,6 +451,9 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
 - `GameLayer`: pembuatan array gameplay lokal untuk character/flog/tower
   dipusatkan ke helper file-scope, sehingga `__Array::create()` tidak lagi
   tersebar langsung di beberapa blok init.
+- `HeroPayload.h`: tipe deprecated internal di helper payload diberi alias lokal
+  `LegacyArray`/`LegacyDictionary`/`LegacyString`, sehingga boundary
+  `__Array`/`__Dictionary`/`__String` di helper tidak lagi ditulis berulang.
 - `NetworkLayer`: path tombol select, preview hero, map preview/label, dan slot
   team training lokal memakai `StringUtils::format`/`std::string`; payload hero
   ke loader tetap `CCString`/`CCArray`.

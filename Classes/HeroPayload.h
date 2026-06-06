@@ -4,9 +4,13 @@
 
 namespace NarutoSenkiPayload {
 
-inline cocos2d::__Dictionary* asHero(cocos2d::Ref* payload)
+using LegacyArray = cocos2d::__Array;
+using LegacyDictionary = cocos2d::__Dictionary;
+using LegacyString = cocos2d::__String;
+
+inline LegacyDictionary* asHero(cocos2d::Ref* payload)
 {
-	return static_cast<cocos2d::__Dictionary*>(payload);
+	return static_cast<LegacyDictionary*>(payload);
 }
 
 inline const char* value(cocos2d::Ref* payload, const char* key)
@@ -31,27 +35,27 @@ inline const char* group(cocos2d::Ref* payload)
 
 inline int gearValue(cocos2d::Ref* payload)
 {
-	return static_cast<cocos2d::__String*>(payload)->intValue();
+	return static_cast<LegacyString*>(payload)->intValue();
 }
 
-inline cocos2d::__Array* createHeroList()
+inline LegacyArray* createHeroList()
 {
-	return cocos2d::__Array::create();
+	return LegacyArray::create();
 }
 
-inline cocos2d::__Dictionary* createStringPayload(const char* value, int key = 1)
+inline LegacyDictionary* createStringPayload(const char* value, int key = 1)
 {
-	auto payload = cocos2d::__Dictionary::create();
-	payload->setObject(cocos2d::__String::create(value), key);
+	auto payload = LegacyDictionary::create();
+	payload->setObject(LegacyString::create(value), key);
 	return payload;
 }
 
-inline void addHero(cocos2d::__Array* heros, const char* character, const char* role, const char* group)
+inline void addHero(LegacyArray* heros, const char* character, const char* role, const char* group)
 {
-	cocos2d::__Dictionary* dic = cocos2d::__Dictionary::create();
-	dic->setObject(cocos2d::__String::create(character), "character");
-	dic->setObject(cocos2d::__String::create(role), "role");
-	dic->setObject(cocos2d::__String::create(group), "group");
+	LegacyDictionary* dic = LegacyDictionary::create();
+	dic->setObject(LegacyString::create(character), "character");
+	dic->setObject(LegacyString::create(role), "role");
+	dic->setObject(LegacyString::create(group), "group");
 	heros->addObject(dic);
 }
 
@@ -59,9 +63,9 @@ template <typename HeroT>
 inline void setId(HeroT* hero, const char* character, const char* role, const char* group)
 {
 	hero->setID(
-		cocos2d::__String::create(character),
-		cocos2d::__String::create(role),
-		cocos2d::__String::create(group));
+		LegacyString::create(character),
+		LegacyString::create(role),
+		LegacyString::create(group));
 }
 
 template <typename HeroT>
@@ -73,25 +77,25 @@ inline void setHeroId(HeroT* hero, cocos2d::Ref* payload)
 template <typename HeroT>
 inline void setMaxHP(HeroT* hero, const char* value)
 {
-	hero->setMaxHP(cocos2d::__String::create(value));
+	hero->setMaxHP(LegacyString::create(value));
 }
 
 template <typename HeroT>
 inline void setHP(HeroT* hero, const char* value)
 {
-	hero->setHP(cocos2d::__String::create(value));
+	hero->setHP(LegacyString::create(value));
 }
 
 template <typename HeroT>
 inline void setCKR(HeroT* hero, const char* value)
 {
-	hero->setCKR(cocos2d::__String::create(value));
+	hero->setCKR(LegacyString::create(value));
 }
 
 template <typename HeroT>
 inline void setCKR2(HeroT* hero, const char* value)
 {
-	hero->setCKR2(cocos2d::__String::create(value));
+	hero->setCKR2(LegacyString::create(value));
 }
 
 }
