@@ -306,6 +306,7 @@ Helper lokal parser XML juga mulai mengurangi duplikasi entry data lama.
 Array gameplay lokal `GameLayer` juga mulai dipusatkan di helper file-scope.
 Helper payload sekarang memakai alias lokal untuk tipe deprecated internal.
 Helper parser/gameplay lokal ikut memakai alias boundary yang sama.
+Header core `ActionManager` mulai memakai alias boundary untuk kontrak lama.
 Pekerjaan berikutnya adalah validasi build Android/Win32 pengguna serta audit
 final konfigurasi build setelah compat bridge dihapus.
 
@@ -458,6 +459,9 @@ Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
 - Helper lokal parser XML dan helper array gameplay `GameLayer` juga memakai
   alias lokal untuk tipe deprecated internal, sehingga boundary helper makin
   eksplisit dan lebih mudah dipindah nanti.
+- `ActionManager.h`: deklarasi field/callback core memakai alias lokal
+  `LegacyArray`/`LegacyDictionary`/`LegacyString`, sehingga kontrak header
+  tetap sama tetapi penyebutan tipe deprecated internal jauh lebih terkunci.
 - `NetworkLayer`: path tombol select, preview hero, map preview/label, dan slot
   team training lokal memakai `StringUtils::format`/`std::string`; payload hero
   ke loader tetap `CCString`/`CCArray`.

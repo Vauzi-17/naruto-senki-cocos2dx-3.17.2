@@ -30,12 +30,16 @@ class HPBar;
 
 namespace NarutoSenki {
 
+using LegacyArray = __Array;
+using LegacyDictionary = __Dictionary;
+using LegacyString = __String;
+
 	class ActionManager :public Sprite {
 	public:
 		ActionManager(void);
 		~ActionManager(void);
 
-		virtual void		setID(__String* character, __String* role, __String* group);
+		virtual void		setID(LegacyString* character, LegacyString* role, LegacyString* group);
 		virtual	void		setHPbar();
 		virtual	void       changeHPbar();
 		virtual	void		setShadows();
@@ -105,10 +109,10 @@ namespace NarutoSenki {
 		bool				_isControled;
 
 		//attributes
-		CC_SYNTHESIZE_RETAIN(__String*, _role, Role);
-		CC_SYNTHESIZE_RETAIN(__String*, _group, Group);
-		CC_SYNTHESIZE_RETAIN(__String*, _character, Character);
-		CC_SYNTHESIZE_RETAIN(__Array*, _gearArray, GearArray);
+		CC_SYNTHESIZE_RETAIN(LegacyString*, _role, Role);
+		CC_SYNTHESIZE_RETAIN(LegacyString*, _group, Group);
+		CC_SYNTHESIZE_RETAIN(LegacyString*, _character, Character);
+		CC_SYNTHESIZE_RETAIN(LegacyArray*, _gearArray, GearArray);
 
 
 		int rebornLabelTime;
@@ -143,11 +147,11 @@ namespace NarutoSenki {
 		//CC_SYNTHESIZE(float,_maxHP,MaxHP);
 		//CC_SYNTHESIZE(float,_hp,HP);
 
-		CC_SYNTHESIZE_RETAIN(__String*, _maxHP, MaxHP);
-		CC_SYNTHESIZE_RETAIN(__String*, _hp, HP);
+		CC_SYNTHESIZE_RETAIN(LegacyString*, _maxHP, MaxHP);
+		CC_SYNTHESIZE_RETAIN(LegacyString*, _hp, HP);
 
-		CC_SYNTHESIZE_RETAIN(__String*, _ckr, CKR);
-		CC_SYNTHESIZE_RETAIN(__String*, _ckr2, CKR2);
+		CC_SYNTHESIZE_RETAIN(LegacyString*, _ckr, CKR);
+		CC_SYNTHESIZE_RETAIN(LegacyString*, _ckr2, CKR2);
 		CC_SYNTHESIZE(float, _gardValue, GP);
 		CC_SYNTHESIZE(float, _exp, EXP);
 		CC_SYNTHESIZE(unsigned int, _level, LV);
@@ -162,17 +166,17 @@ namespace NarutoSenki {
 		CC_SYNTHESIZE(NarutoSenki::ActionManager*, _controler, Controler);
 		CC_SYNTHESIZE(NarutoSenki::ActionManager*, _secmaster, SecMaster);
 
-		CC_SYNTHESIZE_RETAIN(__String*, _nattackValue, nAttackValue);
+		CC_SYNTHESIZE_RETAIN(LegacyString*, _nattackValue, nAttackValue);
 		//unsigned int   _nattackValue ;
-		CC_SYNTHESIZE(__String*, _nattackType, nAttackType);
+		CC_SYNTHESIZE(LegacyString*, _nattackType, nAttackType);
 		int				_nattackRangeX;
 		int				_nattackRangeY;
 
 
 
-		CC_SYNTHESIZE_RETAIN(__String*, _sattackValue1, sAttackValue1);
+		CC_SYNTHESIZE_RETAIN(LegacyString*, _sattackValue1, sAttackValue1);
 		//unsigned int    _sattackValue1;
-		CC_SYNTHESIZE(__String*, _sattackType1, sAttack1Type);
+		CC_SYNTHESIZE(LegacyString*, _sattackType1, sAttack1Type);
 		int				_sattackRangeX1;
 		int				_sattackRangeY1;
 		unsigned int	_sattackcoldDown1;
@@ -181,40 +185,40 @@ namespace NarutoSenki {
 
 
 		unsigned int	 _attackValue;
-		CC_SYNTHESIZE(__String*, _attackType, AttackType);
+		CC_SYNTHESIZE(LegacyString*, _attackType, AttackType);
 		int				_attackRangeX;
 		int				_attackRangeY;
 
-		CC_SYNTHESIZE_RETAIN(__String*, _sattackValue2, sAttackValue2);
+		CC_SYNTHESIZE_RETAIN(LegacyString*, _sattackValue2, sAttackValue2);
 		//unsigned int    _sattackValue2;
-		CC_SYNTHESIZE(__String*, _sattackType2, sAttack2Type);
+		CC_SYNTHESIZE(LegacyString*, _sattackType2, sAttack2Type);
 		int				_sattackRangeX2;
 		int				_sattackRangeY2;
 		unsigned int	_sattackcoldDown2;
 		bool			_sattack2isDouble;
 		int				_sattackCombatPoint2;
 
-		CC_SYNTHESIZE_RETAIN(__String*, _sattackValue3, sAttackValue3);
+		CC_SYNTHESIZE_RETAIN(LegacyString*, _sattackValue3, sAttackValue3);
 		//unsigned int    _sattackValue3;
-		CC_SYNTHESIZE(__String*, _sattackType3, sAttack3Type);
+		CC_SYNTHESIZE(LegacyString*, _sattackType3, sAttack3Type);
 		int				_sattackRangeX3;
 		int				_sattackRangeY3;
 		unsigned int	_sattackcoldDown3;
 		bool			_sattack3isDouble;
 		int				_sattackCombatPoint3;
 
-		CC_SYNTHESIZE_RETAIN(__String*, _sattackValue4, sAttackValue4);
+		CC_SYNTHESIZE_RETAIN(LegacyString*, _sattackValue4, sAttackValue4);
 		//unsigned int    _sattackValue4;
-		CC_SYNTHESIZE(__String*, _sattackType4, sAttack4Type);
+		CC_SYNTHESIZE(LegacyString*, _sattackType4, sAttack4Type);
 		int				_sattackRangeX4;
 		int				_sattackRangeY4;
 		unsigned int	_sattackcoldDown4;
 		bool			_sattack4isDouble;
 		int				_sattackCombatPoint4;
 
-		CC_SYNTHESIZE_RETAIN(__String*, _sattackValue5, sAttackValue5);
+		CC_SYNTHESIZE_RETAIN(LegacyString*, _sattackValue5, sAttackValue5);
 		//unsigned int    _sattackValue5;
-		CC_SYNTHESIZE(__String*, _sattackType5, sAttack5Type);
+		CC_SYNTHESIZE(LegacyString*, _sattackType5, sAttack5Type);
 		int				_sattackRangeX5;
 		int				_sattackRangeY5;
 		unsigned int	_sattackcoldDown5;
@@ -224,46 +228,46 @@ namespace NarutoSenki {
 		int enemyCombatPoint;
 		int friendCombatPoint;
 
-		CC_SYNTHESIZE_RETAIN(__String*, _spcattackValue1, spcAttackValue1);
+		CC_SYNTHESIZE_RETAIN(LegacyString*, _spcattackValue1, spcAttackValue1);
 		//unsigned int    _spcattackValue1;
-		CC_SYNTHESIZE(__String*, _spcattackType1, spcAttack1Type);
+		CC_SYNTHESIZE(LegacyString*, _spcattackType1, spcAttack1Type);
 		int				_spcattackRangeX1;
 		int				_spcattackRangeY1;
 		unsigned int				_spcattackcoldDown1;
 
 
 
-		CC_SYNTHESIZE_RETAIN(__String*, _spcattackValue2, spcAttackValue2);
+		CC_SYNTHESIZE_RETAIN(LegacyString*, _spcattackValue2, spcAttackValue2);
 		//unsigned int    _spcattackValue2;
-		CC_SYNTHESIZE(__String*, _spcattackType2, spcAttack2Type);
+		CC_SYNTHESIZE(LegacyString*, _spcattackType2, spcAttack2Type);
 		int				_spcattackRangeX2;
 		int				_spcattackRangeY2;
 		unsigned int				_spcattackcoldDown2;
 
-		CC_SYNTHESIZE_RETAIN(__String*, _spcattackValue3, spcAttackValue3);
+		CC_SYNTHESIZE_RETAIN(LegacyString*, _spcattackValue3, spcAttackValue3);
 		//unsigned int    _spcattackValue3;
-		CC_SYNTHESIZE(__String*, _spcattackType3, spcAttack3Type);
+		CC_SYNTHESIZE(LegacyString*, _spcattackType3, spcAttack3Type);
 		int				_spcattackRangeX3;
 		int				_spcattackRangeY3;
 		unsigned int				_spcattackcoldDown3;
 
 
-		CC_SYNTHESIZE_RETAIN(__String*, _tempAttackValue1, tempAttackValue1);
+		CC_SYNTHESIZE_RETAIN(LegacyString*, _tempAttackValue1, tempAttackValue1);
 		int            _tempcoldDown1;
 
 
-		CC_SYNTHESIZE(__String*, _tempAttackType, TempAttackType);
+		CC_SYNTHESIZE(LegacyString*, _tempAttackType, TempAttackType);
 
-		CC_SYNTHESIZE(__String*, _effectType, EffectType);
+		CC_SYNTHESIZE(LegacyString*, _effectType, EffectType);
 		bool			_hurtFromLeft;
 		bool			_hurtFromRight;
 
 
 
-		CC_SYNTHESIZE(__Array*, _damageArray, DamageArray);
+		CC_SYNTHESIZE(LegacyArray*, _damageArray, DamageArray);
 
 		unsigned int damageEffectCount;
-		CC_SYNTHESIZE(__Array*, _monsterArray, MonsterArray);
+		CC_SYNTHESIZE(LegacyArray*, _monsterArray, MonsterArray);
 
 		//movement
 		CC_SYNTHESIZE(cocos2d::Vec2, _velocity, Velocity);
@@ -371,25 +375,25 @@ namespace NarutoSenki {
 		bool				_isCanOugis1;
 		bool				_isCanOugis2;
 
-		__Array* idleArray;
-		__Array* walkArray;
-		__Array* hurtArray;
-		__Array* airHurtArray;
-		__Array* knockDownArray;
-		__Array* floatArray;
-		__Array* deadArray;
-		__Array* nattackArray;
-		__Array* skill1Array;
-		__Array* skill2Array;
-		__Array* skill3Array;
-		__Array* skill4Array;
-		__Array* skill5Array;
+		LegacyArray* idleArray;
+		LegacyArray* walkArray;
+		LegacyArray* hurtArray;
+		LegacyArray* airHurtArray;
+		LegacyArray* knockDownArray;
+		LegacyArray* floatArray;
+		LegacyArray* deadArray;
+		LegacyArray* nattackArray;
+		LegacyArray* skill1Array;
+		LegacyArray* skill2Array;
+		LegacyArray* skill3Array;
+		LegacyArray* skill4Array;
+		LegacyArray* skill5Array;
 
-		__Array* skillSPC1Array;
-		__Array* skillSPC2Array;
-		__Array* skillSPC3Array;
-		__Array* skillSPC4Array;
-		__Array* skillSPC5Array;
+		LegacyArray* skillSPC1Array;
+		LegacyArray* skillSPC2Array;
+		LegacyArray* skillSPC3Array;
+		LegacyArray* skillSPC4Array;
+		LegacyArray* skillSPC5Array;
 
 
 		virtual void	    dealloc();
@@ -412,11 +416,11 @@ namespace NarutoSenki {
 
 
 
-		void				readDate(__Array* tmpDate, __String*& attackType, __String*& attackValue, int& attackRangeX, int& attackRangeY, unsigned int& coldDown, int& combatPoint);
+		void				readDate(LegacyArray* tmpDate, LegacyString*& attackType, LegacyString*& attackValue, int& attackRangeX, int& attackRangeY, unsigned int& coldDown, int& combatPoint);
 
-		Action* createAnimation(__Array* ationArray, float fps, bool isRepeat, bool isReturn);
+		Action* createAnimation(LegacyArray* ationArray, float fps, bool isRepeat, bool isReturn);
 
-		__Dictionary* callValue;
+		LegacyDictionary* callValue;
 
 		void				setSound(Node* sender, void* date);
 		void				setDSound(Node* sender, void* date);
@@ -428,11 +432,11 @@ namespace NarutoSenki {
 		void				stopMove(float dt);
 		void				stopJump(Node* sender, void* date);
 		void				setAttackBox(Node* sender, void* date);
-		void				setDamage(__String* effectType, unsigned int attackValue, bool isFlipped);
+		void				setDamage(LegacyString* effectType, unsigned int attackValue, bool isFlipped);
 		void				setDamgeDisplay(unsigned int value, const char* type);
 
 		void				setItemEffect(Node* sender, void* date);
-		void				setDamgeEffect(__String* type);
+		void				setDamgeEffect(LegacyString* type);
 		void				setMonAttack(Node* sender, void* date);
 		void				setTransform();
 		void				setOugis();
