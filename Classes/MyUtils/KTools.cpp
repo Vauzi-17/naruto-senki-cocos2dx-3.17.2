@@ -24,15 +24,19 @@ using namespace CocosDenshion;
 
 namespace {
 
-__Array* createLegacyArray()
+using LegacyArray = __Array;
+using LegacyDictionary = __Dictionary;
+using LegacyString = __String;
+
+LegacyArray* createLegacyArray()
 {
-	return __Array::create();
+	return LegacyArray::create();
 }
 
-void addStringEntry(__Array* target, const char* key, const char* value)
+void addStringEntry(LegacyArray* target, const char* key, const char* value)
 {
-	auto entry = __Dictionary::create();
-	entry->setObject(__String::create(value), key);
+	auto entry = LegacyDictionary::create();
+	entry->setObject(LegacyString::create(value), key);
 	target->addObject(entry);
 }
 

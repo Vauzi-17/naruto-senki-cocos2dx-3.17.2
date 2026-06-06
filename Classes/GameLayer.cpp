@@ -15,9 +15,11 @@ using namespace CocosDenshion;
 
 namespace {
 
-__Array* createGameplayArray()
+using LegacyArray = __Array;
+
+LegacyArray* createGameplayArray()
 {
-	return __Array::create();
+	return LegacyArray::create();
 }
 
 }
