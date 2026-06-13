@@ -6,14 +6,14 @@ USING_NS_CC;
 
 namespace
 {
-__String* createElementIntString(int value)
+NarutoSenkiLegacy::String* createElementIntString(int value)
 {
-	return __String::create(cocos2d::StringUtils::format("%d", value));
+	return NarutoSenkiLegacy::String::create(cocos2d::StringUtils::format("%d", value));
 }
 
-__String* createElementFloatString(float value)
+NarutoSenkiLegacy::String* createElementFloatString(float value)
 {
-	return __String::create(cocos2d::StringUtils::format("%f", value));
+	return NarutoSenkiLegacy::String::create(cocos2d::StringUtils::format("%f", value));
 }
 }
 
@@ -69,13 +69,13 @@ bool HeroElement::init(){
 
 };
 
-void HeroElement::setID(__String* character,__String* role,__String* group){
+void HeroElement::setID(NarutoSenkiLegacy::String* character,NarutoSenkiLegacy::String* role,NarutoSenkiLegacy::String* group){
 
 	this->setCharacter(character);
 	this->setRole(role);
 	this->setGroup(group);
 
-	__Array* animationArray=__Array::create();
+	NarutoSenkiLegacy::Array* animationArray=NarutoSenkiLegacy::Array::create();
 	std::string filePath;
 
 	KTools* tool= KTools::create();
@@ -99,11 +99,11 @@ void HeroElement::setID(__String* character,__String* role,__String* group){
 
 	SpriteFrame* firstFrame=NULL;
 	if(animationArray->count()>0){
-		__Array* firstAction=(__Array*)animationArray->objectAtIndex(0);
+		NarutoSenkiLegacy::Array* firstAction=(NarutoSenkiLegacy::Array*)animationArray->objectAtIndex(0);
 		if(firstAction && firstAction->count()>1){
-			__Array* firstFrames=(__Array*)firstAction->objectAtIndex(1);
+			NarutoSenkiLegacy::Array* firstFrames=(NarutoSenkiLegacy::Array*)firstAction->objectAtIndex(1);
 			if(firstFrames && firstFrames->count()>0){
-				__Dictionary* firstFrameDict=(__Dictionary*)firstFrames->objectAtIndex(0);
+				NarutoSenkiLegacy::Dictionary* firstFrameDict=(NarutoSenkiLegacy::Dictionary*)firstFrames->objectAtIndex(0);
 				const char* firstFrameName=firstFrameDict->valueForKey("frameName")->getCString();
 				firstFrame=SpriteFrameCache::getInstance()->spriteFrameByName(firstFrameName);
 			}
@@ -116,9 +116,9 @@ void HeroElement::setID(__String* character,__String* role,__String* group){
 
 	//init Attribute; & indleFrame
 
-	__Array* tmpAction=(__Array*)(animationArray->objectAtIndex(0));
-	__Array* tmpDate=(__Array *)(tmpAction->objectAtIndex(0));
-	idleArray=(__Array*)(tmpAction->objectAtIndex(1));
+	NarutoSenkiLegacy::Array* tmpAction=(NarutoSenkiLegacy::Array*)(animationArray->objectAtIndex(0));
+	NarutoSenkiLegacy::Array* tmpDate=(NarutoSenkiLegacy::Array *)(tmpAction->objectAtIndex(0));
+	idleArray=(NarutoSenkiLegacy::Array*)(tmpAction->objectAtIndex(1));
 
 	if(strcmp(this->getCharacter()->getCString(),"Kakashi")==0||
 		strcmp(this->getCharacter()->getCString(),"Deidara")==0 ||
@@ -147,29 +147,29 @@ void HeroElement::setID(__String* character,__String* role,__String* group){
 	}
 
 
-	__String* tmpName;
-	__String* tmpHpMax;
+	NarutoSenkiLegacy::String* tmpName;
+	NarutoSenkiLegacy::String* tmpHpMax;
 	int tmpWidth;
 	int tmpHeight;
 	unsigned int tmpSpeed;
 	int tmpCombatPoint;
 	this->readDate(tmpDate,tmpName,tmpHpMax,tmpWidth,tmpHeight,tmpSpeed,tmpCombatPoint);
 	this->setMaxHP(createElementIntString(std::atoi(tmpHpMax->getCString())));
-	this->setHP(__String::create(this->getMaxHP()->getCString()));
+	this->setHP(NarutoSenkiLegacy::String::create(this->getMaxHP()->getCString()));
 
 	this->setHeight(tmpHeight);
 	this->setWalkSpeed(tmpSpeed);
 	_originSpeed=tmpSpeed;
 
 	if(!this->getCKR() && !this->getCKR2()){
-		this->setCKR(__String::create("0"));
-		this->setCKR2(__String::create("0"));
+		this->setCKR(NarutoSenkiLegacy::String::create("0"));
+		this->setCKR2(NarutoSenkiLegacy::String::create("0"));
 	}
 
 
 	//init WalkFrame
-	tmpAction=(__Array*)(animationArray->objectAtIndex(1));
-	walkArray=(__Array*)(tmpAction->objectAtIndex(1));
+	tmpAction=(NarutoSenkiLegacy::Array*)(animationArray->objectAtIndex(1));
+	walkArray=(NarutoSenkiLegacy::Array*)(tmpAction->objectAtIndex(1));
 
 	if(strcmp(this->getCharacter()->getCString(),"Konan")==0 ||
 		strcmp(this->getCharacter()->getCString(),"Deidara")==0 ||
@@ -203,8 +203,8 @@ void HeroElement::setID(__String* character,__String* role,__String* group){
 
 
 	//init HurtFrame
-	tmpAction=(__Array*)(animationArray->objectAtIndex(2));
-	hurtArray=(__Array*)(tmpAction->objectAtIndex(1));
+	tmpAction=(NarutoSenkiLegacy::Array*)(animationArray->objectAtIndex(2));
+	hurtArray=(NarutoSenkiLegacy::Array*)(tmpAction->objectAtIndex(1));
 
 	if(strcmp(this->getCharacter()->getCString(),"Sasuke")==0||
 		strcmp(this->getCharacter()->getCString(),"ImmortalSasuke")==0
@@ -214,12 +214,12 @@ void HeroElement::setID(__String* character,__String* role,__String* group){
 
 
 	//init AirHurtFrame
-	tmpAction=(__Array*)(animationArray->objectAtIndex(3));
-	airHurtArray=(__Array*)(tmpAction->objectAtIndex(1));
+	tmpAction=(NarutoSenkiLegacy::Array*)(animationArray->objectAtIndex(3));
+	airHurtArray=(NarutoSenkiLegacy::Array*)(tmpAction->objectAtIndex(1));
 
 	//init KnockDownFrame
-	tmpAction=(__Array*)(animationArray->objectAtIndex(4));
-	knockDownArray=(__Array*)(tmpAction->objectAtIndex(1));
+	tmpAction=(NarutoSenkiLegacy::Array*)(animationArray->objectAtIndex(4));
+	knockDownArray=(NarutoSenkiLegacy::Array*)(tmpAction->objectAtIndex(1));
 
 	if(strcmp(this->getCharacter()->getCString(),"Itachi")==0 ||
 		strcmp(this->getCharacter()->getCString(),"Sasuke")==0 ||
@@ -230,24 +230,24 @@ void HeroElement::setID(__String* character,__String* role,__String* group){
 	}
 
 	//init FloatFrame
-	tmpAction=(__Array*)(animationArray->objectAtIndex(5));
-	floatArray=(__Array*)(tmpAction->objectAtIndex(1));
+	tmpAction=(NarutoSenkiLegacy::Array*)(animationArray->objectAtIndex(5));
+	floatArray=(NarutoSenkiLegacy::Array*)(tmpAction->objectAtIndex(1));
 
 	//init DeadFrame
-	tmpAction=(__Array*)(animationArray->objectAtIndex(6));
-	deadArray=(__Array*)(tmpAction->objectAtIndex(1));
+	tmpAction=(NarutoSenkiLegacy::Array*)(animationArray->objectAtIndex(6));
+	deadArray=(NarutoSenkiLegacy::Array*)(tmpAction->objectAtIndex(1));
 
 
 	//init nAttack date & Frame Array
-	tmpAction=(__Array*)(animationArray->objectAtIndex(7));
-	tmpDate=(__Array *)(tmpAction->objectAtIndex(0));
-	__String* tmpValue;
+	tmpAction=(NarutoSenkiLegacy::Array*)(animationArray->objectAtIndex(7));
+	tmpDate=(NarutoSenkiLegacy::Array *)(tmpAction->objectAtIndex(0));
+	NarutoSenkiLegacy::String* tmpValue;
 	unsigned int tmpCD;
 	this->readDate(tmpDate,_nattackType,tmpValue,_nattackRangeX,_nattackRangeY,tmpCD,tmpCombatPoint);
 	this->setnAttackValue(tmpValue);
 	_nattackType->retain();
 
-	nattackArray=(__Array *)(tmpAction->objectAtIndex(1));
+	nattackArray=(NarutoSenkiLegacy::Array *)(tmpAction->objectAtIndex(1));
 
 	if(strcmp(this->getCharacter()->getCString(),"Sai")==0||
 		strcmp(this->getCharacter()->getCString(),"Tenten")==0||
@@ -282,24 +282,24 @@ void HeroElement::setID(__String* character,__String* role,__String* group){
 
 
 	//init skill1 date & Frame Array
-	tmpAction=(__Array*)(animationArray->objectAtIndex(8));
-	tmpDate=(__Array *)(tmpAction->objectAtIndex(0));
+	tmpAction=(NarutoSenkiLegacy::Array*)(animationArray->objectAtIndex(8));
+	tmpDate=(NarutoSenkiLegacy::Array *)(tmpAction->objectAtIndex(0));
 
 	this->readDate(tmpDate,_sattackType1,tmpValue,_sattackRangeX1,_sattackRangeY1,_sattackcoldDown1,_sattackCombatPoint1);
 	this->setsAttackValue1(tmpValue);
 	_sattackType1->retain();
 
-	skill1Array=(__Array *)(tmpAction->objectAtIndex(1));
+	skill1Array=(NarutoSenkiLegacy::Array *)(tmpAction->objectAtIndex(1));
 
 
 
 	//init skill2 date & Frame Array
-	tmpAction=(__Array*)(animationArray->objectAtIndex(9));
-	tmpDate=(__Array *)(tmpAction->objectAtIndex(0));
+	tmpAction=(NarutoSenkiLegacy::Array*)(animationArray->objectAtIndex(9));
+	tmpDate=(NarutoSenkiLegacy::Array *)(tmpAction->objectAtIndex(0));
 	this->readDate(tmpDate,_sattackType2,tmpValue,_sattackRangeX2,_sattackRangeY2,_sattackcoldDown2,_sattackCombatPoint2);
 	_sattackType2->retain();
 	this->setsAttackValue2(tmpValue);
-	skill2Array=(__Array *)(tmpAction->objectAtIndex(1));
+	skill2Array=(NarutoSenkiLegacy::Array *)(tmpAction->objectAtIndex(1));
 
 	if(strcmp(this->getCharacter()->getCString(),"Kakashi")==0 ){
 		skill1Array->retain();
@@ -313,30 +313,30 @@ void HeroElement::setID(__String* character,__String* role,__String* group){
 
 
 	//init skill3 date & Frame Array
-	tmpAction=(__Array*)(animationArray->objectAtIndex(10));
-	tmpDate=(__Array *)(tmpAction->objectAtIndex(0));
+	tmpAction=(NarutoSenkiLegacy::Array*)(animationArray->objectAtIndex(10));
+	tmpDate=(NarutoSenkiLegacy::Array *)(tmpAction->objectAtIndex(0));
 	this->readDate(tmpDate,_sattackType3,tmpValue,_sattackRangeX3,_sattackRangeY3,_sattackcoldDown3,_sattackCombatPoint3);
 	_sattackType3->retain();
 	this->setsAttackValue3(tmpValue);
-	skill3Array=(__Array *)(tmpAction->objectAtIndex(1));
+	skill3Array=(NarutoSenkiLegacy::Array *)(tmpAction->objectAtIndex(1));
 
 
 	//init skill4 date & Frame Array
-	tmpAction=(__Array*)(animationArray->objectAtIndex(11));
-	tmpDate=(__Array *)(tmpAction->objectAtIndex(0));
+	tmpAction=(NarutoSenkiLegacy::Array*)(animationArray->objectAtIndex(11));
+	tmpDate=(NarutoSenkiLegacy::Array *)(tmpAction->objectAtIndex(0));
 	this->readDate(tmpDate,_sattackType4,tmpValue,_sattackRangeX4,_sattackRangeY4,_sattackcoldDown4,_sattackCombatPoint4);
 	this->setsAttackValue4(tmpValue);
 	_sattackType4->retain();
-	skill4Array=(__Array *)(tmpAction->objectAtIndex(1));
+	skill4Array=(NarutoSenkiLegacy::Array *)(tmpAction->objectAtIndex(1));
 
 	//init skill5 date & Frame Array
 
-	tmpAction=(__Array*)(animationArray->objectAtIndex(12));
-	tmpDate=(__Array *)(tmpAction->objectAtIndex(0));
+	tmpAction=(NarutoSenkiLegacy::Array*)(animationArray->objectAtIndex(12));
+	tmpDate=(NarutoSenkiLegacy::Array *)(tmpAction->objectAtIndex(0));
 	this->readDate(tmpDate,_sattackType5,tmpValue,_sattackRangeX5,_sattackRangeY5,_sattackcoldDown5,_sattackCombatPoint5);
 	this->setsAttackValue5(tmpValue);
 	_sattackType5->retain();
-	skill5Array=(__Array *)(tmpAction->objectAtIndex(1));
+	skill5Array=(NarutoSenkiLegacy::Array *)(tmpAction->objectAtIndex(1));
 
 
 	//init specal Frame
@@ -349,12 +349,12 @@ void HeroElement::setID(__String* character,__String* role,__String* group){
 		strcmp(this->getCharacter()->getCString(),"Tobi")==0 ||
 		strcmp(this->getCharacter()->getCString(),"RockLee")==0
 		){
-			tmpAction=(__Array*)(animationArray->objectAtIndex(17));
-			tmpDate=(__Array *)(tmpAction->objectAtIndex(0));
+			tmpAction=(NarutoSenkiLegacy::Array*)(animationArray->objectAtIndex(17));
+			tmpDate=(NarutoSenkiLegacy::Array *)(tmpAction->objectAtIndex(0));
 			this->readDate(tmpDate,_spcattackType1,tmpValue,_spcattackRangeX1,_spcattackRangeY1,_spcattackcoldDown1,tmpCombatPoint);
 			this->setspcAttackValue1(tmpValue);
 			_spcattackType1->retain();
-			skillSPC1Array=(__Array *)(tmpAction->objectAtIndex(1));
+			skillSPC1Array=(NarutoSenkiLegacy::Array *)(tmpAction->objectAtIndex(1));
 			skillSPC1Array->retain();
 
 	}else if(strcmp(this->getCharacter()->getCString(),"Sai")==0 ||
@@ -384,26 +384,26 @@ void HeroElement::setID(__String* character,__String* role,__String* group){
 		strcmp(this->getCharacter()->getCString(),"Kisame")==0
 		){
 
-		tmpAction=(__Array*)(animationArray->objectAtIndex(17));
-		tmpDate=(__Array *)(tmpAction->objectAtIndex(0));
+		tmpAction=(NarutoSenkiLegacy::Array*)(animationArray->objectAtIndex(17));
+		tmpDate=(NarutoSenkiLegacy::Array *)(tmpAction->objectAtIndex(0));
 		this->readDate(tmpDate,_spcattackType1,tmpValue,_spcattackRangeX1,_spcattackRangeY1,_spcattackcoldDown1,tmpCombatPoint);
 		this->setspcAttackValue1(tmpValue);
 		_spcattackType1->retain();
-		skillSPC1Array=(__Array *)(tmpAction->objectAtIndex(1));
+		skillSPC1Array=(NarutoSenkiLegacy::Array *)(tmpAction->objectAtIndex(1));
 		skillSPC1Array->retain();
 
-		tmpAction=(__Array*)(animationArray->objectAtIndex(18));
-		tmpDate=(__Array *)(tmpAction->objectAtIndex(0));
+		tmpAction=(NarutoSenkiLegacy::Array*)(animationArray->objectAtIndex(18));
+		tmpDate=(NarutoSenkiLegacy::Array *)(tmpAction->objectAtIndex(0));
 		this->readDate(tmpDate,_spcattackType2,tmpValue,_spcattackRangeX2,_spcattackRangeY2,_spcattackcoldDown2,tmpCombatPoint);
-		skillSPC2Array=(__Array *)(tmpAction->objectAtIndex(1));
+		skillSPC2Array=(NarutoSenkiLegacy::Array *)(tmpAction->objectAtIndex(1));
 		this->setspcAttackValue2(tmpValue);
 		_spcattackType2->retain();
 		skillSPC2Array->retain();
 
-		tmpAction=(__Array*)(animationArray->objectAtIndex(19));
-		tmpDate=(__Array *)(tmpAction->objectAtIndex(0));
+		tmpAction=(NarutoSenkiLegacy::Array*)(animationArray->objectAtIndex(19));
+		tmpDate=(NarutoSenkiLegacy::Array *)(tmpAction->objectAtIndex(0));
 		this->readDate(tmpDate,_spcattackType3,tmpValue,_spcattackRangeX3,_spcattackRangeY3,_spcattackcoldDown3,tmpCombatPoint);
-		skillSPC3Array=(__Array *)(tmpAction->objectAtIndex(1));
+		skillSPC3Array=(NarutoSenkiLegacy::Array *)(tmpAction->objectAtIndex(1));
 		this->setspcAttackValue3(tmpValue);
 		_spcattackType3->retain();
 		skillSPC3Array->retain();
@@ -419,16 +419,16 @@ void HeroElement::setID(__String* character,__String* role,__String* group){
 		strcmp(this->getCharacter()->getCString(),"Sasuke")==0||
 		strcmp(this->getCharacter()->getCString(),"ImmortalSasuke")==0
 		){
-		tmpAction=(__Array*)(animationArray->objectAtIndex(16));
-		skillSPC4Array=(__Array *)(tmpAction->objectAtIndex(1));
+		tmpAction=(NarutoSenkiLegacy::Array*)(animationArray->objectAtIndex(16));
+		skillSPC4Array=(NarutoSenkiLegacy::Array *)(tmpAction->objectAtIndex(1));
 		skillSPC4Array->retain();
 	}
 
 	if(strcmp(this->getCharacter()->getCString(),"Sasuke")==0 ||
 		strcmp(this->getCharacter()->getCString(),"SageNaruto")==0
 		){
-		tmpAction=(__Array*)(animationArray->objectAtIndex(15));
-		skillSPC5Array=(__Array *)(tmpAction->objectAtIndex(1));
+		tmpAction=(NarutoSenkiLegacy::Array*)(animationArray->objectAtIndex(15));
+		skillSPC5Array=(NarutoSenkiLegacy::Array *)(tmpAction->objectAtIndex(1));
 		skillSPC5Array->retain();
 	}
 
@@ -443,11 +443,11 @@ void HeroElement::setID(__String* character,__String* role,__String* group){
 	}
 
 
-	_damageArray=__Array::create();
+	_damageArray=NarutoSenkiLegacy::Array::create();
 	_damageArray->retain();
 
 	if(this->getLV()==1 && !this->getCoin()){
-		this->setGearArray(__Array::create());
+		this->setGearArray(NarutoSenkiLegacy::Array::create());
 		this->setCoin(50);
 	}
 
@@ -524,7 +524,7 @@ void HeroElement::applyStartLevel6(){
 		_exp=expThresholds[i];
 		this->changeHPbar();
 	}
-	this->setHP(__String::create(this->getMaxHP()->getCString()));
+	this->setHP(NarutoSenkiLegacy::String::create(this->getMaxHP()->getCString()));
 	if(_hpBar){
 		_hpBar->loseHP(this->getHpPercent());
 	}
@@ -872,7 +872,7 @@ void HeroElement::reborn(float dt){
 	{
 		this->registerAcceptAttackListener();
 		this->setOpacity(255);
-		this->setHP(__String::create(this->getMaxHP()->getCString()));
+		this->setHP(NarutoSenkiLegacy::String::create(this->getMaxHP()->getCString()));
 		if(_delegate && _delegate->_isDuelMode && _delegate->currentPlayer){
 			if(strcmp(this->getRole()->getCString(),"Player")==0){
 				_delegate->setHPLose(this->getHpPercent());
@@ -974,13 +974,13 @@ bool Flog::init(){
 
 };
 
-void Flog::setID(__String* character,__String* role,__String* group){
+void Flog::setID(NarutoSenkiLegacy::String* character,NarutoSenkiLegacy::String* role,NarutoSenkiLegacy::String* group){
 
 	this->setCharacter(character);
 	this->setRole(role);
 	this->setGroup(group);
 
-	__Array* animationArray=__Array::create();
+	NarutoSenkiLegacy::Array* animationArray=NarutoSenkiLegacy::Array::create();
 	std::string filePath;
 
 
@@ -994,12 +994,12 @@ void Flog::setID(__String* character,__String* role,__String* group){
 
 	//init Attribute; & indleFrame
 
-	__Array* tmpAction=(__Array*)(animationArray->objectAtIndex(0));
-	__Array* tmpDate=(__Array *)(tmpAction->objectAtIndex(0));
-	idleArray=(__Array*)(tmpAction->objectAtIndex(1));
+	NarutoSenkiLegacy::Array* tmpAction=(NarutoSenkiLegacy::Array*)(animationArray->objectAtIndex(0));
+	NarutoSenkiLegacy::Array* tmpDate=(NarutoSenkiLegacy::Array *)(tmpAction->objectAtIndex(0));
+	idleArray=(NarutoSenkiLegacy::Array*)(tmpAction->objectAtIndex(1));
 
-	__String* tmpName;
-	__String* tmpHpMax;
+	NarutoSenkiLegacy::String* tmpName;
+	NarutoSenkiLegacy::String* tmpHpMax;
 	int tmpWidth;
 	int tmpHeight;
 	unsigned int tmpSpeed;
@@ -1007,7 +1007,7 @@ void Flog::setID(__String* character,__String* role,__String* group){
 
 	this->readDate(tmpDate,tmpName,tmpHpMax,tmpWidth,tmpHeight,tmpSpeed,tmpCombatPoint);
 	this->setMaxHP(createElementIntString(std::atoi(tmpHpMax->getCString())));
-	this->setHP(__String::create(this->getMaxHP()->getCString()));
+	this->setHP(NarutoSenkiLegacy::String::create(this->getMaxHP()->getCString()));
 	this->setHeight(tmpHeight);
 	this->setWalkSpeed(tmpSpeed);
 
@@ -1016,48 +1016,48 @@ void Flog::setID(__String* character,__String* role,__String* group){
 
 
 	if(!this->getCKR() && !this->getCKR2()){
-		this->setCKR(__String::create("0"));
-		this->setCKR2(__String::create("0"));
+		this->setCKR(NarutoSenkiLegacy::String::create("0"));
+		this->setCKR2(NarutoSenkiLegacy::String::create("0"));
 	}
 
 	//init WalkFrame
-	tmpAction=(__Array*)(animationArray->objectAtIndex(1));
-	walkArray=(__Array*)(tmpAction->objectAtIndex(1));
+	tmpAction=(NarutoSenkiLegacy::Array*)(animationArray->objectAtIndex(1));
+	walkArray=(NarutoSenkiLegacy::Array*)(tmpAction->objectAtIndex(1));
 
 
 	//init HurtFrame
-	tmpAction=(__Array*)(animationArray->objectAtIndex(2));
-	hurtArray=(__Array*)(tmpAction->objectAtIndex(1));
+	tmpAction=(NarutoSenkiLegacy::Array*)(animationArray->objectAtIndex(2));
+	hurtArray=(NarutoSenkiLegacy::Array*)(tmpAction->objectAtIndex(1));
 
 	//init AirHurtFrame
-	tmpAction=(__Array*)(animationArray->objectAtIndex(3));
-	airHurtArray=(__Array*)(tmpAction->objectAtIndex(1));
+	tmpAction=(NarutoSenkiLegacy::Array*)(animationArray->objectAtIndex(3));
+	airHurtArray=(NarutoSenkiLegacy::Array*)(tmpAction->objectAtIndex(1));
 
 	//init KnockDownFrame
-	tmpAction=(__Array*)(animationArray->objectAtIndex(4));
-	knockDownArray=(__Array*)(tmpAction->objectAtIndex(1));
+	tmpAction=(NarutoSenkiLegacy::Array*)(animationArray->objectAtIndex(4));
+	knockDownArray=(NarutoSenkiLegacy::Array*)(tmpAction->objectAtIndex(1));
 
 	//init FloatFrame
-	tmpAction=(__Array*)(animationArray->objectAtIndex(5));
-	floatArray=(__Array*)(tmpAction->objectAtIndex(1));
+	tmpAction=(NarutoSenkiLegacy::Array*)(animationArray->objectAtIndex(5));
+	floatArray=(NarutoSenkiLegacy::Array*)(tmpAction->objectAtIndex(1));
 
 	//init DeadFrame
-	tmpAction=(__Array*)(animationArray->objectAtIndex(6));
-	deadArray=(__Array*)(tmpAction->objectAtIndex(1));
+	tmpAction=(NarutoSenkiLegacy::Array*)(animationArray->objectAtIndex(6));
+	deadArray=(NarutoSenkiLegacy::Array*)(tmpAction->objectAtIndex(1));
 
 
 	//init nAttack date & Frame Array
-	tmpAction=(__Array*)(animationArray->objectAtIndex(7));
-	tmpDate=(__Array *)(tmpAction->objectAtIndex(0));
+	tmpAction=(NarutoSenkiLegacy::Array*)(animationArray->objectAtIndex(7));
+	tmpDate=(NarutoSenkiLegacy::Array *)(tmpAction->objectAtIndex(0));
 	unsigned int tmpCD;
-	__String* tmpValue;
+	NarutoSenkiLegacy::String* tmpValue;
 	this->readDate(tmpDate,_nattackType,tmpValue,_nattackRangeX,_nattackRangeY,tmpCD,tmpCombatPoint);
 	this->setnAttackValue(tmpValue);
 	_nattackType->retain();
-	nattackArray=(__Array *)(tmpAction->objectAtIndex(1));
+	nattackArray=(NarutoSenkiLegacy::Array *)(tmpAction->objectAtIndex(1));
 
 
-	_damageArray=__Array::create();
+	_damageArray=NarutoSenkiLegacy::Array::create();
 	_damageArray->retain();
 
 	this->setCoin(50);
@@ -1233,13 +1233,13 @@ bool Tower::init(){
 
 };
 
-void Tower::setID(__String* character,__String* role,__String* group){
+void Tower::setID(NarutoSenkiLegacy::String* character,NarutoSenkiLegacy::String* role,NarutoSenkiLegacy::String* group){
 
 	this->setCharacter(character);
 	this->setRole(role);
 	this->setGroup(group);
 
-	__Array* animationArray=__Array::create();
+	NarutoSenkiLegacy::Array* animationArray=NarutoSenkiLegacy::Array::create();
 	std::string filePath;
 
 
@@ -1264,12 +1264,12 @@ void Tower::setID(__String* character,__String* role,__String* group){
 
 	//init Attribute; & indleFrame
 
-	__Array* tmpAction=(__Array*)(animationArray->objectAtIndex(0));
-	__Array* tmpDate=(__Array *)(tmpAction->objectAtIndex(0));
-	idleArray=(__Array*)(tmpAction->objectAtIndex(1));
+	NarutoSenkiLegacy::Array* tmpAction=(NarutoSenkiLegacy::Array*)(animationArray->objectAtIndex(0));
+	NarutoSenkiLegacy::Array* tmpDate=(NarutoSenkiLegacy::Array *)(tmpAction->objectAtIndex(0));
+	idleArray=(NarutoSenkiLegacy::Array*)(tmpAction->objectAtIndex(1));
 
-	__String* tmpName;
-	__String* tmpHpMax;
+	NarutoSenkiLegacy::String* tmpName;
+	NarutoSenkiLegacy::String* tmpHpMax;
 	int tmpWidth;
 	int tmpHeight;
 	unsigned int tmpSpeed;
@@ -1277,20 +1277,20 @@ void Tower::setID(__String* character,__String* role,__String* group){
 
 	this->readDate(tmpDate,tmpName,tmpHpMax,tmpWidth,tmpHeight,tmpSpeed, tmpCombatPoint);
 	this->setMaxHP(createElementIntString(std::atoi(tmpHpMax->getCString())));
-	this->setHP(__String::create(this->getMaxHP()->getCString()));
+	this->setHP(NarutoSenkiLegacy::String::create(this->getMaxHP()->getCString()));
 
 	this->setHeight(tmpHeight);
 	this->setWalkSpeed(tmpSpeed);
 
 
 	if(!this->getCKR() && !this->getCKR2()){
-		this->setCKR(__String::create("0"));
-		this->setCKR2(__String::create("0"));
+		this->setCKR(NarutoSenkiLegacy::String::create("0"));
+		this->setCKR2(NarutoSenkiLegacy::String::create("0"));
 	}
 
 	//init DeadFrame
-	tmpAction=(__Array*)(animationArray->objectAtIndex(6));
-	deadArray=(__Array*)(tmpAction->objectAtIndex(1));
+	tmpAction=(NarutoSenkiLegacy::Array*)(animationArray->objectAtIndex(6));
+	deadArray=(NarutoSenkiLegacy::Array*)(tmpAction->objectAtIndex(1));
 
 	this->setCoin(50);
 
@@ -1327,7 +1327,7 @@ void Tower::dealloc(){
 	this->stopAllActions();
 
 	Ref* pObject;
-	__Array* list;
+	NarutoSenkiLegacy::Array* list;
 	for(int i=0;i<2;i++){
 		if(i==0){
 			list=_delegate->_KonohaFlogArray;
@@ -1391,13 +1391,13 @@ bool Monster::init(){
 
 };
 
-void Monster::setID(__String* character,__String* role,__String* group){
+void Monster::setID(NarutoSenkiLegacy::String* character,NarutoSenkiLegacy::String* role,NarutoSenkiLegacy::String* group){
 
 	this->setCharacter(character);
 	this->setRole(role);
 	this->setGroup(group);
 
-	__Array* animationArray=__Array::create();
+	NarutoSenkiLegacy::Array* animationArray=NarutoSenkiLegacy::Array::create();
 	std::string filePath;
 
 
@@ -1411,12 +1411,12 @@ void Monster::setID(__String* character,__String* role,__String* group){
 
 	//init Attribute; & indleFrame
 
-	__Array* tmpAction=(__Array*)(animationArray->objectAtIndex(0));
-	__Array* tmpDate=(__Array *)(tmpAction->objectAtIndex(0));
-	idleArray=(__Array*)(tmpAction->objectAtIndex(1));
+	NarutoSenkiLegacy::Array* tmpAction=(NarutoSenkiLegacy::Array*)(animationArray->objectAtIndex(0));
+	NarutoSenkiLegacy::Array* tmpDate=(NarutoSenkiLegacy::Array *)(tmpAction->objectAtIndex(0));
+	idleArray=(NarutoSenkiLegacy::Array*)(tmpAction->objectAtIndex(1));
 
-	__String* tmpName;
-	__String* tmpHpMax;
+	NarutoSenkiLegacy::String* tmpName;
+	NarutoSenkiLegacy::String* tmpHpMax;
 	int tmpWidth;
 	int tmpHeight;
 	unsigned int tmpSpeed;
@@ -1424,7 +1424,7 @@ void Monster::setID(__String* character,__String* role,__String* group){
 
 	this->readDate(tmpDate,tmpName,tmpHpMax,tmpWidth,tmpHeight,tmpSpeed, tmpCombatPoint);
 	this->setMaxHP(createElementIntString(std::atoi(tmpHpMax->getCString())));
-	this->setHP(__String::create(this->getMaxHP()->getCString()));
+	this->setHP(NarutoSenkiLegacy::String::create(this->getMaxHP()->getCString()));
 
 	this->setHeight(tmpHeight);
 	this->setWalkSpeed(tmpSpeed);
@@ -1432,29 +1432,29 @@ void Monster::setID(__String* character,__String* role,__String* group){
 
 
 	if(!this->getCKR() && !this->getCKR2()){
-		this->setCKR(__String::create("0"));
-		this->setCKR2(__String::create("0"));
+		this->setCKR(NarutoSenkiLegacy::String::create("0"));
+		this->setCKR2(NarutoSenkiLegacy::String::create("0"));
 	}
 
 	//init WalkFrame
-	tmpAction=(__Array*)(animationArray->objectAtIndex(1));
-	walkArray=(__Array*)(tmpAction->objectAtIndex(1));
+	tmpAction=(NarutoSenkiLegacy::Array*)(animationArray->objectAtIndex(1));
+	walkArray=(NarutoSenkiLegacy::Array*)(tmpAction->objectAtIndex(1));
 
 
 	//init DeadFrame
-	tmpAction=(__Array*)(animationArray->objectAtIndex(6));
-	deadArray=(__Array*)(tmpAction->objectAtIndex(1));
+	tmpAction=(NarutoSenkiLegacy::Array*)(animationArray->objectAtIndex(6));
+	deadArray=(NarutoSenkiLegacy::Array*)(tmpAction->objectAtIndex(1));
 
 
 	//init nAttack date & Frame Array
-	tmpAction=(__Array*)(animationArray->objectAtIndex(7));
-	tmpDate=(__Array *)(tmpAction->objectAtIndex(0));
+	tmpAction=(NarutoSenkiLegacy::Array*)(animationArray->objectAtIndex(7));
+	tmpDate=(NarutoSenkiLegacy::Array *)(tmpAction->objectAtIndex(0));
 	unsigned int tmpCD;
-	__String* tmpValue;
+	NarutoSenkiLegacy::String* tmpValue;
 	this->readDate(tmpDate,_nattackType,tmpValue,_nattackRangeX,_nattackRangeY,tmpCD,tmpCombatPoint);
 	this->setnAttackValue(tmpValue);
 	_nattackType->retain();
-	nattackArray=(__Array *)(tmpAction->objectAtIndex(1));
+	nattackArray=(NarutoSenkiLegacy::Array *)(tmpAction->objectAtIndex(1));
 
 	this->setCoin(50);
 
@@ -1566,8 +1566,8 @@ void Monster::setAI(float dt){
 				float distanceX=_isFlipped?tempHero->getPositionX() - this->getPositionX() + this->getContentSize().width:tempHero->getPositionX() - this->getPositionX()-this->getContentSize().width;
 				if( abs(distanceX)< 32 &&  distanceY< 48){
 					if(!this->_monsterArray){
-						__Dictionary* dic=__Dictionary::create();
-						__String* monterName=__String::create("KageHand");
+						NarutoSenkiLegacy::Dictionary* dic=NarutoSenkiLegacy::Dictionary::create();
+						NarutoSenkiLegacy::String* monterName=NarutoSenkiLegacy::String::create("KageHand");
 						dic->setObject(monterName,1);
 						this->setMon(this,(void*) dic);
 						this->unschedule(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::setAI));
@@ -1895,7 +1895,7 @@ bool Bullet::init(){
 
 };
 
-void Bullet::setID(__String* character,__String* role,__String* group){
+void Bullet::setID(NarutoSenkiLegacy::String* character,NarutoSenkiLegacy::String* role,NarutoSenkiLegacy::String* group){
 
 
 
@@ -1903,7 +1903,7 @@ void Bullet::setID(__String* character,__String* role,__String* group){
 	this->setRole(role);
 	this->setGroup(group);
 
-	__Array* animationArray=__Array::create();
+	NarutoSenkiLegacy::Array* animationArray=NarutoSenkiLegacy::Array::create();
 	std::string filePath;
 
 
@@ -1923,26 +1923,26 @@ void Bullet::setID(__String* character,__String* role,__String* group){
 
 	//init Attribute; & idleFrame
 
-	__Array* tmpAction=(__Array*)(animationArray->objectAtIndex(0));
-	__Array* tmpDate=(__Array *)(tmpAction->objectAtIndex(0));
-	idleArray=(__Array*)(tmpAction->objectAtIndex(1));
+	NarutoSenkiLegacy::Array* tmpAction=(NarutoSenkiLegacy::Array*)(animationArray->objectAtIndex(0));
+	NarutoSenkiLegacy::Array* tmpDate=(NarutoSenkiLegacy::Array *)(tmpAction->objectAtIndex(0));
+	idleArray=(NarutoSenkiLegacy::Array*)(tmpAction->objectAtIndex(1));
 
 	//init nAttack date & Frame Array
-	tmpAction=(__Array*)(animationArray->objectAtIndex(7));
-	tmpDate=(__Array *)(tmpAction->objectAtIndex(0));
+	tmpAction=(NarutoSenkiLegacy::Array*)(animationArray->objectAtIndex(7));
+	tmpDate=(NarutoSenkiLegacy::Array *)(tmpAction->objectAtIndex(0));
 	unsigned int tmpCD;
 	int tmpCombatPoint;
-	__String* tmpValue;
+	NarutoSenkiLegacy::String* tmpValue;
 
 	this->readDate(tmpDate,_nattackType,tmpValue,_nattackRangeX,_nattackRangeY,tmpCD,tmpCombatPoint);
 	this->setnAttackValue(tmpValue);
 	_nattackType->retain();
-	nattackArray=(__Array *)(tmpAction->objectAtIndex(1));
+	nattackArray=(NarutoSenkiLegacy::Array *)(tmpAction->objectAtIndex(1));
 
 	if(strcmp(this->getCharacter()->getCString(),"Amaterasu")==0 ){
 		//init DeadFrame
-		tmpAction=(__Array*)(animationArray->objectAtIndex(6));
-		deadArray=(__Array*)(tmpAction->objectAtIndex(1));
+		tmpAction=(NarutoSenkiLegacy::Array*)(animationArray->objectAtIndex(6));
+		deadArray=(NarutoSenkiLegacy::Array*)(tmpAction->objectAtIndex(1));
 	}
 
 	this->setCoin(50);

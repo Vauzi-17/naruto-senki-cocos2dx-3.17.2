@@ -24,9 +24,9 @@ using namespace CocosDenshion;
 
 namespace {
 
-using LegacyArray = __Array;
-using LegacyDictionary = __Dictionary;
-using LegacyString = __String;
+using LegacyArray = NarutoSenkiLegacy::Array;
+using LegacyDictionary = NarutoSenkiLegacy::Dictionary;
+using LegacyString = NarutoSenkiLegacy::String;
 
 LegacyArray* createLegacyArray()
 {
@@ -765,7 +765,7 @@ void KTools::updateData(){
 }
 
 
-bool KTools::readXMLToArray(const char* filePath,__Array* &array)
+bool KTools::readXMLToArray(const char* filePath,NarutoSenkiLegacy::Array* &array)
 {
 
 	tinyxml2::XMLDocument* doc = new tinyxml2::XMLDocument();  

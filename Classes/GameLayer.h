@@ -1,5 +1,6 @@
 #pragma once
 #include "cocos2d.h"
+#include "LegacyData.h"
 #include "SimpleAudioEngine.h"
 #include "Defines.h"
 #include "cocos-ext.h"
@@ -24,7 +25,7 @@ namespace NarutoSenki { class ActionManager; }
 class BGLayer;
 class HudLayer;
 
-using GameLayerLegacyArray = __Array;
+using GameLayerLegacyArray = NarutoSenkiLegacy::Array;
 
 class GameLayer :public Layer{
 public:

@@ -1,5 +1,6 @@
 #pragma once
 #include "cocos2d.h"
+#include "LegacyData.h"
 #include "Defines.h"
 #include "SimpleAudioEngine.h"
 #include "GameLayer.h"
@@ -25,7 +26,7 @@
 USING_NS_CC;
 using namespace rapidjson;
 
-using LoadLayerLegacyArray = __Array;
+using LoadLayerLegacyArray = NarutoSenkiLegacy::Array;
 
 class LoadLayer : public Layer{
 

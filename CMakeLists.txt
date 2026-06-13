@@ -85,6 +85,7 @@ list(APPEND GAME_HEADER
     Classes/GearLayer.h
     Classes/HPBar.h
     Classes/HeroPayload.h
+    Classes/LegacyData.h
     Classes/HudLayer.h
     Classes/JoyStick.h
     Classes/LoadLayer.h

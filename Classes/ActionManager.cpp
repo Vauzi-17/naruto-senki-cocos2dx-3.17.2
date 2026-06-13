@@ -21,17 +21,17 @@ namespace
 			steady_clock::now() - startTime).count());
 	}
 
-	__String* createActionIntString(int value)
+	NarutoSenkiLegacy::String* createActionIntString(int value)
 	{
-		return __String::create(cocos2d::StringUtils::format("%d", value));
+		return NarutoSenkiLegacy::String::create(cocos2d::StringUtils::format("%d", value));
 	}
 
-	__String* createActionFloatString(float value)
+	NarutoSenkiLegacy::String* createActionFloatString(float value)
 	{
-		return __String::create(cocos2d::StringUtils::format("%f", value));
+		return NarutoSenkiLegacy::String::create(cocos2d::StringUtils::format("%f", value));
 	}
 
-	Animation* createAnimationFromFrameArray(__Array* frames, float delay)
+	Animation* createAnimationFromFrameArray(NarutoSenkiLegacy::Array* frames, float delay)
 	{
 		Vector<SpriteFrame*> frameVector;
 		Ref* object = NULL;
@@ -47,7 +47,7 @@ namespace
 		return Animation::createWithSpriteFrames(frameVector, delay);
 	}
 
-	Sequence* createSequenceFromActionArray(__Array* actions)
+	Sequence* createSequenceFromActionArray(NarutoSenkiLegacy::Array* actions)
 	{
 		if (!actions || actions->count() == 0)
 		{
@@ -303,24 +303,24 @@ void NarutoSenki::ActionManager::unregisterAcceptAttackListener()
 }
 
 
-void NarutoSenki::ActionManager::setID(__String* character,__String* role,__String* group){}
+void NarutoSenki::ActionManager::setID(NarutoSenkiLegacy::String* character,NarutoSenkiLegacy::String* role,NarutoSenkiLegacy::String* group){}
 
 void NarutoSenki::ActionManager::setHPbar(){}
 void NarutoSenki::ActionManager::setShadows(){}
 void NarutoSenki::ActionManager::changeHPbar(){}
 
 
-void NarutoSenki::ActionManager::readDate(__Array* tmpDate,__String* &attackType,__String* &attackValue,int &attackRangeX,int &attackRangeY,unsigned int &coldDown,int &combatPoint){
+void NarutoSenki::ActionManager::readDate(NarutoSenkiLegacy::Array* tmpDate,NarutoSenkiLegacy::String* &attackType,NarutoSenkiLegacy::String* &attackValue,int &attackRangeX,int &attackRangeY,unsigned int &coldDown,int &combatPoint){
 	
-	__Dictionary* tmpDict;
+	NarutoSenkiLegacy::Dictionary* tmpDict;
 	for(unsigned int i=0;i<tmpDate->count();++i){
-		tmpDict=(__Dictionary * )(tmpDate->objectAtIndex(i));
+		tmpDict=(NarutoSenkiLegacy::Dictionary * )(tmpDate->objectAtIndex(i));
 		switch(i){
 		case 0:
-			attackType=__String::create(tmpDict->valueForKey("attackType")->getCString());
+			attackType=NarutoSenkiLegacy::String::create(tmpDict->valueForKey("attackType")->getCString());
 			break;
 		case 1:
-			attackValue=__String::create(tmpDict->valueForKey("attackValue")->getCString());
+			attackValue=NarutoSenkiLegacy::String::create(tmpDict->valueForKey("attackValue")->getCString());
 				//tmpDict->valueForKey("attackValue")->intValue();
 			break;
 		case 2:
@@ -1208,12 +1208,12 @@ void NarutoSenki::ActionManager::acceptAttack(Ref* object){
 };
 
 
-Action* NarutoSenki::ActionManager::createAnimation(__Array* ationArray,float fps,bool isRepeat,bool isReturn){
+Action* NarutoSenki::ActionManager::createAnimation(NarutoSenkiLegacy::Array* ationArray,float fps,bool isRepeat,bool isReturn){
 
 
 	Ref* tObject;
-	__Array* animeFrames=__Array::create();
-	__Array* seqArray=__Array::create();
+	NarutoSenkiLegacy::Array* animeFrames=NarutoSenkiLegacy::Array::create();
+	NarutoSenkiLegacy::Array* seqArray=NarutoSenkiLegacy::Array::create();
 	Animation* tempAnimation;
 	Action* tempAction;
 	Action* seq;
@@ -1223,12 +1223,12 @@ Action* NarutoSenki::ActionManager::createAnimation(__Array* ationArray,float fp
 
 
 		tObject = ationArray->objectAtIndex(ccIndex);
-		__Dictionary* dic=(__Dictionary *)tObject;
+		NarutoSenkiLegacy::Dictionary* dic=(NarutoSenkiLegacy::Dictionary *)tObject;
 		DictElement* ele = NULL;
 		DictElement* tmpEle = NULL;
 
 		if (dic) HASH_ITER(hh, dic->_elements, ele, tmpEle){
-			const char* key=__String::create(ele->getStrKey())->getCString();
+			const char* key=NarutoSenkiLegacy::String::create(ele->getStrKey())->getCString();
 			const char* keyValue=dic->valueForKey(key)->getCString();
 			if(strcmp(key,"frameName")==0){
 
@@ -1244,21 +1244,21 @@ Action* NarutoSenki::ActionManager::createAnimation(__Array* ationArray,float fp
 			
 				seqArray->addObject(tempAction);
 				if(strcmp(key,"setAttackBox")==0){
-					callValue = __Dictionary::create();
+					callValue = NarutoSenkiLegacy::Dictionary::create();
 					callValue->retain();
-					callValue->setObject(__String::create(keyValue), 1);
+					callValue->setObject(NarutoSenkiLegacy::String::create(keyValue), 1);
 					FiniteTimeAction *call = createPayloadCall(this, &NarutoSenki::ActionManager::setAttackBox, (void*)callValue);
 					seqArray->addObject(call);
 				}else if(strcmp(key,"setSound")==0){
-					callValue = __Dictionary::create();
+					callValue = NarutoSenkiLegacy::Dictionary::create();
 					callValue->retain();
-					callValue->setObject(__String::create(keyValue), 1);
+					callValue->setObject(NarutoSenkiLegacy::String::create(keyValue), 1);
 					FiniteTimeAction *call = createPayloadCall(this, &NarutoSenki::ActionManager::setSound, (void*)callValue);
 					seqArray->addObject(call);
 				}else if(strcmp(key,"setDSound")==0){
-					callValue = __Dictionary::create();
+					callValue = NarutoSenkiLegacy::Dictionary::create();
 					callValue->retain();
-					callValue->setObject(__String::create(keyValue), 1);
+					callValue->setObject(NarutoSenkiLegacy::String::create(keyValue), 1);
 					FiniteTimeAction *call = createPayloadCall(this, &NarutoSenki::ActionManager::setDSound, (void*)callValue);
 					seqArray->addObject(call);
 				}else if(strcmp(key,"setDelay")==0){
@@ -1270,9 +1270,9 @@ Action* NarutoSenki::ActionManager::createAnimation(__Array* ationArray,float fp
 					FiniteTimeAction *call = createPayloadCall(this, &NarutoSenki::ActionManager::setMove, (void*)moveLength);
 					seqArray->addObject(call);
 				}else if(strcmp(key,"setSkillEffect")==0){
-					callValue = __Dictionary::create();
+					callValue = NarutoSenkiLegacy::Dictionary::create();
 					callValue->retain();
-					callValue->setObject(__String::create(keyValue), 1);
+					callValue->setObject(NarutoSenkiLegacy::String::create(keyValue), 1);
 					FiniteTimeAction *call = createPayloadCall(this, &NarutoSenki::ActionManager::setSkillEffect, (void*)callValue);
 					seqArray->addObject(call);
 				}else if(strcmp(key,"setJump")==0){
@@ -1295,13 +1295,13 @@ Action* NarutoSenki::ActionManager::createAnimation(__Array* ationArray,float fp
 					FiniteTimeAction *call = createPayloadCall(this, &NarutoSenki::ActionManager::setClone, (void*)cloneTime);
 					seqArray->addObject(call);
 				}else if(strcmp(key,"setMon")==0){
-					callValue = __Dictionary::create();
+					callValue = NarutoSenkiLegacy::Dictionary::create();
 					callValue->retain();
-					callValue->setObject(__String::create(keyValue), 1);
+					callValue->setObject(NarutoSenkiLegacy::String::create(keyValue), 1);
 					FiniteTimeAction *call = createPayloadCall(this, &NarutoSenki::ActionManager::setMon, (void*)callValue);
 					seqArray->addObject(call);
 				}else if(strcmp(key,"setFont")==0){
-					callValue = __Dictionary::create();
+					callValue = NarutoSenkiLegacy::Dictionary::create();
 					callValue->retain();
 					const char * split = ",";
 					char * p; 
@@ -1310,7 +1310,7 @@ Action* NarutoSenki::ActionManager::createAnimation(__Array* ationArray,float fp
 					p = strtok (str,split); 
 					int i=1;
 					while(p!=NULL) { 
-						callValue->setObject(__String::create(p), i);
+						callValue->setObject(NarutoSenkiLegacy::String::create(p), i);
 						i++;
 						p = strtok(NULL,split); 
 					} 
@@ -1321,9 +1321,9 @@ Action* NarutoSenki::ActionManager::createAnimation(__Array* ationArray,float fp
 					FiniteTimeAction *call = createPayloadCall(this, &NarutoSenki::ActionManager::setBuff, (void*)buffValue);
 					seqArray->addObject(call);
 				}else if(strcmp(key,"setCommand")==0){
-					callValue = __Dictionary::create();
+					callValue = NarutoSenkiLegacy::Dictionary::create();
 					callValue->retain();
-					callValue->setObject(__String::create(keyValue), 1);
+					callValue->setObject(NarutoSenkiLegacy::String::create(keyValue), 1);
 					FiniteTimeAction *call = createPayloadCall(this, &NarutoSenki::ActionManager::setCommand, (void*)callValue);
 					seqArray->addObject(call);
 
@@ -1332,9 +1332,9 @@ Action* NarutoSenki::ActionManager::createAnimation(__Array* ationArray,float fp
 					seqArray->addObject(call);
 
 				}else if(strcmp(key,"setBullet")==0){
-					callValue = __Dictionary::create();
+					callValue = NarutoSenkiLegacy::Dictionary::create();
 					callValue->retain();
-					callValue->setObject(__String::create(keyValue), 1);
+					callValue->setObject(NarutoSenkiLegacy::String::create(keyValue), 1);
 					FiniteTimeAction *call = createPayloadCall(this, &NarutoSenki::ActionManager::setBullet, (void*)callValue);
 					seqArray->addObject(call);
 				}else if(strcmp(key,"setMonAttack")==0){
@@ -1342,9 +1342,9 @@ Action* NarutoSenki::ActionManager::createAnimation(__Array* ationArray,float fp
 					FiniteTimeAction *call = createPayloadCall(this, &NarutoSenki::ActionManager::setMonAttack, (void*)skillNum);
 					seqArray->addObject(call);
 				}else if(strcmp(key,"setTrap")==0){
-					callValue = __Dictionary::create();
+					callValue = NarutoSenkiLegacy::Dictionary::create();
 					callValue->retain();
-					callValue->setObject(__String::create(keyValue), 1);
+					callValue->setObject(NarutoSenkiLegacy::String::create(keyValue), 1);
 					FiniteTimeAction *call = createPayloadCall(this, &NarutoSenki::ActionManager::setTrap, (void*)callValue);
 					seqArray->addObject(call);
 				}else if(strcmp(key,"setActionResume")==0){
@@ -1355,7 +1355,7 @@ Action* NarutoSenki::ActionManager::createAnimation(__Array* ationArray,float fp
 					FiniteTimeAction *call = CallFunc::create(CC_CALLBACK_0(NarutoSenki::ActionManager::setActionResume2, this));
 					seqArray->addObject(call);
 				}else if(strcmp(key,"setShadow")==0){
-					callValue = __Dictionary::create();
+					callValue = NarutoSenkiLegacy::Dictionary::create();
 					callValue->retain();
 					callValue->setObject(animeFrames->objectAtIndex(int(animeFrames->count()-1)),1);
 					FiniteTimeAction *call = createPayloadCall(this, &NarutoSenki::ActionManager::setShadow, (void*)callValue);
@@ -1420,7 +1420,7 @@ void NarutoSenki::ActionManager::setCharFlip(){
 void NarutoSenki::ActionManager::setShadow(Node* sender,void* date){
 
 	Size visibleSize = Director::getInstance()->getVisibleSize();
-	__Dictionary* file=(__Dictionary*) date;
+	NarutoSenkiLegacy::Dictionary* file=(NarutoSenkiLegacy::Dictionary*) date;
 	SpriteFrame *frame  = (SpriteFrame *)(file->objectForKey(1));
 	Sprite* charN=Sprite::createWithSpriteFrame(frame);
 	charN->setVisible(false);
@@ -1487,7 +1487,7 @@ void NarutoSenki::ActionManager::disableHpBar(float dt){
 	
 }
 
-void NarutoSenki::ActionManager::setDamage(__String* effectType,unsigned int attackValue,bool isFlipped){
+void NarutoSenki::ActionManager::setDamage(NarutoSenkiLegacy::String* effectType,unsigned int attackValue,bool isFlipped){
 	
 	if(strcmp(_role->getCString(),"Tower")==0){
 		if(_hpBar){
@@ -1578,7 +1578,7 @@ void NarutoSenki::ActionManager::setDamage(__String* effectType,unsigned int att
 	}
 
 	if (std::atoi(_hp->getCString())-realValue<0){
-		this->setHP(__String::create("0"));
+		this->setHP(NarutoSenkiLegacy::String::create("0"));
 	}else{
 		this->setHP(createActionIntString(std::atoi(this->getHP()->getCString())-realValue));
 	}
@@ -1615,7 +1615,7 @@ void NarutoSenki::ActionManager::setDamage(__String* effectType,unsigned int att
 					float newValue=atof(_master->getCKR()->getCString())+boundValue;
 					_master->setCKR(createActionFloatString(newValue));
 				}else{
-					_master->setCKR(__String::create("45000"));
+					_master->setCKR(NarutoSenkiLegacy::String::create("45000"));
 				}	
 
 				if(atof(_master->getCKR()->getCString())>=15000){
@@ -1635,7 +1635,7 @@ void NarutoSenki::ActionManager::setDamage(__String* effectType,unsigned int att
 						_master->setCKR2(createActionFloatString(newValue));
 					}else{
 						
-						_master->setCKR2(__String::create("50000"));
+						_master->setCKR2(NarutoSenkiLegacy::String::create("50000"));
 					}	
 
 					if(atof(_master->getCKR2()->getCString())>=25000){
@@ -1692,7 +1692,7 @@ void NarutoSenki::ActionManager::setDamage(__String* effectType,unsigned int att
 					float newValue=atof(this->getCKR()->getCString())+boundValue;
 					this->setCKR(createActionFloatString(newValue));
 				}else{
-					this->setCKR(__String::create("45000"));
+					this->setCKR(NarutoSenkiLegacy::String::create("45000"));
 			
 				}	
 
@@ -1718,7 +1718,7 @@ void NarutoSenki::ActionManager::setDamage(__String* effectType,unsigned int att
 					this->setCKR2(createActionFloatString(newValue));
 
 				}else{
-					this->setCKR2(__String::create("50000"));
+					this->setCKR2(NarutoSenkiLegacy::String::create("50000"));
 					
 					
 				}	
@@ -1762,7 +1762,7 @@ void NarutoSenki::ActionManager::setDamage(__String* effectType,unsigned int att
 						currentAttacker->setCKR(createActionFloatString(newValue));
 
 					}else{
-						currentAttacker->setCKR(__String::create("45000"));
+						currentAttacker->setCKR(NarutoSenkiLegacy::String::create("45000"));
 					}	
 
 					if(atof(currentAttacker->getCKR()->getCString())>=15000){
@@ -1782,7 +1782,7 @@ void NarutoSenki::ActionManager::setDamage(__String* effectType,unsigned int att
 						currentAttacker->setCKR2(createActionFloatString(newValue));
 
 					}else{
-						currentAttacker->setCKR2(__String::create("50000"));
+						currentAttacker->setCKR2(NarutoSenkiLegacy::String::create("50000"));
 
 					}	
 
@@ -1840,7 +1840,7 @@ void NarutoSenki::ActionManager::setDamage(__String* effectType,unsigned int att
 
 			if(strcmp(this->_role->getCString(),"Flog")==0 && strcmp(attacker->_role->getCString(),"Flog")!=0 ){
 				if(strcmp(effectType->getCString(),"a_hit")==0){
-					this->setDamgeEffect(__String::create("a_hit"));
+					this->setDamgeEffect(NarutoSenkiLegacy::String::create("a_hit"));
 				}
 			}else if(strcmp(attacker->_role->getCString(),"Flog")!=0){
 				this->setDamgeEffect(effectType);
@@ -1935,8 +1935,8 @@ void NarutoSenki::ActionManager::removeDamageDisplay(){
 	
 }
 
-void NarutoSenki::ActionManager::setDamgeEffect(__String* type){
-	__String* str=type;
+void NarutoSenki::ActionManager::setDamgeEffect(NarutoSenkiLegacy::String* type){
+	NarutoSenkiLegacy::String* str=type;
 	if(strcmp(_role->getCString(),"Player")==0 || abs((this->getPosition() - _delegate->currentPlayer->getPosition()).x)<winSize.width/2){
 
 			if (damageEffectCount<2){
@@ -1961,8 +1961,8 @@ void NarutoSenki::ActionManager::setDamgeEffect(__String* type){
 
 void NarutoSenki::ActionManager::setSkillEffect(Node* sender,void* date){
 
-	__Dictionary* file=(__Dictionary*) date;
-	__String* str = (__String*)(file->objectForKey(1));
+	NarutoSenkiLegacy::Dictionary* file=(NarutoSenkiLegacy::Dictionary*) date;
+	NarutoSenkiLegacy::String* str = (NarutoSenkiLegacy::String*)(file->objectForKey(1));
 
 	if(strcmp(_role->getCString(),"Player")==0 || 
 		abs((this->getPosition() - _delegate->currentPlayer->getPosition()).x)<winSize.width/2){
@@ -2023,7 +2023,7 @@ void NarutoSenki::ActionManager::setItem(abType type){
 		
 		int hpRestore=3000+gearRecoverValue;
 		if(std::atoi(_maxHP->getCString())-std::atoi(_hp->getCString())<=hpRestore){
-			this->setHP(__String::create(this->getMaxHP()->getCString()));
+			this->setHP(NarutoSenkiLegacy::String::create(this->getMaxHP()->getCString()));
 			if(_hpBar){
 				_hpBar->loseHP(this->getHpPercent());
 			}
@@ -2057,7 +2057,7 @@ bool NarutoSenki::ActionManager::setGear(gearType type){
 	
 	if( this->getGearArray()->count()<=2 && this->getCoin()>=gearCost){
 		std::string gearItemText=cocos2d::StringUtils::format("%d",gearType(type));
-		__String* gearItem=__String::create(gearItemText);
+		NarutoSenkiLegacy::String* gearItem=NarutoSenkiLegacy::String::create(gearItemText);
 		this->getGearArray()->addObject(gearItem);
 		
 		if(strcmp(this->getRole()->getCString(),"Player")==0){
@@ -2173,8 +2173,8 @@ void NarutoSenki::ActionManager::useGear(gearType type){
 					}
 					this->_isVisable=false;
 
-					__Dictionary* callValue2 = __Dictionary::create();
-					callValue2->setObject(__String::create("Audio/Effect/suzou_effect.mp3"),1);
+					NarutoSenkiLegacy::Dictionary* callValue2 = NarutoSenkiLegacy::Dictionary::create();
+					callValue2->setObject(NarutoSenkiLegacy::String::create("Audio/Effect/suzou_effect.mp3"),1);
 					this->setSound(this,callValue2);
 
 
@@ -2187,8 +2187,8 @@ void NarutoSenki::ActionManager::useGear(gearType type){
 	}else if(type==gear03){
 		_isCanGear03=false;
 
-		__Dictionary* tmpValue = __Dictionary::create();
-		tmpValue->setObject(__String::create("Traps"), 1);
+		NarutoSenkiLegacy::Dictionary* tmpValue = NarutoSenkiLegacy::Dictionary::create();
+		tmpValue->setObject(NarutoSenkiLegacy::String::create("Traps"), 1);
 		this->setMon(this,(void*)tmpValue);
 	
 
@@ -2220,15 +2220,15 @@ void NarutoSenki::ActionManager::useGear(gearType type){
 
 					this->idle();
 
-					__Dictionary* callValue = __Dictionary::create();
-					callValue->setObject(__String::create("tishen"), 1);
+					NarutoSenkiLegacy::Dictionary* callValue = NarutoSenkiLegacy::Dictionary::create();
+					callValue->setObject(NarutoSenkiLegacy::String::create("tishen"), 1);
 					this->setSkillEffect(this,callValue);
 					this->scheduleOnce(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::disableGear2),1.0f);
 
 
 					
-					__Dictionary* callValue2 = __Dictionary::create();
-					callValue2->setObject(__String::create("Audio/Effect/poof2.mp3"),1);
+					NarutoSenkiLegacy::Dictionary* callValue2 = NarutoSenkiLegacy::Dictionary::create();
+					callValue2->setObject(NarutoSenkiLegacy::String::create("Audio/Effect/poof2.mp3"),1);
 					this->setSound(this,callValue2);
 
 
@@ -2336,7 +2336,7 @@ void NarutoSenki::ActionManager::setRestore(float dt){
 
 		
 		if(std::atoi(_maxHP->getCString())-std::atoi(_hp->getCString())<=800){
-			this->setHP(__String::create(this->getMaxHP()->getCString()));
+			this->setHP(NarutoSenkiLegacy::String::create(this->getMaxHP()->getCString()));
 			_hpBar->loseHP(this->getHpPercent());
 		}else{
 			this->setHP(createActionIntString(std::atoi(_hp->getCString())+800));
@@ -2361,7 +2361,7 @@ void NarutoSenki::ActionManager::setRestore2(float dt){
 				this->setHP(createActionIntString(std::atoi(_hp->getCString())-1000));
 				_hpBar->loseHP(this->getHpPercent());
 			}else{
-				this->setHP(__String::create("100"));
+				this->setHP(NarutoSenkiLegacy::String::create("100"));
 				_hpBar->loseHP(this->getHpPercent());
 			}
 		}else if(bamen>=5){
@@ -2369,7 +2369,7 @@ void NarutoSenki::ActionManager::setRestore2(float dt){
 				this->setHP(createActionIntString(std::atoi(_hp->getCString())-200));
 				_hpBar->loseHP(this->getHpPercent());
 			}else{
-				this->setHP(__String::create("100"));
+				this->setHP(NarutoSenkiLegacy::String::create("100"));
 				_hpBar->loseHP(this->getHpPercent());
 			}
 		}else if(bamen>=4){
@@ -2377,7 +2377,7 @@ void NarutoSenki::ActionManager::setRestore2(float dt){
 				this->setHP(createActionIntString(std::atoi(_hp->getCString())-150));
 				_hpBar->loseHP(this->getHpPercent());
 			}else{
-				this->setHP(__String::create("100"));
+				this->setHP(NarutoSenkiLegacy::String::create("100"));
 				_hpBar->loseHP(this->getHpPercent());
 			}
 		}else if(bamen>=3){
@@ -2385,7 +2385,7 @@ void NarutoSenki::ActionManager::setRestore2(float dt){
 				this->setHP(createActionIntString(std::atoi(_hp->getCString())-100));
 				_hpBar->loseHP(this->getHpPercent());
 			}else{
-				this->setHP(__String::create("100"));
+				this->setHP(NarutoSenkiLegacy::String::create("100"));
 				_hpBar->loseHP(this->getHpPercent());
 			}
 		}
@@ -2403,7 +2403,7 @@ void NarutoSenki::ActionManager::setRestore2(float dt){
 				this->setHP(createActionIntString(std::atoi(_hp->getCString())-1000));
 				_hpBar->loseHP(this->getHpPercent());
 			}else{
-				this->setHP(__String::create("100"));
+				this->setHP(NarutoSenkiLegacy::String::create("100"));
 				_hpBar->loseHP(this->getHpPercent());
 			}
 
@@ -2412,7 +2412,7 @@ void NarutoSenki::ActionManager::setRestore2(float dt){
 
 		if(this->getActionState()==ACTION_STATE_IDLE && this->getHpPercent()<1){
 			if(std::atoi(_maxHP->getCString())-std::atoi(_hp->getCString())<=300){
-				this->setHP(__String::create(this->getMaxHP()->getCString()));
+				this->setHP(NarutoSenkiLegacy::String::create(this->getMaxHP()->getCString()));
 				_hpBar->loseHP(this->getHpPercent());
 			}else{
 				this->setHP(createActionIntString(std::atoi(_hp->getCString())+300));
@@ -2458,8 +2458,8 @@ void NarutoSenki::ActionManager::setSound(Node* sender,void* date){
 		}
 
 		if(_isPlayable){
-				__Dictionary* file=(__Dictionary*) date;
-				__String* str = (__String*)(file->objectForKey(1));
+				NarutoSenkiLegacy::Dictionary* file=(NarutoSenkiLegacy::Dictionary*) date;
+				NarutoSenkiLegacy::String* str = (NarutoSenkiLegacy::String*)(file->objectForKey(1));
 				KTools::playEffectOptimized(str->getCString());
 		}
 	}
@@ -2481,16 +2481,16 @@ void NarutoSenki::ActionManager::setDSound(Node* sender,void* date){
 		}
 
 		if(_isPlayable && this->_isHitOne){
-			__Dictionary* file=(__Dictionary*) date;
-			__String* str = (__String*)(file->objectForKey(1));
+			NarutoSenkiLegacy::Dictionary* file=(NarutoSenkiLegacy::Dictionary*) date;
+			NarutoSenkiLegacy::String* str = (NarutoSenkiLegacy::String*)(file->objectForKey(1));
 			KTools::playEffectOptimized(str->getCString());
 		}
 	}
 };
 
 void NarutoSenki::ActionManager::setAttackBox(Node* sender,void* date){
-	__Dictionary* file=(__Dictionary*) date;
-	__String* str = (__String*)(file->objectForKey(1));
+	NarutoSenkiLegacy::Dictionary* file=(NarutoSenkiLegacy::Dictionary*) date;
+	NarutoSenkiLegacy::String* str = (NarutoSenkiLegacy::String*)(file->objectForKey(1));
 
 	_effectType=str;
 
@@ -2503,7 +2503,7 @@ void NarutoSenki::ActionManager::setAttackBox(Node* sender,void* date){
 			strcmp(this->getCharacter()->getCString(),"DevaPath")==0 ){
 
 				if(std::atoi(_maxHP->getCString())-std::atoi(_hp->getCString())<=260){
-					this->setHP(__String::create(this->getMaxHP()->getCString()));
+					this->setHP(NarutoSenkiLegacy::String::create(this->getMaxHP()->getCString()));
 					_hpBar->loseHP(this->getHpPercent());
 				}else{
 					this->setHP(createActionIntString(std::atoi(_hp->getCString())+260));
@@ -2678,13 +2678,13 @@ void NarutoSenki::ActionManager::setChargeB(Node* sender,void* date){
 
 void NarutoSenki::ActionManager::setCommand(Node* sender,void* date){
 
-	__Dictionary* file=(__Dictionary*) date;
-	__String* str = (__String*)(file->objectForKey(1));
-	__String* commandType=str;
+	NarutoSenkiLegacy::Dictionary* file=(NarutoSenkiLegacy::Dictionary*) date;
+	NarutoSenkiLegacy::String* str = (NarutoSenkiLegacy::String*)(file->objectForKey(1));
+	NarutoSenkiLegacy::String* commandType=str;
 
 	if(strcmp(commandType->getCString(),"addHP")==0){
 		if(_hpBar){
-			this->setHP(__String::create(this->getMaxHP()->getCString()));
+			this->setHP(NarutoSenkiLegacy::String::create(this->getMaxHP()->getCString()));
 			_hpBar->loseHP(this->getHpPercent());
 			_hpBar->setPositionY(this->getHeight());
 		}
@@ -2697,7 +2697,7 @@ void NarutoSenki::ActionManager::setCommand(Node* sender,void* date){
 				float newValue=atof(this->getCKR()->getCString())+boundValue;
 				this->setCKR(createActionFloatString(newValue));
 			}else{
-				this->setCKR(__String::create("45000"));
+				this->setCKR(NarutoSenkiLegacy::String::create("45000"));
 
 			}	
 
@@ -2720,7 +2720,7 @@ void NarutoSenki::ActionManager::setCommand(Node* sender,void* date){
 				this->setCKR2(createActionFloatString(newValue));
 
 			}else{
-				this->setCKR2(__String::create("50000"));
+				this->setCKR2(NarutoSenkiLegacy::String::create("50000"));
 
 
 			}	
@@ -2934,7 +2934,7 @@ void NarutoSenki::ActionManager::setCommand(Node* sender,void* date){
 
 	}else if(strcmp(commandType->getCString(),"addExtern")==0){
 
-		__Array* tempArray= __Array::create();
+		NarutoSenkiLegacy::Array* tempArray= NarutoSenkiLegacy::Array::create();
 
 		int i=1;
 		if(strcmp(this->getCharacter()->getCString(),"Tenten")==0){
@@ -2956,7 +2956,7 @@ void NarutoSenki::ActionManager::setCommand(Node* sender,void* date){
 		FiniteTimeAction *call = CallFunc::create([this, tempChar]() {
 			this->disableShadow(tempChar);
 		});
-		__Array* list=__Array::create();
+		NarutoSenkiLegacy::Array* list=NarutoSenkiLegacy::Array::create();
 		list->addObject(tempAction);
 		list->addObject(call);
 		Action* seq=createSequenceFromActionArray(list);
@@ -2999,10 +2999,10 @@ void NarutoSenki::ActionManager::setCommand(Node* sender,void* date){
 
 							tempHero->_slayer=this;
 							if(std::atoi(tempHero->_hp->getCString())<=2000){
-								tempHero->setDamage(__String::create("c_hit"),std::atoi(tempHero->_hp->getCString()),false);
+								tempHero->setDamage(NarutoSenkiLegacy::String::create("c_hit"),std::atoi(tempHero->_hp->getCString()),false);
 
 							}else{
-								tempHero->setDamage(__String::create("c_hit"),2000,false);
+								tempHero->setDamage(NarutoSenkiLegacy::String::create("c_hit"),2000,false);
 
 							};
 
@@ -3021,9 +3021,9 @@ void NarutoSenki::ActionManager::setCommand(Node* sender,void* date){
 			if(this->_hpBar){
 				_slayer=this;
 				if(std::atoi(this->_hp->getCString())<=2000){
-					this->setDamage(__String::create("c_hit"),std::atoi(this->_hp->getCString()),false);
+					this->setDamage(NarutoSenkiLegacy::String::create("c_hit"),std::atoi(this->_hp->getCString()),false);
 				}else{
-					this->setDamage(__String::create("c_hit"),2000,false);
+					this->setDamage(NarutoSenkiLegacy::String::create("c_hit"),2000,false);
 				};
 				this->_hpBar->loseHP(this->getHpPercent());
 
@@ -3369,7 +3369,7 @@ void NarutoSenki::ActionManager::healBuff(float dt){
 						abs(tempHero->getPositionY()-this->getPositionY())<=128){
 
 							if(std::atoi(tempHero->getMaxHP()->getCString())-std::atoi(tempHero->getHP()->getCString())<=_healBuffValue){
-								tempHero->setHP(__String::create(tempHero->getMaxHP()->getCString()));
+								tempHero->setHP(NarutoSenkiLegacy::String::create(tempHero->getMaxHP()->getCString()));
 								if(tempHero->_hpBar){
 									tempHero->_hpBar->loseHP(tempHero->getHpPercent());
 								}
@@ -3425,7 +3425,7 @@ void NarutoSenki::ActionManager::healBuff(float dt){
 								float newValue=atof(tempHero->getCKR()->getCString())+_healBuffValue;
 								tempHero->setCKR(createActionFloatString(newValue));
 							}else{
-								tempHero->setCKR(__String::create("45000"));
+								tempHero->setCKR(NarutoSenkiLegacy::String::create("45000"));
 
 							}	
 
@@ -3448,7 +3448,7 @@ void NarutoSenki::ActionManager::healBuff(float dt){
 								tempHero->setCKR2(createActionFloatString(newValue));
 
 							}else{
-								tempHero->setCKR2(__String::create("50000"));
+								tempHero->setCKR2(NarutoSenkiLegacy::String::create("50000"));
 
 							}	
 
@@ -3483,7 +3483,7 @@ void NarutoSenki::ActionManager::healBuff(float dt){
 	}else if(strcmp(_character->getCString(),"Slug")==0){
 
 		Ref* pObject;
-		__Array* list;
+		NarutoSenkiLegacy::Array* list;
 
 		if(strcmp("Akatsuki",_group->getCString())==0){
 			list=_delegate->_AkatsukiFlogArray;
@@ -3504,7 +3504,7 @@ void NarutoSenki::ActionManager::healBuff(float dt){
 						abs(tempHero->getPositionY()-this->getPositionY())<=128){
 
 							if(std::atoi(tempHero->getMaxHP()->getCString())-std::atoi(tempHero->getHP()->getCString())<=_healBuffValue){
-								tempHero->setHP(__String::create(tempHero->getMaxHP()->getCString()));
+								tempHero->setHP(NarutoSenkiLegacy::String::create(tempHero->getMaxHP()->getCString()));
 								if(tempHero->_hpBar){
 									tempHero->_hpBar->loseHP(tempHero->getHpPercent());
 								}
@@ -3531,7 +3531,7 @@ void NarutoSenki::ActionManager::healBuff(float dt){
 
 		//Сӣ����
 		if(std::atoi(_maxHP->getCString())-std::atoi(_hp->getCString())<=_healBuffValue){
-			this->setHP(__String::create(_maxHP->getCString()));
+			this->setHP(NarutoSenkiLegacy::String::create(_maxHP->getCString()));
 			if(_hpBar){
 				_hpBar->loseHP(this->getHpPercent());
 			}
@@ -3581,10 +3581,10 @@ void NarutoSenki::ActionManager::dehealBuff(float dt){
 		}
 	};
 	if(std::atoi(_hp->getCString())<=_dehealBuffValue){
-		this->setDamage(__String::create("c_hit"),_dehealBuffValue,false);
+		this->setDamage(NarutoSenkiLegacy::String::create("c_hit"),_dehealBuffValue,false);
 		
 	}else{
-		this->setDamage(__String::create("c_hit"),_dehealBuffValue,false);
+		this->setDamage(NarutoSenkiLegacy::String::create("c_hit"),_dehealBuffValue,false);
 
 	};
 	if(_hpBar){
@@ -3609,10 +3609,10 @@ void NarutoSenki::ActionManager::lostBlood(float dt){
 	}
 
 	if(std::atoi(_hp->getCString())<=lostBloodValue){
-		this->setDamage(__String::create("c_hit"),lostBloodValue,false);
+		this->setDamage(NarutoSenkiLegacy::String::create("c_hit"),lostBloodValue,false);
 
 	}else{
-		this->setDamage(__String::create("c_hit"),lostBloodValue,false);
+		this->setDamage(NarutoSenkiLegacy::String::create("c_hit"),lostBloodValue,false);
 
 	};
 
@@ -3725,7 +3725,7 @@ void NarutoSenki::ActionManager::changeAction(){
 		this->_isOnlySkillLocked=true;
 
 		this->settempAttackValue1(createActionIntString(std::atoi(_nattackValue->getCString())));
-		this->setnAttackValue(__String::create("960"));
+		this->setnAttackValue(NarutoSenkiLegacy::String::create("960"));
 		
 	
 		_nattackRangeX=_spcattackRangeX3;
@@ -3763,7 +3763,7 @@ void NarutoSenki::ActionManager::changeAction(){
 			
 		if(strcmp(this->_character->getCString(),"RikudoNaruto")==0){
 			this->settempAttackValue1(createActionIntString(std::atoi(_nattackValue->getCString())));
-			this->setnAttackValue(__String::create("560"));
+			this->setnAttackValue(NarutoSenkiLegacy::String::create("560"));
 		}
 		
 		this->setWalkSpeed(320);
@@ -3911,7 +3911,7 @@ void NarutoSenki::ActionManager::changeAction(){
 
 			this->_isOnlySkillLocked=true;
 			this->settempAttackValue1(createActionIntString(std::atoi(_nattackValue->getCString())));
-			this->setnAttackValue(__String::create("560"));
+			this->setnAttackValue(NarutoSenkiLegacy::String::create("560"));
 			
 
 			_nattackRangeX=_spcattackRangeX3;
@@ -3986,7 +3986,7 @@ void NarutoSenki::ActionManager::changeAction(){
 			this->_originSpeed=112;
 			
 			this->settempAttackValue1(createActionIntString(std::atoi(_nattackValue->getCString())));
-			this->setnAttackValue(__String::create("1160"));
+			this->setnAttackValue(NarutoSenkiLegacy::String::create("1160"));
 		
 			_nattackRangeX=156;
 			_nattackRangeY=64;
@@ -4089,7 +4089,7 @@ void NarutoSenki::ActionManager::changeAction(){
 		this->_isOnlySkillLocked=true;
 
 		this->settempAttackValue1(createActionIntString(std::atoi(_nattackValue->getCString())));
-		this->setnAttackValue(__String::create("560"));
+		this->setnAttackValue(NarutoSenkiLegacy::String::create("560"));
 
 		_nattackRangeX=128;
 		_nattackRangeY=64;
@@ -4167,7 +4167,7 @@ void NarutoSenki::ActionManager::changeAction(){
 			_nattackRangeX=16;
 			_nattackRangeY=48;
 			this->settempAttackValue1(createActionIntString(std::atoi(_nattackValue->getCString())));
-			this->setnAttackValue(__String::create("560"));
+			this->setnAttackValue(NarutoSenkiLegacy::String::create("560"));
 			
 			this->_isOnlySkillLocked=true;
 
@@ -4189,7 +4189,7 @@ void NarutoSenki::ActionManager::changeAction(){
 	}else if(strcmp(this->_character->getCString(),"Suigetsu")==0 ){
 
 		this->settempAttackValue1(createActionIntString(std::atoi(_nattackValue->getCString())));
-		this->setnAttackValue(__String::create("1960"));
+		this->setnAttackValue(NarutoSenkiLegacy::String::create("1960"));
 
 		this->_isOnlySkillLocked=true;
 
@@ -4215,7 +4215,7 @@ void NarutoSenki::ActionManager::changeAction(){
 	}else if(strcmp(this->_character->getCString(),"Kisame")==0){
 
 		this->settempAttackValue1(createActionIntString(std::atoi(_nattackValue->getCString())));
-		this->setnAttackValue(__String::create("660"));
+		this->setnAttackValue(NarutoSenkiLegacy::String::create("660"));
 
 		this->_isOnlySkillLocked=true;
 
@@ -4245,7 +4245,7 @@ void NarutoSenki::ActionManager::changeAction(){
 	}else if(strcmp(this->_character->getCString(),"Jugo")==0){
 
 		this->settempAttackValue1(createActionIntString(std::atoi(_nattackValue->getCString())));
-		this->setnAttackValue(__String::create("1960"));
+		this->setnAttackValue(NarutoSenkiLegacy::String::create("1960"));
 
 		this->_isOnlySkillLocked=true;
 
@@ -4275,7 +4275,7 @@ void NarutoSenki::ActionManager::changeAction(){
 	}else if(strcmp(this->_character->getCString(),"Parents")==0){
 
 		this->settempAttackValue1(createActionIntString(std::atoi(_nattackValue->getCString())));
-		this->setnAttackValue(__String::create("2460"));
+		this->setnAttackValue(NarutoSenkiLegacy::String::create("2460"));
 
 		this->_isOnlySkillLocked=true;
 
@@ -5602,13 +5602,13 @@ void NarutoSenki::ActionManager::stopJump(Node* sender,void* date){
 }
 
 void NarutoSenki::ActionManager::setBullet(Node* sender,void* date){
-	__Dictionary* file=(__Dictionary*) date;
-	__String* str = (__String*)(file->objectForKey(1));
-	__String* bulletType=str;
+	NarutoSenkiLegacy::Dictionary* file=(NarutoSenkiLegacy::Dictionary*) date;
+	NarutoSenkiLegacy::String* str = (NarutoSenkiLegacy::String*)(file->objectForKey(1));
+	NarutoSenkiLegacy::String* bulletType=str;
 
 	Bullet* bullet=Bullet::create();
 	bullet->setDelegate(_delegate);
-	bullet->setID(bulletType,__String::create("Bullet"),this->_group);
+	bullet->setID(bulletType,NarutoSenkiLegacy::String::create("Bullet"),this->_group);
 	bullet->idle();
 	if (_master){
 		bullet->_master=this->_master;
@@ -5668,7 +5668,7 @@ void NarutoSenki::ActionManager::setBullet(Node* sender,void* date){
 		){
 
 		if(!_monsterArray){
-			_monsterArray=__Array::create();
+			_monsterArray=NarutoSenkiLegacy::Array::create();
 			_monsterArray->retain();
 		}
 		if(strcmp(bulletType->getCString(),"HiraishinKunai")==0){
@@ -5706,7 +5706,7 @@ void NarutoSenki::ActionManager::setBulletGroup(float dt){
 		bullet->setDelegate(_delegate);
 		float rangeX=0;
 		
-		bullet->setID(__String::create("HugeSRK"),__String::create("Bullet"),this->_group);
+		bullet->setID(NarutoSenkiLegacy::String::create("HugeSRK"),NarutoSenkiLegacy::String::create("Bullet"),this->_group);
 		rangeX=76;
 		
 		bullet->_master=(Hero*) this;
@@ -5753,7 +5753,7 @@ void NarutoSenki::ActionManager::setClone(Node* sender,void* date){
 	clone->setPosition(Vec2(this->getPositionX()+(this->_isFlipped?-32:32),this->getPositionY()-1));
 	if(strcmp(this->getCharacter()->getCString(),"Nagato")==0){
 
-		clone->setID(__String::create("DevaPath"),__String::create("Clone"),this->_group);
+		clone->setID(NarutoSenkiLegacy::String::create("DevaPath"),NarutoSenkiLegacy::String::create("Clone"),this->_group);
 		clone->_isBati=true;		
 		if(strcmp(this->getRole()->getCString(),"Player")==0 ){
 			if(this->_delegate->getHudLayer()->skill5Button){
@@ -5766,7 +5766,7 @@ void NarutoSenki::ActionManager::setClone(Node* sender,void* date){
 
 	}else if(strcmp(this->getCharacter()->getCString(),"Kakuzu")==0){
 		if(!_monsterArray){
-			_monsterArray=__Array::create();
+			_monsterArray=NarutoSenkiLegacy::Array::create();
 			_monsterArray->retain();
 		}
 		bool isRaidon=false;
@@ -5796,11 +5796,11 @@ void NarutoSenki::ActionManager::setClone(Node* sender,void* date){
 
 		if(this->hearts>0 &&  (!isRaidon || !isKadon || !isFudon)){
 			if(!isRaidon){
-				clone->setID(__String::create("MaskRaidon"),__String::create("Kuilei"),this->_group);
+				clone->setID(NarutoSenkiLegacy::String::create("MaskRaidon"),NarutoSenkiLegacy::String::create("Kuilei"),this->_group);
 			}else if(!isFudon){
-				clone->setID(__String::create("MaskFudon"),__String::create("Kuilei"),this->_group);
+				clone->setID(NarutoSenkiLegacy::String::create("MaskFudon"),NarutoSenkiLegacy::String::create("Kuilei"),this->_group);
 			}else if(!isKadon){
-				clone->setID(__String::create("MaskKadon"),__String::create("Kuilei"),this->_group);
+				clone->setID(NarutoSenkiLegacy::String::create("MaskKadon"),NarutoSenkiLegacy::String::create("Kuilei"),this->_group);
 
 			}	
 			clone->_isBati=true;
@@ -5831,13 +5831,13 @@ void NarutoSenki::ActionManager::setClone(Node* sender,void* date){
 	 }else if(strcmp(this->getCharacter()->getCString(),"Kankuro")==0){
 
 		if(!_monsterArray){
-			_monsterArray=__Array::create();
+			_monsterArray=NarutoSenkiLegacy::Array::create();
 			_monsterArray->retain();
 		}
 		if(cloneTime==0){
-			clone->setID(__String::create("Karasu"),__String::create("Kuilei"),this->_group);
+			clone->setID(NarutoSenkiLegacy::String::create("Karasu"),NarutoSenkiLegacy::String::create("Kuilei"),this->_group);
 		}else if(cloneTime==1){
-			clone->setID(__String::create("Sanshouuo"),__String::create("Kuilei"),this->_group);
+			clone->setID(NarutoSenkiLegacy::String::create("Sanshouuo"),NarutoSenkiLegacy::String::create("Kuilei"),this->_group);
 			if(strcmp(this->getRole()->getCString(),"Player")==0 ){
 				if(this->_delegate->getHudLayer()->skill4Button){
 					this->_delegate->getHudLayer()->skill4Button->setLock();
@@ -5845,7 +5845,7 @@ void NarutoSenki::ActionManager::setClone(Node* sender,void* date){
 				
 			}
 		}else if(cloneTime==2){
-			clone->setID(__String::create("Saso"),__String::create("Kuilei"),this->_group);
+			clone->setID(NarutoSenkiLegacy::String::create("Saso"),NarutoSenkiLegacy::String::create("Kuilei"),this->_group);
 			if(strcmp(this->getRole()->getCString(),"Player")==0 ){
 				if(this->_delegate->getHudLayer()->skill5Button){
 				this->_delegate->getHudLayer()->skill5Button->setLock();
@@ -5858,11 +5858,11 @@ void NarutoSenki::ActionManager::setClone(Node* sender,void* date){
 	}else if(strcmp(this->getCharacter()->getCString(),"Chiyo")==0){
 
 		if(!_monsterArray){
-			_monsterArray=__Array::create();
+			_monsterArray=NarutoSenkiLegacy::Array::create();
 			_monsterArray->retain();
 		}
 	
-		clone->setID(__String::create("Parents"),__String::create("Kuilei"),this->_group);
+		clone->setID(NarutoSenkiLegacy::String::create("Parents"),NarutoSenkiLegacy::String::create("Kuilei"),this->_group);
 		clone->setPosition(Vec2(this->getPositionX(),this->getPositionY()-3));
 		clone->_isBati=true;
 		_monsterArray->addObject(clone);
@@ -5870,52 +5870,52 @@ void NarutoSenki::ActionManager::setClone(Node* sender,void* date){
 	 }else if(strcmp(this->getCharacter()->getCString(),"Kiba")==0){
 
 		if(!_monsterArray){
-			_monsterArray=__Array::create();
+			_monsterArray=NarutoSenkiLegacy::Array::create();
 			_monsterArray->retain();
 		}
 
-		clone->setID(__String::create("Akamaru"),__String::create("Clone"),this->_group);
+		clone->setID(NarutoSenkiLegacy::String::create("Akamaru"),NarutoSenkiLegacy::String::create("Clone"),this->_group);
 		clone->_isBati=true;
 		_monsterArray->addObject(clone);
 	
 	}else if(strcmp(this->getCharacter()->getCString(),"DevaPath")==0){
 		if(!_monsterArray){
-			_monsterArray=__Array::create();
+			_monsterArray=NarutoSenkiLegacy::Array::create();
 			_monsterArray->retain();
 		}
 		if(cloneTime==0){
-			clone->setID(__String::create("AnimalPath"),__String::create("Summon"),this->_group);
+			clone->setID(NarutoSenkiLegacy::String::create("AnimalPath"),NarutoSenkiLegacy::String::create("Summon"),this->_group);
 		}else{
-			clone->setID(__String::create("AsuraPath"),__String::create("Summon"),this->_group);
+			clone->setID(NarutoSenkiLegacy::String::create("AsuraPath"),NarutoSenkiLegacy::String::create("Summon"),this->_group);
 		}
 		_monsterArray->addObject(clone);
 		clone->_isBati=true;
 	}else if(strcmp(this->getCharacter()->getCString(),"Tsunade")==0){
-		clone->setID(__String::create("Slug"),__String::create("Summon"),this->_group);
+		clone->setID(NarutoSenkiLegacy::String::create("Slug"),NarutoSenkiLegacy::String::create("Summon"),this->_group);
 		clone->_isBati=true;
 	}else if(strcmp(this->getCharacter()->getCString(),"Kakashi")==0){
-		clone->setID(__String::create("DogWall"),__String::create("Summon"),this->_group);
+		clone->setID(NarutoSenkiLegacy::String::create("DogWall"),NarutoSenkiLegacy::String::create("Summon"),this->_group);
 			clone->setPosition(Vec2(this->getPositionX()+(this->_isFlipped?-56:56),this->getPositionY()));
 		clone->setAnchorPoint(Vec2(0.5f,0.1f));
 		clone->_isBati=true;
 	}else if(strcmp(this->getCharacter()->getCString(),"Deidara")==0){
-		clone->setID(__String::create("Centipede"),__String::create("Summon"),this->_group);
+		clone->setID(NarutoSenkiLegacy::String::create("Centipede"),NarutoSenkiLegacy::String::create("Summon"),this->_group);
 		clone->_isBati=true;
 	}else if(strcmp(this->getCharacter()->getCString(),"Naruto")==0){
-		clone->setID(this->getCharacter(),__String::create("Clone"),this->_group);
+		clone->setID(this->getCharacter(),NarutoSenkiLegacy::String::create("Clone"),this->_group);
 		
 	}else if(strcmp(this->getCharacter()->getCString(),"SageNaruto")==0||
 		(strcmp(this->getCharacter()->getCString(),"RikudoNaruto")==0 && cloneTime==10)
 		){
 		//����
-		clone->setID(this->getCharacter(),__String::create("Clone"),this->_group);
+		clone->setID(this->getCharacter(),NarutoSenkiLegacy::String::create("Clone"),this->_group);
 		clone->setSkill1Action(clone->createAnimation(clone->skillSPC1Array,10.0f,false,true));	
 		clone->_sattackValue1=_spcattackValue1;
 		clone->_sattackType1=_spcattackType1;
 		clone->_sattackcoldDown1=_spcattackcoldDown1;
 
 	}else if(strcmp(this->getCharacter()->getCString(),"RikudoNaruto")==0 && cloneTime==9){
-		clone->setID(__String::create("Kurama"),__String::create("Clone"),this->_group);
+		clone->setID(NarutoSenkiLegacy::String::create("Kurama"),NarutoSenkiLegacy::String::create("Clone"),this->_group);
 		clone->_gardValue+=5000;
 		clone->_isBati=true;	
 		clone->setWalkSpeed(320);
@@ -5929,13 +5929,13 @@ void NarutoSenki::ActionManager::setClone(Node* sender,void* date){
 		strcmp(this->getCharacter()->getCString(),"Naruto")==0||
 		(strcmp(this->getCharacter()->getCString(),"RikudoNaruto")==0 && cloneTime==10)
 		){
-		clone->setHP(__String::create(this->getHP()->getCString()));
+		clone->setHP(NarutoSenkiLegacy::String::create(this->getHP()->getCString()));
 		
 	}else{	
-		clone->setHP(__String::create(this->getMaxHP()->getCString()));
+		clone->setHP(NarutoSenkiLegacy::String::create(this->getMaxHP()->getCString()));
 	}
 
-	clone->setMaxHP(__String::create(this->getMaxHP()->getCString()));
+	clone->setMaxHP(NarutoSenkiLegacy::String::create(this->getMaxHP()->getCString()));
 	clone->_exp=this->_exp;
 	clone->setnAttackValue(createActionIntString(std::atoi(this->getnAttackValue()->getCString())));
 	clone->_gardValue=this->_gardValue;
@@ -5947,9 +5947,9 @@ void NarutoSenki::ActionManager::setClone(Node* sender,void* date){
 		if(clone->_hpBar){
 			clone->_hpBar->setPositionY(120);
 		}
-		clone->setnAttackValue(__String::create("1060"));
+		clone->setnAttackValue(NarutoSenkiLegacy::String::create("1060"));
 	}else if(strcmp(this->getCharacter()->getCString(),"Kakashi")==0){
-		clone->setnAttackValue(__String::create("1060"));
+		clone->setnAttackValue(NarutoSenkiLegacy::String::create("1060"));
 	}
 
 	if(this->isPofang){
@@ -5964,8 +5964,8 @@ void NarutoSenki::ActionManager::setClone(Node* sender,void* date){
 	
 	clone->setFlipX(this->_isFlipped);
 	clone->_isFlipped=this->_isFlipped;
-	__Dictionary* callValue = __Dictionary::create();
-	callValue->setObject(__String::create("smk"), 1);
+	NarutoSenkiLegacy::Dictionary* callValue = NarutoSenkiLegacy::Dictionary::create();
+	callValue->setObject(NarutoSenkiLegacy::String::create("smk"), 1);
 	clone->setSkillEffect(clone,callValue);
 	clone->idle();
 	_delegate->_CharacterArray->addObject(clone);
@@ -5994,16 +5994,16 @@ void NarutoSenki::ActionManager::removeClone(float dt){
 void NarutoSenki::ActionManager::setMon(Node* sender,void* date){
 
 
-	__Dictionary* file=(__Dictionary*) date;
-	__String* str = (__String*)(file->objectForKey(1));
-	__String* monsterType=str;
+	NarutoSenkiLegacy::Dictionary* file=(NarutoSenkiLegacy::Dictionary*) date;
+	NarutoSenkiLegacy::String* str = (NarutoSenkiLegacy::String*)(file->objectForKey(1));
+	NarutoSenkiLegacy::String* monsterType=str;
 
 
 
 	float monsterStayTime=_attackRangeY;
 	
 	if(!_monsterArray){
-		_monsterArray=__Array::create();
+		_monsterArray=NarutoSenkiLegacy::Array::create();
 		_monsterArray->retain();
 	}
 
@@ -6012,7 +6012,7 @@ void NarutoSenki::ActionManager::setMon(Node* sender,void* date){
 	monster->setDelegate(_delegate);
 
 
-	monster->setID(monsterType,__String::create("Mon"),this->_group);
+	monster->setID(monsterType,NarutoSenkiLegacy::String::create("Mon"),this->_group);
 	
 
 	if(this->getMaster()){
@@ -6097,8 +6097,8 @@ void NarutoSenki::ActionManager::setMon(Node* sender,void* date){
 	}else if(strcmp(monsterType->getCString(),"SmallSlug")==0){
 
 		if(_monsterArray && _monsterArray->count()<3){
-			__Dictionary* callValue = __Dictionary::create();
-			callValue->setObject(__String::create("smk"), 1);
+			NarutoSenkiLegacy::Dictionary* callValue = NarutoSenkiLegacy::Dictionary::create();
+			callValue->setObject(NarutoSenkiLegacy::String::create("smk"), 1);
 			monster->setSkillEffect(monster,callValue);
 			_monsterArray->addObject(monster);
 			monster->doAI();
@@ -6108,8 +6108,8 @@ void NarutoSenki::ActionManager::setMon(Node* sender,void* date){
 		}
 
 	}else if(strcmp(monsterType->getCString(),"Kuroari")==0){
-		__Dictionary* callValue = __Dictionary::create();
-		callValue->setObject(__String::create("smk"), 1);
+		NarutoSenkiLegacy::Dictionary* callValue = NarutoSenkiLegacy::Dictionary::create();
+		callValue->setObject(NarutoSenkiLegacy::String::create("smk"), 1);
 		monster->setSkillEffect(monster,callValue);
 		_monsterArray->addObject(monster);
 		monster->doAI();
@@ -6188,8 +6188,8 @@ void NarutoSenki::ActionManager::setMon(Node* sender,void* date){
 		monster->setPosition(Vec2(this->getPositionX()+(this->_isFlipped==true?-64:64),this->getPositionY()+1));
 		monster->attack(NAttack);
 	}else if ( strcmp(monsterType->getCString(),"Mine")==0 ){
-		__Dictionary* callValue = __Dictionary::create();
-		callValue->setObject(__String::create("smk"), 1);
+		NarutoSenkiLegacy::Dictionary* callValue = NarutoSenkiLegacy::Dictionary::create();
+		callValue->setObject(NarutoSenkiLegacy::String::create("smk"), 1);
 		monster->setSkillEffect(monster,callValue);
 		_monsterArray->addObject(monster);
 		monster->doAI();
@@ -6361,7 +6361,7 @@ void NarutoSenki::ActionManager::setMonPer(float dt){
 
 
 	if(!_monsterArray){
-		_monsterArray=__Array::create();
+		_monsterArray=NarutoSenkiLegacy::Array::create();
 		_monsterArray->retain();
 	}
 
@@ -6370,11 +6370,11 @@ void NarutoSenki::ActionManager::setMonPer(float dt){
 	monster->setDelegate(_delegate);
 
 	if(strcmp(this->getCharacter()->getCString(),"Deidara")==0){
-		monster->setID(__String::create("Spider"),__String::create("Mon"),this->_group);
+		monster->setID(NarutoSenkiLegacy::String::create("Spider"),NarutoSenkiLegacy::String::create("Mon"),this->_group);
 	}else if(strcmp(this->getCharacter()->getCString(),"Sai")==0){
-		monster->setID(__String::create("Mouse"),__String::create("Mon"),this->_group);
-		__Dictionary* callValue2 = __Dictionary::create();
-		callValue2->setObject(__String::create("Audio/Sai/ink_mouse.mp3"),1);
+		monster->setID(NarutoSenkiLegacy::String::create("Mouse"),NarutoSenkiLegacy::String::create("Mon"),this->_group);
+		NarutoSenkiLegacy::Dictionary* callValue2 = NarutoSenkiLegacy::Dictionary::create();
+		callValue2->setObject(NarutoSenkiLegacy::String::create("Audio/Sai/ink_mouse.mp3"),1);
 		this->setSound(this,callValue2); 
 	}
 	
@@ -6396,9 +6396,9 @@ void NarutoSenki::ActionManager::setMonPer(float dt){
 
 void NarutoSenki::ActionManager::setTrap(Node* sender,void* date){
 	
-	__Dictionary* file=(__Dictionary*) date;
-	__String* str = (__String*)(file->objectForKey(1));
-	__String* trapType=str;
+	NarutoSenkiLegacy::Dictionary* file=(NarutoSenkiLegacy::Dictionary*) date;
+	NarutoSenkiLegacy::String* str = (NarutoSenkiLegacy::String*)(file->objectForKey(1));
+	NarutoSenkiLegacy::String* trapType=str;
 	if(strcmp(trapType->getCString(),"Amaterasu")==0  ){
 
 		Ref* pObject;
@@ -6454,7 +6454,7 @@ void NarutoSenki::ActionManager::setTrap(Node* sender,void* date){
 					Bullet* trap=Bullet::create();
 					trap->setDelegate(_delegate);
 					trap->_master=(Hero*)this;
-					trap->setID(trapType,__String::create("Mon"),_group);
+					trap->setID(trapType,NarutoSenkiLegacy::String::create("Mon"),_group);
 					trap->setAnchorPoint(Vec2(0.5,0));
 					trap->setPosition(Vec2(targetPoint.x,targetPoint.y+32));
 					trap->idle();
@@ -6467,7 +6467,7 @@ void NarutoSenki::ActionManager::setTrap(Node* sender,void* date){
 					Bullet* trap=Bullet::create();
 					trap->setDelegate(_delegate);
 					trap->_master=(Hero*)this;
-					trap->setID(trapType,__String::create("Mon"),_group);
+					trap->setID(trapType,NarutoSenkiLegacy::String::create("Mon"),_group);
 					trap->setAnchorPoint(Vec2(0.5,0));
 					trap->setPosition(Vec2(targetPoint.x+(i-1)*60,targetPoint.y));
 					trap->idle();
@@ -6481,7 +6481,7 @@ void NarutoSenki::ActionManager::setTrap(Node* sender,void* date){
 					Bullet* trap=Bullet::create();
 					trap->setDelegate(_delegate);
 					trap->_master=(Hero*)this;
-					trap->setID(trapType,__String::create("Mon"),_group);
+					trap->setID(trapType,NarutoSenkiLegacy::String::create("Mon"),_group);
 					trap->setAnchorPoint(Vec2(0.5,0));
 					trap->setPosition(Vec2(targetPoint.x,targetPoint.y-32));
 					trap->idle();
@@ -6500,7 +6500,7 @@ void NarutoSenki::ActionManager::setTrap(Node* sender,void* date){
 					Bullet* trap=Bullet::create();
 					trap->setDelegate(_delegate);
 					trap->_master=(Hero*)this;
-					trap->setID(trapType,__String::create("Mon"),_group);
+					trap->setID(trapType,NarutoSenkiLegacy::String::create("Mon"),_group);
 
 					trap->setPosition(Vec2(this->getPositionX()+(_isFlipped?-112:112),this->getPositionY()+(48-i*24)));
 					trap->idle();
@@ -6516,7 +6516,7 @@ void NarutoSenki::ActionManager::setTrap(Node* sender,void* date){
 					Bullet* trap=Bullet::create();
 					trap->setDelegate(_delegate);
 					trap->_master=(Hero*)this;
-					trap->setID(trapType,__String::create("Mon"),_group);
+					trap->setID(trapType,NarutoSenkiLegacy::String::create("Mon"),_group);
 					trap->setPosition(Vec2(this->getPositionX()+(_isFlipped?-80:80),this->getPositionY()+(32-i*24)));
 					trap->idle();
 					trap->attack(NAttack);
@@ -6528,7 +6528,7 @@ void NarutoSenki::ActionManager::setTrap(Node* sender,void* date){
 				Bullet* trap=Bullet::create();
 				trap->setDelegate(_delegate);
 				trap->_master=(Hero*)this;
-				trap->setID(trapType,__String::create("Mon"),_group);
+				trap->setID(trapType,NarutoSenkiLegacy::String::create("Mon"),_group);
 				trap->setPosition(Vec2(this->getPositionX()+(_isFlipped?-48:48),this->getPositionY()+22));
 				trap->idle();
 				trap->attack(NAttack);
@@ -6549,7 +6549,7 @@ void NarutoSenki::ActionManager::setTrap(Node* sender,void* date){
 			trap->setDelegate(_delegate);
 			trap->setAnchorPoint(Vec2(0.5f,0));
 			trap->_master=(Hero*)this;
-			trap->setID(trapType,__String::create("Mon"),_group);
+			trap->setID(trapType,NarutoSenkiLegacy::String::create("Mon"),_group);
 
 			if(i==0){
 				trap->setPosition(Vec2(this->getPositionX()+(_isFlipped?-24:
@@ -6585,7 +6585,7 @@ void NarutoSenki::ActionManager::setTrap(Node* sender,void* date){
 						Monster* trap=Monster::create();
 						trap->setDelegate(_delegate);
 						trap->_master=(Hero*)this;
-						trap->setID(trapType,__String::create("Mon"),_group);
+						trap->setID(trapType,NarutoSenkiLegacy::String::create("Mon"),_group);
 						trap->setPosition(Vec2(tempHero->getPositionX(),tempHero->getPositionY()));
 						trap->idle();
 						trap->attack(NAttack);
@@ -6680,25 +6680,25 @@ void NarutoSenki::ActionManager::setTransform(){
 	int tempMaxHP=std::atoi(this->getMaxHP()->getCString());
 	
 	int tempHP=std::atoi(this->getHP()->getCString());
-	__String* tempAttackValue=__String::create(this->getnAttackValue()->getCString());
+	NarutoSenkiLegacy::String* tempAttackValue=NarutoSenkiLegacy::String::create(this->getnAttackValue()->getCString());
 	const char* charName;
 	if(strcmp(_character->getCString(),"Naruto")==0){
-		this->setID(__String::create("SageNaruto"),_role,_group);
+		this->setID(NarutoSenkiLegacy::String::create("SageNaruto"),_role,_group);
 		charName="SageNaruto";
 	}else if(strcmp(_character->getCString(),"SageNaruto")==0){
-		this->setID(__String::create("RikudoNaruto"),_role,_group);
+		this->setID(NarutoSenkiLegacy::String::create("RikudoNaruto"),_role,_group);
 		charName="RikudoNaruto";
 	}else if(strcmp(_character->getCString(),"Jiraiya")==0){
-		this->setID(__String::create("SageJiraiya"),_role,_group);
+		this->setID(NarutoSenkiLegacy::String::create("SageJiraiya"),_role,_group);
 		charName="SageJiraiya";
 	}else if(strcmp(_character->getCString(),"Sasuke")==0){
-		this->setID(__String::create("ImmortalSasuke"),_role,_group);
+		this->setID(NarutoSenkiLegacy::String::create("ImmortalSasuke"),_role,_group);
 		charName="ImmortalSasuke";
 	}else if(strcmp(_character->getCString(),"Lee")==0){
-		this->setID(__String::create("RockLee"),_role,_group);
+		this->setID(NarutoSenkiLegacy::String::create("RockLee"),_role,_group);
 		charName="Lee";
 	}else if(strcmp(_character->getCString(),"RockLee")==0){
-		this->setID(__String::create("Lee"),_role,_group);
+		this->setID(NarutoSenkiLegacy::String::create("Lee"),_role,_group);
 		charName="Lee";
 	}
 
@@ -7303,8 +7303,8 @@ bool NarutoSenki::ActionManager::hardHurt(int delayTime,bool isHurtAction,bool i
 			}
 			
 			if(isStun){
-				__Dictionary* callValue = __Dictionary::create();
-				callValue->setObject(__String::create("stun"), 1);
+				NarutoSenkiLegacy::Dictionary* callValue = NarutoSenkiLegacy::Dictionary::create();
+				callValue->setObject(NarutoSenkiLegacy::String::create("stun"), 1);
 				callValue->retain();
 				FiniteTimeAction *call = createPayloadCall(this, &NarutoSenki::ActionManager::setSkillEffect, (void*)callValue);
 				list.pushBack(call);
@@ -7728,8 +7728,8 @@ void NarutoSenki::ActionManager::dead(){
 	
 	}else{
 		this->unschedule(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::removeClone));
-		__Dictionary* callValue = __Dictionary::create();
-		callValue->setObject(__String::create("smk"), 1);
+		NarutoSenkiLegacy::Dictionary* callValue = NarutoSenkiLegacy::Dictionary::create();
+		callValue->setObject(NarutoSenkiLegacy::String::create("smk"), 1);
 		this->setSkillEffect(this,callValue);
 		this->dealloc();
 	}
@@ -7781,7 +7781,7 @@ void NarutoSenki::ActionManager::doAI(){
 
 bool NarutoSenki::ActionManager::findEnemy(const char* type,int searchRange,bool masterRange){
 
-	__Array* list;
+	NarutoSenkiLegacy::Array* list;
 	if(strcmp("Hero",type)==0){
 		list=_delegate->_CharacterArray;
 	}else if(strcmp("Flog",type)==0){
@@ -7867,7 +7867,7 @@ bool NarutoSenki::ActionManager::findEnemy(const char* type,int searchRange,bool
 
 bool NarutoSenki::ActionManager::findEnemy2(const char* type){
 	
-	__Array* list;
+	NarutoSenkiLegacy::Array* list;
 	if(strcmp("Hero",type)==0){
 		list=_delegate->_CharacterArray;
 	}else if(strcmp("Flog",type)==0){
@@ -7974,7 +7974,7 @@ bool NarutoSenki::ActionManager::findEnemy2(const char* type){
 
 bool NarutoSenki::ActionManager::checkBase(){
 
-	__Array* list=_delegate->_CharacterArray;
+	NarutoSenkiLegacy::Array* list=_delegate->_CharacterArray;
 	Ref* pObject;
 
 	for (unsigned int ccIndex = 0; list && ccIndex < list->count(); ++ccIndex){
@@ -8037,7 +8037,7 @@ bool NarutoSenki::ActionManager::checkBase(){
 
 bool NarutoSenki::ActionManager::findTargetEnemy(const char* type,bool isTowerDected){
 
-	__Array* list;
+	NarutoSenkiLegacy::Array* list;
 	if(strcmp("Hero",type)==0){
 		list=_delegate->_CharacterArray;
 	}else if(strcmp("Flog",type)==0){
@@ -8313,9 +8313,9 @@ void NarutoSenki::ActionManager::changeSide(Vec2 sp){
 void NarutoSenki::ActionManager::changeGroup(){
 	
 	if(strcmp(this->getGroup()->getCString(),"Konoha")==0){
-		this->setGroup(__String::create("Akatsuki"));
+		this->setGroup(NarutoSenkiLegacy::String::create("Akatsuki"));
 	}else{
-		this->setGroup(__String::create("Konoha"));
+		this->setGroup(NarutoSenkiLegacy::String::create("Konoha"));
 	}
 
 	if(this->_hpBar && strcmp(this->getRole()->getCString(),"Player")!=0){
@@ -8329,7 +8329,7 @@ void NarutoSenki::ActionManager::changeGroup(){
 	if(strcmp(this->getRole()->getCString(),"Player")==0){
 
 		for(int i=0;i<4;i++){
-			__Array* list;
+			NarutoSenkiLegacy::Array* list;
 
 			if(i==0){
 				list=_delegate->_CharacterArray;

@@ -1,12 +1,12 @@
 #pragma once
 
-#include "cocos2d.h"
+#include "LegacyData.h"
 
 namespace NarutoSenkiPayload {
 
-using LegacyArray = cocos2d::__Array;
-using LegacyDictionary = cocos2d::__Dictionary;
-using LegacyString = cocos2d::__String;
+using LegacyArray = NarutoSenkiLegacy::Array;
+using LegacyDictionary = NarutoSenkiLegacy::Dictionary;
+using LegacyString = NarutoSenkiLegacy::String;
 
 inline LegacyDictionary* asHero(cocos2d::Ref* payload)
 {

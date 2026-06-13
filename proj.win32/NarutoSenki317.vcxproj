@@ -201,6 +201,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)\Resources\" /D /E /I /F /Y
     <ClInclude Include="..\Classes\JoyStick.h" />
     <ClInclude Include="..\Classes\LoadLayer.h" />
     <ClInclude Include="..\Classes\HeroPayload.h" />
+    <ClInclude Include="..\Classes\LegacyData.h" />
     <ClInclude Include="..\Classes\MyUtils\CCScrewLayer.h" />
     <ClInclude Include="..\Classes\MyUtils\CCShake.h" />
     <ClInclude Include="..\Classes\MyUtils\CCStrokeLabel.h" />

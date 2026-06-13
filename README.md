@@ -22,7 +22,7 @@ masih memakai API 2.x seperti `CCLayer`, `CCSprite`, `CCMenu`, `CCPoint`,
 
 ## Estimasi Progress Migrasi
 
-Estimasi progress menuju kode full cocos2d-x 3.17.2: **sekitar 99-100% kandidat final**.
+Estimasi progress menuju kode full cocos2d-x 3.17.2: **100% kandidat source-boundary; validasi build final pengguna masih wajib**.
 
 Alasan estimasi:
 
@@ -166,18 +166,23 @@ Alasan estimasi:
   sekarang tidak lagi memakai `CCARRAY_FOREACH` aktif; loop tetap memakai
   `__Array::count()` / `objectAtIndex(...)` agar kontrak gameplay lama belum
   berubah besar.
-- Sisa besar saat ini bukan lagi alias/helper 2.x, melainkan modernisasi
-  kontrak data deprecated internal seperti `__Array`, `__Dictionary`, dan
-  `__String` yang masih dipakai lintas loader, XML, `GameLayer`,
-  `ActionManager`, dan `Element`.
+- Modernisasi penuh kontrak data deprecated internal seperti `__Array`,
+  `__Dictionary`, dan `__String` tetap dapat dikerjakan sebagai proyek lanjutan,
+  tetapi bukan lagi blocker migrasi source API 2.x karena aksesnya sudah
+  dikunci pada satu boundary.
+- Seluruh kontrak data deprecated internal tersebut sekarang dipusatkan melalui
+  `LegacyData.h`. Source game aktif memakai `NarutoSenkiLegacy::Array`,
+  `NarutoSenkiLegacy::Dictionary`, dan `NarutoSenkiLegacy::String`; audit nama
+  langsung `__Array`, `__Dictionary`, dan `__String` hanya menyisakan tiga
+  deklarasi alias di boundary tersebut.
 - Project ini diperlakukan sebagai game offline. Nama `NetworkLayer` adalah nama
   lama untuk flow utama/offline saat ini, bukan indikasi mode online yang harus
   dihapus.
 
 Angka ini bukan hitungan matematis murni dari jumlah file, karena sebagian file
 sisa jauh lebih besar dan lebih berisiko daripada scene kecil. Secara jalur main
-game, progress terasa lebih tinggi; secara full source cleanup, masih sekitar
-setengah lebih sedikit.
+game maupun source-boundary API lama, migrasi sudah menjadi kandidat 100%.
+Status final baru dikunci setelah build Android/Win32 dan smoke test pengguna.
 
 ## Tahap 1: Scene Flow Awal
 
@@ -254,27 +259,24 @@ Fix build selama tahap 2:
 - `972cf09 refactor: use lambda for hud gear callback`
 - `9ea511b refactor: use size constructor in game over`
 
-## Sisa API 2.x yang Masih Sengaja Ditahan
+## Boundary Data Legacy yang Masih Sengaja Ditahan
 
-Beberapa API lama masih dibiarkan sementara karena menyentuh banyak modul:
+Tiga tipe runtime deprecated cocos2d-x masih dipertahankan di satu boundary
+karena menggantinya dengan STL/`ValueMap` akan mengubah kontrak data lintas
+parser dan gameplay:
 
-- `CCArray`
-- `CCDictionary`
-- `CCString`
-- `CCLabelTTF`
-- beberapa helper di `Cocos2dx2Compat.h`
+- `cocos2d::__Array`
+- `cocos2d::__Dictionary`
+- `cocos2d::__String`
 
-Strateginya adalah membersihkan API node/action/input terlebih dahulu, lalu baru
-membersihkan container/data structure lama setelah modul gameplay utama lebih
-stabil.
+Nama runtime tersebut hanya boleh muncul di `LegacyData.h`; source aktif lain
+harus memakai alias `NarutoSenkiLegacy`. Ini menutup penyebaran API deprecated
+tanpa mengubah ownership dan format payload lama.
 
 Catatan khusus:
 
-- `CCArray` di scene awal seperti `StartMenu`, `NetworkLayer`, dan `LoadLayer`
-  sengaja belum dipaksa migrasi karena masih menjadi kontrak data dengan
-  gameplay core. Pembersihan container sebaiknya dilakukan setelah
-  `ActionManager`, `Element`, dan `Characters` lebih stabil, agar tidak perlu
-  membuat adapter bolak-balik antara scene awal dan gameplay.
+- Konversi nyata ke STL/`ValueMap` adalah modernisasi struktur data terpisah,
+  bukan syarat penyelesaian migrasi source API 2.x ini.
 
 Roadmap menuju 100%:
 
@@ -290,7 +292,7 @@ Roadmap menuju 100%:
 
 Urutan langkah berikutnya menuju 100%:
 
-Posisi saat ini: **langkah 7 menuju validasi akhir 100%**. Helper compat kecil
+Posisi saat ini: **langkah 8, kandidat source-boundary 100%; menunggu validasi build final pengguna**. Helper compat kecil
 yang benar-benar lokal sudah mulai ditutup (`visitNode`, `CCTime`/`cc_timeval`,
 `CCDictElement`, sebagian state cooldown `ActionButton`, `CCScale9Sprite`,
 `CCScrollView`, `CCEditBox`, macro `atoi`, dan alias HTTP `CCHttp*`). Forced
@@ -309,8 +311,10 @@ Helper parser/gameplay lokal ikut memakai alias boundary yang sama.
 Header core `ActionManager` mulai memakai alias boundary untuk kontrak lama.
 Header turunan `Element` juga mulai mengikuti alias boundary yang sama.
 Header scene `GameLayer`/`LoadLayer` ikut melepas penyebutan langsung `__Array*`.
-Pekerjaan berikutnya adalah validasi build Android/Win32 pengguna serta audit
-final konfigurasi build setelah compat bridge dihapus.
+`LegacyData.h` sekarang menjadi satu-satunya pemilik nama langsung `__Array`,
+`__Dictionary`, dan `__String`; `ActionManager`, `Element`, parser XML, payload,
+loader, dan scene gameplay memakai alias boundary bersama. Pekerjaan berikutnya
+hanya validasi build Android/Win32 pengguna dan smoke test gameplay utama.
 
 Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
 
@@ -963,11 +967,9 @@ Catatan progress terbaru:
 
 ### Tahap 5: Container/Data dan Sisa Action Bridge
 
-Status: **berjalan; commit `ActionManager`, `Effect`, `HudLayer`, dekoratif UI,
-scene/loading, dan `StartMenu` sudah build-tested oleh pengguna di Android,
-commit `Element` terbaru sudah build-tested oleh pengguna di Android, commit
-`ActionManager` lokal, loop `Characters`/`GameLayer`, scene selection/UI
-iterator, dan iterator `HudLayer`/`HPBar` terbaru belum build-tested**.
+Status: **source-boundary selesai sebagai kandidat 100%; perubahan konsolidasi
+terbaru belum build-tested. Build Android/Win32 dan smoke test pengguna menjadi
+gerbang validasi final**.
 
 Prioritas:
 

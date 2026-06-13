@@ -1,6 +1,7 @@
 #pragma once
 #include "tinyxml2/tinyxml2.h"
 #include "cocos2d.h"
+#include "LegacyData.h"
 #include "MyUtils/CMD5Checksum.h"
 #include "MyUtils/sqlite3.h"
 #include "SimpleAudioEngine.h"
@@ -22,7 +23,7 @@ public:
 	void prepareFileMD5();
 	void prepareFileSHA();
 
-	bool readXMLToArray(const char* filePath,__Array* &array);
+	bool readXMLToArray(const char* filePath,NarutoSenkiLegacy::Array* &array);
 	void	initTableInDB();
 	void	initColumeInDB();
 

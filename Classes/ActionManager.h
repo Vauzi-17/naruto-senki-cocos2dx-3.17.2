@@ -1,5 +1,6 @@
 #pragma once
 #include "cocos2d.h"
+#include "LegacyData.h"
 #include "MyUtils/KTools.h"
 #include "GameLayer.h"
 #include "Defines.h"
@@ -30,9 +31,9 @@ class HPBar;
 
 namespace NarutoSenki {
 
-using LegacyArray = __Array;
-using LegacyDictionary = __Dictionary;
-using LegacyString = __String;
+using LegacyArray = NarutoSenkiLegacy::Array;
+using LegacyDictionary = NarutoSenkiLegacy::Dictionary;
+using LegacyString = NarutoSenkiLegacy::String;
 
 	class ActionManager :public Sprite {
 	public:

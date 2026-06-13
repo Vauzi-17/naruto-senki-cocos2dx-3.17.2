@@ -15,7 +15,7 @@ using namespace CocosDenshion;
 
 namespace {
 
-using LegacyArray = __Array;
+using LegacyArray = NarutoSenkiLegacy::Array;
 
 LegacyArray* createGameplayArray()
 {
