@@ -5,7 +5,7 @@
 /*#if (CC_TARGET_PLATFORM==CC_PLATFORM_ANDROID)
 #include "platform/android/jni/JniHelper.h"
 #endif  */
-#include <map>
+#include <set>
 #include <vector>
 #include <string>
 #include <algorithm>
@@ -1105,91 +1105,36 @@ void KTools::dfsFolder(std::string folderPath, int depth /* = 0 */,int type/* =0
 
 }
 
-static bool sAudioListLoaded = false;
-static std::map<std::string, std::vector<std::string> > sAudioListCache;
-static std::map<std::string, bool> sPreloadedEffects;
-static std::map<std::string, unsigned int> sLastEffectFrame;
-static unsigned int sEffectFrame = 0;
-static int sEffectsPlayedThisFrame = 0;
+static std::set<std::string> sPreloadedEffects;
+static std::set<std::string> sMatchEffects;
 
-static void loadAudioListCache()
+static std::string normalizeAudioPath(const char* soundPath)
 {
-    if (sAudioListLoaded)
-        return;
+    std::string key = soundPath ? soundPath : "";
+    std::replace(key.begin(), key.end(), '\\', '/');
 
-    sAudioListLoaded = true;
+    const std::string whitespace = " \t\r\n";
+    const size_t first = key.find_first_not_of(whitespace);
+    if (first == std::string::npos)
+        return "";
 
-    std::string md5Path = "Audio/list.xml";
-
-    if (!FileUtils::getInstance()->isFileExist(md5Path))
-        return;
-
-    ssize_t nSize = 0;
-    unsigned char* pXmlBuffer = FileUtils::getInstance()->getFileData(md5Path.c_str(), "r", &nSize);
-
-    if (!pXmlBuffer || nSize <= 0)
-        return;
-
-    tinyxml2::XMLDocument doc;
-    doc.Parse(reinterpret_cast<const char*>(pXmlBuffer), nSize);
-
-    CC_SAFE_DELETE_ARRAY(pXmlBuffer);
-
-    XMLElement* rootEle = doc.RootElement();
-    if (!rootEle)
-        return;
-
-    XMLElement* fileEle = rootEle->FirstChildElement();
-
-    while (fileEle)
-    {
-        if (fileEle->FirstAttribute() && fileEle->GetText())
-        {
-            const char* listName = fileEle->FirstAttribute()->Value();
-            const char* soundPath = fileEle->GetText();
-
-            if (listName && soundPath)
-            {
-                std::string normalizedPath = soundPath;
-                std::replace(normalizedPath.begin(), normalizedPath.end(), '\\', '/');
-                sAudioListCache[listName].push_back(normalizedPath);
-            }
-        }
-
-        fileEle = fileEle->NextSiblingElement();
-    }
+    const size_t last = key.find_last_not_of(whitespace);
+    return key.substr(first, last - first + 1);
 }
 
-void KTools::prepareFileOGG(const char* listName, int type /* = 0 */)
+static void collectAudioPaths(XMLElement* element, std::set<std::string>& paths)
 {
-    if (!UserDefault::getInstance()->getBoolForKey("isPreload"))
-        return;
-
-    if (!listName || !listName[0])
-        return;
-
-    loadAudioListCache();
-
-    std::map<std::string, std::vector<std::string> >::iterator it = sAudioListCache.find(listName);
-
-    if (it == sAudioListCache.end())
-        return;
-
-
-    const std::vector<std::string>& files = it->second;
-
-    for (size_t i = 0; i < files.size(); ++i)
+    for (XMLElement* current = element; current; current = current->NextSiblingElement())
     {
-        const char* soundPath = files[i].c_str();
+        const char* text = current->GetText();
+        if (text)
+        {
+            const std::string path = normalizeAudioPath(text);
+            if (path.compare(0, 6, "Audio/") == 0)
+                paths.insert(path);
+        }
 
-        if (type == 0)
-        {
-            KTools::preloadEffectCached(soundPath);
-        }
-        else if (type == 1)
-        {
-            KTools::unloadEffectCached(soundPath);
-        }
+        collectAudioPaths(current->FirstChildElement(), paths);
     }
 }
 
@@ -1198,13 +1143,14 @@ void KTools::preloadEffectCached(const char* soundPath)
     if (!soundPath || !soundPath[0])
         return;
 
-    std::string key = soundPath;
-    std::replace(key.begin(), key.end(), '\\', '/');
-    if (sPreloadedEffects[key])
+    std::string key = normalizeAudioPath(soundPath);
+    if (key.empty())
+        return;
+    if (sPreloadedEffects.find(key) != sPreloadedEffects.end())
         return;
 
     SimpleAudioEngine::getInstance()->preloadEffect(key.c_str());
-    sPreloadedEffects[key] = true;
+    sPreloadedEffects.insert(key);
 }
 
 void KTools::unloadEffectCached(const char* soundPath)
@@ -1212,11 +1158,53 @@ void KTools::unloadEffectCached(const char* soundPath)
     if (!soundPath || !soundPath[0])
         return;
 
-    std::string key = soundPath;
-    std::replace(key.begin(), key.end(), '\\', '/');
+    std::string key = normalizeAudioPath(soundPath);
+    if (key.empty())
+        return;
     SimpleAudioEngine::getInstance()->unloadEffect(key.c_str());
     sPreloadedEffects.erase(key);
-    sLastEffectFrame.erase(key);
+}
+
+void KTools::preloadMatchEffect(const char* soundPath)
+{
+	if (!UserDefault::getInstance()->getBoolForKey("isPreload"))
+		return;
+
+    const std::string key = normalizeAudioPath(soundPath);
+    if (key.empty() || !FileUtils::getInstance()->isFileExist(key))
+        return;
+
+    sMatchEffects.insert(key);
+    KTools::preloadEffectCached(key.c_str());
+}
+
+void KTools::preloadMatchEffectsFromXML(const char* xmlPath)
+{
+    if (!xmlPath || !xmlPath[0] || !FileUtils::getInstance()->isFileExist(xmlPath))
+        return;
+
+    ssize_t size = 0;
+    unsigned char* data = FileUtils::getInstance()->getFileData(xmlPath, "r", &size);
+    if (!data || size <= 0)
+        return;
+
+    tinyxml2::XMLDocument document;
+    document.Parse(reinterpret_cast<const char*>(data), size);
+    CC_SAFE_DELETE_ARRAY(data);
+
+    std::set<std::string> paths;
+    collectAudioPaths(document.RootElement(), paths);
+    for (std::set<std::string>::const_iterator it = paths.begin(); it != paths.end(); ++it)
+        KTools::preloadMatchEffect(it->c_str());
+}
+
+void KTools::releaseMatchEffects()
+{
+    std::set<std::string> effects;
+    effects.swap(sMatchEffects);
+
+    for (std::set<std::string>::const_iterator it = effects.begin(); it != effects.end(); ++it)
+        KTools::unloadEffectCached(it->c_str());
 }
 
 unsigned int KTools::playEffectOptimized(const char* soundPath, unsigned int minFrameGap, int maxPerFrame)
@@ -1224,27 +1212,19 @@ unsigned int KTools::playEffectOptimized(const char* soundPath, unsigned int min
     if (!soundPath || !soundPath[0])
         return 0;
 
-    unsigned int frame = Director::getInstance()->getTotalFrames();
-    if (frame != sEffectFrame)
-    {
-        sEffectFrame = frame;
-        sEffectsPlayedThisFrame = 0;
-    }
+    (void)minFrameGap;
+    (void)maxPerFrame;
 
-    if (maxPerFrame > 0 && sEffectsPlayedThisFrame >= maxPerFrame)
-        return 0;
-
-    std::string key = soundPath;
-    std::replace(key.begin(), key.end(), '\\', '/');
-    std::map<std::string, unsigned int>::iterator it = sLastEffectFrame.find(key);
-    if (it != sLastEffectFrame.end() && frame - it->second < minFrameGap)
+    std::string key = normalizeAudioPath(soundPath);
+    if (key.empty())
         return 0;
 
     if (UserDefault::getInstance()->getBoolForKey("isPreload"))
-        KTools::preloadEffectCached(soundPath);
+    {
+        sMatchEffects.insert(key);
+        KTools::preloadEffectCached(key.c_str());
+    }
 
-    sLastEffectFrame[key] = frame;
-    ++sEffectsPlayedThisFrame;
     return SimpleAudioEngine::getInstance()->playEffect(key.c_str());
 }
 

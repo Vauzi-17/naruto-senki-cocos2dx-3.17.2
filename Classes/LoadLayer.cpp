@@ -16,6 +16,22 @@ USING_NS_CC_EXT;
 using namespace std;
 using namespace CocosDenshion;
 
+namespace {
+
+void preloadCharacterMatchAudio(const char* character)
+{
+	if (!character || !character[0])
+		return;
+
+	const std::string xmlPath=cocos2d::StringUtils::format("Element/%s/%s.xml",character,character);
+	KTools::preloadMatchEffectsFromXML(xmlPath.c_str());
+
+	const std::string ougisPath=cocos2d::StringUtils::format("Audio/Ougis/%s_ougis.mp3",character);
+	KTools::preloadMatchEffect(ougisPath.c_str());
+}
+
+}
+
 LoadLayer::LoadLayer(void)
 {
 	tempHeros=NULL;
@@ -104,7 +120,9 @@ void LoadLayer::preloadIMG(){
 
 	int i=0;
 	std::string path;
-	KTools* tool=KTools::create();
+	KTools::preloadMatchEffect("Audio/Effect/poof.mp3");
+	KTools::preloadMatchEffect("Audio/Effect/poof2.mp3");
+	KTools::preloadMatchEffect("Audio/Effect/suzou_effect.mp3");
 
 	for(unsigned int heroIndex=0; heroIndex<tempHeros->count(); ++heroIndex){
 		Ref* pObject=tempHeros->objectAtIndex(heroIndex);
@@ -126,7 +144,7 @@ void LoadLayer::preloadIMG(){
 		}
 
 		//Ԥ������Ч
-		tool->prepareFileOGG(player);
+		preloadCharacterMatchAudio(player);
 
 
 
@@ -140,27 +158,37 @@ void LoadLayer::preloadIMG(){
 		//���ض����ɫ
 		if(strcmp(player,"Jiraiya")==0){
 			SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Element/SageJiraiya/SageJiraiya.plist");
-			tool->prepareFileOGG("SageJiraiya");
+			preloadCharacterMatchAudio("SageJiraiya");
 		}else if(strcmp(player,"Kankuro")==0){
 			SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Element/Karasu/Karasu.plist");
 			SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Element/Sanshouuo/Sanshouuo.plist");
 			SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Element/Saso/Saso.plist");
+			preloadCharacterMatchAudio("Karasu");
+			preloadCharacterMatchAudio("Sanshouuo");
+			preloadCharacterMatchAudio("Saso");
 		}else if(strcmp(player,"Chiyo")==0){
 			SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Element/Parents/Parents.plist");
+			preloadCharacterMatchAudio("Parents");
 		}else if(strcmp(player,"Kakuzu")==0){
 			SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Element/MaskRaidon/MaskRaidon.plist");
 			SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Element/MaskFudon/MaskFudon.plist");
 			SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Element/MaskKadon/MaskKadon.plist");
+			preloadCharacterMatchAudio("MaskRaidon");
+			preloadCharacterMatchAudio("MaskFudon");
+			preloadCharacterMatchAudio("MaskKadon");
 		}else if(strcmp(player,"Naruto")==0){
 			SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Element/RikudoNaruto/RikudoNaruto.plist");
 			SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Element/SageNaruto/SageNaruto.plist");
 			SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Element/Kurama/Kurama.plist");
-			tool->prepareFileOGG("SageNaruto");
-			tool->prepareFileOGG("RikudoNaruto");
+			preloadCharacterMatchAudio("Kurama");
+			preloadCharacterMatchAudio("SageNaruto");
+			preloadCharacterMatchAudio("RikudoNaruto");
 		}else if(strcmp(player,"Lee")==0){
 			SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Element/RockLee/RockLee.plist");
+			preloadCharacterMatchAudio("RockLee");
 		}else if(strcmp(player,"Tsunade")==0){
 			SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Element/Slug/Slug.plist");
+			preloadCharacterMatchAudio("Slug");
 		}else if(strcmp(player,"Shisui")==0){
 			SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Element/Shisui/Shisui-1.plist");
 			SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Element/Shisui/Shisui-2.plist");
@@ -170,17 +198,23 @@ void LoadLayer::preloadIMG(){
 			SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Element/Shisui/Shisui-6.plist");
 		}else if(strcmp(player,"Kakashi")==0){
 			SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Element/DogWall/DogWall.plist");
+			preloadCharacterMatchAudio("DogWall");
 		}else if(strcmp(player,"Deidara")==0){
 			SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Element/Centipede/Centipede.plist");
+			preloadCharacterMatchAudio("Centipede");
 		}else if(strcmp(player,"Pain")==0){
 			SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Element/DevaPath/DevaPath.plist");
 			SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Element/AsuraPath/AsuraPath.plist");
 			SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Element/AnimalPath/AnimalPath.plist");
+			preloadCharacterMatchAudio("DevaPath");
+			preloadCharacterMatchAudio("AsuraPath");
+			preloadCharacterMatchAudio("AnimalPath");
 		}else if(strcmp(player,"Sasuke")==0){
 			SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Element/ImmortalSasuke/ImmortalSasuke.plist");
-			tool->prepareFileOGG("ImmortalSasuke");
+			preloadCharacterMatchAudio("ImmortalSasuke");
 		}else if(strcmp(player,"Kiba")==0){
 			SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Element/Akamaru/Akamaru.plist");
+			preloadCharacterMatchAudio("Akamaru");
 		}
 
 
@@ -233,8 +267,8 @@ void LoadLayer::preloadIMG(){
 	if(_isHardCoreMode){
 		SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Element/Roshi/Roshi.plist");
 		SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Element/Han/Han.plist");
-		tool->prepareFileOGG("Roshi");
-		tool->prepareFileOGG("Han");
+		preloadCharacterMatchAudio("Roshi");
+		preloadCharacterMatchAudio("Han");
 	}
 	SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Element/Flog/KotetsuFlog.plist");
 	SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Element/Flog/FemalePainFlog.plist");
@@ -246,8 +280,6 @@ void LoadLayer::preloadIMG(){
 	SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Element/Flog/PainFlog.plist");
 	SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Element/Flog/ObitoFlog.plist");
 
-	tool->prepareFileOGG("Effect");
-	tool->prepareFileOGG("Ougis");
 
 
 	try{
@@ -323,6 +355,7 @@ void LoadLayer::preloadAudio(){
 	//tool->dfsFolder(soundpath,0,1);
 	}
 
+	KTools::releaseMatchEffects();
 	this->preloadIMG();
 }
 

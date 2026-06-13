@@ -1330,8 +1330,6 @@ void GameLayer::onLeft(){
 		SpriteFrameCache::getInstance()->removeSpriteFramesFromFile("Element/Tower/Tower5.plist");
 	}
 
-	KTools* tool=KTools::create();
-
 	auto rematchHeros=_isRematching ? _rematchHerosOverride : nullptr;
 	if(_isRematching && !rematchHeros && _CharacterArray){
 		rematchHeros=NarutoSenkiPayload::createHeroList();
@@ -1365,17 +1363,11 @@ void GameLayer::onLeft(){
 		SpriteFrameCache::getInstance()->removeSpriteFramesFromFile(path);
 
 		//ɾ��Ԥ������Ч
-		if(strcmp(player->getRole()->getCString(),"Com")==0 ||
-			strcmp(player->getRole()->getCString(),"Player")==0
-			){
-			tool->prepareFileOGG(player->getCharacter()->getCString(),1);
-		}
 
 
 		//ɾ�������ɫ
 		if(strcmp(player->getCharacter()->getCString(),"Jiraiya")==0){
 			SpriteFrameCache::getInstance()->removeSpriteFramesFromFile("Element/SageJiraiya/SageJiraiya.plist");
-			tool->prepareFileOGG("SageJiraiya",1);
 		}else if(strcmp(player->getCharacter()->getCString(),"Kankuro")==0){
 			SpriteFrameCache::getInstance()->removeSpriteFramesFromFile("Element/Karasu/Karasu.plist");
 			SpriteFrameCache::getInstance()->removeSpriteFramesFromFile("Element/Sanshouuo/Sanshouuo.plist");
@@ -1386,14 +1378,11 @@ void GameLayer::onLeft(){
 		}else if(strcmp(player->getCharacter()->getCString(),"Naruto")==0){
 			SpriteFrameCache::getInstance()->removeSpriteFramesFromFile("Element/SageNaruto/SageNaruto.plist");
 			SpriteFrameCache::getInstance()->removeSpriteFramesFromFile("Element/RikudoNaruto/RikudoNaruto.plist");
-			tool->prepareFileOGG("SageNaruto",1);
-			tool->prepareFileOGG("RikudoNaruto",1);
 		}else if(strcmp(player->getCharacter()->getCString(),"RockLee")==0){
 			SpriteFrameCache::getInstance()->removeSpriteFramesFromFile("Element/Lee/Lee.plist");
 		}else if(strcmp(player->getCharacter()->getCString(),"Lee")==0){
 			SpriteFrameCache::getInstance()->removeSpriteFramesFromFile("Element/RockLee/RockLee.plist");
 		}else if(strcmp(player->getCharacter()->getCString(),"Sasuke")==0){
-			tool->prepareFileOGG("ImmortalSasuke",1);
 			SpriteFrameCache::getInstance()->removeSpriteFramesFromFile("Element/ImmortalSasuke/ImmortalSasuke.plist");
 		}else if(strcmp(player->getCharacter()->getCString(),"Shisui")==0){
 			SpriteFrameCache::getInstance()->removeSpriteFramesFromFile("Element/Shisui/Shisui-1.plist");
@@ -1408,12 +1397,8 @@ void GameLayer::onLeft(){
 	if(this->_isHardCoreGame){
 		SpriteFrameCache::getInstance()->removeSpriteFramesFromFile("Element/Roshi/Roshi.plist");
 		SpriteFrameCache::getInstance()->removeSpriteFramesFromFile("Element/Han/Han.plist");
-		tool->prepareFileOGG("Roshi",1);
-		tool->prepareFileOGG("Han",1);
 	}
-
-	tool->prepareFileOGG("Effect",1);
-	tool->prepareFileOGG("Ougis",1);
+	KTools::releaseMatchEffects();
 
 
     if(_CharacterArray){

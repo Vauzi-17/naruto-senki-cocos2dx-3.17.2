@@ -318,6 +318,14 @@ hanya validasi build Android/Win32 pengguna dan smoke test gameplay utama.
 
 Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
 
+- Optimasi first-use skill: `LoadLayer` sekarang membaca referensi audio dari
+  XML karakter/form yang benar-benar ikut match dan melakukan warm-up selama
+  loading. Preload global seluruh grup `Effect`/`Ougis` tidak lagi dilakukan,
+  sehingga decode pertama tidak jatuh di tengah gameplay tetapi penggunaan RAM
+  tetap mengikuti roster aktif.
+- `KTools::playEffectOptimized` tidak lagi membatasi jumlah atau jarak frame
+  suara; setiap request effect tetap dimainkan. Cache audio match dilepas saat
+  meninggalkan gameplay dan sebelum loading match berikutnya.
 - `ActionButton`: overload `setCD(CCString*)` dihapus; caller `HudLayer` dan
   `ActionManager` sekarang memakai `setCD(int)` langsung.
 - `StartMenu`: pemakaian `CCScale9Sprite` di area input panel diganti ke
