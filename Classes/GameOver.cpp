@@ -597,7 +597,7 @@ void GameOver::listResult(){
 				std::string recordTime=tool->readSQLite("CharRecord","name",resultChar.c_str(),"column3");
 				if(recordTime.empty()){
 					if(CError!=1){
-						tool->saveSQLite("CharRecord","name",resultChar.c_str(),"column3",(char*) tempTime->getCString(),false);
+						tool->saveSQLite("CharRecord","name",resultChar.c_str(),"column3",(char*) tempTime.c_str(),false);
 					}
 				}else{
 					std::string bestTime=recordTime;
@@ -628,7 +628,7 @@ void GameOver::listResult(){
 
 					if(isNewRecord){
 						if(CError!=1){
-							tool->saveSQLite("CharRecord","name",resultChar.c_str(),"column3",(char*) tempTime->getCString(),false);
+							tool->saveSQLite("CharRecord","name",resultChar.c_str(),"column3",(char*) tempTime.c_str(),false);
 						}
 					}
 

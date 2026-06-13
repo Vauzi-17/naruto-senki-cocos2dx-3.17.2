@@ -318,6 +318,9 @@ hanya validasi build Android/Win32 pengguna dan smoke test gameplay utama.
 
 Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
 
+- Fix Win32 Debug VS2022: dua penyimpanan best-time di `GameOver` memakai
+  `tempTime.c_str()` setelah `tempTime` dimigrasikan menjadi `std::string`,
+  menghapus error C2819/C2039/C2660 pada baris result record.
 - Optimasi first-use skill: `LoadLayer` sekarang membaca referensi audio dari
   XML karakter/form yang benar-benar ikut match dan melakukan warm-up selama
   loading. Preload global seluruh grup `Effect`/`Ougis` tidak lagi dilakukan,
