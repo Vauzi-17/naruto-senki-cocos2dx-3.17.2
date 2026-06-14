@@ -318,6 +318,18 @@ hanya validasi build Android/Win32 pengguna dan smoke test gameplay utama.
 
 Update terbaru (belum build-tested oleh Codex sesuai aturan kerja):
 
+- Fix gameplay multi-mode: loading 4v4/5v5 menampilkan seluruh animasi walk
+  anggota tim pemain berdasarkan payload `group`/`role`, bukan lagi batas tetap
+  maksimal tiga karakter.
+- Sinkronisasi indikator skill 4/5 dipusatkan di `ActionButton::unLock()`:
+  overlay level, freeze mark, progress ring, dan blink biru diperbarui bersama.
+  Unlock normal mengikuti level karakter pemain, sementara lock khusus karakter
+  tetap diterapkan setelah unlock level.
+- Antrean report kill sekarang menghapus sprite report lama sebelum item antrean
+  berikutnya menetap, sehingga notifikasi berurutan tidak menumpuk di layar.
+- Mode training menjaga HP hero lawan `Player`/`Com` tetap penuh saat menerima
+  damage; hit effect dan perolehan resource tetap berjalan, sedangkan mode duel
+  dan match normal tidak berubah.
 - Fix Win32 Debug VS2022: dua penyimpanan best-time di `GameOver` memakai
   `tempTime.c_str()` setelah `tempTime` dimigrasikan menjadi `std::string`,
   menghapus error C2819/C2039/C2660 pada baris result record.

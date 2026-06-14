@@ -118,8 +118,26 @@ bool LoadLayer::init(){
 
 void LoadLayer::preloadIMG(){
 
-	int i=0;
+	unsigned int teamAvatarIndex=0;
+	unsigned int teamAvatarCount=0;
+	std::string playerGroup;
 	std::string path;
+
+	for(unsigned int heroIndex=0; heroIndex<tempHeros->count(); ++heroIndex){
+		Ref* heroPayload=tempHeros->objectAtIndex(heroIndex);
+		if(strcmp(NarutoSenkiPayload::role(heroPayload),"Player")==0){
+			playerGroup=NarutoSenkiPayload::group(heroPayload);
+			break;
+		}
+	}
+	for(unsigned int heroIndex=0; heroIndex<tempHeros->count(); ++heroIndex){
+		Ref* heroPayload=tempHeros->objectAtIndex(heroIndex);
+		const char* role=NarutoSenkiPayload::role(heroPayload);
+		if(strcmp(NarutoSenkiPayload::group(heroPayload),playerGroup.c_str())==0 &&
+			(strcmp(role,"Player")==0 || strcmp(role,"Com")==0)){
+			teamAvatarCount++;
+		}
+	}
 	KTools::preloadMatchEffect("Audio/Effect/poof.mp3");
 	KTools::preloadMatchEffect("Audio/Effect/poof2.mp3");
 	KTools::preloadMatchEffect("Audio/Effect/suzou_effect.mp3");
@@ -218,12 +236,19 @@ void LoadLayer::preloadIMG(){
 		}
 
 
-		if(i==0 ||( (i==1 || i==2 ) && _isHardCoreMode) ){
+		const char* playerRole=NarutoSenkiPayload::role(pObject);
+		const char* playerTeam=NarutoSenkiPayload::group(pObject);
+		const bool showTeamAvatar=!playerGroup.empty() &&
+			strcmp(playerTeam,playerGroup.c_str())==0 &&
+			(strcmp(playerRole,"Player")==0 || strcmp(playerRole,"Com")==0);
+
+		if(showTeamAvatar){
 
 			std::string loadingAvatarPath=cocos2d::StringUtils::format("%s_Walk_01.png",player);
 			Sprite* loadingAvator=Sprite::createWithSpriteFrameName(loadingAvatarPath);
 			loadingAvator->setFlipX(true);
-			loadingAvator->setPosition(Vec2(winSize.width-100+i*16,30));
+			float avatarStartX=winSize.width-100-static_cast<float>(teamAvatarCount>0 ? teamAvatarCount-1 : 0)*16.0f;
+			loadingAvator->setPosition(Vec2(avatarStartX+teamAvatarIndex*16.0f,30));
 			loadingAvator->setAnchorPoint(Vec2(0,0));
 
 			Vector<SpriteFrame*> animeFrames;
@@ -251,12 +276,12 @@ void LoadLayer::preloadIMG(){
 
 			this->addChild(loadingAvator);
 			loadingAvator->runAction(seq);
+			teamAvatarIndex++;
 
 
 
 		}
 
-		i++;
 
 	};
 

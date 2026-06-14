@@ -1047,26 +1047,14 @@ void GameLayer::refreshOugisSkillLocks(){
 		return;
 	}
 
-	unsigned int maxLevel=1;
-	Ref* pObject=NULL;
-	for(unsigned int characterIndex=0; characterIndex<_CharacterArray->count(); ++characterIndex){
-	pObject=_CharacterArray->objectAtIndex(characterIndex);
-		NarutoSenki::ActionManager* hero=(NarutoSenki::ActionManager*)pObject;
-		if(strcmp(hero->getRole()->getCString(),"Player")==0 ||
-			strcmp(hero->getRole()->getCString(),"Com")==0){
-			if(hero->getLV()>maxLevel){
-				maxLevel=hero->getLV();
-			}
-		}
-	}
-
-	if(maxLevel>=2){
+	unsigned int playerLevel=currentPlayer ? currentPlayer->getLV() : 1;
+	if(playerLevel>=2){
 		this->removeOugisMark(1);
 		if(_hudLayer->skill4Button){
 			_hudLayer->skill4Button->unLock();
 		}
 	}
-	if(maxLevel>=4){
+	if(playerLevel>=4){
 		this->removeOugisMark(2);
 		if(_hudLayer->skill5Button){
 			_hudLayer->skill5Button->unLock();

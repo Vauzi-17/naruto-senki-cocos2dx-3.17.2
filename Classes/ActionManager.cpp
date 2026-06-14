@@ -1577,7 +1577,14 @@ void NarutoSenki::ActionManager::setDamage(NarutoSenkiLegacy::String* effectType
 		
 	}
 
-	if (std::atoi(_hp->getCString())-realValue<0){
+	const bool hasUnlimitedTrainingHP=_delegate && _delegate->_isTrainingMode &&
+		_delegate->currentPlayer &&
+		(strcmp(_role->getCString(),"Player")==0 || strcmp(_role->getCString(),"Com")==0) &&
+		strcmp(_group->getCString(),_delegate->currentPlayer->getGroup()->getCString())!=0;
+
+	if(hasUnlimitedTrainingHP){
+		this->setHP(NarutoSenkiLegacy::String::create(this->getMaxHP()->getCString()));
+	}else if (std::atoi(_hp->getCString())-realValue<0){
 		this->setHP(NarutoSenkiLegacy::String::create("0"));
 	}else{
 		this->setHP(createActionIntString(std::atoi(this->getHP()->getCString())-realValue));

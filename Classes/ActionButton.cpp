@@ -19,6 +19,10 @@ ActionButton::ActionButton(void)
 	_isDoubleSkill=false;
 	_freezeAction=NULL;
 	markSprite=NULL;
+	ougismarkSprite=NULL;
+	clipper=NULL;
+	lockLabel1=NULL;
+	lockLabel2=NULL;
 	_clickTime=0;
 	_clickNum=0;
 	cdLabel=NULL;
@@ -323,6 +327,10 @@ void ActionButton::setOugisMark(){
 }
 
 void ActionButton::setProgressMark(){
+	if(clipper){
+		this->updateProgressMark();
+		return;
+	}
 
 	clipper = ClippingNode::create();
 	Node *stencil = Sprite::createWithSpriteFrameName("icon_bg1.png");
@@ -518,6 +526,17 @@ void ActionButton::setLock(){
 }
 
 void ActionButton::unLock(){
+	_isLock=false;
+	if(ougismarkSprite){
+		ougismarkSprite->setVisible(false);
+	}
+	if(lockLabel1){
+		lockLabel1->removeFromParent();
+		lockLabel1=NULL;
+	}
+	if(!clipper && (this->getABType()==OUGIS1 || this->getABType()==OUGIS2)){
+		this->setProgressMark();
+	}
 	if(markSprite){
 		markSprite->stopAllActions();
 		markSprite->setPercentage(0);
@@ -535,12 +554,14 @@ void ActionButton::unLock(){
 	}else if(this->getABType()== OUGIS2) {
 		if(ckr2>=25000){
 			if(proressblinkMask){
-			proressblinkMask->setVisible(false);
+			proressblinkMask->setVisible(true);
 			}
 		}
 	}
-	
-	_isLock=false;
+	if(this->getABType()==OUGIS1 || this->getABType()==OUGIS2){
+		this->updateProgressMark();
+	}
+
 }
 
 void ActionButton::createFreezeAnimation(){

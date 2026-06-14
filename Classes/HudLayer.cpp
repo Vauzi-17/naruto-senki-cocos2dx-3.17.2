@@ -926,7 +926,7 @@ void HudLayer::setReport(const char* name1, const char* name2,const char* killNu
 	ActionInterval*  su=ScaleBy::create(0.2f,1.0f);
 	FiniteTimeAction* call=CallFunc::create(CC_CALLBACK_0(HudLayer::setReportCache, this));
 	DelayTime* delay=DelayTime::create(2.0f);
-	Action* seq=Sequence::create(su,su->reverse(),delay,call,nullptr);
+	Action* seq=Sequence::create(su,su->reverse(),delay,call,RemoveSelf::create(),nullptr);
 	reportSprite->runAction(seq);
 
 	entry.isDisplay=true;
@@ -1086,7 +1086,7 @@ void HudLayer::setReportCache(){
 			ActionInterval*  su=ScaleBy::create(0.2f,1.1f);
 			FiniteTimeAction* call=CallFunc::create(CC_CALLBACK_0(HudLayer::setReportCache, this));
 			DelayTime* delay=DelayTime::create(2.0f);
-			Action* seq=Sequence::create(su,su->reverse(),delay,call,nullptr);
+			Action* seq=Sequence::create(su,su->reverse(),delay,call,RemoveSelf::create(),nullptr);
 			reportSprite->runAction(seq);
 
 			if(strcmp(entry.name2.c_str(),"Tower")!=0){
