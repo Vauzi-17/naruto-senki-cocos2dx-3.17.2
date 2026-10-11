@@ -40,6 +40,21 @@ void addStringEntry(LegacyArray* target, const char* key, const char* value)
 	target->addObject(entry);
 }
 
+// getFileData() returns a malloc'd buffer that is not null-terminated, so the size must be
+// passed to Parse(); without it tinyxml2 reads past the end of the buffer.
+bool loadXmlDocument(tinyxml2::XMLDocument& doc, const std::string& path)
+{
+	ssize_t size = 0;
+	unsigned char* data = FileUtils::getInstance()->getFileData(path, "r", &size);
+	if (!data || size <= 0) {
+		free(data);
+		return false;
+	}
+	doc.Parse(reinterpret_cast<const char*>(data), size);
+	free(data);
+	return !doc.Error() && doc.RootElement();
+}
+
 }
 
 KTools::KTools(void)
@@ -470,12 +485,12 @@ int KTools::checkMD5(std::string findPath /* ="" */){
 	
 
 
-	tinyxml2::XMLDocument* doc = new tinyxml2::XMLDocument();  
-	ssize_t nSize;
-	const char *pXmlBuffer = (const char*)FileUtils::getInstance()->getFileData(md5Path.c_str(), "r", &nSize);
-	doc->Parse(pXmlBuffer);
+	tinyxml2::XMLDocument doc;
+	if(!loadXmlDocument(doc, md5Path)){
+		return 0;
+	}
 
-	XMLElement *rootEle=doc->RootElement();
+	XMLElement *rootEle=doc.RootElement();
 	XMLElement *fileEle=rootEle->FirstChildElement();
 
 
@@ -690,12 +705,12 @@ bool KTools::checkData(){
 		return false;
 	}
 
-	tinyxml2::XMLDocument* doc = new tinyxml2::XMLDocument();  
-	ssize_t nSize;
-	const char *pXmlBuffer = (const char*)FileUtils::getInstance()->getFileData(filePath.c_str(), "r", &nSize);
-	doc->Parse(pXmlBuffer);
+	tinyxml2::XMLDocument doc;
+	if(!loadXmlDocument(doc, filePath)){
+		return false;
+	}
 
-	XMLElement *rootEle=doc->RootElement();
+	XMLElement *rootEle=doc.RootElement();
 	XMLElement *fileEle=rootEle->FirstChildElement();
 
 	int i=0;
@@ -768,15 +783,13 @@ void KTools::updateData(){
 bool KTools::readXMLToArray(const char* filePath,NarutoSenkiLegacy::Array* &array)
 {
 
-	tinyxml2::XMLDocument* doc = new tinyxml2::XMLDocument();  
-	//doc->LoadFile(filePath);  this's doesn't work for android
-	ssize_t nSize;
-	const char *data = (const char*)FileUtils::getInstance()->getFileData(filePath, "r", &nSize);
-	doc->Parse(data);
+	tinyxml2::XMLDocument doc;
+	//doc.LoadFile(filePath);  this's doesn't work for android
+	if(!loadXmlDocument(doc, filePath)){
+		return false;
+	}
 
-
-
-	XMLElement *rootEle=doc->RootElement();
+	XMLElement *rootEle=doc.RootElement();
 	XMLElement *actionEle=rootEle->FirstChildElement();
 
 	
@@ -828,11 +841,9 @@ bool KTools::readXMLToArray(const char* filePath,NarutoSenkiLegacy::Array* &arra
 
 		array->addObject(actionArray);
 		actionEle=actionEle->NextSiblingElement();
-		
+
 	}
 
-	delete data;
-	
 	return true;
 
 };
@@ -1190,7 +1201,7 @@ void KTools::preloadMatchEffectsFromXML(const char* xmlPath)
 
     tinyxml2::XMLDocument document;
     document.Parse(reinterpret_cast<const char*>(data), size);
-    CC_SAFE_DELETE_ARRAY(data);
+    free(data);
 
     std::set<std::string> paths;
     collectAudioPaths(document.RootElement(), paths);
