@@ -1,13 +1,28 @@
 #include "GameLayer.h"
+#include <cstdlib>
+#include <string>
 #include "Characters.h"
 #include "BGLayer.h"
 #include "HudLayer.h"
+#include "HeroPayload.h"
 #include "StartMenu.h"
 #include "LoadLayer.h"
+#include "MyUtils/KTools.h"
 
 int CError=0;
 
 using namespace CocosDenshion;
+
+namespace {
+
+using LegacyArray = NarutoSenkiLegacy::Array;
+
+LegacyArray* createGameplayArray()
+{
+	return LegacyArray::create();
+}
+
+}
 
 GameLayer::GameLayer(void)
 {
@@ -25,8 +40,8 @@ GameLayer::GameLayer(void)
 	kEXPBound=25;
 	aEXPBound=25;
 
-	totalKills=NULL;
-	totalTM=NULL;
+	totalKills=0;
+	totalTM=0;
 	_isShacking=false;
 	_isSurrender=false;
 	_isGuardian=false;
@@ -37,6 +52,7 @@ GameLayer::GameLayer(void)
 	_isHardCoreGame=false;
 	_isRandomChar=false;
 	_isDuelMode=false;
+	_isUnlimitedCKR=false;
 	_isDuelFinished=false;
 	_isRematching=false;
 	_rematchHerosOverride=NULL;
@@ -48,23 +64,28 @@ GameLayer::GameLayer(void)
 	currentPlayer=NULL;
 	isPosting=false;
 	postTime=0;
+	_hudLayer = NULL;
 
+	_TowerArray = NULL;
+	bulletBatch = NULL;
+	blend = NULL;
+
+	_isAttackButtonRelease = true;
+	_isSkillFinish = true;
 }
 
 
 GameLayer::~GameLayer(void)
 {
-	//CC_SAFE_RELEASE(totalKills);
-	CC_SAFE_RELEASE(totalTM);
 	CC_SAFE_RELEASE(_rematchHerosOverride);
-	
+
 }
 
 bool GameLayer::init(){
 	bool bRet=false;
 	do{
-		CC_BREAK_IF(!CCLayer::init());
-		//CCTexture2D::setDefaultAlphaPixelFormat(kCCTexture2DPixelFormat_RGBA4444);  
+		CC_BREAK_IF(!Layer::init());
+		//Texture2D::setDefaultAlphaPixelFormat(kTexture2DPixelFormat_RGBA4444);
 		KeyList.push_back("8396c,4a035");
 		KeyList.push_back("8384b,880d8");
 		KeyList.push_back("f2e4e,4203d");
@@ -228,7 +249,7 @@ bool GameLayer::init(){
 }
 void GameLayer::onEnter(){
 	if(_isExiting){
-		this->onLeft();	
+		this->onLeft();
 		return;
 	}
 
@@ -238,7 +259,7 @@ void GameLayer::onEnter(){
 		}
 	}
 
-	CCLayer::onEnter();
+	Layer::onEnter();
 
 	if(_isSurrender){
 		this->onGameOver(false);
@@ -246,16 +267,16 @@ void GameLayer::onEnter(){
 
 };
 void GameLayer::onExit(){
-	CCLayer::onExit();
+	Layer::onExit();
 	if(_isExiting){
 		_isExiting=false;
 		CC_SAFE_RELEASE(_TowerArray);
 		CC_SAFE_RELEASE(_KonohaFlogArray);
 		CC_SAFE_RELEASE(_AkatsukiFlogArray);
 		CC_SAFE_RELEASE(_CharacterArray);
-		
+
 	}
-	
+
 
 };
 
@@ -263,7 +284,7 @@ void GameLayer::onExit(){
 
 void GameLayer::initTileMap(){
 	//�����ͼ
-	
+
 
 	if(selectedMap>=0 && selectedMap<=4){
 		randomMap=selectedMap;
@@ -273,7 +294,7 @@ void GameLayer::initTileMap(){
 	}else {
 		randomMap=0;
 	}
-	
+
 	const char* filePath;
 	if (randomMap==0){
 		filePath=S_MAP01;
@@ -297,7 +318,7 @@ void GameLayer::initTileMap(){
 //		}
 //	}
 
-	currentMap=CCTMXTiledMap::create(filePath);
+	currentMap=TMXTiledMap::create(filePath);
 
 	this->addChild(currentMap,currentMapTag);
 
@@ -321,18 +342,18 @@ void GameLayer::initGard(){
 		groupName="Konoha";
 	}
 	if(index==0){
-		Guardian->setID(CCString::create("Roshi"),CCString::create("Com"),CCString::create(groupName));
+		NarutoSenkiPayload::setId(Guardian,"Roshi","Com",groupName);
 	}else if(index==1){
-		Guardian->setID(CCString::create("Han"),CCString::create("Com"),CCString::create(groupName));
+		NarutoSenkiPayload::setId(Guardian,"Han","Com",groupName);
 	}
 
 
 	if(zhenying>0){
-	Guardian->setPosition(ccp(2800,80));
-	Guardian->setSpawnPoint(ccp(2800,80));
+	Guardian->setPosition(Vec2(2800,80));
+	Guardian->setSpawnPoint(Vec2(2800,80));
 	}else{
-		Guardian->setPosition(ccp(272,80));
-		Guardian->setSpawnPoint(ccp(272,80));
+		Guardian->setPosition(Vec2(272,80));
+		Guardian->setSpawnPoint(Vec2(272,80));
 	}
 
 
@@ -344,14 +365,13 @@ void GameLayer::initGard(){
 	Guardian->setCharNO(7);
 
 	Guardian->idle();
-	CCDictionary* callValue = CCDictionary::create(); 
-	callValue->setObject(CCString::create("smk"), 1);
+	auto callValue=NarutoSenkiPayload::createStringPayload("smk");
 	Guardian->setSkillEffect(Guardian,callValue);
 
 	Guardian->doAI();
 
 
-	
+
 
 	_CharacterArray->addObject(Guardian);
 	_hudLayer->addMapIcon();
@@ -360,133 +380,69 @@ void GameLayer::initGard(){
 }
 
 void GameLayer::initHeros(){
-	
+
 	this->initTileMap();
 	this->initEffects();
 
-	_CharacterArray=CCArray::create();
+	_CharacterArray=createGameplayArray();
 	if(_isDuelMode){
-		_KonohaFlogArray=CCArray::create();
+		_KonohaFlogArray=createGameplayArray();
 		_KonohaFlogArray->retain();
-		_AkatsukiFlogArray=CCArray::create();
+		_AkatsukiFlogArray=createGameplayArray();
 		_AkatsukiFlogArray->retain();
 	}
-	CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("Element/hpBar/hpBar.plist");	
-	CCObject* pObject=NULL;
+	SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Element/hpBar/hpBar.plist");
+	Ref* pObject=NULL;
 	int i=0;
 
 
-	CCTMXObjectGroup* group = currentMap->objectGroupNamed("object");
-	CCArray* objectArray = cocos2d::cocos2dx2_compat::toCCArray(group->getObjects());
+	TMXObjectGroup* group = currentMap->objectGroupNamed("object");
+	const auto& objectArray = group->getObjects();
 
 	_isOugis2Game=true;
 	//4v4
 
 	if(Heros->count()>6 || Cheats>10){
 
+		const int konohaSpawnMap[]={0,1,2,6,7};
+		const int akatsukiSpawnMap[]={3,5,4,8,9};
 		int konohaSpawnIndex=0;
 		int akatsukiSpawnIndex=0;
 
-		CCARRAY_FOREACH(Heros,pObject){
+		for(unsigned int heroIndex=0; heroIndex<Heros->count(); ++heroIndex){
+			pObject=Heros->objectAtIndex(heroIndex);
 
-			CCDictionary* tempdict=(CCDictionary *) pObject;
+			const char* group=NarutoSenkiPayload::group(pObject);
 
-			CCString* player=CCString::create(tempdict->valueForKey("character")->getCString());
-			CCString* role=CCString::create(tempdict->valueForKey("role")->getCString());
-			CCString* group=CCString::create(tempdict->valueForKey("group")->getCString());
-
-			int konohaX[]={352,304,304,256,256};
-			int konohaY[]={176,128,224,96,256};
-			int akatsukiX[]={2688,2736,2736,2784,2784};
-			int akatsukiY[]={176,128,224,96,256};
-			if(strcmp(group->getCString(),"Akatsuki")==0){
+			int mapPos;
+			if(strcmp(group,"Akatsuki")==0){
 				int spawnIndex=akatsukiSpawnIndex++;
 				if(spawnIndex>4){
 					spawnIndex=4;
 				}
-				spawnPoint=ccp(akatsukiX[spawnIndex],akatsukiY[spawnIndex]);
+				mapPos=akatsukiSpawnMap[spawnIndex];
 			}else{
 				int spawnIndex=konohaSpawnIndex++;
 				if(spawnIndex>4){
 					spawnIndex=4;
 				}
-				spawnPoint=ccp(konohaX[spawnIndex],konohaY[spawnIndex]);
+				mapPos=konohaSpawnMap[spawnIndex];
 			}
 
-			if(i==0){			
+				const auto& mapdict = objectArray.at(mapPos).asValueMap();
+				int x=mapdict.at("x").asInt();
+				int y=mapdict.at("y").asInt();
+			spawnPoint=Vec2(x,y);
 
-			
-			
-				currentPlayer=Hero::create();
-				currentPlayer->setDelegate(this);
-				currentPlayer->setID(player,role,group);
-				currentPlayer->setPosition(spawnPoint);
-				currentPlayer->setSpawnPoint(spawnPoint);
-				this->addChild(currentPlayer,-currentPlayer->getPositionY());
-				currentPlayer->setHPbar();
-				currentPlayer->setShadows();
-				currentPlayer->idle();
-				currentPlayer->setCharNO(i+1);
-				currentPlayer->schedule(schedule_selector(NarutoSenki::ActionManager::setRestore2),1.0f);
-				_CharacterArray->addObject(currentPlayer);
+			if(i==0){
 
-			}else{
-
-				Hero* Com=Hero::create();
-				Com->setDelegate(this);
-				Com->setID(player,role,group);
-				Com->setPosition(spawnPoint);
-				Com->setSpawnPoint(spawnPoint);
-				this->addChild(Com,-Com->getPositionY());
-				Com->setHPbar();
-				Com->setShadows();
-				Com->idle();
-				Com->setCharNO(i+1);
-				Com->schedule(schedule_selector(NarutoSenki::ActionManager::setRestore2),1.0f);
-				_CharacterArray->addObject(Com);
-			}
-			i++;
-		};
-
-	}else{
-		CCARRAY_FOREACH(Heros,pObject){
-
-			CCDictionary* tempdict=(CCDictionary *) pObject;
-
-			CCString* player=CCString::create(tempdict->valueForKey("character")->getCString());
-			CCString* role=CCString::create(tempdict->valueForKey("role")->getCString());
-			CCString* group=CCString::create(tempdict->valueForKey("group")->getCString());
-
-			int mapPos=i;
-			if(strcmp(group->getCString(),"Akatsuki")==0){
-				if(mapPos<=2){
-					mapPos+=3;
-				}
-				
-			}else{
-				if(mapPos>2){
-					mapPos-=3;
-				}
-			}
-
-
-			CCObject* mapObject = objectArray->objectAtIndex(mapPos);
-			CCDictionary* mapdict=(CCDictionary *) mapObject;
-			int x=((CCString*)mapdict->objectForKey("x"))->intValue();
-			int y=((CCString*)mapdict->objectForKey("y"))->intValue();
-			spawnPoint=ccp(x,y);
-
-			
-
-			if(i==0){			
-
-				if(strcmp(group->getCString(),"Akatsuki")==0){
+				if(strcmp(group,"Akatsuki")==0){
 					zhenying=0;
 				}
-				
+
 				currentPlayer=Hero::create();
 				currentPlayer->setDelegate(this);
-				currentPlayer->setID(player,role,group);
+				NarutoSenkiPayload::setHeroId(currentPlayer,pObject);
 				currentPlayer->setPosition(spawnPoint);
 				currentPlayer->setSpawnPoint(spawnPoint);
 				this->addChild(currentPlayer,-currentPlayer->getPositionY());
@@ -498,14 +454,99 @@ void GameLayer::initHeros(){
 					currentPlayer->setFlipX(true);
 				}
 				currentPlayer->setCharNO(i+1);
-				currentPlayer->schedule(schedule_selector(NarutoSenki::ActionManager::setRestore2),1.0f);
+				currentPlayer->schedule(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::setRestore2),1.0f);
 				_CharacterArray->addObject(currentPlayer);
 
 			}else{
 
 				Hero* Com=Hero::create();
 				Com->setDelegate(this);
-				Com->setID(player,role,group);
+				NarutoSenkiPayload::setHeroId(Com,pObject);
+				Com->setPosition(spawnPoint);
+				Com->setSpawnPoint(spawnPoint);
+				this->addChild(Com,-Com->getPositionY());
+				Com->setHPbar();
+				Com->setShadows();
+				Com->idle();
+				if(strcmp(Com->getGroup()->getCString(),"Akatsuki")==0){
+					Com->_isFlipped=true;
+					Com->setFlipX(true);
+				}
+				Com->setCharNO(i+1);
+				Com->schedule(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::setRestore2),1.0f);
+				_CharacterArray->addObject(Com);
+			}
+			i++;
+		};
+
+	}else{
+		bool useCenterSpawn=(_isDuelMode || _isTrainingMode) && Heros->count()<=2;
+		Size mapSize=currentMap->getMapSize();
+		Size tileSize=currentMap->getTileSize();
+		float mapCenterX=mapSize.width*tileSize.width*0.5f;
+		const float centerSpawnY=108.0f;
+		const float centerSpawnOffsetX=160.0f;
+
+		for(unsigned int heroIndex=0; heroIndex<Heros->count(); ++heroIndex){
+			pObject=Heros->objectAtIndex(heroIndex);
+
+			const char* group=NarutoSenkiPayload::group(pObject);
+
+			if(useCenterSpawn){
+				if(strcmp(group,"Akatsuki")==0){
+					spawnPoint=Vec2(mapCenterX+centerSpawnOffsetX,centerSpawnY);
+				}else{
+					spawnPoint=Vec2(mapCenterX-centerSpawnOffsetX,centerSpawnY);
+				}
+			}else{
+				int mapPos=i;
+				if(strcmp(group,"Akatsuki")==0){
+					if(mapPos<=2){
+						mapPos+=3;
+					}
+
+				}else{
+					if(mapPos>2){
+						mapPos-=3;
+					}
+				}
+
+				const auto& mapdict = objectArray.at(mapPos).asValueMap();
+				int x=mapdict.at("x").asInt();
+				int y=mapdict.at("y").asInt();
+				spawnPoint=Vec2(x,y);
+			}
+
+
+
+			if(i==0){
+
+				if(strcmp(group,"Akatsuki")==0){
+					zhenying=0;
+				}
+
+				currentPlayer=Hero::create();
+				currentPlayer->setDelegate(this);
+				NarutoSenkiPayload::setHeroId(currentPlayer,pObject);
+				currentPlayer->setPosition(spawnPoint);
+				currentPlayer->setSpawnPoint(spawnPoint);
+				this->addChild(currentPlayer,-currentPlayer->getPositionY());
+				currentPlayer->setHPbar();
+				currentPlayer->setShadows();
+				currentPlayer->idle();
+				if(zhenying<=0){
+					currentPlayer->_isFlipped=true;
+					currentPlayer->setFlipX(true);
+				}
+				currentPlayer->setCharNO(i+1);
+				currentPlayer->schedule(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::setRestore2),1.0f);
+				_CharacterArray->addObject(currentPlayer);
+
+			}else{
+
+				Hero* Com=Hero::create();
+				Com->setDelegate(this);
+				NarutoSenkiPayload::setHeroId(Com,pObject);
 				Com->setPosition(spawnPoint);
 				Com->setSpawnPoint(spawnPoint);
 				this->addChild(Com,-Com->getPositionY());
@@ -518,7 +559,7 @@ void GameLayer::initHeros(){
 				}
 
 				Com->setCharNO(i+1);
-				Com->schedule(schedule_selector(NarutoSenki::ActionManager::setRestore2),1.0f);
+				Com->schedule(CC_SCHEDULE_SELECTOR(NarutoSenki::ActionManager::setRestore2),1.0f);
 				_CharacterArray->addObject(Com);
 			}
 			i++;
@@ -529,39 +570,39 @@ void GameLayer::initHeros(){
 
 
 	_CharacterArray->retain();
-	
+
 	this->initTower();
 
 
 
-	this->schedule(schedule_selector(GameLayer::updateViewPoint),0.0f);
+	this->schedule(CC_SCHEDULE_SELECTOR(GameLayer::updateViewPoint),0.0f);
 
 
-	
+
 
 	/*if(strcmp(currentPlayer->getCharacter()->getCString(),"Asuma")==0){
-		this->schedule(schedule_selector(GameLayer::checkPost),10.0f);
+		this->schedule(CC_SCHEDULE_SELECTOR(GameLayer::checkPost),10.0f);
 	}*/
-	
 
-	
-	
-	this->scheduleOnce(schedule_selector(GameLayer::onKaichang),0.5f);
 
-	
+
+
+	this->scheduleOnce(CC_SCHEDULE_SELECTOR(GameLayer::onKaichang),0.5f);
+
+
 };
 
 void GameLayer::onKaichang(float dt){
 	this->getHudLayer()->onKaichang();
 
 	if(_isHardCoreGame){
-		SimpleAudioEngine::sharedEngine()->playEffect("Audio/Menu/battle_start1.ogg");
+		SimpleAudioEngine::getInstance()->playEffect("Audio/Menu/battle_start1.ogg");
 	}else{
-		SimpleAudioEngine::sharedEngine()->playEffect("Audio/Menu/battle_start.ogg");
+		SimpleAudioEngine::getInstance()->playEffect("Audio/Menu/battle_start.ogg");
 	}
 
-	
-	this->scheduleOnce(schedule_selector(GameLayer::onGameStart),0.75f);
+
+	this->scheduleOnce(CC_SCHEDULE_SELECTOR(GameLayer::onGameStart),0.75f);
 
 }
 
@@ -569,37 +610,46 @@ void GameLayer::onGameStart(float dt){
 	this->getHudLayer()->Kaichang->removeFromParent();
 	this->getHudLayer()->Kaichang=NULL;
 	this->getHudLayer()->initHeroInterface();
-	this->schedule(schedule_selector(GameLayer::updateGameTime),1.0f);
-	this->schedule(schedule_selector(GameLayer::checkBackgroundMusic),2.0f);
+	this->applyDuelTrainStartSetup();
+	if((_isDuelMode || _isTrainingMode) && currentPlayer){
+		currentPlayer->setCoin(10000);
+		if(_hudLayer && _hudLayer->coinLabel){
+			_hudLayer->coinLabel->setString("10000");
+		}
+	}
+	this->refreshOugisSkillLocks();
+	this->schedule(CC_SCHEDULE_SELECTOR(GameLayer::updateGameTime),1.0f);
+	this->schedule(CC_SCHEDULE_SELECTOR(GameLayer::checkBackgroundMusic),2.0f);
 	if(!_isTrainingMode && !_isDuelMode){
-		this->schedule(schedule_selector(GameLayer::addFlog),15.0f);
+		this->schedule(CC_SCHEDULE_SELECTOR(GameLayer::addFlog),15.0f);
 		this->initFlogs();
 	}
-	
-	CCObject* pObject;
-	CCARRAY_FOREACH(this->_CharacterArray,pObject){
+
+	Ref* pObject;
+	for(unsigned int characterIndex=0; characterIndex<this->_CharacterArray->count(); ++characterIndex){
+		pObject=this->_CharacterArray->objectAtIndex(characterIndex);
 		NarutoSenki::ActionManager* tempChar=(NarutoSenki::ActionManager*) pObject;
 		if(strcmp(tempChar->getRole()->getCString(),"Com")==0 && !_isTrainingMode){
 			tempChar->doAI();
 		}
-		
+
 	}
 
 }
 
 void GameLayer::initFlogs(){
 
-	CCString* KonohaFlogName=CCString::create("KotetsuFlog");
-	CCString* AkatsukiFlogName=CCString::create("FemalePainFlog");
+	const char* KonohaFlogName="KotetsuFlog";
+	const char* AkatsukiFlogName="FemalePainFlog";
 
 	kName="KotetsuFlog";
 	aName="FemalePainFlog";
 
-	_KonohaFlogArray=CCArray::create();
-	_AkatsukiFlogArray=CCArray::create();
-	
-	
-	CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("Element/hpBar/flogBar.plist");
+	_KonohaFlogArray=createGameplayArray();
+	_AkatsukiFlogArray=createGameplayArray();
+
+
+	SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Element/hpBar/flogBar.plist");
 
 	int i;
 	Flog* aiFlog;
@@ -607,7 +657,7 @@ void GameLayer::initFlogs(){
 	for(i= 0;i<6;i++){
 		aiFlog=Flog::create();
 		aiFlog->setDelegate(this);
-		aiFlog->setID(KonohaFlogName,CCString::create("Flog"),CCString::create("Konoha"));
+		NarutoSenkiPayload::setId(aiFlog,KonohaFlogName,"Flog","Konoha");
 		if(i<3){
 			mainPosY=(5.5-i/1.5)*32;
 
@@ -615,7 +665,7 @@ void GameLayer::initFlogs(){
 			mainPosY=(3.5-i/1.5)*32;
 		}
 		aiFlog->_mainPosY= mainPosY;
-		aiFlog->setPosition(ccp(13*32,aiFlog->_mainPosY));
+		aiFlog->setPosition(Vec2(13*32,aiFlog->_mainPosY));
 		aiFlog->setHPbar();
 		this->addChild(aiFlog,-int(aiFlog->getPositionY()));
 		aiFlog->idle();
@@ -629,7 +679,7 @@ void GameLayer::initFlogs(){
 	for(i= 0;i<6;i++){
 		aiFlog=Flog::create();
 		aiFlog->setDelegate(this);
-		aiFlog->setID(AkatsukiFlogName,CCString::create("Flog"),CCString::create("Akatsuki"));
+		NarutoSenkiPayload::setId(aiFlog,AkatsukiFlogName,"Flog","Akatsuki");
 		if(i<3){
 			mainPosY=(5.5-i/1.5)*32 ;
 
@@ -637,7 +687,7 @@ void GameLayer::initFlogs(){
 			mainPosY=(3.5-i/1.5)*32;
 		}
 		aiFlog->_mainPosY= mainPosY;
-		aiFlog->setPosition(ccp(83*32,aiFlog->_mainPosY));
+		aiFlog->setPosition(Vec2(83*32,aiFlog->_mainPosY));
 		aiFlog->setHPbar();
 		aiFlog->idle();
 		aiFlog->doAI();
@@ -651,8 +701,8 @@ void GameLayer::initFlogs(){
 };
 void GameLayer::addFlog(float dt){
 
-	CCString* KonohaFlogName=CCString::create(kName);
-	CCString* AkatsukiFlogName=CCString::create(aName);
+	const char* KonohaFlogName=kName;
+	const char* AkatsukiFlogName=aName;
 
 
 	int i;
@@ -661,7 +711,7 @@ void GameLayer::addFlog(float dt){
 	for(i= 0;i<6;i++){
 		aiFlog=Flog::create();
 		aiFlog->setDelegate(this);
-		aiFlog->setID(KonohaFlogName,CCString::create("Flog"),CCString::create("Konoha"));
+		NarutoSenkiPayload::setId(aiFlog,KonohaFlogName,"Flog","Konoha");
 		if(i<3){
 			mainPosY=(5.5-i/1.5)*32;
 
@@ -669,8 +719,8 @@ void GameLayer::addFlog(float dt){
 			mainPosY=(3.5-i/1.5)*32;
 		}
 		aiFlog->_mainPosY= mainPosY;
-		aiFlog->setPosition(ccp(13*32,aiFlog->_mainPosY));
-		aiFlog->setHPbar();	
+		aiFlog->setPosition(Vec2(13*32,aiFlog->_mainPosY));
+		aiFlog->setHPbar();
 		aiFlog->idle();
 		aiFlog->doAI();
 		_KonohaFlogArray->addObject(aiFlog);
@@ -680,7 +730,7 @@ void GameLayer::addFlog(float dt){
 	for(i= 0;i<6;i++){
 		aiFlog=Flog::create();
 		aiFlog->setDelegate(this);
-		aiFlog->setID(AkatsukiFlogName,CCString::create("Flog"),CCString::create("Akatsuki"));
+		NarutoSenkiPayload::setId(aiFlog,AkatsukiFlogName,"Flog","Akatsuki");
 		if(i<3){
 			mainPosY=(5.5-i/1.5)*32 ;
 
@@ -688,7 +738,7 @@ void GameLayer::addFlog(float dt){
 			mainPosY=(3.5-i/1.5)*32;
 		}
 		aiFlog->_mainPosY= mainPosY;
-		aiFlog->setPosition(ccp(83*32,aiFlog->_mainPosY));
+		aiFlog->setPosition(Vec2(83*32,aiFlog->_mainPosY));
 		aiFlog->setHPbar();
 		aiFlog->idle();
 		aiFlog->doAI();
@@ -704,71 +754,67 @@ void GameLayer::addFlog(float dt){
 void GameLayer::initTower(){
 
 	if(_isDuelMode){
-		_TowerArray=CCArray::create();
+		_TowerArray=createGameplayArray();
 		_TowerArray->retain();
 		return;
 	}
 
 	if (randomMap==0) {
-		CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("Element/Tower/Tower.plist");
+		SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Element/Tower/Tower.plist");
 	}else if(randomMap==1){
-		CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("Element/Tower/Tower2.plist");
+		SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Element/Tower/Tower2.plist");
 	}else if(randomMap==2){
-		CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("Element/Tower/Tower3.plist");
+		SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Element/Tower/Tower3.plist");
 	}else if(randomMap==3){
-		CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("Element/Tower/Tower4.plist");
+		SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Element/Tower/Tower4.plist");
 	}else if(randomMap==4){
-		CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("Element/Tower/Tower5.plist");
+		SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Element/Tower/Tower5.plist");
 	}
 
 
 
-	CCTMXObjectGroup* metaGroup = currentMap->objectGroupNamed("meta");
-	CCArray* metaArray= cocos2d::cocos2dx2_compat::toCCArray(metaGroup->getObjects());
+	TMXObjectGroup* metaGroup = currentMap->objectGroupNamed("meta");
+	const auto& metaArray = metaGroup->getObjects();
 
-	_TowerArray=CCArray::create();
+	_TowerArray=createGameplayArray();
 
-	CCObject *pObject;
 	int i=0;
 
-	CCARRAY_FOREACH(metaArray,pObject){
+	for (const auto& metaValue : metaArray){
 
-		CCDictionary* dict=(CCDictionary *)pObject;
-
-		int metaX=((CCString*)dict->objectForKey("x"))->intValue();
-		int metaY=((CCString*)dict->objectForKey("y"))->intValue();
-
-		int metaWidth=((CCString*)dict->objectForKey("width"))->intValue();
-		int metaHeight=((CCString*)dict->objectForKey("height"))->intValue();
-
-		CCString* name=(CCString*)dict->objectForKey("name");
+		const auto& dict = metaValue.asValueMap();
+		int metaX=dict.at("x").asInt();
+		int metaY=dict.at("y").asInt();
+		int metaWidth=dict.at("width").asInt();
+		int metaHeight=dict.at("height").asInt();
+		std::string name=dict.at("name").asString();
 
 
 		Tower* tower=Tower::create();
 		tower->setDelegate(this);
 		char towerName[7]="abcdef";
-		strncpy(towerName,name->getCString(),6);
+		strncpy(towerName,name.c_str(),6);
 		if(strcmp(towerName,"Konoha")==0){
-			tower->setID(name,CCString::create("Tower"),CCString::create("Konoha"));
+			NarutoSenkiPayload::setId(tower,name.c_str(),"Tower","Konoha");
 		}else{
-			tower->setID(name,CCString::create("Tower"),CCString::create("Akatsuki"));
+			NarutoSenkiPayload::setId(tower,name.c_str(),"Tower","Akatsuki");
 			tower->setFlipX(true);
 			tower->_isFlipped=true;
 		}
 		float posX=metaX+metaWidth/2;
 		float posY=metaY+metaHeight/2;
-		tower->setPosition(ccp(posX,posY));
-		tower->setSpawnPoint(ccp(posX,posY));
+		tower->setPosition(Vec2(posX,posY));
+		tower->setSpawnPoint(Vec2(posX,posY));
 		tower->setCharNO(i+1);
 
 		if(i==1 || i==4 ){
 			//4v4
 			if(Cheats>10){
-				tower->setMaxHP(CCString::createWithFormat("%d",80000));
+				NarutoSenkiPayload::setMaxHP(tower,"80000");
 			}else{
-				tower->setMaxHP(CCString::createWithFormat("%d",50000));
-			}	
-			tower->setHP(CCString::create(tower->getMaxHP()->getCString()));
+				NarutoSenkiPayload::setMaxHP(tower,"50000");
+			}
+			NarutoSenkiPayload::setHP(tower,tower->getMaxHP()->getCString());
 		}
 		tower->setHPbar();
 		tower->_hpBar->setVisible(false);
@@ -784,18 +830,18 @@ void GameLayer::initTower(){
 };
 
 void GameLayer::initEffects(){
-	
 
-	CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("Effects/SkillEffect.plist");
-	skillEffectBatch=CCSpriteBatchNode::create("Effects/SkillEffect.png");
+
+	SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Effects/SkillEffect.plist");
+	skillEffectBatch=SpriteBatchNode::create("Effects/SkillEffect.png");
 	this->addChild(skillEffectBatch,currentSkillTag);
 
-	CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("Effects/DamageEffect.plist");
-	damageEffectBatch=CCSpriteBatchNode::create("Effects/DamageEffect.png");
+	SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Effects/DamageEffect.plist");
+	damageEffectBatch=SpriteBatchNode::create("Effects/DamageEffect.png");
 	this->addChild(damageEffectBatch,currentDamageTag);
 
-	CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("Effects/Shadows.plist");
-	shadowBatch=CCSpriteBatchNode::create("Effects/Shadows.png");
+	SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Effects/Shadows.plist");
+	shadowBatch=SpriteBatchNode::create("Effects/Shadows.png");
 	this->addChild(shadowBatch,currentShadowTag);
 
 };
@@ -807,11 +853,10 @@ void GameLayer::updateGameTime(float dt)
 		_minute+=1;
 		_second=0;
 	}
-	CCString* tempTime=CCString::createWithFormat("%02d:%02d",_minute,_second);
-	this->_hudLayer->gameClock->setString(tempTime->getCString());
+	std::string tempTime=cocos2d::StringUtils::format("%02d:%02d",_minute,_second);
+	this->_hudLayer->gameClock->setString(tempTime);
 
-	int newValue=atoi(this->getTotalTM()->getCString())+1;
-	this->setTotalTM(CCString::createWithFormat("%d",newValue));
+	this->setTotalTM(this->getTotalTM()+1);
 }
 
 
@@ -820,7 +865,7 @@ void GameLayer::updateViewPoint(float dt){
 
 
 	if(!currentPlayer) return;
-	CCPoint playerPoint;
+	Vec2 playerPoint;
 	if(ougisChar){
 		playerPoint=ougisChar->getPosition();
 	}else if(controlChar){
@@ -834,12 +879,12 @@ void GameLayer::updateViewPoint(float dt){
 	x=MIN(x,(currentMap->getMapSize().width*currentMap->getTileSize().width)-winSize.width/2);
 	y=MIN(y,(currentMap->getMapSize().height*currentMap->getTileSize().height)-winSize.height/2);
 
-	CCPoint actualPoint=ccp(x,y);
-	CCPoint centerPoint=ccp(winSize.width/2,y);
-	CCPoint viewPoint=ccpSub(centerPoint,actualPoint);
+	Vec2 actualPoint=Vec2(x,y);
+	Vec2 centerPoint=Vec2(winSize.width/2,y);
+	Vec2 viewPoint=(centerPoint - actualPoint);
 
 	this->setPosition(viewPoint);
-	//CCDirector::sharedDirector()->getScheduler()->setTimeScale(1.0f);  
+	//Director::getInstance()->getScheduler()->setTimeScale(1.0f);
 
 };
 
@@ -852,7 +897,7 @@ void GameLayer::setCKRLose(bool isCRK2){
 
 
 
-void GameLayer::setReport(const char* name1, const char* name2,CCString* killNum){
+void GameLayer::setReport(const char* name1, const char* name2,const char* killNum){
 	this->_hudLayer->setReport(name1,name2,killNum);
 }
 
@@ -886,6 +931,14 @@ void GameLayer::setCoin(const char* value){
 
 }
 void GameLayer::removeOugisMark(int type){
+	CCLOG("removeOugisMark()");
+	CCLOG("_hudLayer=%p", _hudLayer);
+
+	if (!_hudLayer)
+	{
+		CCLOG("HUD NULL");
+		return;
+	}
 	if(type==1){
 		if(this->_hudLayer->skill4Button){
 			if(this->_hudLayer->skill4Button->lockLabel1){
@@ -905,13 +958,118 @@ void GameLayer::removeOugisMark(int type){
 	}
 }
 
+bool GameLayer::shouldUnlockAllOugis() const{
+	return _isDuelMode || _isTrainingMode;
+}
+
+void GameLayer::fillCKRToMax(NarutoSenki::ActionManager* hero){
+	if(!hero){
+		return;
+	}
+	NarutoSenkiPayload::setCKR(hero,"45000");
+	NarutoSenkiPayload::setCKR2(hero,"50000");
+	hero->_isCanOugis1=true;
+	hero->_isCanOugis2=true;
+}
+
+void GameLayer::applyDuelTrainStartSetup(){
+	if(!_isDuelMode && !_isTrainingMode){
+		_isUnlimitedCKR=false;
+		return;
+	}
+	_isUnlimitedCKR=_isTrainingMode;
+
+	if(!_CharacterArray){
+		return;
+	}
+
+	Ref* pObject=NULL;
+	for(unsigned int characterIndex=0; characterIndex<_CharacterArray->count(); ++characterIndex){
+	pObject=_CharacterArray->objectAtIndex(characterIndex);
+		Hero* hero=(Hero*)pObject;
+		if(!hero){
+			continue;
+		}
+		if(strcmp(hero->getRole()->getCString(),"Player")!=0 &&
+			strcmp(hero->getRole()->getCString(),"Com")!=0){
+			continue;
+		}
+		hero->applyStartLevel6();
+		this->fillCKRToMax(hero);
+	}
+
+	if(currentPlayer && _hudLayer){
+		_hudLayer->setHPLose(currentPlayer->getHpPercent());
+		_hudLayer->setEXPLose(NULL);
+		_hudLayer->setCKRLose(false);
+		_hudLayer->setCKRLose(true);
+	}
+
+	if(_isDuelMode && _hudLayer && currentPlayer){
+		for(unsigned int characterIndex=0; characterIndex<_CharacterArray->count(); ++characterIndex){
+	pObject=_CharacterArray->objectAtIndex(characterIndex);
+			NarutoSenki::ActionManager* hero=(NarutoSenki::ActionManager*)pObject;
+			if(strcmp(hero->getGroup()->getCString(),currentPlayer->getGroup()->getCString())!=0 &&
+				(strcmp(hero->getRole()->getCString(),"Player")==0 || strcmp(hero->getRole()->getCString(),"Com")==0)){
+				_hudLayer->setEnemyHPLose(hero->getHpPercent());
+				break;
+			}
+		}
+	}
+}
+
+void GameLayer::refreshOugisSkillLocks(){
+	if(!_hudLayer || !_CharacterArray){
+		return;
+	}
+
+	if(shouldUnlockAllOugis()){
+		this->removeOugisMark(1);
+		this->removeOugisMark(2);
+		if(_hudLayer->skill4Button){
+			if(_hudLayer->skill4Button->ougismarkSprite){
+				_hudLayer->skill4Button->ougismarkSprite->setVisible(false);
+			}
+			_hudLayer->skill4Button->unLock();
+			if(!_hudLayer->skill4Button->clipper){
+				_hudLayer->skill4Button->setProgressMark();
+			}
+		}
+		if(_hudLayer->skill5Button){
+			if(_hudLayer->skill5Button->ougismarkSprite){
+				_hudLayer->skill5Button->ougismarkSprite->setVisible(false);
+			}
+			_hudLayer->skill5Button->unLock();
+			if(!_hudLayer->skill5Button->clipper){
+				_hudLayer->skill5Button->setProgressMark();
+			}
+		}
+		return;
+	}
+
+	unsigned int playerLevel=currentPlayer ? currentPlayer->getLV() : 1;
+	if(playerLevel>=2){
+		this->removeOugisMark(1);
+		if(_hudLayer->skill4Button){
+			_hudLayer->skill4Button->unLock();
+		}
+	}
+	if(playerLevel>=4){
+		this->removeOugisMark(2);
+		if(_hudLayer->skill5Button){
+			_hudLayer->skill5Button->unLock();
+		}
+	}
+}
+
 void GameLayer::checkTower(){
 
 	int konohaTowerCount=0;
 	int akatsukiTowerCount=0;
-	CCObject* pObject;
+	Ref* pObject;
 
-	CCARRAY_FOREACH(_TowerArray,pObject){
+	for(unsigned int towerIndex=0; towerIndex<_TowerArray->count(); ++towerIndex){
+	pObject=_TowerArray->objectAtIndex(towerIndex);
 		Tower* tower=(Tower*) pObject;
 		if(strcmp(tower->getGroup()->getCString(),"Konoha")==0){
 			konohaTowerCount++;
@@ -921,8 +1079,8 @@ void GameLayer::checkTower(){
 	}
 
 	if(konohaTowerCount==2){
-		aName="PainFlog";	
-		kEXPBound=50;			
+		aName="PainFlog";
+		kEXPBound=50;
 	}else if(konohaTowerCount==1){
 		aName="ObitoFlog";
 		kEXPBound=100;
@@ -930,20 +1088,21 @@ void GameLayer::checkTower(){
 
 	if(akatsukiTowerCount==2){
 		kName="IzumoFlog";
-		aEXPBound=50;	
+		aEXPBound=50;
 	}else if(akatsukiTowerCount==1){
 		kName="KakashiFlog";
-		aEXPBound=100;	
+		aEXPBound=100;
 	}
 
 	if(postTime>=9){
 		currentPlayer=NULL;
 	}
-	
+
 
 
 	//֪ͨս������
-	CCARRAY_FOREACH(_CharacterArray,pObject){
+	for(unsigned int characterIndex=0; characterIndex<_CharacterArray->count(); ++characterIndex){
+	pObject=_CharacterArray->objectAtIndex(characterIndex);
 		NarutoSenki::ActionManager* tmpHero=(NarutoSenki::ActionManager*) pObject;
 
 		if(strcmp(tmpHero->getRole()->getCString(),"Com")!=0){
@@ -954,10 +1113,10 @@ void GameLayer::checkTower(){
 			tmpHero->battleCondiction=konohaTowerCount-akatsukiTowerCount;
 			if(konohaTowerCount==1){
 				tmpHero->isBaseDanger=true;
-			}	
+			}
 
 		}else{
-			
+
 			tmpHero->battleCondiction=akatsukiTowerCount-konohaTowerCount;
 			if(_isHardCoreGame){
 				if(akatsukiTowerCount==1){
@@ -1008,7 +1167,7 @@ void GameLayer::checkTower(){
 				this->onGameOver(true);
 			}
 		}
-		
+
 
 	}
 }
@@ -1016,7 +1175,7 @@ void GameLayer::checkTower(){
 
 void GameLayer::clearDoubleClick(){
 	if(_hudLayer->skill1Button->getDoubleSkill() &&
-		_hudLayer->skill1Button->_clickNum>=1 
+		_hudLayer->skill1Button->_clickNum>=1
 		){
 			_hudLayer->skill1Button->setFreezeAction(NULL);
 			_hudLayer->skill1Button->beganAnimation();
@@ -1031,7 +1190,7 @@ void GameLayer::JoyStickRelease(){
 	}
 }
 
-void GameLayer::JoyStickUpdate(CCPoint direction){
+void GameLayer::JoyStickUpdate(Vec2 direction){
 	if(!ougisChar){
 		//CCLOG("x:%f,y:%f",direction.x,direction.y);
 		currentPlayer->walk(direction);
@@ -1062,23 +1221,23 @@ void GameLayer::attackButtonRelease(){
 
 void GameLayer::onPause(){
 
-	CCRenderTexture* snapshoot=CCRenderTexture::create(winSize.width,winSize.height);
-	CCScene* f = CCDirector::sharedDirector()->getRunningScene();
-	CCObject* pObject= f->getChildren().at(0);
+	RenderTexture* snapshoot=RenderTexture::create(winSize.width,winSize.height);
+	Scene* f = Director::getInstance()->getRunningScene();
+	Ref* pObject= f->getChildren().at(0);
 	BGLayer* bg=(BGLayer*) pObject;
 	snapshoot->begin();
-	cocos2d::cocos2dx2_compat::visitNode(bg);
+	bg->visit(Director::getInstance()->getRenderer(), Mat4::IDENTITY, 0);
 
-	cocos2d::cocos2dx2_compat::visitNode(this);
+	this->visit(Director::getInstance()->getRenderer(), Mat4::IDENTITY, 0);
 	snapshoot->end();
 
 
-	CCScene* pscene =CCScene::create();
+	Scene* pscene =Scene::create();
 	PauseLayer* layer=PauseLayer::create(snapshoot);
 
 	layer->setDelegate(this);
 	pscene->addChild(layer);
-	CCDirector::sharedDirector()->pushScene(pscene);
+	Director::getInstance()->pushScene(pscene);
 
 }
 
@@ -1086,23 +1245,23 @@ void GameLayer::onGear(){
 
 	if(this->_isHardCoreGame){
 
-		CCRenderTexture* snapshoot=CCRenderTexture::create(winSize.width,winSize.height);
-		CCScene* f = CCDirector::sharedDirector()->getRunningScene();
-		CCObject* pObject= f->getChildren().at(0);
+		RenderTexture* snapshoot=RenderTexture::create(winSize.width,winSize.height);
+		Scene* f = Director::getInstance()->getRunningScene();
+		Ref* pObject= f->getChildren().at(0);
 		BGLayer* bg=(BGLayer*) pObject;
 		snapshoot->begin();
-		cocos2d::cocos2dx2_compat::visitNode(bg);
+		bg->visit(Director::getInstance()->getRenderer(), Mat4::IDENTITY, 0);
 
-		cocos2d::cocos2dx2_compat::visitNode(this);
+		this->visit(Director::getInstance()->getRenderer(), Mat4::IDENTITY, 0);
 		snapshoot->end();
 
-		CCScene* pscene =CCScene::create();
+		Scene* pscene =Scene::create();
 		GearLayer* layer=GearLayer::create(snapshoot);
 
 		layer->setDelegate(this);
 		layer->updatePlayerGear();
 		pscene->addChild(layer);
-		CCDirector::sharedDirector()->pushScene(pscene);
+		Director::getInstance()->pushScene(pscene);
 
 	}
 
@@ -1113,24 +1272,24 @@ void GameLayer::onGameOver(bool isWin){
 
 
 	if(CError!=1){
-		CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("Result.plist");
-		CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("Select.plist");
-		CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("Report.plist");
-		CCRenderTexture* snapshoot=CCRenderTexture::create(winSize.width,winSize.height);
-		CCScene* f = CCDirector::sharedDirector()->getRunningScene();
-		CCObject* pObject= f->getChildren().at(0);
+		SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Result.plist");
+		SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Select.plist");
+		SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Report.plist");
+		RenderTexture* snapshoot=RenderTexture::create(winSize.width,winSize.height);
+		Scene* f = Director::getInstance()->getRunningScene();
+		Ref* pObject= f->getChildren().at(0);
 		BGLayer* bg=(BGLayer*) pObject;
 		snapshoot->begin();
-		cocos2d::cocos2dx2_compat::visitNode(bg);
-		cocos2d::cocos2dx2_compat::visitNode(this);
+		bg->visit(Director::getInstance()->getRenderer(), Mat4::IDENTITY, 0);
+		this->visit(Director::getInstance()->getRenderer(), Mat4::IDENTITY, 0);
 		snapshoot->end();
 
-		CCScene* pscene =CCScene::create();
+		Scene* pscene =Scene::create();
 		GameOver* layer=GameOver::create(snapshoot);
 		layer->setWin(isWin);
-		layer->setDelegate(this);	
+		layer->setDelegate(this);
 		pscene->addChild(layer);
-		CCDirector::sharedDirector()->pushScene(pscene);
+		Director::getInstance()->pushScene(pscene);
 	}
 
 
@@ -1138,38 +1297,33 @@ void GameLayer::onGameOver(bool isWin){
 
 void GameLayer::onLeft(){
 
-	CCArray* childArray=cocos2d::cocos2dx2_compat::toCCArray(this->getChildren());
-	CCObject* pObject;
-
-	CCARRAY_FOREACH(childArray,pObject){		
+	const auto& childArray = this->getChildren();
+	for (auto pObject : childArray){
 		//�������
 		NarutoSenki::ActionManager* ac=(NarutoSenki::ActionManager*) pObject;
-		CCNotificationCenter::sharedNotificationCenter()->removeObserver(ac,"acceptAttack");
+		ac->unregisterAcceptAttackListener();
 	}
 
 	//�����ͼ����
 
 	if(randomMap==0) {
-		CCSpriteFrameCache::sharedSpriteFrameCache()->removeSpriteFramesFromFile("Element/Tower/Tower.plist");	
+		SpriteFrameCache::getInstance()->removeSpriteFramesFromFile("Element/Tower/Tower.plist");
 	}else if(randomMap==1){
-		CCSpriteFrameCache::sharedSpriteFrameCache()->removeSpriteFramesFromFile("Element/Tower/Tower2.plist");
+		SpriteFrameCache::getInstance()->removeSpriteFramesFromFile("Element/Tower/Tower2.plist");
 	}else if (randomMap==2){
-		CCSpriteFrameCache::sharedSpriteFrameCache()->removeSpriteFramesFromFile("Element/Tower/Tower3.plist");
+		SpriteFrameCache::getInstance()->removeSpriteFramesFromFile("Element/Tower/Tower3.plist");
 	}else if (randomMap==3){
-		CCSpriteFrameCache::sharedSpriteFrameCache()->removeSpriteFramesFromFile("Element/Tower/Tower4.plist");
+		SpriteFrameCache::getInstance()->removeSpriteFramesFromFile("Element/Tower/Tower4.plist");
 	}else if (randomMap==4){
-		CCSpriteFrameCache::sharedSpriteFrameCache()->removeSpriteFramesFromFile("Element/Tower/Tower5.plist");
+		SpriteFrameCache::getInstance()->removeSpriteFramesFromFile("Element/Tower/Tower5.plist");
 	}
 
-	KTools* tool=KTools::create();
-	
-	CCArray* rematchHeros=NULL;
-	if(_isRematching && _rematchHerosOverride){
-		rematchHeros=_rematchHerosOverride;
-	}else if(_isRematching && _CharacterArray){
-		rematchHeros=CCArray::create();
-		CCObject* heroObject;
-		CCARRAY_FOREACH(_CharacterArray,heroObject){
+	auto rematchHeros=_isRematching ? _rematchHerosOverride : nullptr;
+	if(_isRematching && !rematchHeros && _CharacterArray){
+		rematchHeros=NarutoSenkiPayload::createHeroList();
+		Ref* heroObject;
+		for(unsigned int heroIndex=0; heroIndex<_CharacterArray->count(); ++heroIndex){
+			heroObject=_CharacterArray->objectAtIndex(heroIndex);
 			NarutoSenki::ActionManager* hero=(NarutoSenki::ActionManager*)heroObject;
 			if(strcmp(hero->getRole()->getCString(),"Player")!=0 && strcmp(hero->getRole()->getCString(),"Com")!=0){
 				continue;
@@ -1177,16 +1331,14 @@ void GameLayer::onLeft(){
 			if(strcmp(hero->getCharacter()->getCString(),"Roshi")==0 || strcmp(hero->getCharacter()->getCString(),"Han")==0){
 				continue;
 			}
-			CCDictionary* dic=CCDictionary::create();
-			dic->setObject(CCString::create(hero->getCharacter()->getCString()),"character");
-			dic->setObject(CCString::create(hero->getRole()->getCString()),"role");
-			dic->setObject(CCString::create(hero->getGroup()->getCString()),"group");
-			rematchHeros->addObject(dic);
+			NarutoSenkiPayload::addHero(rematchHeros,hero->getCharacter()->getCString(),hero->getRole()->getCString(),hero->getGroup()->getCString());
 		}
 	}
 
-	const char* path;
-	CCARRAY_FOREACH(_CharacterArray,pObject){
+	std::string path;
+	Ref* pObject;
+	for(unsigned int characterIndex=0; characterIndex<_CharacterArray->count(); ++characterIndex){
+	pObject=_CharacterArray->objectAtIndex(characterIndex);
 		NarutoSenki::ActionManager* player=(NarutoSenki::ActionManager*) pObject;
 
 		if(strcmp(player->getRole()->getCString(),"Clone")==0 ||
@@ -1195,44 +1347,35 @@ void GameLayer::onLeft(){
 		}
 
 		//ɾ�����ﻺ��
-		path=CCString::createWithFormat("Element/%s/%s.plist",player->getCharacter()->getCString(),player->getCharacter()->getCString())->getCString();
-		CCSpriteFrameCache::sharedSpriteFrameCache()->removeSpriteFramesFromFile(path);
+		path=cocos2d::StringUtils::format("Element/%s/%s.plist",player->getCharacter()->getCString(),player->getCharacter()->getCString());
+		SpriteFrameCache::getInstance()->removeSpriteFramesFromFile(path);
 
 		//ɾ��Ԥ������Ч
-		if(strcmp(player->getRole()->getCString(),"Com")==0 ||
-			strcmp(player->getRole()->getCString(),"Player")==0
-			){
-			tool->prepareFileOGG(player->getCharacter()->getCString(),1);
-		}
-		
+
 
 		//ɾ�������ɫ
 		if(strcmp(player->getCharacter()->getCString(),"Jiraiya")==0){
-			CCSpriteFrameCache::sharedSpriteFrameCache()->removeSpriteFramesFromFile("Element/SageJiraiya/SageJiraiya.plist");
-			tool->prepareFileOGG("SageJiraiya",1);
+			SpriteFrameCache::getInstance()->removeSpriteFramesFromFile("Element/SageJiraiya/SageJiraiya.plist");
 		}else if(strcmp(player->getCharacter()->getCString(),"Kankuro")==0){
-			CCSpriteFrameCache::sharedSpriteFrameCache()->removeSpriteFramesFromFile("Element/Karasu/Karasu.plist");
-			CCSpriteFrameCache::sharedSpriteFrameCache()->removeSpriteFramesFromFile("Element/Sanshouuo/Sanshouuo.plist");
+			SpriteFrameCache::getInstance()->removeSpriteFramesFromFile("Element/Karasu/Karasu.plist");
+			SpriteFrameCache::getInstance()->removeSpriteFramesFromFile("Element/Sanshouuo/Sanshouuo.plist");
 		}else if(strcmp(player->getCharacter()->getCString(),"Kakuzu")==0){
-			CCSpriteFrameCache::sharedSpriteFrameCache()->removeSpriteFramesFromFile("Element/MaskFudon/MaskFudon.plist");
-			CCSpriteFrameCache::sharedSpriteFrameCache()->removeSpriteFramesFromFile("Element/MaskRaidon/MaskRaidon.plist");
-			CCSpriteFrameCache::sharedSpriteFrameCache()->removeSpriteFramesFromFile("Element/MaskKadon/MaskKadon.plist");
+			SpriteFrameCache::getInstance()->removeSpriteFramesFromFile("Element/MaskFudon/MaskFudon.plist");
+			SpriteFrameCache::getInstance()->removeSpriteFramesFromFile("Element/MaskRaidon/MaskRaidon.plist");
+			SpriteFrameCache::getInstance()->removeSpriteFramesFromFile("Element/MaskKadon/MaskKadon.plist");
 		}else if(strcmp(player->getCharacter()->getCString(),"Naruto")==0){
-			CCSpriteFrameCache::sharedSpriteFrameCache()->removeSpriteFramesFromFile("Element/SageNaruto/SageNaruto.plist");
-			CCSpriteFrameCache::sharedSpriteFrameCache()->removeSpriteFramesFromFile("Element/RikudoNaruto/RikudoNaruto.plist");
-			tool->prepareFileOGG("SageNaruto",1);
-			tool->prepareFileOGG("RikudoNaruto",1);
+			SpriteFrameCache::getInstance()->removeSpriteFramesFromFile("Element/SageNaruto/SageNaruto.plist");
+			SpriteFrameCache::getInstance()->removeSpriteFramesFromFile("Element/RikudoNaruto/RikudoNaruto.plist");
 		}else if(strcmp(player->getCharacter()->getCString(),"RockLee")==0){
-			CCSpriteFrameCache::sharedSpriteFrameCache()->removeSpriteFramesFromFile("Element/Lee/Lee.plist");
+			SpriteFrameCache::getInstance()->removeSpriteFramesFromFile("Element/Lee/Lee.plist");
 		}else if(strcmp(player->getCharacter()->getCString(),"Lee")==0){
-			CCSpriteFrameCache::sharedSpriteFrameCache()->removeSpriteFramesFromFile("Element/RockLee/RockLee.plist");
+			SpriteFrameCache::getInstance()->removeSpriteFramesFromFile("Element/RockLee/RockLee.plist");
 		}else if(strcmp(player->getCharacter()->getCString(),"Sasuke")==0){
-			tool->prepareFileOGG("ImmortalSasuke",1);
-			CCSpriteFrameCache::sharedSpriteFrameCache()->removeSpriteFramesFromFile("Element/ImmortalSasuke/ImmortalSasuke.plist");
+			SpriteFrameCache::getInstance()->removeSpriteFramesFromFile("Element/ImmortalSasuke/ImmortalSasuke.plist");
 		}else if(strcmp(player->getCharacter()->getCString(),"Shisui")==0){
-			CCSpriteFrameCache::sharedSpriteFrameCache()->removeSpriteFramesFromFile("Element/Shisui/Shisui-1.plist");
-			CCSpriteFrameCache::sharedSpriteFrameCache()->removeSpriteFramesFromFile("Element/Shisui/Shisui-2.plist");
-			CCSpriteFrameCache::sharedSpriteFrameCache()->removeSpriteFramesFromFile("Element/Shisui/Shisui-3.plist");
+			SpriteFrameCache::getInstance()->removeSpriteFramesFromFile("Element/Shisui/Shisui-1.plist");
+			SpriteFrameCache::getInstance()->removeSpriteFramesFromFile("Element/Shisui/Shisui-2.plist");
+			SpriteFrameCache::getInstance()->removeSpriteFramesFromFile("Element/Shisui/Shisui-3.plist");
 		}
 		player->removeFromParentAndCleanup(true);
 
@@ -1240,14 +1383,10 @@ void GameLayer::onLeft(){
 
 	//�����ػ���
 	if(this->_isHardCoreGame){
-		CCSpriteFrameCache::sharedSpriteFrameCache()->removeSpriteFramesFromFile("Element/Roshi/Roshi.plist");
-		CCSpriteFrameCache::sharedSpriteFrameCache()->removeSpriteFramesFromFile("Element/Han/Han.plist");
-		tool->prepareFileOGG("Roshi",1);
-		tool->prepareFileOGG("Han",1);
+		SpriteFrameCache::getInstance()->removeSpriteFramesFromFile("Element/Roshi/Roshi.plist");
+		SpriteFrameCache::getInstance()->removeSpriteFramesFromFile("Element/Han/Han.plist");
 	}
-
-	tool->prepareFileOGG("Effect",1);
-	tool->prepareFileOGG("Ougis",1);
+	KTools::releaseMatchEffects();
 
 
     if(_CharacterArray){
@@ -1270,18 +1409,19 @@ void GameLayer::onLeft(){
         _AkatsukiFlogArray=NULL;
     }
 
-	CCSpriteFrameCache::sharedSpriteFrameCache()->removeSpriteFramesFromFile("UI.plist");
-	CCSpriteFrameCache::sharedSpriteFrameCache()->removeSpriteFramesFromFile("Map.plist");
+	SpriteFrameCache::getInstance()->removeSpriteFramesFromFile("UI.plist");
+	SpriteFrameCache::getInstance()->removeSpriteFramesFromFile("Map.plist");
 
-	CCScene* nextScene =CCScene::create();
+	Scene* nextScene =Scene::create();
 	if(_isRematching && rematchHeros && rematchHeros->count()>0){
-		CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("Menu.plist");
-		CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("Result.plist");
-		CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("Select.plist");
-		CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("UI.plist");
-		CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("Ougis.plist");
-		CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("Ougis2.plist");
-		CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("Map.plist");
+		SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Menu.plist");
+		SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Result.plist");
+		SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Select.plist");
+		SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Report.plist");
+		SpriteFrameCache::getInstance()->addSpriteFramesWithFile("UI.plist");
+		SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Ougis.plist");
+		SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Ougis2.plist");
+		SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Map.plist");
 		LoadLayer* loadLayer=LoadLayer::create();
 		loadLayer->tempHeros=rematchHeros;
 		loadLayer->_isHardCoreMode=_isHardCoreGame;
@@ -1296,7 +1436,7 @@ void GameLayer::onLeft(){
 		StartMenu* menuLayer=StartMenu::create();
 		nextScene->addChild(menuLayer);
 	}
-	CCDirector::sharedDirector()->replaceScene(CCTransitionFade::create(2.0f,nextScene));
+	Director::getInstance()->replaceScene(TransitionFade::create(2.0f,nextScene));
 
 
 
@@ -1306,148 +1446,105 @@ void GameLayer::onRematch(){
 
 	_isRematching=true;
 	_isExiting=true;
-	CCDirector::sharedDirector()->popScene();
+	Director::getInstance()->popScene();
 
 }
 
 void GameLayer::checkPost(float dt){
 
-	if(!isPosting && postTime<10){
-		
-		isPosting=true;
-		postTime++;
-		cocos2d::extension::CCHttpRequest* request = new  cocos2d::extension::CCHttpRequest(); 
-		std::string codeFinal;
-		
-		
-		std::string code2="&pw="+PWord;
-		std::string code1=CCString::createWithFormat("code=50&id=%d",MemberID)->getCString();
-		std::string code3=CCString::createWithFormat("&version=%d",CURRENT_VERSION)->getCString();
-		std::string url=SERVER"nsk/list.php?"+code1+code2+code3;
-		request->setUrl(url.c_str());  
-		request->setRequestType( cocos2d::extension::CCHttpRequest::kHttpGet);  
-		
-		request->setResponseCallback(this, callfuncND_selector(GameLayer::onHttpRequestCompleted));  
-		
-
-		request->setTag("Post_My_Data");  
-		cocos2d::extension::CCHttpClient::getInstance()->send(request);  
-		request->release();  
-
-	}else{
-		SimpleAudioEngine::sharedEngine()->stopBackgroundMusic();
-		CCDirector::sharedDirector()->end();
-		return;
-	}
-
+	// Jalur heartbeat online lama tidak dipakai pada mode offline.
+	(void)dt;
+	isPosting=false;
 }
 
-void GameLayer::onHttpRequestCompleted(CCNode *sender ,void *data) {  
+void GameLayer::onHttpRequestCompleted(Node *sender ,void *data) {
 
+	// Callback lama dipertahankan sebagai stub untuk kontrak internal.
+	(void)sender;
+	(void)data;
 	isPosting=false;
-	
-	cocos2d::extension::CCHttpResponse *response = (cocos2d::extension::CCHttpResponse*)data;    
-	if (!response)    
-	{  
-		return;    
-	}   
-	
-	int statusCode = response->getResponseCode();  
-	char statusString[64] = {};  
-	
-	if (!response->isSucceed())  
-	{  	
-		return;
-	}  
-	std::vector<char> *buffer = response->getResponseData();  
-	
-	Document doc;
-	
-	std::string buf(buffer->begin(),buffer->end()); 
-
-	if(strcmp(buf.c_str(),"postOK")==0){
-		this->unschedule(schedule_selector(GameLayer::checkPost));
-	}
-}  
-
+}
 
 
 void GameLayer::checkBackgroundMusic(float dt){
-	if(CCUserDefault::sharedUserDefault()->getBoolForKey("isBGM")!=false){
+	if(UserDefault::getInstance()->getBoolForKey("isBGM")!=false){
 
-		if(!SimpleAudioEngine::sharedEngine()->isBackgroundMusicPlaying()){
+		if(!SimpleAudioEngine::getInstance()->isBackgroundMusicPlaying()){
 			if(!_isHardCoreGame){
-				SimpleAudioEngine::sharedEngine()->playBackgroundMusic("Audio/Music/Battle1.mp3");
+				SimpleAudioEngine::getInstance()->playBackgroundMusic("Audio/Music/Battle1.mp3");
 			}else{
 				if(_playNum==0){
-					SimpleAudioEngine::sharedEngine()->playBackgroundMusic(CCString::createWithFormat("Audio/Music/Battle%d.mp3",int(2+randomMap*3))->getCString(),false);
+					std::string musicPath=cocos2d::StringUtils::format("Audio/Music/Battle%d.mp3",int(2+randomMap*3));
+					SimpleAudioEngine::getInstance()->playBackgroundMusic(musicPath.c_str(),false);
 					_playNum++;
 				}else if(_playNum==1){
-					SimpleAudioEngine::sharedEngine()->playBackgroundMusic(CCString::createWithFormat("Audio/Music/Battle%d.mp3",int(3+randomMap*3))->getCString(),false);
+					std::string musicPath=cocos2d::StringUtils::format("Audio/Music/Battle%d.mp3",int(3+randomMap*3));
+					SimpleAudioEngine::getInstance()->playBackgroundMusic(musicPath.c_str(),false);
 					_playNum++;
 				}else if(_playNum==2){
-					SimpleAudioEngine::sharedEngine()->playBackgroundMusic(CCString::createWithFormat("Audio/Music/Battle%d.mp3",int(1+randomMap*3))->getCString(),false);
+					std::string musicPath=cocos2d::StringUtils::format("Audio/Music/Battle%d.mp3",int(1+randomMap*3));
+					SimpleAudioEngine::getInstance()->playBackgroundMusic(musicPath.c_str(),false);
 					_playNum=0;
 				}
 			}
 
-			
+
 		}
 	}
 }
 
 
-void GameLayer::setOugis(CCNode* sender){
+void GameLayer::setOugis(Node* sender){
 
 	if(!this->_hudLayer->ougisLayer){
-		CCArray* childArray=cocos2d::cocos2dx2_compat::toCCArray(this->getChildren());
+		const auto& childArray = this->getChildren();
 		ougisChar=sender;
 		NarutoSenki::ActionManager* Sender=(NarutoSenki::ActionManager*) sender;
-		CCObject* pObject;
-		CCARRAY_FOREACH(childArray,pObject){
+		for (auto pObject : childArray){
 
-			CCNode* object=(CCNode*) pObject;
+			Node* object=(Node*) pObject;
 
 			object->pauseSchedulerAndActions();
 
 		}
-		CCDirector::sharedDirector()->getScheduler()->pauseTarget(this);
+		Director::getInstance()->getScheduler()->pauseTarget(this);
 
 		this->updateViewPoint(0.0);
 		/*
-		CCPoint normalPos=this->getPosition();
-		CCRect ougisBox=sender->boundingBox();
-		CCPoint ougisPoint=ccp(ougisBox.getMidX(),ougisBox.getMidY());
+		Vec2 normalPos=this->getPosition();
+		Rect ougisBox=sender->boundingBox();
+		Vec2 ougisPoint=Vec2(ougisBox.getMidX(),ougisBox.getMidY());
 		float ougisZoom=1.50f;
-		CCPoint zoomPos=ccp(winSize.width/2-ougisPoint.x*ougisZoom,winSize.height/2-ougisPoint.y*ougisZoom);
+		Vec2 zoomPos=Vec2(winSize.width/2-ougisPoint.x*ougisZoom,winSize.height/2-ougisPoint.y*ougisZoom);
 
 		this->stopAllActions();
-		this->runAction(cocos2d::cocos2dx2_compat::createSequence(
-			CCEaseSineInOut::create(CCSpawn::create(
-				CCScaleTo::create(0.28f,ougisZoom),
-				CCMoveTo::create(0.28f,zoomPos),
+		this->runAction(Sequence::create(
+			EaseSineInOut::create(Spawn::create(
+				ScaleTo::create(0.28f,ougisZoom),
+				MoveTo::create(0.28f,zoomPos),
 				NULL
 			)),
-			CCDelayTime::create(0.28f),
-			CCEaseSineInOut::create(CCSpawn::create(
-				CCScaleTo::create(0.50f,1.0f),
-				CCMoveTo::create(0.50f,normalPos),
+			DelayTime::create(0.28f),
+			EaseSineInOut::create(Spawn::create(
+				ScaleTo::create(0.50f,1.0f),
+				MoveTo::create(0.50f,normalPos),
 				NULL
 			)),
 			NULL
 		));
 		*/
 
-		blend=CCLayerColor::create(ccc4(0, 0, 0, 200),winSize.width,winSize.height);
-		blend->setPosition(ccp(-this->getPositionX(),0));
+		blend=LayerColor::create(Color4B(0, 0, 0, 200),winSize.width,winSize.height);
+		blend->setPosition(Vec2(-this->getPositionX(),0));
 		this->addChild(blend,1000);
 		sender->setZOrder(2000);
 
-		if(CCUserDefault::sharedUserDefault()->getBoolForKey("isVoice")!=false){
-			SimpleAudioEngine::sharedEngine()->playEffect(CCString::createWithFormat("Audio/Ougis/%s_ougis.mp3",Sender->getCharacter()->getCString())->getCString());
+		if(UserDefault::getInstance()->getBoolForKey("isVoice")!=false){
+			std::string ougisPath=cocos2d::StringUtils::format("Audio/Ougis/%s_ougis.mp3",Sender->getCharacter()->getCString());
+			KTools::playEffectOptimized(ougisPath.c_str(), 15, 3);
 		}
 
-		_hudLayer->setOugis(Sender->getCharacter(),Sender->getGroup());
+		_hudLayer->setOugis(Sender->getCharacter()->getCString(),Sender->getGroup()->getCString());
 	}
 
 
@@ -1460,18 +1557,18 @@ void GameLayer::removeOugis(){
 	this->stopAllActions();
 	this->setScale(1.0f);
 	*/
-	CCArray* childArray=cocos2d::cocos2dx2_compat::toCCArray(this->getChildren());
-	CCObject* pObject;
-	CCARRAY_FOREACH(childArray,pObject){
-		CCNode* object=(CCNode*) pObject;
+	const auto& childArray = this->getChildren();
+	for (auto pObject : childArray){
+		Node* object=(Node*) pObject;
 		object->resumeSchedulerAndActions();
 	}
-	CCDirector::sharedDirector()->getScheduler()->resumeTarget(this);
+	Director::getInstance()->getScheduler()->resumeTarget(this);
 	this->updateViewPoint(0.0);
 
 	blend->removeFromParent();
 	ougisChar=NULL;
 }
+
 
 
 

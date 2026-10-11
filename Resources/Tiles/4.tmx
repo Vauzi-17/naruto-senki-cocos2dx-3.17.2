@@ -30,6 +30,10 @@
   <object name="SpawnPoint04" x="2688" y="160" width="32" height="32"/>
   <object name="SpawnPoint05" x="2736" y="208" width="32" height="32"/>
   <object name="SpawnPoint06" x="2688" y="256" width="32" height="32"/>
+  <object name="SpawnPoint07" x="256" y="160" width="32" height="32"/>
+  <object name="SpawnPoint08" x="256" y="256" width="32" height="32"/>
+  <object name="SpawnPoint09" x="2784" y="160" width="32" height="32"/>
+  <object name="SpawnPoint10" x="2784" y="256" width="32" height="32"/>
  </objectgroup>
  <objectgroup name="meta" width="96" height="10">
   <object name="KonohaTower2" x="1056" y="144" width="96" height="128">

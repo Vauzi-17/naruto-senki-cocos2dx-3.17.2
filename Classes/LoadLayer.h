@@ -1,5 +1,6 @@
 #pragma once
 #include "cocos2d.h"
+#include "LegacyData.h"
 #include "Defines.h"
 #include "SimpleAudioEngine.h"
 #include "GameLayer.h"
@@ -23,16 +24,18 @@
 #endif
 
 USING_NS_CC;
-using namespace rapidjson; 
+using namespace rapidjson;
 
-class LoadLayer : public CCLayer{
+using LoadLayerLegacyArray = NarutoSenkiLegacy::Array;
+
+class LoadLayer : public Layer{
 
 public:
 	LoadLayer(void);
 	~LoadLayer(void);
 
 
-	CCArray* tempHeros;
+	LoadLayerLegacyArray* tempHeros;
 	bool init();
 
 	//void dfsFolder(std::string folderPath, int depth);
@@ -56,12 +59,11 @@ public:
 	void onLoadFinish(float dt);
 
 	bool isPosting;
-	void onHttpRequestCompleted(CCNode *sender ,void *data);
+	void onHttpRequestCompleted(Node *sender ,void *data);
 
-	CCArray* DLCArray;
 private:
-	
-	void preloadPlist(CCObject* obj);
+
+	void preloadPlist(Ref* obj);
 
 protected:
 	void onEnter();
@@ -69,6 +71,3 @@ protected:
 
 
 };
-
-
-

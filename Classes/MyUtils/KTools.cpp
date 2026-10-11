@@ -1,9 +1,14 @@
 #include "KTools.h"
+#include <cstdlib>
 #include "SelectLayer.h"
 #include "NetworkLayer.h"
 /*#if (CC_TARGET_PLATFORM==CC_PLATFORM_ANDROID)
 #include "platform/android/jni/JniHelper.h"
 #endif  */
+#include <set>
+#include <vector>
+#include <string>
+#include <algorithm>
 
 #ifdef _WIN32
 #include <io.h>
@@ -16,6 +21,26 @@
 
 using namespace tinyxml2;
 using namespace CocosDenshion;
+
+namespace {
+
+using LegacyArray = NarutoSenkiLegacy::Array;
+using LegacyDictionary = NarutoSenkiLegacy::Dictionary;
+using LegacyString = NarutoSenkiLegacy::String;
+
+LegacyArray* createLegacyArray()
+{
+	return LegacyArray::create();
+}
+
+void addStringEntry(LegacyArray* target, const char* key, const char* value)
+{
+	auto entry = LegacyDictionary::create();
+	entry->setObject(LegacyString::create(value), key);
+	target->addObject(entry);
+}
+
+}
 
 KTools::KTools(void)
 {
@@ -200,7 +225,7 @@ void  KTools::prepareFileMD5(){
 
 	};
 
-	std::string filePath = CCFileUtils::sharedFileUtils()->getWritablePath() + "checkMD5.xml";
+	std::string filePath = FileUtils::getInstance()->getWritablePath() + "checkMD5.xml";
 	//xml�ĵ�
 	tinyxml2::XMLDocument* pDoc = new tinyxml2::XMLDocument();  
 	if (NULL==pDoc) {
@@ -388,7 +413,7 @@ void  KTools::prepareFileSHA(){
 		"Element/Tsunade/Tsunade.xml"
 	};
 
-	std::string filePath = CCFileUtils::sharedFileUtils()->getWritablePath() + "SHA.xml";
+	std::string filePath = FileUtils::getInstance()->getWritablePath() + "SHA.xml";
 	//xml�ĵ�
 	tinyxml2::XMLDocument* pDoc = new tinyxml2::XMLDocument();  
 	if (NULL==pDoc) {
@@ -435,7 +460,7 @@ int KTools::checkMD5(std::string findPath /* ="" */){
 	
 	std::string md5Path =  "Element/md5.xml";
 
-	bool isExisted=CCFileUtils::sharedFileUtils()->isFileExist(md5Path);
+	bool isExisted=FileUtils::getInstance()->isFileExist(md5Path);
 
 	if(!isExisted){
 		return 0;
@@ -447,7 +472,7 @@ int KTools::checkMD5(std::string findPath /* ="" */){
 
 	tinyxml2::XMLDocument* doc = new tinyxml2::XMLDocument();  
 	ssize_t nSize;
-	const char *pXmlBuffer = (const char*)CCFileUtils::sharedFileUtils()->getFileData(md5Path.c_str(), "r", &nSize);
+	const char *pXmlBuffer = (const char*)FileUtils::getInstance()->getFileData(md5Path.c_str(), "r", &nSize);
 	doc->Parse(pXmlBuffer);
 
 	XMLElement *rootEle=doc->RootElement();
@@ -650,15 +675,15 @@ int KTools::checkMD5(std::string findPath /* ="" */){
 
 std::string  KTools::getKeycode(std::string path){
 	std::string strKey =CMD5Checksum::GetMD5(path);
-	std::string strKeyCode=CCString::createWithFormat("%s,%s",strKey.substr(16,5).c_str(),strKey.substr(6,5).c_str())->getCString();
+	std::string strKeyCode=cocos2d::StringUtils::format("%s,%s",strKey.substr(16,5).c_str(),strKey.substr(6,5).c_str());
 	return strKeyCode ;
 }
 
 bool KTools::checkData(){
 
-	const std::string filePath = CCFileUtils::sharedFileUtils()->getWritablePath() + "CheckMD5_113.xml";
+	const std::string filePath = FileUtils::getInstance()->getWritablePath() + "CheckMD5_113.xml";
 
-	bool isExisted=CCFileUtils::sharedFileUtils()->isFileExist(filePath);
+	bool isExisted=FileUtils::getInstance()->isFileExist(filePath);
 
 
 	if(!isExisted){
@@ -667,7 +692,7 @@ bool KTools::checkData(){
 
 	tinyxml2::XMLDocument* doc = new tinyxml2::XMLDocument();  
 	ssize_t nSize;
-	const char *pXmlBuffer = (const char*)CCFileUtils::sharedFileUtils()->getFileData(filePath.c_str(), "r", &nSize);
+	const char *pXmlBuffer = (const char*)FileUtils::getInstance()->getFileData(filePath.c_str(), "r", &nSize);
 	doc->Parse(pXmlBuffer);
 
 	XMLElement *rootEle=doc->RootElement();
@@ -683,7 +708,7 @@ bool KTools::checkData(){
 	while (fileEle){
 
 		std::string pathMD5= fileEle->GetText();	
-		std::string savePath = CCFileUtils::sharedFileUtils()->getWritablePath() + "sql.db";
+		std::string savePath = FileUtils::getInstance()->getWritablePath() + "sql.db";
 		std::string strFileMD5 =CMD5Checksum::GetMD5(savePath);
 
 
@@ -708,7 +733,7 @@ bool KTools::checkData(){
 
 void KTools::updateData(){
 
-	std::string filePath = CCFileUtils::sharedFileUtils()->getWritablePath() + "CheckMD5_113.xml";
+	std::string filePath = FileUtils::getInstance()->getWritablePath() + "CheckMD5_113.xml";
 
 
 	//xml�ĵ�
@@ -728,7 +753,7 @@ void KTools::updateData(){
 	XMLElement *fileElement = pDoc->NewElement("data");
 	pDoc->LinkEndChild(fileElement);
 
-	std::string savePath = CCFileUtils::sharedFileUtils()->getWritablePath() + "sql.db";
+	std::string savePath = FileUtils::getInstance()->getWritablePath() + "sql.db";
 	std::string strFileMD5 =CMD5Checksum::GetMD5(savePath);
 	XMLElement *pathElement = pDoc->NewElement("path");
 	pathElement->LinkEndChild(pDoc->NewText(strFileMD5.c_str()));
@@ -740,13 +765,13 @@ void KTools::updateData(){
 }
 
 
-bool KTools::readXMLToArray(const char* filePath,CCArray* &array)
+bool KTools::readXMLToArray(const char* filePath,NarutoSenkiLegacy::Array* &array)
 {
 
 	tinyxml2::XMLDocument* doc = new tinyxml2::XMLDocument();  
 	//doc->LoadFile(filePath);  this's doesn't work for android
 	ssize_t nSize;
-	const char *data = (const char*)CCFileUtils::sharedFileUtils()->getFileData(filePath, "r", &nSize);
+	const char *data = (const char*)FileUtils::getInstance()->getFileData(filePath, "r", &nSize);
 	doc->Parse(data);
 
 
@@ -760,9 +785,9 @@ bool KTools::readXMLToArray(const char* filePath,CCArray* &array)
 		//CCLOG("[%s]",actionName);
 
 		XMLElement *actionNodeEle=actionEle->FirstChildElement();
-        CCArray* actionArray=CCArray::create();
-		CCArray* actionDate=CCArray::create();
-		CCArray* actionFrame=CCArray::create();
+        auto actionArray=createLegacyArray();
+		auto actionDate=createLegacyArray();
+		auto actionFrame=createLegacyArray();
 		while(actionNodeEle){
 			//CCLOG("+[%s]",actionNodeEle->Name());
 			if(strcmp(actionNodeEle->Name(),"frame")){
@@ -771,13 +796,8 @@ bool KTools::readXMLToArray(const char* filePath,CCArray* &array)
 				while(dateEle){
 
 					const char* nodeKey=dateEle->FirstAttribute()->Value();
-					CCString* nodeValue=CCString::create(dateEle->GetText());
-
-					//CCLOG("%s:%s",nodeKey,nodeValue->getCString());
-					CCDictionary* dateDic=CCDictionary::create();
-					dateDic->setObject(nodeValue,nodeKey);
-
-					actionDate->addObject(dateDic);
+					//CCLOG("%s:%s",nodeKey,dateEle->GetText());
+					addStringEntry(actionDate,nodeKey,dateEle->GetText());
 					dateEle=dateEle->NextSiblingElement();
 				}
 
@@ -794,12 +814,8 @@ bool KTools::readXMLToArray(const char* filePath,CCArray* &array)
 						nodeKey=frameEle->Name();
 					}
 					
-					CCString* nodeValue=CCString::create(frameEle->GetText());
-
-					//CCLOG("%s:%s",nodeKey,nodeValue->getCString());
-					CCDictionary* frameDic=CCDictionary::create();
-					frameDic->setObject(nodeValue,nodeKey);
-					actionFrame->addObject(frameDic);
+					//CCLOG("%s:%s",nodeKey,frameEle->GetText());
+					addStringEntry(actionFrame,nodeKey,frameEle->GetText());
 
 					frameEle=frameEle->NextSiblingElement();
 				}
@@ -861,41 +877,40 @@ void KTools::initTableInDB(){
 
 	sqlite3* pDB = NULL;
 	char* errorMsg=NULL;
-	std::string path=CCFileUtils::sharedFileUtils()->getWritablePath() +"sql.db"; 
+	std::string path=FileUtils::getInstance()->getWritablePath() +"sql.db";
 	int result=sqlite3_open(path.c_str(),&pDB);  
 	if(result!=SQLITE_OK){
 		CCLOG("open sql file Failed!");
 		return;
 	};
 
-	CCString*sql=CCString::create("drop table IF EXISTS Achievement");
+	std::string sql="drop table IF EXISTS Achievement";
 
-	sqlite3_exec(pDB,sql->getCString(),NULL,NULL,&errorMsg);
+	sqlite3_exec(pDB,sql.c_str(),NULL,NULL,&errorMsg);
 
 
-	sql=CCString::create("create table if not exists CharRecord (name char(20)  primary key ,column1 char(10),column2 char(10),column3 char(10))");
-	sqlite3_exec(pDB,sql->getCString(),NULL,NULL,&errorMsg);
+	sql="create table if not exists CharRecord (name char(20)  primary key ,column1 char(10),column2 char(10),column3 char(10))";
+	sqlite3_exec(pDB,sql.c_str(),NULL,NULL,&errorMsg);
 	 
-	sql=CCString::create("select * from  GameRecord");
+	sql="select * from  GameRecord";
 	
-	sqlite3_exec(pDB,sql->getCString(),NULL,NULL,&errorMsg);
+	sqlite3_exec(pDB,sql.c_str(),NULL,NULL,&errorMsg);
 	
 
 
 	if(errorMsg!=NULL){
 		errorMsg=NULL;
-		sql=CCString::create("create table if not exists GameRecord (id char(10) primary key,coin char(20),version char(20))");
-		sqlite3_exec(pDB,sql->getCString(),NULL,NULL,&errorMsg);
+		sql="create table if not exists GameRecord (id char(10) primary key,coin char(20),version char(20))";
+		sqlite3_exec(pDB,sql.c_str(),NULL,NULL,&errorMsg);
 		
 		std::string str="n>";
-		CCString* coin=CCString::create(str);
 
-		sql=CCString::createWithFormat("insert into GameRecord values(1,'%s','1')",coin->getCString());
-		int result=sqlite3_exec(pDB,sql->getCString(),NULL,NULL,&errorMsg);
+		std::string insertSql=cocos2d::StringUtils::format("insert into GameRecord values(1,'%s','1')",str.c_str());
+		int result=sqlite3_exec(pDB,insertSql.c_str(),NULL,NULL,&errorMsg);
 
 		if(errorMsg!=NULL){
 			
-			CCLOG("exec sql %s failed with mgs: %s",sql->getCString(),errorMsg);
+			CCLOG("exec sql %s failed with mgs: %s",insertSql.c_str(),errorMsg);
 			sqlite3_close(pDB);
 			return;
 		}
@@ -907,8 +922,8 @@ void KTools::initTableInDB(){
 	
 	bool isExisted_;
 	
-	sql=CCString::create("select count(*) from  CharRecord");
-	sqlite3_exec(pDB,sql->getCString(),isExisted,&isExisted_,&errorMsg);
+	sql="select count(*) from  CharRecord";
+	sqlite3_exec(pDB,sql.c_str(),isExisted,&isExisted_,&errorMsg);
 	
 	if(!isExisted_){
 
@@ -928,33 +943,29 @@ void KTools::initTableInDB(){
 
 			int key=rand()%50+40;
 			encode(name,key);
-			CCString* nameDB=CCString::create(name);
 		
 
 			std::string column1="0";
 			key=rand()%60+40;
 			encode(column1,key);
-			CCString* column1DB=CCString::create(column1);
 
 			std::string column2="0";
 			key=rand()%60+40;
 			encode(column2,key);
-			CCString* column2DB=CCString::create(column2);
 
 
 			std::string column3="";
 			key=rand()%60+40;
 			encode(column3,key);
-			CCString* column3DB=CCString::create(column3);
 
 
 
 
-			CCString* sql=CCString::createWithFormat("insert into  CharRecord values('%s','%s','%s','%s')",nameDB->getCString(),column1DB->getCString(),column2DB->getCString(),column3DB->getCString());
-			sqlite3_exec(pDB,sql->getCString(),NULL,NULL,&errorMsg);
+			std::string insertSql=cocos2d::StringUtils::format("insert into  CharRecord values('%s','%s','%s','%s')",name.c_str(),column1.c_str(),column2.c_str(),column3.c_str());
+			sqlite3_exec(pDB,insertSql.c_str(),NULL,NULL,&errorMsg);
 
 			if(errorMsg!=NULL){
-				CCLOG("exec sql %s failed with mgs: %s",sql->getCString(),errorMsg);
+				CCLOG("exec sql %s failed with mgs: %s",insertSql.c_str(),errorMsg);
 				sqlite3_close(pDB);
 				return;
 			}
@@ -973,7 +984,7 @@ void KTools::initColumeInDB(){
 
 	sqlite3* pDB = NULL;
 	char* errorMsg=NULL;
-	std::string path=CCFileUtils::sharedFileUtils()->getWritablePath() +"sql.db"; 
+	std::string path=FileUtils::getInstance()->getWritablePath() +"sql.db";
 	int result=sqlite3_open(path.c_str(),&pDB);  
 	if(result!=SQLITE_OK){
 		CCLOG("open sql file Failed!");
@@ -985,22 +996,22 @@ void KTools::initColumeInDB(){
 	int row=0;
 	int column=0;
 	
-	CCString* sql=CCString::create("select coin from GameRecord");
-	sqlite3_get_table(pDB,sql->getCString(),&result2,&row,&column,NULL);
+	std::string sql="select coin from GameRecord";
+	sqlite3_get_table(pDB,sql.c_str(),&result2,&row,&column,NULL);
 	std::string str2=result2[1];
 	decode(str2);
 
 	
 	std::string str3="uuuuu<";
 	decode(str3);
-	if(atoi(str2.c_str())>atoi(str3.c_str())){
-		CCString* coin=CCString::create("uuuuu<");
-		sql=CCString::createWithFormat("update GameRecord set coin='%s'",coin->getCString());
-		sqlite3_exec(pDB,sql->getCString(),NULL,NULL,&errorMsg);
+	if(std::atoi(str2.c_str())>std::atoi(str3.c_str())){
+		std::string coin="uuuuu<";
+		std::string updateSql=cocos2d::StringUtils::format("update GameRecord set coin='%s'",coin.c_str());
+		sqlite3_exec(pDB,updateSql.c_str(),NULL,NULL,&errorMsg);
 		this->updateData();
 	}
 
-	/*std::string folderPath =CCFileUtils::sharedFileUtils()->getWritablePath()+"DLC";
+	/*std::string folderPath =FileUtils::getInstance()->getWritablePath()+"DLC";
 	this->dfsFolder(folderPath);*/
 	
 	
@@ -1083,7 +1094,7 @@ void KTools::dfsFolder(std::string folderPath, int depth /* = 0 */,int type/* =0
 			}else if(type==1){
 				
 				//CCLOG("damn3:%s",filename.c_str());
-				SimpleAudioEngine::sharedEngine()->preloadEffect(filename.c_str());
+				SimpleAudioEngine::getInstance()->preloadEffect(filename.c_str());
 			}
 			
 		}
@@ -1094,47 +1105,127 @@ void KTools::dfsFolder(std::string folderPath, int depth /* = 0 */,int type/* =0
 
 }
 
-void KTools::prepareFileOGG(const char* listName,int type/* =0 */){
+static std::set<std::string> sPreloadedEffects;
+static std::set<std::string> sMatchEffects;
 
-	if(CCUserDefault::sharedUserDefault()->getBoolForKey("isPreload")){
-		
-	}else{
+static std::string normalizeAudioPath(const char* soundPath)
+{
+    std::string key = soundPath ? soundPath : "";
+    std::replace(key.begin(), key.end(), '\\', '/');
+
+    const std::string whitespace = " \t\r\n";
+    const size_t first = key.find_first_not_of(whitespace);
+    if (first == std::string::npos)
+        return "";
+
+    const size_t last = key.find_last_not_of(whitespace);
+    return key.substr(first, last - first + 1);
+}
+
+static void collectAudioPaths(XMLElement* element, std::set<std::string>& paths)
+{
+    for (XMLElement* current = element; current; current = current->NextSiblingElement())
+    {
+        const char* text = current->GetText();
+        if (text)
+        {
+            const std::string path = normalizeAudioPath(text);
+            if (path.compare(0, 6, "Audio/") == 0)
+                paths.insert(path);
+        }
+
+        collectAudioPaths(current->FirstChildElement(), paths);
+    }
+}
+
+void KTools::preloadEffectCached(const char* soundPath)
+{
+    if (!soundPath || !soundPath[0])
+        return;
+
+    std::string key = normalizeAudioPath(soundPath);
+    if (key.empty())
+        return;
+    if (sPreloadedEffects.find(key) != sPreloadedEffects.end())
+        return;
+
+    SimpleAudioEngine::getInstance()->preloadEffect(key.c_str());
+    sPreloadedEffects.insert(key);
+}
+
+void KTools::unloadEffectCached(const char* soundPath)
+{
+    if (!soundPath || !soundPath[0])
+        return;
+
+    std::string key = normalizeAudioPath(soundPath);
+    if (key.empty())
+        return;
+    SimpleAudioEngine::getInstance()->unloadEffect(key.c_str());
+    sPreloadedEffects.erase(key);
+}
+
+void KTools::preloadMatchEffect(const char* soundPath)
+{
+	if (!UserDefault::getInstance()->getBoolForKey("isPreload"))
 		return;
-	}
 
-	//MD5 
+    const std::string key = normalizeAudioPath(soundPath);
+    if (key.empty() || !FileUtils::getInstance()->isFileExist(key))
+        return;
 
-	std::string md5Path =  "Audio/list.xml";
+    sMatchEffects.insert(key);
+    KTools::preloadEffectCached(key.c_str());
+}
 
-	bool isExisted=CCFileUtils::sharedFileUtils()->isFileExist(md5Path);
+void KTools::preloadMatchEffectsFromXML(const char* xmlPath)
+{
+    if (!xmlPath || !xmlPath[0] || !FileUtils::getInstance()->isFileExist(xmlPath))
+        return;
 
-	if(!isExisted){
-	return;
-	}
+    ssize_t size = 0;
+    unsigned char* data = FileUtils::getInstance()->getFileData(xmlPath, "r", &size);
+    if (!data || size <= 0)
+        return;
 
-	tinyxml2::XMLDocument* doc = new tinyxml2::XMLDocument();  
-	ssize_t nSize;
-	const char *pXmlBuffer = (const char*)CCFileUtils::sharedFileUtils()->getFileData(md5Path.c_str(), "r", &nSize);
-	doc->Parse(pXmlBuffer);
+    tinyxml2::XMLDocument document;
+    document.Parse(reinterpret_cast<const char*>(data), size);
+    CC_SAFE_DELETE_ARRAY(data);
 
-	XMLElement *rootEle=doc->RootElement();
-	XMLElement *fileEle=rootEle->FirstChildElement();
+    std::set<std::string> paths;
+    collectAudioPaths(document.RootElement(), paths);
+    for (std::set<std::string>::const_iterator it = paths.begin(); it != paths.end(); ++it)
+        KTools::preloadMatchEffect(it->c_str());
+}
 
-	while (fileEle){
-	const char* pathSrc=fileEle->FirstAttribute()->Value();
-	std::string soundPath= fileEle->GetText();	 
-	if(strcmp(pathSrc,listName)==0){
-	if(type==0){
-	SimpleAudioEngine::sharedEngine()->preloadEffect(soundPath.c_str());
-	}else if(type==1){
-	SimpleAudioEngine::sharedEngine()->unloadEffect(soundPath.c_str());
-	}
-	}
+void KTools::releaseMatchEffects()
+{
+    std::set<std::string> effects;
+    effects.swap(sMatchEffects);
 
-	fileEle=fileEle->NextSiblingElement();	
-	}
-	return;
+    for (std::set<std::string>::const_iterator it = effects.begin(); it != effects.end(); ++it)
+        KTools::unloadEffectCached(it->c_str());
+}
 
+unsigned int KTools::playEffectOptimized(const char* soundPath, unsigned int minFrameGap, int maxPerFrame)
+{
+    if (!soundPath || !soundPath[0])
+        return 0;
+
+    (void)minFrameGap;
+    (void)maxPerFrame;
+
+    std::string key = normalizeAudioPath(soundPath);
+    if (key.empty())
+        return 0;
+
+    if (UserDefault::getInstance()->getBoolForKey("isPreload"))
+    {
+        sMatchEffects.insert(key);
+        KTools::preloadEffectCached(key.c_str());
+    }
+
+    return SimpleAudioEngine::getInstance()->playEffect(key.c_str());
 }
 
 
@@ -1169,7 +1260,7 @@ sqlite3* KTools::prepareTableInDB(){
 	sqlite3* pDB = NULL;
 	char* errorMsg=NULL;
 
-	std::string path=CCFileUtils::sharedFileUtils()->getWritablePath() +"sql.db"; 
+	std::string path=FileUtils::getInstance()->getWritablePath() +"sql.db";
 	int result=sqlite3_open(path.c_str(),&pDB);  
 
 	if(result!=SQLITE_OK){
@@ -1192,9 +1283,8 @@ bool KTools::saveToSQLite(const char* table/* ="GameRecord"*/,const char* column
 
 
 		encode(str,key);
-		CCString* coin=CCString::create(str);
-		CCString* sql=CCString::createWithFormat("update %s set %s='%s'",table,column,coin->getCString());
-		sqlite3_exec(pDB,sql->getCString(),NULL,NULL,&errorMsg);
+		std::string sql=cocos2d::StringUtils::format("update %s set %s='%s'",table,column,str.c_str());
+		sqlite3_exec(pDB,sql.c_str(),NULL,NULL,&errorMsg);
 
 		if(errorMsg!=NULL){
 			sqlite3_close(pDB);
@@ -1213,7 +1303,7 @@ bool KTools::saveToSQLite(const char* table/* ="GameRecord"*/,const char* column
 
 
 
-CCString* KTools::readFromSQLite(const char* table/* ="GameRecord" */,const char* column/* =NULL */,const char* value/* =NULL */){
+std::string KTools::readFromSQLite(const char* table/* ="GameRecord" */,const char* column/* =NULL */,const char* value/* =NULL */){
 
 	sqlite3* pDB =prepareTableInDB();
 
@@ -1221,25 +1311,24 @@ CCString* KTools::readFromSQLite(const char* table/* ="GameRecord" */,const char
 	if(pDB!=NULL){
 
 		char **result;
-		CCString* sql=CCString::createWithFormat("select %s from  GameRecord","coin");
+		std::string sql="select coin from  GameRecord";
 		int row=0;
 		int column=0;
 
-		sqlite3_get_table(pDB,sql->getCString(),&result,&row,&column,NULL);
+		sqlite3_get_table(pDB,sql.c_str(),&result,&row,&column,NULL);
 
 		std::string str=result[1];
 		decode(str);
-		CCString* coin=CCString::createWithFormat("%s",str.c_str());
 		sqlite3_free_table(result);
 		sqlite3_close(pDB);
-		return coin;
+		return str;
 	}
 	sqlite3_close(pDB);
-	return 0;
+	return "";
 
 }
 
-CCString* KTools::readSQLite(const char* table,const char* column,const char* value,const char* targetColumn){
+std::string KTools::readSQLite(const char* table,const char* column,const char* value,const char* targetColumn){
 
 	sqlite3* pDB =prepareTableInDB();
 
@@ -1248,11 +1337,11 @@ CCString* KTools::readSQLite(const char* table,const char* column,const char* va
 
 		char **result;
 
-		CCString* sql=CCString::createWithFormat(("select %s,%s from  %s "),column,targetColumn,table);
+		std::string sql=cocos2d::StringUtils::format("select %s,%s from  %s ",column,targetColumn,table);
 		int row=0;
 		int column=0;
 
-		sqlite3_get_table(pDB,sql->getCString(),&result,&row,&column,NULL);
+		sqlite3_get_table(pDB,sql.c_str(),&result,&row,&column,NULL);
 		 
 		std::string target;
 		for( int i = 0; i <= row*2 ; i++ ){
@@ -1268,13 +1357,13 @@ CCString* KTools::readSQLite(const char* table,const char* column,const char* va
 	
 		}
 
-		CCString* targetValue=CCString::create("");
+		std::string targetValue;
 
 
 		if(strcmp(targetColumn,"column3")==0 || strcmp(targetColumn,"column4")==0){
-		    targetValue=CCString::createWithFormat("%s",target.c_str());
+		    targetValue=target;
 		}else{
-			targetValue=CCString::createWithFormat("%d",atoi(target.c_str()));
+			targetValue=cocos2d::StringUtils::format("%d",std::atoi(target.c_str()));
 		}
 		sqlite3_free_table(result);
 		sqlite3_close(pDB);
@@ -1282,7 +1371,7 @@ CCString* KTools::readSQLite(const char* table,const char* column,const char* va
 		
 	}
 	sqlite3_close(pDB);
-	return 0;
+	return "";
 	
 }
 
@@ -1296,12 +1385,12 @@ void KTools::saveSQLite(const char* table,const char* relatedColumn,const char* 
 
 		char **result;
 
-		CCString* sql=CCString::createWithFormat(("select %s,%s from  %s "),relatedColumn,targetColumn,table);
+		std::string sql=cocos2d::StringUtils::format("select %s,%s from  %s ",relatedColumn,targetColumn,table);
 		int row=0;
 		int column=0;
 
 
-		sqlite3_get_table(pDB,sql->getCString(),&result,&row,&column,NULL);
+		sqlite3_get_table(pDB,sql.c_str(),&result,&row,&column,NULL);
 
 		std::string target;
 		std::string columnValue;
@@ -1320,31 +1409,30 @@ void KTools::saveSQLite(const char* table,const char* relatedColumn,const char* 
 		std::string saveValue;
 		if(isPlus){
 			saveValue=std::string(targetValue)+ target;	
-			sql=CCString::createWithFormat(("update %s set %s='%s' where %s='%s'"),table,targetColumn,saveValue.c_str(),relatedColumn,columnValue.c_str());
 		
 		}else{
 			saveValue=std::string(targetValue);		
 		}
 		int key=rand()%50+40;
 		encode(saveValue,key);
-		sql=CCString::createWithFormat(("update %s set %s='%s' where %s='%s'"),table,targetColumn,saveValue.c_str(),relatedColumn,columnValue.c_str());
-		sqlite3_exec(pDB,sql->getCString(),NULL,NULL,NULL);
+		sql=cocos2d::StringUtils::format("update %s set %s='%s' where %s='%s'",table,targetColumn,saveValue.c_str(),relatedColumn,columnValue.c_str());
+		sqlite3_exec(pDB,sql.c_str(),NULL,NULL,NULL);
 		
 		
 		if(isPlus){
 			char **result2;
-			sql=CCString::create("select coin from GameRecord");
-			sqlite3_get_table(pDB,sql->getCString(),&result2,&row,&column,NULL);
+			sql="select coin from GameRecord";
+			sqlite3_get_table(pDB,sql.c_str(),&result2,&row,&column,NULL);
 			std::string str2=result2[1];
 			decode(str2);
 
 			std::string str3="uuuuu<";
 			decode(str3);
 
-			if(atoi(str2.c_str())>atoi(str3.c_str())){
-				CCString* coin=CCString::create("uuuuu<");
-				sql=CCString::createWithFormat("update GameRecord set coin='%s'",coin->getCString());
-				sqlite3_exec(pDB,sql->getCString(),NULL,NULL,&errorMsg);
+			if(std::atoi(str2.c_str())>std::atoi(str3.c_str())){
+				std::string coin="uuuuu<";
+				sql=cocos2d::StringUtils::format("update GameRecord set coin='%s'",coin.c_str());
+				sqlite3_exec(pDB,sql.c_str(),NULL,NULL,&errorMsg);
 			}
 		}
 	
@@ -1396,28 +1484,22 @@ CCTips::~CCTips(void)
 bool CCTips::init(const char *tips){
 	bool bRet = false;
 	do{
-		CC_BREAK_IF(!CCSprite::init());
-		this->setAnchorPoint(ccp(0.5,0.5));
-		CCDictionary *strings = CCDictionary::createWithContentsOfFile("Element/strings.xml");  
-		const char *reply = ((CCString*)strings->objectForKey(tips))->getCString();  
+		CC_BREAK_IF(!Sprite::init());
+		this->setAnchorPoint(Vec2(0.5f,0.5f));
+		ValueMap strings=FileUtils::getInstance()->getValueMapFromFile("Element/strings.xml");
+		auto value=strings.find(tips);
+		std::string reply=value != strings.end() ? value->second.asString() : "";
 
-		CCLabelTTF* tipLabel=CCLabelTTF::create(reply,FONT_TYPE,12);
+		Label* tipLabel=Label::createWithSystemFont(reply.c_str(),FONT_TYPE,12);
 		this->addChild(tipLabel,5000);
-		this->setPosition(ccp(winSize.width/2,50));
-		CCFiniteTimeAction *call=CCCallFunc::create(this,callfunc_selector(CCTips::onDestroy));
+		this->setPosition(Vec2(winSize.width/2,50));
+		FiniteTimeAction *call=CallFunc::create(CC_CALLBACK_0(CCTips::onDestroy, this));
 
-		CCActionInterval*  mv=CCMoveBy::create(0.2f,ccp(0,12));
-		CCActionInterval* fadeOut=CCFadeOut::create(0.2f);
-		CCDelayTime* delay=CCDelayTime::create(2.0f);
-		CCActionInterval* sp=CCSpawn::create(fadeOut,mv,NULL);
-
-		CCArray* seqArray=CCArray::create();
-		seqArray->addObject(sp);
-		seqArray->addObject(delay);
-		seqArray->addObject(call);
-
-
-		CCAction* seq=cocos2d::cocos2dx2_compat::createSequence(seqArray);
+		ActionInterval*  mv=MoveBy::create(0.2f,Vec2(0,12));
+		ActionInterval* fadeOut=FadeOut::create(0.2f);
+		DelayTime* delay=DelayTime::create(2.0f);
+		ActionInterval* sp=Spawn::create(fadeOut,mv,NULL);
+		Action* seq=Sequence::create(sp, delay, call, NULL);
 
 		this->runAction(seq);
 
@@ -1450,5 +1532,6 @@ CCTips*  CCTips::create( const char *tips ){
 		return NULL;
 	}
 }
+
 
 

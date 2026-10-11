@@ -7,29 +7,31 @@ USING_NS_CC;
 
 class HudLayer;
 
-class ActionButton : public CCSprite,public CCTouchDelegate{
+class ActionButton : public Sprite{
 public:
 	ActionButton(void);
 	~ActionButton(void);
 
 	int						_clickNum;
 	float					_clickTime;
-	CCProgressTimer*		markSprite;
-	CCSprite*				ougismarkSprite;
-	CCSprite*		proressmarkSprite;
-	CCSprite*		proressblinkSprite ;
-	CCSprite*		progressPointSprite;
-	CCSprite*       proressblinkMask;
+	ProgressTimer*		markSprite;
+	Sprite*				ougismarkSprite;
+	Sprite*		proressmarkSprite;
+	Sprite*		proressblinkSprite ;
+	Sprite*		progressPointSprite;
+	Sprite*       proressblinkMask;
 	const char*				_cost;
-	CCClippingNode* clipper;
+	ClippingNode* clipper;
 	bool					_isLock;
 
 	bool					_isColdChanged;
+	int						_coldDown;
+	int						_timeCout;
 
 	virtual bool			init(const char *szImage);
 	static ActionButton*	create(const char *szImage);
 	virtual bool			isCanClick();
-	CCRect					getRect();
+	Rect					getRect();
 
 	void					click();
 	void					setMarkSprite(const char* mark);
@@ -37,20 +39,22 @@ public:
 	void					setProgressMark();
 	void					updateProgressMark();
 
-	CCSprite*		gearSign ;
-	CCLabelBMFont*			cdLabel;
+	Sprite*		gearSign ;
+	LabelBMFont*			cdLabel;
 
-	CCLabelBMFont*			lockLabel1;
-	CCLabelBMFont*			lockLabel2;
+	LabelBMFont*			lockLabel1;
+	LabelBMFont*			lockLabel2;
 
 	bool					_isMarkVisable;
 
 	CC_SYNTHESIZE(abType,_abType,ABType);
 	gearType				_gearType;
 	
-	CC_SYNTHESIZE_RETAIN(CCString*,_coldDown,CD);
+	void setCD(int value);
+	int getCD() const;
 	CC_SYNTHESIZE(bool,_isDoubleSkill,DoubleSkill);
-	CC_SYNTHESIZE_RETAIN(CCString*,_timeCout,TimeCout);
+	void setTimeCout(int value);
+	int getTimeCout() const;
 	
 
 	void			setLock();
@@ -58,8 +62,8 @@ public:
 	void			clearOugisMark();
 	void			setGearType(int tmpGearType);
 
-	CC_SYNTHESIZE_RETAIN(CCAction*,_freezeAction,FreezeAction);
-	//CC_SYNTHESIZE_RETAIN(CCProgressTimer*,markSprite,MarkSprite);
+	CC_SYNTHESIZE_RETAIN(Action*,_freezeAction,FreezeAction);
+	//CC_SYNTHESIZE_RETAIN(ProgressTimer*,markSprite,MarkSprite);
 	CC_SYNTHESIZE(HudLayer*,_delegate,Delegate);
 	virtual void	beganAnimation(bool isLock = false);
 
@@ -72,15 +76,15 @@ protected:
 
 	virtual void	onEnter();
 	virtual void	onExit();
-	virtual bool	ccTouchBegan(CCTouch* touch,CCEvent* event);
-	virtual void	ccTouchEnded(CCTouch* touch,CCEvent* event);
+	virtual bool	ccTouchBegan(Touch* touch,Event* event);
+	virtual void	ccTouchEnded(Touch* touch,Event* event);
 
 	
 	void		    createFreezeAnimation();
 	void			clearClick();
 
 
-	bool			containsTouchLocation(CCTouch* touch);
+	bool			containsTouchLocation(Touch* touch);
 
 	
 

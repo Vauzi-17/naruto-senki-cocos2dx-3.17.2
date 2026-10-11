@@ -5,14 +5,14 @@
 USING_NS_CC;
 class GameLayer;
 
-class BGLayer: public CCLayer{
+class BGLayer: public Layer{
 
 public:
 	BGLayer(void);
 	~BGLayer(void);
 
-	CCTexture2D*	texMap;
-	CCSprite*		bgMap;
+	Texture2D*	texMap;
+	Sprite*		bgMap;
 
 	GameLayer*			_delegate;
 
@@ -23,6 +23,3 @@ public:
 	CREATE_FUNC(BGLayer);
 
 };
-
-
-

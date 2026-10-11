@@ -1,18 +1,22 @@
 #include "NetworkLayer.h"
 #include "Defines.h"
 #include "StartMenu.h"
+#include "HeroPayload.h"
+#include <algorithm>
+#include <string>
 USING_NS_CC_EXT;
 using namespace CocosDenshion;
 
 #include<time.h>
 
-static bool networkContainsHero(CCArray* used, const char* heroName)
+static bool networkContainsHero(const std::vector<std::string>& used, const char* heroName)
 {
-	CCObject* pObject = NULL;
-	CCARRAY_FOREACH(used, pObject)
+	if(!heroName){
+		return false;
+	}
+	for(const std::string& value : used)
 	{
-		CCString* value = (CCString*)pObject;
-		if(strcmp(value->getCString(), heroName) == 0)
+		if(value == heroName)
 		{
 			return true;
 		}
@@ -20,11 +24,11 @@ static bool networkContainsHero(CCArray* used, const char* heroName)
 	return false;
 }
 
-static const char* networkPickHero(CCArray* used, const char** allHeroes, int heroCount, const char** presetList, int presetCount, int presetIndex, bool randomPick)
+static const char* networkPickHero(std::vector<std::string>& used, const char** allHeroes, int heroCount, const char** presetList, int presetCount, int presetIndex, bool randomPick)
 {
 	if(!randomPick && presetIndex < presetCount && !networkContainsHero(used, presetList[presetIndex]))
 	{
-		used->addObject(CCString::create(presetList[presetIndex]));
+		used.push_back(presetList[presetIndex]);
 		return presetList[presetIndex];
 	}
 
@@ -34,7 +38,7 @@ static const char* networkPickHero(CCArray* used, const char** allHeroes, int he
 		const char* heroName=allHeroes[index];
 		if(!networkContainsHero(used, heroName))
 		{
-			used->addObject(CCString::create(heroName));
+			used.push_back(heroName);
 			return heroName;
 		}
 	}
@@ -43,7 +47,7 @@ static const char* networkPickHero(CCArray* used, const char** allHeroes, int he
 	{
 		if(!networkContainsHero(used, allHeroes[i]))
 		{
-			used->addObject(CCString::create(allHeroes[i]));
+			used.push_back(allHeroes[i]);
 			return allHeroes[i];
 		}
 	}
@@ -52,33 +56,22 @@ static const char* networkPickHero(CCArray* used, const char** allHeroes, int he
 }
 
 
-static bool networkArrayHasHero(CCArray* list, const char* heroName)
+static bool networkArrayHasHero(const std::vector<std::string>& list, const char* heroName)
 {
-	if(!list || !heroName){
+	if(!heroName){
 		return false;
 	}
-	CCObject* pObject=NULL;
-	CCARRAY_FOREACH(list,pObject)
-	{
-		CCString* value=(CCString*)pObject;
-		if(strcmp(value->getCString(),heroName)==0){
+	for(const std::string& value : list){
+		if(value == heroName){
 			return true;
 		}
 	}
 	return false;
 }
 
-static void networkAddHero(CCArray* heros, const char* character, const char* role, const char* group)
-{
-	CCDictionary* dic=CCDictionary::create();
-	dic->setObject(CCString::create(character),"character");
-	dic->setObject(CCString::create(role),"role");
-	dic->setObject(CCString::create(group),"group");
-	heros->addObject(dic);
-}
 /*
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)   
-#include <jni.h>   
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#include <jni.h>
 #include "platform/android/jni/JniHelper.h"
 
 #endif  */
@@ -89,9 +82,8 @@ NetworkLayer::NetworkLayer(void)
 	_heroHalf=NULL;
 	_heroName=NULL;
 	_selectImg=NULL;
-	
-	
-	_selectList=NULL;
+
+
 
 	_comSelector1=NULL;
 	_comLabel1=NULL;
@@ -116,25 +108,17 @@ NetworkLayer::NetworkLayer(void)
 	_playerSelect=NULL;
 	_com1Select=NULL;
 	_com2Select=NULL;
-	_trainingPlayerPick=NULL;
-	_trainingTeamPicks=NULL;
-	_trainingEnemyPicks=NULL;
-	selectArray=NULL;
 
 	_pageLayer1=NULL;
 	_pageLayer2=NULL;
 	_pageLayer3=NULL;
 
-	
+
 
 	isPosting=false;
 	refreshBtn=NULL;
-	
+
 	_teamSelector=NULL;
-	_trainingTeamPicks=CCArray::create();
-	_trainingTeamPicks->retain();
-	_trainingEnemyPicks=CCArray::create();
-	_trainingEnemyPicks->retain();
 	for(int i=0;i<5;i++){
 		_trainingTeamSlots[i]=NULL;
 		_trainingEnemySlots[i]=NULL;
@@ -144,182 +128,123 @@ NetworkLayer::NetworkLayer(void)
 
 NetworkLayer::~NetworkLayer(void)
 {
-	CC_SAFE_RELEASE(selectArray);
-	CC_SAFE_RELEASE(_trainingPlayerPick);
-	CC_SAFE_RELEASE(_trainingTeamPicks);
-	CC_SAFE_RELEASE(_trainingEnemyPicks);
-	
+
 }
 
 bool NetworkLayer::init(){
 
 	bool bRet=false;
 	do{
-		CC_BREAK_IF(!CCLayer::init());
+		CC_BREAK_IF(!Layer::init());
 
-			//�������м�	
-		    CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("Menu.plist");
-		    CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("Select.plist");
-		    CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("Record.plist");
-			CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("Record2.plist");		
-			CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("UI.plist");
-			CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("Report.plist");
-			CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("Ougis.plist");
-			CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("Ougis2.plist");
-			CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("Map.plist");
-			CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("Gears.plist");
-			
+			//�������м�
+		    SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Menu.plist");
+		    SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Select.plist");
+		    SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Record.plist");
+			SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Record2.plist");
+			SpriteFrameCache::getInstance()->addSpriteFramesWithFile("UI.plist");
+			SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Report.plist");
+			SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Ougis.plist");
+			SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Ougis2.plist");
+			SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Map.plist");
+			SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Gears.plist");
+
 			KTools* tool= KTools::create();
-			
+
 
 
 //			if(CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID){
 //				if(tool->checkMD5()==0){
-//					SimpleAudioEngine::sharedEngine()->stopBackgroundMusic();
-//					CCDirector::sharedDirector()->end();
+//					SimpleAudioEngine::getInstance()->stopBackgroundMusic();
+//					Director::getInstance()->end();
 //					return false;
 //				}
 //			}
-			
-			
+
+
 		char* bg_src="blue_bg.png";
 
-		CCSprite* bgSprite = CCSprite::create(bg_src);
-		bgSprite->setAnchorPoint(ccp(0,0));
-		
+		Sprite* bgSprite = Sprite::create(bg_src);
+		bgSprite->setAnchorPoint(Vec2(0,0));
+
 		scaleSpriteToScreen(bgSprite);
-		bgSprite->setPosition(ccp(0,0));
+		bgSprite->setPosition(Vec2(0,0));
 		this->addChild(bgSprite, -5);
 
-		//produce groud 
+		//produce groud
 
-		CCSprite* gold_left=CCSprite::createWithSpriteFrameName("gold_left.png");
-		gold_left->setAnchorPoint(ccp(0,0));
-		gold_left->setPosition(ccp(0,20));
+		Sprite* gold_left=Sprite::createWithSpriteFrameName("gold_left.png");
+		gold_left->setAnchorPoint(Vec2(0,0));
+		gold_left->setPosition(Vec2(0,20));
 		this->addChild(gold_left,1);
 
 
-		CCSprite* gold_right=CCSprite::createWithSpriteFrameName("gold_right.png");
-		gold_right->setAnchorPoint(ccp(0,1));
-		gold_right->setPosition(ccp(winSize.width-gold_right->getContentSize().width-20,winSize.height-20));
+		Sprite* gold_right=Sprite::createWithSpriteFrameName("gold_right.png");
+		gold_right->setAnchorPoint(Vec2(0,1));
+		gold_right->setPosition(Vec2(winSize.width-gold_right->getContentSize().width-20,winSize.height-20));
 		this->addChild(gold_right,1);
 
 
 		//produce the cloud
-		CCSprite* cloud_left=CCSprite::createWithSpriteFrameName("cloud.png");	
-		cloud_left->setPosition(ccp(0,15));
+		Sprite* cloud_left=Sprite::createWithSpriteFrameName("cloud.png");
+		cloud_left->setPosition(Vec2(0,15));
 		cloud_left->setFlipX(true);
 		cloud_left->setFlipY(true);
-		cloud_left->setAnchorPoint(ccp(0,0));
+		cloud_left->setAnchorPoint(Vec2(0,0));
 		this->addChild(cloud_left,2);
 
-		CCActionInterval* cmv1=CCMoveBy::create(1,ccp(-15,0));
-		CCAction* cseq1=CCRepeatForever::create(cocos2d::cocos2dx2_compat::createSequence(cmv1,cmv1->reverse(),NULL));
+		ActionInterval* cmv1=MoveBy::create(1,Vec2(-15,0));
+		Action* cseq1=RepeatForever::create(Sequence::create(cmv1, cmv1->reverse(), nullptr));
 		cloud_left->runAction(cseq1);
 
-		CCSprite* cloud_right=CCSprite::createWithSpriteFrameName("cloud.png");	
-		cloud_right->setPosition(ccp(winSize.width-cloud_right->getContentSize().width,15));
+		Sprite* cloud_right=Sprite::createWithSpriteFrameName("cloud.png");
+		cloud_right->setPosition(Vec2(winSize.width-cloud_right->getContentSize().width,15));
 		cloud_right->setFlipY(true);
-		cloud_right->setAnchorPoint(ccp(0,0));
+		cloud_right->setAnchorPoint(Vec2(0,0));
 		this->addChild(cloud_right,2);
 
-		CCActionInterval* cmv2=CCMoveBy::create(1,ccp(15,0));
-		CCAction* cseq2=CCRepeatForever::create(cocos2d::cocos2dx2_compat::createSequence(cmv2,cmv2->reverse(),NULL));
+		ActionInterval* cmv2=MoveBy::create(1,Vec2(15,0));
+		Action* cseq2=RepeatForever::create(Sequence::create(cmv2, cmv2->reverse(), nullptr));
 		cloud_right->runAction(cseq2);
 
-		CCSprite* cloud_top=CCSprite::createWithSpriteFrameName("cloud_top.png");
-		cloud_top->setPosition(ccp(winSize.width/2,winSize.height-(cloud_top->getContentSize().height+12)));
-		cloud_top->setAnchorPoint(ccp(0.5f,0));
+		Sprite* cloud_top=Sprite::createWithSpriteFrameName("cloud_top.png");
+		cloud_top->setPosition(Vec2(winSize.width/2,winSize.height-(cloud_top->getContentSize().height+12)));
+		cloud_top->setAnchorPoint(Vec2(0.5f,0));
 		this->addChild(cloud_top,1);
 
-		
+
 		//produce the menu_bar
-		CCSprite* menu_bar_b = CCSprite::create("menu_bar2.png");
-		menu_bar_b->setAnchorPoint(ccp(0,0));
-		
+		Sprite* menu_bar_b = Sprite::create("menu_bar2.png");
+		menu_bar_b->setAnchorPoint(Vec2(0,0));
+
 		scaleSpriteToScreenWidth(menu_bar_b);
 		this->addChild(menu_bar_b,2);
 
-		
 
 
-		CCSprite* menu_bar_t = CCSprite::create("menu_bar3.png");
-		menu_bar_t->setAnchorPoint(ccp(0,0));
-		
+
+		Sprite* menu_bar_t = Sprite::create("menu_bar3.png");
+		menu_bar_t->setAnchorPoint(Vec2(0,0));
+
 		scaleSpriteToScreenWidth(menu_bar_t);
-		menu_bar_t->setPosition(ccp(0,winSize.height-menu_bar_t->getContentSize().height));
+		menu_bar_t->setPosition(Vec2(0,winSize.height-menu_bar_t->getContentSize().height));
 		this->addChild(menu_bar_t,2);
 
-		CCSprite* select_title=CCSprite::createWithSpriteFrameName("hcmode_title.png");
-		
-		select_title->setAnchorPoint(ccp(0,0));
-		select_title->setPosition(ccp(2,winSize.height-select_title->getContentSize().height-2));
+		Sprite* select_title=Sprite::createWithSpriteFrameName("hcmode_title.png");
+
+		select_title->setAnchorPoint(Vec2(0,0));
+		select_title->setPosition(Vec2(2,winSize.height-select_title->getContentSize().height-2));
 		this->addChild(select_title,3);
 
-		
+
 
 		if(!SaveError){
 
-//			if(!isPosting){
-//
-//				isPosting=true;
-//				if(!refreshBtn){
-//					refreshBtn=CCSprite::createWithSpriteFrameName("refresh_btn.png");
-//					refreshBtn->setPosition(ccp(winSize.width/2,winSize.height/2));
-//					CCActionInterval* rt=CCRotateBy::create(0.3f,180,180);
-//					refreshBtn->runAction(CCRepeatForever::create(rt));
-//					this->addChild(refreshBtn,1000);
-//
-//				}
-//
-//				cocos2d::extension::CCHttpRequest* request = new  cocos2d::extension::CCHttpRequest(); 
-//				std::string codeFinal;
-//
-//				std::string Andriodstr="";
-//
-//#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)  
-//				JniMethodInfo minfo;
-//				bool isHave = JniHelper::getStaticMethodInfo(minfo,"net/zakume/game/NarutoSenki","getMacAdress", "()Ljava/lang/String;");  
-//
-//				if (isHave)   
-//				{  
-//					jstring jstr=(jstring) minfo.env->CallStaticObjectMethod(minfo.classID, minfo.methodID); 
-//					Andriodstr = Andriodstr + JniHelper::jstring2string(jstr);
-//
-//				}  
-//#endif		
-//				std::string Imeistr="";
-//
-//#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)  
-//				JniMethodInfo minfo2;
-//				bool isHave2 = JniHelper::getStaticMethodInfo(minfo2,"net/zakume/game/NarutoSenki","getImei", "()Ljava/lang/String;");  
-//
-//				if (isHave2)   
-//				{  
-//					jstring jstr2=(jstring) minfo2.env->CallStaticObjectMethod(minfo2.classID, minfo2.methodID); 
-//					Imeistr = Imeistr + JniHelper::jstring2string(jstr2);
-//
-//				}  
-//#endif	
-//
-//				std::string code1=CCString::createWithFormat("code=100&id=%d",MemberID)->getCString();
-//				std::string code2=CCString::createWithFormat("&version=%d",CURRENT_VERSION)->getCString();
-//				std::string url=SERVER"nsk/list.php?"+code1+code2+"&pw="+PWord+"&androidID="+Andriodstr+"&Imei="+Imeistr;
-//				request->setUrl(url.c_str());  
-//				request->setRequestType( cocos2d::extension::CCHttpRequest::kHttpGet);  
-//
-//				request->setResponseCallback(this, callfuncND_selector(NetworkLayer::onListRequestCompleted));  
-//
-//				request->setTag("Post_My_Data");  
-//				cocos2d::extension::CCHttpClient::getInstance()->send(request);  
-//				request->release();  
-//
-//			}
-			_selectList=CCArray::create();
-			selectArray=CCArray::create();
-			_pageLayer1=CCLayer::create();
-			_pageLayer2=CCLayer::create();
-			_pageLayer3=CCLayer::create();
+			_selectList.clear();
+			selectArray.clear();
+			_pageLayer1=Layer::create();
+			_pageLayer2=Layer::create();
+			_pageLayer3=Layer::create();
 
 			char* selectList[]={"Naruto","Sakura","Sai","Kakashi",
 			"None","None","None",
@@ -343,7 +268,7 @@ bool NetworkLayer::init(){
 			"None","None","None"
 			};
 
-			
+
 
 
 			int num= sizeof(selectList)/sizeof(char*);
@@ -353,36 +278,34 @@ bool NetworkLayer::init(){
 			int Page=0;
 
 			for (int i=0; i < num; i++)  {
-				
+
 				const char* charName;
 				charName=selectList[i];
 
-				_selectList->addObject(CCString::createWithFormat("%s",charName));
-				
-				CCString* path;
+				_selectList.push_back(charName);
 
-				path=CCString::createWithFormat("%s_select.png",charName);
+				std::string path=cocos2d::StringUtils::format("%s_select.png",charName);
 				Column=i%7;
 				Row=i/7;
 				Page=int(i/21);
-				SelectButton* select_btn=SelectButton::create(path->getCString());
+				SelectButton* select_btn=SelectButton::create(path.c_str());
 				select_btn->setDelegate2(this);
-				select_btn->setCharName(CCString::createWithFormat("%s",charName));
-				if(Page==0){	
-					select_btn->setPosition(ccp(winSize.width/2-36+(Column-1)*27+Column/4*10,winSize.height-112-(72*Row)));
+				select_btn->setCharName(charName);
+				if(Page==0){
+					select_btn->setPosition(Vec2(winSize.width/2-36+(Column-1)*27+Column/4*10,winSize.height-112-(72*Row)));
 					_pageLayer1->addChild(select_btn,-Column);
 				}else if(Page==1){
-					select_btn->setPosition(ccp(winSize.width/2-36+(Column-1)*27+Column/4*10,winSize.height-112-(72*(Row-3))));
+					select_btn->setPosition(Vec2(winSize.width/2-36+(Column-1)*27+Column/4*10,winSize.height-112-(72*(Row-3))));
 					_pageLayer2->addChild(select_btn,-Column);
 
 				}else if(Page==2){
-					select_btn->setPosition(ccp(winSize.width/2-36+(Column-1)*27+Column/4*10,winSize.height-112-(72*(Row-6))));
+					select_btn->setPosition(Vec2(winSize.width/2-36+(Column-1)*27+Column/4*10,winSize.height-112-(72*(Row-6))));
 					_pageLayer3->addChild(select_btn,-Column);
 
 				}
 
 
-				selectArray->addObject(select_btn);
+				selectArray.push_back(select_btn);
 			};
 
 
@@ -396,80 +319,77 @@ bool NetworkLayer::init(){
 			_pageLayer2->setPositionY(2000);
 			_pageLayer3->setPositionY(2000);
 
-			page1_btn=CCMenuItemSprite::create(CCSprite::createWithSpriteFrameName("page1_off.png"),CCSprite::createWithSpriteFrameName("page1_on.png"),this,menu_selector(NetworkLayer::onPage1Btn));
-			page2_btn=CCMenuItemSprite::create(CCSprite::createWithSpriteFrameName("page2_off.png"),CCSprite::createWithSpriteFrameName("page2_on.png"),this,menu_selector(NetworkLayer::onPage2Btn));
-			page3_btn=CCMenuItemSprite::create(CCSprite::createWithSpriteFrameName("page3_off.png"),CCSprite::createWithSpriteFrameName("page3_on.png"),this,menu_selector(NetworkLayer::onPage3Btn));
+			page1_btn=MenuItemSprite::create(Sprite::createWithSpriteFrameName("page1_off.png"),Sprite::createWithSpriteFrameName("page1_on.png"),CC_CALLBACK_1(NetworkLayer::onPage1Btn, this));
+			page2_btn=MenuItemSprite::create(Sprite::createWithSpriteFrameName("page2_off.png"),Sprite::createWithSpriteFrameName("page2_on.png"),CC_CALLBACK_1(NetworkLayer::onPage2Btn, this));
+			page3_btn=MenuItemSprite::create(Sprite::createWithSpriteFrameName("page3_off.png"),Sprite::createWithSpriteFrameName("page3_on.png"),CC_CALLBACK_1(NetworkLayer::onPage3Btn, this));
 
-			page_menu=CCMenu::create(page1_btn,page2_btn,page3_btn,NULL);
+			page_menu=Menu::create(page1_btn,page2_btn,page3_btn,NULL);
 
 			page_menu->alignItemsHorizontallyWithPadding(20);
-			page_menu->setPosition(ccp(winSize.width/2+48,42));
+			page_menu->setPosition(Vec2(winSize.width/2+48,42));
 			this->addChild(page_menu,10);
 			page1_btn->selected();
 
 
 
-			selectArray->retain();
-			_selectList->retain();
+			const std::string& hero=_selectList[0];
 
-			CCString* hero=(CCString *)_selectList->objectAtIndex(0);
-
-			const char* path=CCString::createWithFormat("%s_half.png",hero->getCString())->getCString();
-			_heroHalf=CCSprite::createWithSpriteFrameName(path);
-			_heroHalf->setAnchorPoint(ccp(0,0));
-			_heroHalf->setPosition(ccp(10,10));
+			std::string path=cocos2d::StringUtils::format("%s_half.png",hero.c_str());
+			_heroHalf=Sprite::createWithSpriteFrameName(path);
+			_heroHalf->setAnchorPoint(Vec2(0,0));
+			_heroHalf->setPosition(Vec2(10,10));
 			this->addChild(_heroHalf,1);
 
-			const char* namePath=CCString::createWithFormat("%s_font.png",hero->getCString())->getCString();
-			_heroName=CCSprite::createWithSpriteFrameName(namePath);
-			_heroName->setAnchorPoint(ccp(0.5f,0));
-			_heroName->setPosition(ccp(100,20));
+			std::string namePath=cocos2d::StringUtils::format("%s_font.png",hero.c_str());
+			_heroName=Sprite::createWithSpriteFrameName(namePath);
+			_heroName->setAnchorPoint(Vec2(0.5f,0));
+			_heroName->setPosition(Vec2(100,20));
 			this->addChild(_heroName,5);
 
 
-			_selectImg=CCSprite::createWithSpriteFrameName("1p.png");
-			_selectImg->setAnchorPoint(ccp(0,0));
-			SelectButton* pObject=(SelectButton*) selectArray->objectAtIndex(0);
-			_selectImg->setPosition(ccp(pObject->getPositionX()-2,pObject->getPositionY()-2));
+			_selectImg=Sprite::createWithSpriteFrameName("1p.png");
+			_selectImg->setAnchorPoint(Vec2(0,0));
+			SelectButton* pObject=selectArray[0];
+			_selectImg->setPosition(Vec2(pObject->getPositionX()-2,pObject->getPositionY()-2));
 			this->addChild(_selectImg,500);
 
-			_selectHero=pObject->getCharName()->getCString();
+			_selectHero=pObject->getCharName();
 
-			CCActionInterval* blink=CCBlink::create(0.6f,1);
-			_selectImg->runAction(CCRepeatForever::create(blink));
+			ActionInterval* blink=Blink::create(0.6f,1);
+			_selectImg->runAction(RepeatForever::create(blink));
 
 
 
 			if(adResult==1 || _isTrainingSelect){
-				_teamSelector=CCLayer::create();
+				_teamSelector=Layer::create();
 
-				CCSprite* _teamBg=CCSprite::createWithSpriteFrameName("team_bg.png");
-				_teamBg->setAnchorPoint(ccp(0,0));
-				_teamBg->setPosition(ccp(0,185));
+				Sprite* _teamBg=Sprite::createWithSpriteFrameName("team_bg.png");
+				_teamBg->setAnchorPoint(Vec2(0,0));
+				_teamBg->setPosition(Vec2(0,185));
 				_teamSelector->addChild(_teamBg);
 
 
 
-				_comSelector1=CCSprite::createWithSpriteFrameName("unknow_select.png");
-				_comSelector1->setAnchorPoint(ccp(0,0));
-				_comSelector1->setPosition(ccp(2,194));
+				_comSelector1=Sprite::createWithSpriteFrameName("unknow_select.png");
+				_comSelector1->setAnchorPoint(Vec2(0,0));
+				_comSelector1->setPosition(Vec2(2,194));
 				_teamSelector->addChild(_comSelector1);
 
-				_comLabel1=CCSprite::createWithSpriteFrameName("com_label.png");
-				_comLabel1->setAnchorPoint(ccp(0.5,0.5f));
-				_comLabel1->setPosition(ccp(_comSelector1->getPositionX()+_comSelector1->getContentSize().width+2+18,_comSelector1->getPositionY()+_comSelector1->getContentSize().height/2));
+				_comLabel1=Sprite::createWithSpriteFrameName("com_label.png");
+				_comLabel1->setAnchorPoint(Vec2(0.5,0.5f));
+				_comLabel1->setPosition(Vec2(_comSelector1->getPositionX()+_comSelector1->getContentSize().width+2+18,_comSelector1->getPositionY()+_comSelector1->getContentSize().height/2));
 				_teamSelector->addChild(_comLabel1);
 
 
-				_comSelector2=CCSprite::createWithSpriteFrameName("unknow_select.png");
-				_comSelector2->setAnchorPoint(ccp(0,0));
-				_comSelector2->setPosition(ccp(_comSelector1->getPositionX()+_comSelector1->getContentSize().width+40,_comSelector1->getPositionY()));
+				_comSelector2=Sprite::createWithSpriteFrameName("unknow_select.png");
+				_comSelector2->setAnchorPoint(Vec2(0,0));
+				_comSelector2->setPosition(Vec2(_comSelector1->getPositionX()+_comSelector1->getContentSize().width+40,_comSelector1->getPositionY()));
 				_teamSelector->addChild(_comSelector2);
 
 
-				_comLabel2=CCSprite::createWithSpriteFrameName("com_label.png");
-				_comLabel2->setAnchorPoint(ccp(0.5,0.5f));
-				_comLabel2->setPosition(ccp(_comSelector2->getPositionX()+_comSelector2->getContentSize().width+2+18,_comSelector2->getPositionY()+_comSelector2->getContentSize().height/2));
+				_comLabel2=Sprite::createWithSpriteFrameName("com_label.png");
+				_comLabel2->setAnchorPoint(Vec2(0.5,0.5f));
+				_comLabel2->setPosition(Vec2(_comSelector2->getPositionX()+_comSelector2->getContentSize().width+2+18,_comSelector2->getPositionY()+_comSelector2->getContentSize().height/2));
 				_teamSelector->addChild(_comLabel2);
 				if(_isTrainingSelect){
 					float slotScale=0.82f;
@@ -483,24 +403,24 @@ bool NetworkLayer::init(){
 					_comLabel2->setVisible(false);
 					_comSelector1->setScale(slotScale);
 					_comSelector2->setScale(slotScale);
-					_comSelector1->setPosition(ccp(teamStartX,slotY));
-					_comSelector2->setPosition(ccp(teamStartX+slotGap,slotY));
+					_comSelector1->setPosition(Vec2(teamStartX,slotY));
+					_comSelector2->setPosition(Vec2(teamStartX+slotGap,slotY));
 					_comSelector2->setVisible(_trainingTeamSize>1);
 
 					_trainingTeamSlots[0]=_comSelector1;
 					_trainingTeamSlots[1]=_comSelector2;
 					for(int i=2;i<_trainingTeamSize && i<5;i++){
-						_trainingTeamSlots[i]=CCSprite::createWithSpriteFrameName("unknow_select.png");
-						_trainingTeamSlots[i]->setAnchorPoint(ccp(0,0));
+						_trainingTeamSlots[i]=Sprite::createWithSpriteFrameName("unknow_select.png");
+						_trainingTeamSlots[i]->setAnchorPoint(Vec2(0,0));
 						_trainingTeamSlots[i]->setScale(slotScale);
-						_trainingTeamSlots[i]->setPosition(ccp(teamStartX+slotGap*i,slotY));
+						_trainingTeamSlots[i]->setPosition(Vec2(teamStartX+slotGap*i,slotY));
 						_teamSelector->addChild(_trainingTeamSlots[i]);
 					}
 					for(int i=0;i<_trainingTeamSize && i<5;i++){
-						_trainingEnemySlots[i]=CCSprite::createWithSpriteFrameName("unknow_select.png");
-						_trainingEnemySlots[i]->setAnchorPoint(ccp(0,0));
+						_trainingEnemySlots[i]=Sprite::createWithSpriteFrameName("unknow_select.png");
+						_trainingEnemySlots[i]->setAnchorPoint(Vec2(0,0));
 						_trainingEnemySlots[i]->setScale(slotScale);
-						_trainingEnemySlots[i]->setPosition(ccp(enemyStartX+slotGap*i,slotY));
+						_trainingEnemySlots[i]->setPosition(Vec2(enemyStartX+slotGap*i,slotY));
 						_teamSelector->addChild(_trainingEnemySlots[i]);
 					}
 				}
@@ -512,30 +432,35 @@ bool NetworkLayer::init(){
 			//���а�
 			this->updateMapPreview();
 
-			CCMenuItem* ranking_btn=CCMenuItemSprite::create(CCSprite::createWithSpriteFrameName("ranking_btn.png"),NULL,NULL,this,menu_selector(NetworkLayer::onRankingBtn));
-			CCMenu* menu3 =CCMenu::create(ranking_btn,NULL);
-			ranking_btn->setAnchorPoint(ccp(1,0.5f));
+			MenuItem* ranking_btn=MenuItemSprite::create(Sprite::createWithSpriteFrameName("ranking_btn.png"),NULL,NULL,CC_CALLBACK_1(NetworkLayer::onRankingBtn, this));
+			Menu* menu3 =Menu::create(ranking_btn,NULL);
+			ranking_btn->setAnchorPoint(Vec2(1,0.5f));
 			menu3->setPosition(winSize.width-15,winSize.height-34);
 			this->addChild(menu3,5);
 
 
 
-		
 
-			CCMenuItem* start_bt=CCMenuItemSprite::create(CCSprite::createWithSpriteFrameName("start_btn.png"),NULL,NULL,this,menu_selector(NetworkLayer::onGameStart));
-			CCMenu* menu =CCMenu::create(start_bt,NULL);
-			menu->setAnchorPoint(ccp(0,0));
+
+			MenuItem* start_bt=MenuItemSprite::create(Sprite::createWithSpriteFrameName("start_btn.png"),NULL,NULL,CC_CALLBACK_1(NetworkLayer::onGameStart, this));
+			Menu* menu =Menu::create(start_bt,NULL);
+			menu->setAnchorPoint(Vec2(0,0));
 			menu->setPosition(winSize.width-40,36);
 			this->addChild(menu,80);
 
 
 
-			CCMenuItem* skill_bt=CCMenuItemSprite::create(CCSprite::createWithSpriteFrameName("skill_btn.png"),NULL,NULL,this,menu_selector(NetworkLayer::onSkillMenu));
-			CCMenu* menu2 =CCMenu::create(skill_bt,NULL);
-			menu2->setAnchorPoint(ccp(0,0));
+			MenuItem* skill_bt=MenuItemSprite::create(Sprite::createWithSpriteFrameName("skill_btn.png"),NULL,NULL,CC_CALLBACK_1(NetworkLayer::onSkillMenu, this));
+			Menu* menu2 =Menu::create(skill_bt,NULL);
+			menu2->setAnchorPoint(Vec2(0,0));
 			menu2->setPosition(winSize.width-35,96);
 			this->addChild(menu2,80);
 
+			MenuItem* unselect_all_bt=MenuItemSprite::create(Sprite::createWithSpriteFrameName("change_btn.png"),NULL,NULL,CC_CALLBACK_1(NetworkLayer::onUnselectAllBtn, this));
+			Menu* unselectMenu=Menu::create(unselect_all_bt,NULL);
+			unselectMenu->setAnchorPoint(Vec2(0,0));
+			unselectMenu->setPosition(38,156);
+			this->addChild(unselectMenu,80);
 
 
 
@@ -544,18 +469,15 @@ bool NetworkLayer::init(){
 
 
 
-			if(CCUserDefault::sharedUserDefault()->getBoolForKey("isBGM")!=false){
-			SimpleAudioEngine::sharedEngine()->playBackgroundMusic("Audio/Music/select_music.mp3",true);
+
+			if(UserDefault::getInstance()->getBoolForKey("isBGM")!=false){
+				SimpleAudioEngine::getInstance()->playBackgroundMusic("Audio/Music/select_music.mp3",true);
 			}
 
-			if(CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID){
-				this->setKeypadEnabled(true);
-			}
 
-			
 		}
 
-		
+
 
 
 		bRet=true;
@@ -564,273 +486,36 @@ bool NetworkLayer::init(){
 	return bRet;
 
 }
-void NetworkLayer::onListRequestCompleted(CCNode *sender ,void *data){
 
+void NetworkLayer::onEnter(){
+	Layer::onEnter();
+	auto keyboardListener = EventListenerKeyboard::create();
+	keyboardListener->onKeyReleased = CC_CALLBACK_2(NetworkLayer::onKeyReleased, this);
+	_eventDispatcher->addEventListenerWithSceneGraphPriority(keyboardListener, this);
+}
 
+void NetworkLayer::onExit(){
+	_eventDispatcher->removeEventListenersForTarget(this);
+	Layer::onExit();
+}
+
+void NetworkLayer::onListRequestCompleted(Node *sender ,void *data){
+
+	// Jalur request list hero lama tidak dipakai pada mode offline.
+	(void)sender;
+	(void)data;
 	isPosting=false;
-	//ˢ�°�ť
 	if(refreshBtn){
 		refreshBtn->stopAllActions();
 		refreshBtn->removeFromParent();
 		refreshBtn=NULL;
 	}
-
-	cocos2d::extension::CCHttpResponse *response = (cocos2d::extension::CCHttpResponse*)data;    
-	if (!response)    
-	{  
-		return;    
-	}   
-	if (0 != strlen(response->getHttpRequest()->getTag()))   
-	{  
-		//CCLOG("%s completed", response->getHttpRequest()->getTag());  
-	}  
-	int statusCode = response->getResponseCode();  
-	char statusString[64] = {};  
-	sprintf(statusString ,"Http status code:%d ,tag = %s" ,statusCode ,response->getHttpRequest()->getTag());  
-	CCLOG("response code:%d" ,statusCode);  
-	if (!response->isSucceed())  
-	{  
-		CCLOG("response failed");  
-		CCLOG("error buffer:%s" ,response->getErrorBuffer());
-		CCTips *tip=CCTips::create("ServerError");
-		this->addChild(tip,5000);
-		return;
-	}  
-	std::vector<char> *buffer = response->getResponseData();  
-	printf("Http response,dump data:");  
-
-
-	Document doc;
-	std::string buf(buffer->begin(),buffer->end()); 	
-	const char* json=(char*) buf.c_str();
-	doc.Parse<kParseDefaultFlags>(json);
-	rapidjson::Value &arr=doc;
-	int Column=0;
-	int Row=0;
-	int Page=0;
-
-	
-	if(arr.IsArray()){
-
-		_selectList=CCArray::create();
-		selectArray=CCArray::create();
-		_pageLayer1=CCLayer::create();
-		_pageLayer2=CCLayer::create();
-		_pageLayer3=CCLayer::create();
-
-		for (SizeType i = 0; i < arr.Size(); i++)  {
-			rapidjson::Value & node=arr[i];
-			rapidjson::Value & nameValue= node;
-			std::string nameString=nameValue.GetString();
-			if(strcmp(nameString.c_str(),"None")!=0 &&
-				strcmp(nameString.c_str(),"Limited1")!=0 &&
-				strcmp(nameString.c_str(),"Limited2")!=0 &&
-				strcmp(nameString.c_str(),"Limited3")!=0 &&
-				strcmp(nameString.c_str(),"Limited4")!=0 &&
-				strcmp(nameString.c_str(),"Limited5")!=0
-				){
-				_selectList->addObject(CCString::createWithFormat("%s",nameString.c_str()));
-			}
-				
-			CCString* path;
-			
-			path=CCString::createWithFormat("%s_select.png",nameString.c_str());
-			Column=i%7;
-			Row=i/7;
-			Page=int(i/21);
-			SelectButton* select_btn=SelectButton::create(path->getCString());
-			select_btn->setDelegate2(this);
-			select_btn->setCharName(CCString::createWithFormat("%s",nameString.c_str()));
-			if(Page==0){	
-				select_btn->setPosition(ccp(winSize.width/2-36+(Column-1)*27+Column/4*10,winSize.height-112-(72*Row)));
-				_pageLayer1->addChild(select_btn,-Column);
-			}else if(Page==1){
-				select_btn->setPosition(ccp(winSize.width/2-36+(Column-1)*27+Column/4*10,winSize.height-112-(72*(Row-3))));
-				_pageLayer2->addChild(select_btn,-Column);
-				
-			}else if(Page==2){
-				select_btn->setPosition(ccp(winSize.width/2-36+(Column-1)*27+Column/4*10,winSize.height-112-(72*(Row-6))));
-				_pageLayer3->addChild(select_btn,-Column);
-				
-			}
-			
-
-			selectArray->addObject(select_btn);
-		};
-
-		
-		this->addChild(_pageLayer1,5);
-		this->addChild(_pageLayer2,5);
-		
-		this->addChild(_pageLayer3,5);
-
-		_pageLayer2->setVisible(false);
-		_pageLayer3->setVisible(false);
-		_pageLayer2->setPositionY(2000);
-		_pageLayer3->setPositionY(2000);
-
-		page1_btn=CCMenuItemSprite::create(CCSprite::createWithSpriteFrameName("page1_off.png"),CCSprite::createWithSpriteFrameName("page1_on.png"),this,menu_selector(NetworkLayer::onPage1Btn));
-		page2_btn=CCMenuItemSprite::create(CCSprite::createWithSpriteFrameName("page2_off.png"),CCSprite::createWithSpriteFrameName("page2_on.png"),this,menu_selector(NetworkLayer::onPage2Btn));
-		page3_btn=CCMenuItemSprite::create(CCSprite::createWithSpriteFrameName("page3_off.png"),CCSprite::createWithSpriteFrameName("page3_on.png"),this,menu_selector(NetworkLayer::onPage3Btn));
-
-		page_menu=CCMenu::create(page1_btn,page2_btn,page3_btn,NULL);
-		
-		page_menu->alignItemsHorizontallyWithPadding(20);
-		page_menu->setPosition(ccp(winSize.width/2+48,42));
-		this->addChild(page_menu,10);
-		page1_btn->selected();
-
-
-
-		selectArray->retain();
-		_selectList->retain();
-		
-		CCString* hero=(CCString *)_selectList->objectAtIndex(0);
-
-		const char* path=CCString::createWithFormat("%s_half.png",hero->getCString())->getCString();
-		_heroHalf=CCSprite::createWithSpriteFrameName(path);
-		_heroHalf->setAnchorPoint(ccp(0,0));
-		_heroHalf->setPosition(ccp(10,10));
-		this->addChild(_heroHalf,1);
-
-		const char* namePath=CCString::createWithFormat("%s_font.png",hero->getCString())->getCString();
-		_heroName=CCSprite::createWithSpriteFrameName(namePath);
-		_heroName->setAnchorPoint(ccp(0.5f,0));
-		_heroName->setPosition(ccp(100,20));
-		this->addChild(_heroName,5);
-
-
-		_selectImg=CCSprite::createWithSpriteFrameName("1p.png");
-		_selectImg->setAnchorPoint(ccp(0,0));
-		SelectButton* pObject=(SelectButton*) selectArray->objectAtIndex(0);
-		_selectImg->setPosition(ccp(pObject->getPositionX()-2,pObject->getPositionY()-2));
-		this->addChild(_selectImg,500);
-
-		_selectHero=pObject->getCharName()->getCString();
-
-		CCActionInterval* blink=CCBlink::create(0.6f,1);
-		_selectImg->runAction(CCRepeatForever::create(blink));
-
-
-
-		 if(adResult==1 || _isTrainingSelect){
-			 _teamSelector=CCLayer::create();
-
-			 CCSprite* _teamBg=CCSprite::createWithSpriteFrameName("team_bg.png");
-			 _teamBg->setAnchorPoint(ccp(0,0));
-			 _teamBg->setPosition(ccp(0,185));
-			 _teamSelector->addChild(_teamBg);
-
-
-
-			 _comSelector1=CCSprite::createWithSpriteFrameName("unknow_select.png");
-			 _comSelector1->setAnchorPoint(ccp(0,0));
-			 _comSelector1->setPosition(ccp(2,194));
-			 _teamSelector->addChild(_comSelector1);
-
-			 _comLabel1=CCSprite::createWithSpriteFrameName("com_label.png");
-			 _comLabel1->setAnchorPoint(ccp(0.5,0.5f));
-			 _comLabel1->setPosition(ccp(_comSelector1->getPositionX()+_comSelector1->getContentSize().width+2+18,_comSelector1->getPositionY()+_comSelector1->getContentSize().height/2));
-			 _teamSelector->addChild(_comLabel1);
-
-
-			 _comSelector2=CCSprite::createWithSpriteFrameName("unknow_select.png");
-			 _comSelector2->setAnchorPoint(ccp(0,0));
-			 _comSelector2->setPosition(ccp(_comSelector1->getPositionX()+_comSelector1->getContentSize().width+40,_comSelector1->getPositionY()));
-			 _teamSelector->addChild(_comSelector2);
-
-
-			 _comLabel2=CCSprite::createWithSpriteFrameName("com_label.png");
-			 _comLabel2->setAnchorPoint(ccp(0.5,0.5f));
-			 _comLabel2->setPosition(ccp(_comSelector2->getPositionX()+_comSelector2->getContentSize().width+2+18,_comSelector2->getPositionY()+_comSelector2->getContentSize().height/2));
-			 _teamSelector->addChild(_comLabel2);
-				if(_isTrainingSelect){
-					float slotScale=0.82f;
-					float slotW=_comSelector1->getContentSize().width*slotScale;
-					float slotGap=slotW+4;
-					float slotY=_comSelector1->getPositionY();
-					float teamStartX=4;
-					float enemyStartX=winSize.width-4-slotGap*_trainingTeamSize;
-
-					_comLabel1->setVisible(false);
-					_comLabel2->setVisible(false);
-					_comSelector1->setScale(slotScale);
-					_comSelector2->setScale(slotScale);
-					_comSelector1->setPosition(ccp(teamStartX,slotY));
-					_comSelector2->setPosition(ccp(teamStartX+slotGap,slotY));
-					_comSelector2->setVisible(_trainingTeamSize>1);
-
-					_trainingTeamSlots[0]=_comSelector1;
-					_trainingTeamSlots[1]=_comSelector2;
-					for(int i=2;i<_trainingTeamSize && i<5;i++){
-						_trainingTeamSlots[i]=CCSprite::createWithSpriteFrameName("unknow_select.png");
-						_trainingTeamSlots[i]->setAnchorPoint(ccp(0,0));
-						_trainingTeamSlots[i]->setScale(slotScale);
-						_trainingTeamSlots[i]->setPosition(ccp(teamStartX+slotGap*i,slotY));
-						_teamSelector->addChild(_trainingTeamSlots[i]);
-					}
-					for(int i=0;i<_trainingTeamSize && i<5;i++){
-						_trainingEnemySlots[i]=CCSprite::createWithSpriteFrameName("unknow_select.png");
-						_trainingEnemySlots[i]->setAnchorPoint(ccp(0,0));
-						_trainingEnemySlots[i]->setScale(slotScale);
-						_trainingEnemySlots[i]->setPosition(ccp(enemyStartX+slotGap*i,slotY));
-						_teamSelector->addChild(_trainingEnemySlots[i]);
-					}
-				}
-			 this->addChild(_teamSelector,_isTrainingSelect ? 4 : 50);
-		 }
-		
-		
-		//���а�
-		this->updateMapPreview();
-
-		CCMenuItem* ranking_btn=CCMenuItemSprite::create(CCSprite::createWithSpriteFrameName("ranking_btn.png"),NULL,NULL,this,menu_selector(NetworkLayer::onRankingBtn));
-		CCMenu* menu3 =CCMenu::create(ranking_btn,NULL);
-		ranking_btn->setAnchorPoint(ccp(1,0.5f));
-		menu3->setPosition(winSize.width-15,winSize.height-34);
-		this->addChild(menu3,5);
-
-
-		
-		CCMenuItem* quest_btn=CCMenuItemSprite::create(CCSprite::createWithSpriteFrameName("quest_btn.png"),NULL,NULL,this,menu_selector(NetworkLayer::onQuestBtn));
-		CCMenu* menu4 =CCMenu::create(quest_btn,NULL);
-		quest_btn->setAnchorPoint(ccp(0,0.5f));
-		menu4->setPosition(4,winSize.height-56);
-		this->addChild(menu4,5);
-
-
-		CCMenuItem* start_bt=CCMenuItemSprite::create(CCSprite::createWithSpriteFrameName("start_btn.png"),NULL,NULL,this,menu_selector(NetworkLayer::onGameStart));
-		CCMenu* menu =CCMenu::create(start_bt,NULL);
-		menu->setAnchorPoint(ccp(0,0));
-		menu->setPosition(winSize.width-40,36);
-		this->addChild(menu,80);
-
-
-
-		CCMenuItem* skill_bt=CCMenuItemSprite::create(CCSprite::createWithSpriteFrameName("skill_btn.png"),NULL,NULL,this,menu_selector(NetworkLayer::onSkillMenu));
-		CCMenu* menu2 =CCMenu::create(skill_bt,NULL);
-		menu2->setAnchorPoint(ccp(0,0));
-		menu2->setPosition(winSize.width-35,96);
-		this->addChild(menu2,80);
-	}else{
-		CCTips *tip=CCTips::create(buf.c_str());
-		this->addChild(tip,5000);
-	}
-
-
-
-
-	
-
-	
-
 }
 
+void NetworkLayer::onPage1Btn(cocos2d::Ref* sender)
+{
+	SimpleAudioEngine::getInstance()->playEffect(SELECT_SOUND);
 
-
-
-void  NetworkLayer::onPage1Btn(CCObject* sender){
-	SimpleAudioEngine::sharedEngine()->playEffect(SELECT_SOUND);
 	page2_btn->unselected();
 	page3_btn->unselected();
 	page1_btn->selected();
@@ -838,14 +523,16 @@ void  NetworkLayer::onPage1Btn(CCObject* sender){
 	_pageLayer1->setVisible(true);
 	_pageLayer2->setVisible(false);
 	_pageLayer3->setVisible(false);
+
 	_pageLayer1->setPositionY(0);
 	_pageLayer2->setPositionY(2000);
 	_pageLayer3->setPositionY(2000);
 }
 
+void NetworkLayer::onPage2Btn(cocos2d::Ref* sender)
+{
+	SimpleAudioEngine::getInstance()->playEffect(SELECT_SOUND);
 
-void  NetworkLayer::onPage2Btn(CCObject* sender){
-	SimpleAudioEngine::sharedEngine()->playEffect(SELECT_SOUND);
 	page1_btn->unselected();
 	page3_btn->unselected();
 	page2_btn->selected();
@@ -853,14 +540,16 @@ void  NetworkLayer::onPage2Btn(CCObject* sender){
 	_pageLayer2->setVisible(true);
 	_pageLayer1->setVisible(false);
 	_pageLayer3->setVisible(false);
+
 	_pageLayer2->setPositionY(0);
 	_pageLayer1->setPositionY(2000);
 	_pageLayer3->setPositionY(2000);
 }
 
+void NetworkLayer::onPage3Btn(cocos2d::Ref* sender)
+{
+	SimpleAudioEngine::getInstance()->playEffect(SELECT_SOUND);
 
-void  NetworkLayer::onPage3Btn(CCObject* sender){
-	SimpleAudioEngine::sharedEngine()->playEffect(SELECT_SOUND);
 	page1_btn->unselected();
 	page2_btn->unselected();
 	page3_btn->selected();
@@ -874,8 +563,8 @@ void  NetworkLayer::onPage3Btn(CCObject* sender){
 	_pageLayer2->setPositionY(2000);
 }
 
-void NetworkLayer::onMapBtn(CCObject* sender){
-	SimpleAudioEngine::sharedEngine()->playEffect(SELECT_SOUND);
+void NetworkLayer::onMapBtn(Ref* sender){
+	SimpleAudioEngine::getInstance()->playEffect(SELECT_SOUND);
 	_selectedMap++;
 	if(_selectedMap>4){
 		_selectedMap=0;
@@ -887,63 +576,297 @@ void NetworkLayer::updateMapPreview(){
 	const int previewTag=9101;
 	const int labelTag=9102;
 	const int buttonTag=9103;
-    CCPoint mapPos=ccp(65, winSize.height-70);
-//    CCPoint mapPos=ccp(70,250);
+    Vec2 mapPos=Vec2(65, winSize.height-70);
+//    Vec2 mapPos=Vec2(70,250);
 
-	CCNode* oldPreview=this->getChildByTag(previewTag);
+	Node* oldPreview=this->getChildByTag(previewTag);
 	if(oldPreview){
 		oldPreview->removeFromParent();
 	}
-	CCNode* oldLabel=this->getChildByTag(labelTag);
+	Node* oldLabel=this->getChildByTag(labelTag);
 	if(oldLabel){
 		oldLabel->removeFromParent();
 	}
 
-	_mapPreview=CCSprite::create(CCString::createWithFormat("Tiles/map_bg%d.png",_selectedMap+1)->getCString());
+	std::string mapPath=cocos2d::StringUtils::format("Tiles/map_bg%d.png",_selectedMap+1);
+	_mapPreview=Sprite::create(mapPath);
 	if(_mapPreview){
 		_mapPreview->setScale(0.205f);
-		_mapPreview->setPosition(ccp(mapPos.x,mapPos.y+6));
+		_mapPreview->setPosition(Vec2(mapPos.x,mapPos.y+6));
 		this->addChild(_mapPreview,81,previewTag);
 	}
 
-	_mapLabel=CCLabelBMFont::create(CCString::createWithFormat("MAP %d",_selectedMap+1)->getCString(),"Fonts/1.fnt");
+	std::string mapLabel=cocos2d::StringUtils::format("MAP %d",_selectedMap+1);
+	_mapLabel=LabelBMFont::create(mapLabel,"Fonts/1.fnt");
 	if(_mapLabel){
 		_mapLabel->setScale(0.25f);
-		_mapLabel->setAnchorPoint(ccp(0.5f,0.5f));
-		_mapLabel->setPosition(ccp(mapPos.x,mapPos.y-18));
+		_mapLabel->setAnchorPoint(Vec2(0.5f,0.5f));
+		_mapLabel->setPosition(Vec2(mapPos.x,mapPos.y-18));
 		this->addChild(_mapLabel,83,labelTag);
 	}
 
 	if(!this->getChildByTag(buttonTag)){
-		CCSprite* mapNormal=CCSprite::createWithSpriteFrameName("minimap_bg.png");
-		CCSprite* mapSelected=CCSprite::createWithSpriteFrameName("minimap_bg.png");
+		Sprite* mapNormal=Sprite::createWithSpriteFrameName("minimap_bg.png");
+		Sprite* mapSelected=Sprite::createWithSpriteFrameName("minimap_bg.png");
 		mapNormal->setOpacity(120);
 		mapSelected->setOpacity(180);
-		CCMenuItemSprite* mapBtn=CCMenuItemSprite::create(
+		MenuItemSprite* mapBtn=MenuItemSprite::create(
 			mapNormal,
 			mapSelected,
-			this,
-			menu_selector(NetworkLayer::onMapBtn));
-		CCMenu* mapMenu=CCMenu::create(mapBtn,NULL);
+			CC_CALLBACK_1(NetworkLayer::onMapBtn, this));
+		Menu* mapMenu=Menu::create(mapBtn,NULL);
 		mapMenu->setPosition(mapPos);
 		this->addChild(mapMenu,80,buttonTag);
 	}
 }
 
 
-void NetworkLayer::setSelected(CCObject* sender){
-	 
-	 SelectButton* btn=(SelectButton*) sender;
-	 if(_selectImg){
-		_selectImg->setPosition(ccp(btn->getPositionX()-2,btn->getPositionY()-2));
-	 }
-	
-	if(adResult!=1 && !_isTrainingSelect && _playerSelect){
+SelectButton* NetworkLayer::findSelectButton(const char* heroName){
+	if(!heroName){
+		return NULL;
+	}
+
+	for(SelectButton* btn : selectArray){
+		if(strcmp(btn->getCharName(),heroName)==0){
+			return btn;
+		}
+	}
+	return NULL;
+}
+
+bool NetworkLayer::isHeroConfirmedSelected(const char* heroName){
+	if(!heroName || strcmp(heroName,"None")==0){
+		return false;
+	}
+	if(_playerSelect && strcmp(_playerSelect,heroName)==0){
+		return true;
+	}
+	if(_com1Select && strcmp(_com1Select,heroName)==0){
+		return true;
+	}
+	if(_com2Select && strcmp(_com2Select,heroName)==0){
+		return true;
+	}
+	if(_isTrainingSelect){
+		if(networkArrayHasHero(_trainingTeamPicks,heroName)){
+			return true;
+		}
+		if(networkArrayHasHero(_trainingEnemyPicks,heroName)){
+			return true;
+		}
+	}
+	return false;
+}
+
+void NetworkLayer::refreshTeamSelectorUI(){
+	SpriteFrame* emptyFrame=SpriteFrameCache::getInstance()->spriteFrameByName("unknow_select.png");
+	SpriteFrame* labelFrame=SpriteFrameCache::getInstance()->spriteFrameByName("com_label.png");
+	ActionInterval* fd=FadeOut::create(1.0f);
+	Action* seq=RepeatForever::create(Sequence::create(fd, fd->reverse(), nullptr));
+
+	if(_comSelector1 && emptyFrame){
+		_comSelector1->setSpriteFrame(emptyFrame);
+	}
+	if(_comSelector2 && emptyFrame){
+		_comSelector2->setSpriteFrame(emptyFrame);
+	}
+	if(_comLabel1 && labelFrame){
+		_comLabel1->stopAllActions();
+		_comLabel1->setOpacity(255);
+		_comLabel1->setSpriteFrame(labelFrame);
+	}
+	if(_comLabel2 && labelFrame){
+		_comLabel2->stopAllActions();
+		_comLabel2->setOpacity(255);
+		_comLabel2->setSpriteFrame(labelFrame);
+	}
+
+	if(_playerSelect && !_com1Select && _comLabel1){
+		_comLabel1->runAction(seq);
+	}
+
+	if(_com1Select){
+		std::string com1Path=cocos2d::StringUtils::format("%s_small.png",_com1Select);
+		SpriteFrame* com1Frame=SpriteFrameCache::getInstance()->spriteFrameByName(com1Path);
+		if(com1Frame && _comSelector1){
+			_comSelector1->setSpriteFrame(com1Frame);
+		}
+		if(_comLabel1){
+			SpriteFrame* confirmedLabel=SpriteFrameCache::getInstance()->spriteFrameByName("com_label2.png");
+			if(confirmedLabel){
+				_comLabel1->stopAllActions();
+				_comLabel1->setOpacity(255);
+				_comLabel1->setSpriteFrame(confirmedLabel);
+			}
+		}
+		if(!_com2Select && _comLabel2){
+			_comLabel2->runAction(seq);
+		}
+	}
+
+	if(_com2Select){
+		std::string com2Path=cocos2d::StringUtils::format("%s_small.png",_com2Select);
+		SpriteFrame* com2Frame=SpriteFrameCache::getInstance()->spriteFrameByName(com2Path);
+		if(com2Frame && _comSelector2){
+			_comSelector2->setSpriteFrame(com2Frame);
+		}
+		if(_comLabel2){
+			SpriteFrame* confirmedLabel=SpriteFrameCache::getInstance()->spriteFrameByName("com_label2.png");
+			if(confirmedLabel){
+				_comLabel2->stopAllActions();
+				_comLabel2->setOpacity(255);
+				_comLabel2->setSpriteFrame(confirmedLabel);
+			}
+		}
+	}
+}
+
+void NetworkLayer::refreshTrainingTeamSlots(){
+	SpriteFrame* emptyFrame=SpriteFrameCache::getInstance()->spriteFrameByName("unknow_select.png");
+	for(int i=0;i<_trainingTeamSize && i<5;i++){
+		if(!_trainingTeamSlots[i]){
+			continue;
+		}
+		if(i==0){
+			if(_playerSelect){
+				std::string framePath=cocos2d::StringUtils::format("%s_small.png",_playerSelect);
+				SpriteFrame* frame=SpriteFrameCache::getInstance()->spriteFrameByName(framePath);
+				if(frame){
+					_trainingTeamSlots[i]->setSpriteFrame(frame);
+				}
+			}else if(emptyFrame){
+				_trainingTeamSlots[i]->setSpriteFrame(emptyFrame);
+			}
+		}else if((int)_trainingTeamPicks.size()>=i){
+			const std::string& picked=_trainingTeamPicks[i-1];
+			std::string framePath=cocos2d::StringUtils::format("%s_small.png",picked.c_str());
+			SpriteFrame* frame=SpriteFrameCache::getInstance()->spriteFrameByName(framePath);
+			if(frame){
+				_trainingTeamSlots[i]->setSpriteFrame(frame);
+			}
+		}else if(emptyFrame){
+			_trainingTeamSlots[i]->setSpriteFrame(emptyFrame);
+		}
+	}
+}
+
+void NetworkLayer::refreshTrainingEnemySlots(){
+	SpriteFrame* emptyFrame=SpriteFrameCache::getInstance()->spriteFrameByName("unknow_select.png");
+	for(int i=0;i<_trainingTeamSize && i<5;i++){
+		if(!_trainingEnemySlots[i]){
+			continue;
+		}
+		if((int)_trainingEnemyPicks.size()>i){
+			const std::string& picked=_trainingEnemyPicks[i];
+			std::string framePath=cocos2d::StringUtils::format("%s_small.png",picked.c_str());
+			SpriteFrame* frame=SpriteFrameCache::getInstance()->spriteFrameByName(framePath);
+			if(frame){
+				_trainingEnemySlots[i]->setSpriteFrame(frame);
+			}
+		}else if(emptyFrame){
+			_trainingEnemySlots[i]->setSpriteFrame(emptyFrame);
+		}
+	}
+}
+
+void NetworkLayer::unselectHero(const char* heroName){
+	if(!heroName || !isHeroConfirmedSelected(heroName)){
 		return;
 	}
-	 
 
-	_selectHero=btn->getCharName()->getCString();
+	SelectButton* btn=findSelectButton(heroName);
+	if(btn){
+		btn->spriteResetGrey();
+	}
+
+	if(_playerSelect && strcmp(_playerSelect,heroName)==0){
+		_playerSelect=NULL;
+		_trainingPlayerPick.clear();
+		if(!_selectImg && !selectArray.empty()){
+			SelectButton* firstBtn=selectArray[0];
+			_selectImg=Sprite::createWithSpriteFrameName("1p.png");
+			_selectImg->setAnchorPoint(Vec2(0,0));
+			_selectImg->setPosition(Vec2(firstBtn->getPositionX()-2,firstBtn->getPositionY()-2));
+			this->addChild(_selectImg,500);
+			ActionInterval* blink=Blink::create(0.6f,1);
+			_selectImg->runAction(RepeatForever::create(blink));
+		}
+	}else if(_com1Select && strcmp(_com1Select,heroName)==0){
+		_com1Select=NULL;
+	}else if(_com2Select && strcmp(_com2Select,heroName)==0){
+		_com2Select=NULL;
+	}else if(_isTrainingSelect){
+		_trainingTeamPicks.erase(std::remove(_trainingTeamPicks.begin(), _trainingTeamPicks.end(), heroName), _trainingTeamPicks.end());
+		_trainingEnemyPicks.erase(std::remove(_trainingEnemyPicks.begin(), _trainingEnemyPicks.end(), heroName), _trainingEnemyPicks.end());
+	}
+
+	if(_isTrainingSelect){
+		refreshTrainingTeamSlots();
+		refreshTrainingEnemySlots();
+	}else if(adResult==1){
+		refreshTeamSelectorUI();
+	}
+
+	isStart=false;
+}
+
+void NetworkLayer::unselectAll(){
+	if(!_playerSelect && !_com1Select && !_com2Select
+		&& _trainingPlayerPick.empty()
+		&& _trainingTeamPicks.empty()
+		&& _trainingEnemyPicks.empty()){
+		return;
+	}
+
+	for(SelectButton* btn : selectArray){
+		btn->spriteResetGrey();
+	}
+
+	_playerSelect=NULL;
+	_com1Select=NULL;
+	_com2Select=NULL;
+	_trainingPlayerPick.clear();
+	_trainingTeamPicks.clear();
+	_trainingEnemyPicks.clear();
+
+	if(_isTrainingSelect){
+		refreshTrainingTeamSlots();
+		refreshTrainingEnemySlots();
+	}else if(adResult==1){
+		refreshTeamSelectorUI();
+	}
+
+	if(!_selectImg && !selectArray.empty()){
+		SelectButton* firstBtn=selectArray[0];
+		_selectImg=Sprite::createWithSpriteFrameName("1p.png");
+		_selectImg->setAnchorPoint(Vec2(0,0));
+		_selectImg->setPosition(Vec2(firstBtn->getPositionX()-2,firstBtn->getPositionY()-2));
+		this->addChild(_selectImg,500);
+		ActionInterval* blink=Blink::create(0.6f,1);
+		_selectImg->runAction(RepeatForever::create(blink));
+	}
+
+	isStart=false;
+}
+
+void NetworkLayer::onUnselectAllBtn(Ref* sender){
+	SimpleAudioEngine::getInstance()->playEffect("Audio/Menu/cancel.ogg");
+	unselectAll();
+}
+
+void NetworkLayer::setSelected(Ref* sender){
+
+	 SelectButton* btn=(SelectButton*) sender;
+	 if(_selectImg){
+		_selectImg->setPosition(Vec2(btn->getPositionX()-2,btn->getPositionY()-2));
+	 }
+
+	if(adResult!=1 && !_isTrainingSelect && _playerSelect && !isHeroConfirmedSelected(btn->getCharName())){
+		return;
+	}
+
+
+	_selectHero=btn->getCharName();
 
 	if(_isTrainingSelect){
 		if(!_selectHero || strcmp(_selectHero,"None")==0){
@@ -954,32 +877,36 @@ void NetworkLayer::setSelected(CCObject* sender){
 		if(selectedTeamNeed<0){
 			selectedTeamNeed=0;
 		}
-		bool selectedTeamFull=_trainingRandomTeam || (_trainingTeamPicks && (int)_trainingTeamPicks->count()>=selectedTeamNeed);
-		bool selectedEnemyFull=_trainingRandomEnemy || (_trainingEnemyPicks && (int)_trainingEnemyPicks->count()>=_trainingTeamSize);
-		if(_playerSelect && selectedTeamFull && selectedEnemyFull){
+		bool selectedTeamFull=_trainingRandomTeam || (int)_trainingTeamPicks.size()>=selectedTeamNeed;
+		bool selectedEnemyFull=_trainingRandomEnemy || (int)_trainingEnemyPicks.size()>=_trainingTeamSize;
+		if(_playerSelect && selectedTeamFull && selectedEnemyFull && !isHeroConfirmedSelected(_selectHero)){
 			return;
 		}
 
 		if(_heroHalf){
 			_heroHalf->removeFromParent();
 		}
-		const char* path=CCString::createWithFormat("%s_half.png",_selectHero)->getCString();
-		_heroHalf=CCSprite::createWithSpriteFrameName(path);
+		std::string path=cocos2d::StringUtils::format("%s_half.png",_selectHero);
+		_heroHalf=Sprite::createWithSpriteFrameName(path);
 		if(_heroHalf){
-			_heroHalf->setAnchorPoint(ccp(0,0));
-			_heroHalf->setPosition(ccp(10,10));
+			_heroHalf->setAnchorPoint(Vec2(0,0));
+			_heroHalf->setPosition(Vec2(10,10));
 			this->addChild(_heroHalf,1);
 		}
 
 		if(_heroName){
 			_heroName->removeFromParent();
 		}
-		const char* namePath=CCString::createWithFormat("%s_font.png",_selectHero)->getCString();
-		_heroName=CCSprite::createWithSpriteFrameName(namePath);
+		std::string namePath=cocos2d::StringUtils::format("%s_font.png",_selectHero);
+		_heroName=Sprite::createWithSpriteFrameName(namePath);
 		if(_heroName){
-			_heroName->setAnchorPoint(ccp(0.5f,0));
-			_heroName->setPosition(ccp(100,20));
+			_heroName->setAnchorPoint(Vec2(0.5f,0));
+			_heroName->setPosition(Vec2(100,20));
 			this->addChild(_heroName,5);
+		}
+
+		if(isHeroConfirmedSelected(_selectHero)){
+			return;
 		}
 
 		if(btn->_clickTime<2){
@@ -987,13 +914,12 @@ void NetworkLayer::setSelected(CCObject* sender){
 		}
 
 		if(!_playerSelect){
-			CC_SAFE_RELEASE(_trainingPlayerPick);
-			_trainingPlayerPick=CCString::create(_selectHero);
-			_trainingPlayerPick->retain();
-			_playerSelect=_trainingPlayerPick->getCString();
-			CCSpriteFrame* frame=CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName(CCString::createWithFormat("%s_small.png",_selectHero)->getCString());
+			_trainingPlayerPick=_selectHero;
+			_playerSelect=_trainingPlayerPick.c_str();
+			std::string framePath=cocos2d::StringUtils::format("%s_small.png",_selectHero);
+			SpriteFrame* frame=SpriteFrameCache::getInstance()->spriteFrameByName(framePath);
 			if(frame && _trainingTeamSlots[0]){
-				_trainingTeamSlots[0]->setDisplayFrame(frame);
+				_trainingTeamSlots[0]->setSpriteFrame(frame);
 			}
 			return;
 		}
@@ -1006,22 +932,24 @@ void NetworkLayer::setSelected(CCObject* sender){
 		if(teamNeed<0){
 			teamNeed=0;
 		}
-		if(!_trainingRandomTeam && (int)_trainingTeamPicks->count()<teamNeed){
-			int slotIndex=_trainingTeamPicks->count()+1;
-			_trainingTeamPicks->addObject(CCString::create(_selectHero));
-			CCSpriteFrame* frame=CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName(CCString::createWithFormat("%s_small.png",_selectHero)->getCString());
+		if(!_trainingRandomTeam && (int)_trainingTeamPicks.size()<teamNeed){
+			int slotIndex=(int)_trainingTeamPicks.size()+1;
+			_trainingTeamPicks.push_back(_selectHero);
+			std::string framePath=cocos2d::StringUtils::format("%s_small.png",_selectHero);
+			SpriteFrame* frame=SpriteFrameCache::getInstance()->spriteFrameByName(framePath);
 			if(frame && slotIndex<5 && _trainingTeamSlots[slotIndex]){
-				_trainingTeamSlots[slotIndex]->setDisplayFrame(frame);
+				_trainingTeamSlots[slotIndex]->setSpriteFrame(frame);
 			}
 			return;
 		}
 
-		if(!_trainingRandomEnemy && (int)_trainingEnemyPicks->count()<_trainingTeamSize){
-			int slotIndex=_trainingEnemyPicks->count();
-			_trainingEnemyPicks->addObject(CCString::create(_selectHero));
-			CCSpriteFrame* frame=CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName(CCString::createWithFormat("%s_small.png",_selectHero)->getCString());
+		if(!_trainingRandomEnemy && (int)_trainingEnemyPicks.size()<_trainingTeamSize){
+			int slotIndex=(int)_trainingEnemyPicks.size();
+			_trainingEnemyPicks.push_back(_selectHero);
+			std::string framePath=cocos2d::StringUtils::format("%s_small.png",_selectHero);
+			SpriteFrame* frame=SpriteFrameCache::getInstance()->spriteFrameByName(framePath);
 			if(frame && slotIndex<5 && _trainingEnemySlots[slotIndex]){
-				_trainingEnemySlots[slotIndex]->setDisplayFrame(frame);
+				_trainingEnemySlots[slotIndex]->setSpriteFrame(frame);
 			}
 			return;
 		}
@@ -1031,14 +959,32 @@ void NetworkLayer::setSelected(CCObject* sender){
 
 	if(_isHardCoreMode){
 
-		CCActionInterval*  fd=CCFadeOut::create(1.0f);
-		CCAction* seq=CCRepeatForever::create(cocos2d::cocos2dx2_compat::createSequence(fd,fd->reverse(),NULL));
+		ActionInterval*  fd=FadeOut::create(1.0f);
+		Action* seq=RepeatForever::create(Sequence::create(fd, fd->reverse(), nullptr));
+
+		if(isHeroConfirmedSelected(_selectHero)){
+			_heroHalf->removeFromParent();
+			const char* charName=btn->getCharName();
+			std::string path=cocos2d::StringUtils::format("%s_half.png", charName);
+			_heroHalf=Sprite::createWithSpriteFrameName(path);
+			_heroHalf->setAnchorPoint(Vec2(0,0));
+			_heroHalf->setPosition(Vec2(10,10));
+			this->addChild(_heroHalf,1);
+
+			_heroName->removeFromParent();
+			std::string namePath=cocos2d::StringUtils::format("%s_font.png",charName);
+			_heroName=Sprite::createWithSpriteFrameName(namePath);
+			_heroName->setAnchorPoint(Vec2(0.5f,0));
+			_heroName->setPosition(Vec2(100,20));
+			this->addChild(_heroName,5);
+			return;
+		}
 
 		if(!_playerSelect){
-			
+
 			if(btn->_clickTime>=2){
 					_playerSelect=_selectHero;
-					
+
 					if(adResult!=1 && !_isTrainingSelect){
 						_selectImg->removeFromParent();
 						_selectImg=NULL;
@@ -1049,60 +995,62 @@ void NetworkLayer::setSelected(CCObject* sender){
 			}
 
 			_heroHalf->removeFromParent();
-			const char* charName=btn->getCharName()->getCString();
+			const char* charName=btn->getCharName();
 
 
-			const char* path=CCString::createWithFormat("%s_half.png", charName)->getCString();
-			_heroHalf=CCSprite::createWithSpriteFrameName(path);
+			std::string path=cocos2d::StringUtils::format("%s_half.png", charName);
+			_heroHalf=Sprite::createWithSpriteFrameName(path);
 
-			_heroHalf->setAnchorPoint(ccp(0,0));
-			_heroHalf->setPosition(ccp(10,10));
+			_heroHalf->setAnchorPoint(Vec2(0,0));
+			_heroHalf->setPosition(Vec2(10,10));
 			this->addChild(_heroHalf,1);
 
 			_heroName->removeFromParent();
-			const char* namePath=CCString::createWithFormat("%s_font.png",charName)->getCString();
-			_heroName=CCSprite::createWithSpriteFrameName(namePath);
-			_heroName->setAnchorPoint(ccp(0.5f,0));
-			_heroName->setPosition(ccp(100,20));
+			std::string namePath=cocos2d::StringUtils::format("%s_font.png",charName);
+			_heroName=Sprite::createWithSpriteFrameName(namePath);
+			_heroName->setAnchorPoint(Vec2(0.5f,0));
+			_heroName->setPosition(Vec2(100,20));
 			this->addChild(_heroName,5);
 
-			
+
 
 		}else if(!_com1Select){
-			CCSpriteFrame *frame=CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName(CCString::createWithFormat("%s_small.png",_selectHero)->getCString()); 
-			this->getComSelector1()->setDisplayFrame(frame);
+			std::string framePath=cocos2d::StringUtils::format("%s_small.png",_selectHero);
+			SpriteFrame *frame=SpriteFrameCache::getInstance()->spriteFrameByName(framePath);
+			this->getComSelector1()->setSpriteFrame(frame);
 
 			if(btn->_clickTime>=2){
 				_com1Select=_selectHero;
 
 				this->getComLabel1()->stopAllActions();
 				this->getComLabel1()->setOpacity(255);
-				CCSpriteFrame *frame=CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName("com_label2.png"); 
-				this->getComLabel1()->setDisplayFrame(frame);
+				SpriteFrame *frame=SpriteFrameCache::getInstance()->spriteFrameByName("com_label2.png");
+				this->getComLabel1()->setSpriteFrame(frame);
 				this->getComLabel2()->runAction(seq);
 			}
 
-			
+
 
 		}else if(!_com2Select){
 
 
-			CCSpriteFrame *frame=CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName(CCString::createWithFormat("%s_small.png",_selectHero)->getCString()); 
-			this->getComSelector2()->setDisplayFrame(frame);
+			std::string framePath=cocos2d::StringUtils::format("%s_small.png",_selectHero);
+			SpriteFrame *frame=SpriteFrameCache::getInstance()->spriteFrameByName(framePath);
+			this->getComSelector2()->setSpriteFrame(frame);
 
 			if(btn->_clickTime>=2){
 				_com2Select=_selectHero;
 
 				this->getComLabel2()->stopAllActions();
 				this->getComLabel2()->setOpacity(255);
-				CCSpriteFrame *frame=CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName("com_label2.png"); 
-				this->getComLabel2()->setDisplayFrame(frame);
+				SpriteFrame *frame=SpriteFrameCache::getInstance()->spriteFrameByName("com_label2.png");
+				this->getComLabel2()->setSpriteFrame(frame);
 
 				_selectImg->removeFromParent();
 				_selectImg=NULL;
 			}
 
-			
+
 		}
 
 	}
@@ -1112,16 +1060,16 @@ void NetworkLayer::setSelected(CCObject* sender){
 
 
 
-void NetworkLayer::onError(CCObject* sender){
+void NetworkLayer::onError(Ref* sender){
 
-	SimpleAudioEngine::sharedEngine()->stopBackgroundMusic();
-	CCDirector::sharedDirector()->end();
+	SimpleAudioEngine::getInstance()->stopBackgroundMusic();
+	Director::getInstance()->end();
 	return;
 
 }
 
 
-void NetworkLayer::onSkillMenu(CCObject* sender){
+void NetworkLayer::onSkillMenu(Ref* sender){
 	if(!_selectHero){
 		return;
 	}
@@ -1130,51 +1078,51 @@ void NetworkLayer::onSkillMenu(CCObject* sender){
 
 	}
 
-	CCScene* pscene =CCScene::create();
+	Scene* pscene =Scene::create();
 	SkillLayer* skillLayer=SkillLayer::create();
 	skillLayer->setDelegate2(this);
 	skillLayer->initInterface();
 	pscene->addChild(skillLayer);
 
-	CCDirector::sharedDirector()->pushScene(pscene);
+	Director::getInstance()->pushScene(pscene);
 
 }
 
-void  NetworkLayer::onRankingBtn(CCObject* sender){
-	SimpleAudioEngine::sharedEngine()->stopAllEffects();
-	SimpleAudioEngine::sharedEngine()->stopBackgroundMusic();
-	CCScene* pscene =CCScene::create();
+void  NetworkLayer::onRankingBtn(Ref* sender){
+	SimpleAudioEngine::getInstance()->stopAllEffects();
+	SimpleAudioEngine::getInstance()->stopBackgroundMusic();
+	Scene* pscene =Scene::create();
 	RakingLayer* rakingLayer=RakingLayer::create();
 	rakingLayer->setDelegate(this);
 	pscene->addChild(rakingLayer);
 
-	CCDirector::sharedDirector()->pushScene(pscene);
+	Director::getInstance()->pushScene(pscene);
 }
 
-void  NetworkLayer::onQuestBtn(CCObject* sender){
+void  NetworkLayer::onQuestBtn(Ref* sender){
 
 	CCTips *tip=CCTips::create("ComingSoon");
 	this->addChild(tip,5000);
 	return;
-	
+
 }
 
 
 
-void NetworkLayer::onGameStart(CCObject* sender){
+void NetworkLayer::onGameStart(Ref* sender){
 
-	
+
 
 	if (!isStart){
 
 		KTools* tool= KTools::create();
 
-		
+
 
 
 		isStart=true;
-		SimpleAudioEngine::sharedEngine()->stopBackgroundMusic();
-		SimpleAudioEngine::sharedEngine()->playEffect("Audio/Menu/confirm.ogg");
+		SimpleAudioEngine::getInstance()->stopBackgroundMusic();
+		SimpleAudioEngine::getInstance()->playEffect("Audio/Menu/confirm.ogg");
 
 
 		if(_isTrainingSelect){
@@ -1196,51 +1144,49 @@ void NetworkLayer::onGameStart(CCObject* sender){
 				teamSize=5;
 			}
 
-			CCArray* tempHeros=CCArray::create();
-			CCArray* used=CCArray::create();
-			const char* playerName=_trainingPlayerPick ? _trainingPlayerPick->getCString() : (_playerSelect ? _playerSelect : _selectHero);
+			auto tempHeros=NarutoSenkiPayload::createHeroList();
+			std::vector<std::string> used;
+			const char* playerName=!_trainingPlayerPick.empty() ? _trainingPlayerPick.c_str() : (_playerSelect ? _playerSelect : _selectHero);
 			if(!playerName || strcmp(playerName,"None")==0){
 				playerName="Naruto";
 			}
-			used->addObject(CCString::create(playerName));
-			networkAddHero(tempHeros,playerName,"Player","Konoha");
+			used.push_back(playerName);
+			NarutoSenkiPayload::addHero(tempHeros,playerName,"Player","Konoha");
 
 			for(int i=1;i<teamSize;i++){
 				const char* heroName=NULL;
-				if(!_trainingRandomTeam && _trainingTeamPicks && (int)_trainingTeamPicks->count()>=i){
-					CCString* picked=(CCString*)_trainingTeamPicks->objectAtIndex(i-1);
-					heroName=picked->getCString();
+				if(!_trainingRandomTeam && (int)_trainingTeamPicks.size()>=i){
+					heroName=_trainingTeamPicks[i-1].c_str();
 				}else{
 					heroName=networkPickHero(used,(const char**)heroList,num,teamPreset,sizeof(teamPreset)/sizeof(char*),i-1,_trainingRandomTeam);
 				}
 				if(!heroName || networkContainsHero(used,heroName)){
 					heroName=networkPickHero(used,(const char**)heroList,num,teamPreset,sizeof(teamPreset)/sizeof(char*),i-1,true);
 				}else{
-					used->addObject(CCString::create(heroName));
+					used.push_back(heroName);
 				}
-				networkAddHero(tempHeros,heroName,"Com","Konoha");
+				NarutoSenkiPayload::addHero(tempHeros,heroName,"Com","Konoha");
 			}
 
 			for(int i=0;i<teamSize;i++){
 				const char* heroName=NULL;
-				if(!_trainingRandomEnemy && _trainingEnemyPicks && (int)_trainingEnemyPicks->count()>i){
-					CCString* picked=(CCString*)_trainingEnemyPicks->objectAtIndex(i);
-					heroName=picked->getCString();
+				if(!_trainingRandomEnemy && (int)_trainingEnemyPicks.size()>i){
+					heroName=_trainingEnemyPicks[i].c_str();
 				}else{
 					heroName=networkPickHero(used,(const char**)heroList,num,enemyPreset,sizeof(enemyPreset)/sizeof(char*),i,_trainingRandomEnemy);
 				}
 				if(!heroName || networkContainsHero(used,heroName)){
 					heroName=networkPickHero(used,(const char**)heroList,num,enemyPreset,sizeof(enemyPreset)/sizeof(char*),i,true);
 				}else{
-					used->addObject(CCString::create(heroName));
+					used.push_back(heroName);
 				}
-				networkAddHero(tempHeros,heroName,"Com","Akatsuki");
+				NarutoSenkiPayload::addHero(tempHeros,heroName,"Com","Akatsuki");
 			}
 
-			CCScene* loadScene=CCScene::create();
+			Scene* loadScene=Scene::create();
 			LoadLayer* loadLayer=LoadLayer::create();
 			loadLayer->tempHeros=tempHeros;
-			loadLayer->_isHardCoreMode=teamSize>3;
+			loadLayer->_isHardCoreMode=true;
 			loadLayer->_isRandomChar=_trainingRandomTeam || _trainingRandomEnemy;
 			loadLayer->_isTrainingMode=_isTrainingMode;
 			loadLayer->_selectedMap=_selectedMap;
@@ -1248,15 +1194,13 @@ void NetworkLayer::onGameStart(CCObject* sender){
 			loadLayer->_duelKillLimit=_trainingKillLimit;
 			loadScene->addChild(loadLayer);
 			loadLayer->preloadAudio();
-			CCDirector::sharedDirector()->replaceScene(CCTransitionFade::create(1.5f,loadScene));
+			Director::getInstance()->replaceScene(TransitionFade::create(1.5f,loadScene));
 			return;
 		}
-		CCDictionary* dic=CCDictionary::create();
+		std::string tmpChar;
 
-		CCString* tmpChar;
 
-		
-		
+
 		char* heroList[]={"Konan","Sakura","Naruto","Sai","Deidara",
 			"Kakashi","Itachi","Tenten","Jiraiya","Suigetsu",
 			"Tsunade","Tobirama","Shisui","Neji","Ino","Asuma","Gaara",
@@ -1266,36 +1210,37 @@ void NetworkLayer::onGameStart(CCObject* sender){
 			"Hiruzen","Kiba","Jugo","Lee"
 		};
 
-		
-	
+
+
 		int num= sizeof(heroList)/sizeof(char*);
 
-		
-		
+
+
 		if(_playerSelect){
-			tmpChar=CCString::create(_playerSelect);
-		}else{	
+			tmpChar=_playerSelect;
+		}else{
 			srand((int)time(0));
-			int num2=this->getSelectList()->count();
+			int num2=(int)_selectList.size();
 			int index=random(num2);
-			tmpChar=(CCString*)_selectList->objectAtIndex(index);
+			tmpChar=_selectList[index];
 			do{
 				srand((int)time(0));
-				int num=this->getSelectList()->count();
+				int num=(int)_selectList.size();
 				int index=random(num);
-				tmpChar=(CCString*)_selectList->objectAtIndex(index);
+				tmpChar=_selectList[index];
 			}
-			while(strcmp(tmpChar->getCString(),"Pain")==0 ||
-				strcmp(tmpChar->getCString(),"Orochimaru")==0 ||
-				strcmp(tmpChar->getCString(),"None")==0
+			while(strcmp(tmpChar.c_str(),"Pain")==0 ||
+				strcmp(tmpChar.c_str(),"Orochimaru")==0 ||
+				strcmp(tmpChar.c_str(),"None")==0
 				);
-				
-				
-			_playerSelect=tmpChar->getCString();				
+
+
+			_randomPlayerPick=tmpChar;
+			_playerSelect=_randomPlayerPick.c_str();
 			_isRandomChar=true;
 		}
-			
-		
+
+
 		srand((int)time(0));
 		int zhenying=1;
 		zhenying=random(2);
@@ -1308,22 +1253,16 @@ void NetworkLayer::onGameStart(CCObject* sender){
 		}
 
 
-		CCString* tmpRole=CCString::create("Player");
-		CCString* tmpGroup=CCString::create(groupName);
+		auto tempHeros=NarutoSenkiPayload::createHeroList();
+		NarutoSenkiPayload::addHero(tempHeros,tmpChar.c_str(),"Player",groupName);
 
-		dic->setObject(tmpChar,"character");
-		dic->setObject(tmpRole,"role");
-		dic->setObject(tmpGroup,"group");
 
-		CCArray* tempHeros=CCArray::createWithObject(dic);
 
-		
+		std::vector<std::string> realHero;
 
-		CCArray* realHero=CCArray::create();
-		
 		for(int i=0;i<num;i++){
 
-			
+
 			if(strcmp(_playerSelect,heroList[i])==0){
 				continue;
 			}
@@ -1338,93 +1277,67 @@ void NetworkLayer::onGameStart(CCObject* sender){
 					continue;
 				}
 			}
-			
-			
-			CCString* hero=CCString::create(heroList[i]);
-			realHero->addObject(hero);
+
+
+			realHero.push_back(heroList[i]);
 		}
 
 
 		for(int i=0;i<5;i++){
-			CCString* hero;
+			std::string hero;
 			if(i<2){
 
-				if(i==0 && _isHardCoreMode && _com1Select){					
-					hero=CCString::create(_com1Select);								
+				if(i==0 && _isHardCoreMode && _com1Select){
+					hero=_com1Select;
 				}else if(i==1 && _isHardCoreMode && _com2Select){
-					hero=CCString::create(_com2Select);
+					hero=_com2Select;
 				}else{
-					int length=realHero->count();
+					int length=(int)realHero.size();
 					srand((int)time(0));
 					int index=random(length);
-					if(index==(int)realHero->count()){
-						index=realHero->count()-1;
+					if(index==(int)realHero.size()){
+						index=(int)realHero.size()-1;
 					}
 
-					CCObject* tempObject=realHero->objectAtIndex(index);
-					hero=(CCString*) tempObject;
-					realHero->removeObjectAtIndex(index);
+					hero=realHero[index];
+					realHero.erase(realHero.begin()+index);
 				}
-				
-				dic=CCDictionary::create();
-				tmpChar=CCString::create(hero->getCString());
-				tmpRole=CCString::create("Com");
-				if(zhenying>0){
-				tmpGroup=CCString::create("Konoha");
-				}else{
-					tmpGroup=CCString::create("Akatsuki");
-				}
-				dic->setObject(tmpChar,"character");
-				dic->setObject(tmpRole,"role");
-				dic->setObject(tmpGroup,"group");
 
-				tempHeros->addObject(dic);
-				
+				const char* comGroup=zhenying>0 ? "Konoha" : "Akatsuki";
+				NarutoSenkiPayload::addHero(tempHeros,hero.c_str(),"Com",comGroup);
+
 
 			}else{
-				int length=realHero->count();
+				int length=(int)realHero.size();
 				srand((int)time(0));
 				int index=random(length);
-				if(index==(int)realHero->count()){
-					index=realHero->count()-1;
+				if(index==(int)realHero.size()){
+					index=(int)realHero.size()-1;
 				}
 
-				CCObject* tempObject=realHero->objectAtIndex(index);
-				CCString* hero=(CCString*) tempObject;
+				std::string hero=realHero[index];
 
-				dic=CCDictionary::create();
-				tmpChar=CCString::create(hero->getCString());
-				tmpRole=CCString::create("Com");
-				if(zhenying>0){
-					tmpGroup=CCString::create("Akatsuki");
-				}else{
-					tmpGroup=CCString::create("Konoha");
-					
-				}
-				dic->setObject(tmpChar,"character");
-				dic->setObject(tmpRole,"role");
-				dic->setObject(tmpGroup,"group");
+				const char* comGroup=zhenying>0 ? "Akatsuki" : "Konoha";
+				NarutoSenkiPayload::addHero(tempHeros,hero.c_str(),"Com",comGroup);
+				realHero.erase(realHero.begin()+index);
 
-				tempHeros->addObject(dic);
-				realHero->removeObjectAtIndex(index);
-
-			} 
+			}
 
 		}
 
 
 
-		CCScene* loadScene=CCScene::create();
+		Scene* loadScene=Scene::create();
 		LoadLayer* loadLayer=LoadLayer::create();
 		loadLayer->tempHeros=tempHeros;
 		loadScene->addChild(loadLayer);
-		
+
 		loadLayer->_isHardCoreMode=_isHardCoreMode;
 		loadLayer->_isRandomChar=_isRandomChar;
 		loadLayer->_selectedMap=_selectedMap;
 		loadLayer->preloadAudio();
-		CCDirector::sharedDirector()->replaceScene(CCTransitionFade::create(1.5f,loadScene));
-	
+		Director::getInstance()->replaceScene(TransitionFade::create(1.5f,loadScene));
+
 
 	}
 }
@@ -1438,11 +1351,11 @@ void NetworkLayer::onKeyReleased(EventKeyboard::KeyCode keyCode, Event* event){
 }
 
 void NetworkLayer::onBackKeyClicked(){
-	SimpleAudioEngine::sharedEngine()->playEffect("Audio/Menu/cancel.ogg");	
-	CCScene* menuScene =CCScene::create();
-	CCLayer* menuLayer=StartMenu::create();
+	SimpleAudioEngine::getInstance()->playEffect("Audio/Menu/cancel.ogg");
+	Scene* menuScene =Scene::create();
+	Layer* menuLayer=StartMenu::create();
 	menuScene->addChild(menuLayer);
-	CCDirector::sharedDirector()->replaceScene(CCTransitionFade::create(1.5f,menuScene));
+	Director::getInstance()->replaceScene(TransitionFade::create(1.5f,menuScene));
 
 }
 
@@ -1479,9 +1392,3 @@ NetworkLayer* NetworkLayer::create(){
 		return NULL;
 	}
 }
-
-
-
-
-
-

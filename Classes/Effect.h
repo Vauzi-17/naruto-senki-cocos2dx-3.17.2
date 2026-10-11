@@ -6,13 +6,13 @@ USING_NS_CC;
 
 namespace NarutoSenki { class ActionManager; }
 
-class Effect : public CCSprite{
+class Effect : public Sprite{
 public:
 	Effect(void);
 	~Effect(void);
 
-	virtual bool			init(const char *szImage,CCObject* Attacker);
-	static Effect*			create(const char *szImage,CCObject* Attacker);
+	virtual bool			init(const char *szImage,Ref* Attacker);
+	static Effect*			create(const char *szImage,Ref* Attacker);
 
 	NarutoSenki::ActionManager* at;
 
@@ -20,8 +20,8 @@ private:
 	
 	void					removeEffect();
 	void					removeFontEffect();
-	CCAction*				createEffectAnimation(const char* file,int frameCount,float fps,bool isRepeat);
-	CCAction*				createFontAnimation();
+	Action*				createEffectAnimation(const char* file,int frameCount,float fps,bool isRepeat);
+	Action*				createFontAnimation();
 };
 
 

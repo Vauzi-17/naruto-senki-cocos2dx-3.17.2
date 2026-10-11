@@ -89,7 +89,6 @@
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <DisableSpecificWarnings>4267;4251;4244;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <ForcedIncludeFiles>Cocos2dx2Compat.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
     </ClCompile>
     <Link>
       <AdditionalDependencies>libcurl.lib;%(AdditionalDependencies);$(_COCOS_LIB_WIN32_BEGIN);$(_COCOS_LIB_WIN32_END)</AdditionalDependencies>
@@ -131,7 +130,6 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)\Resources\" /D /E /I /F /Y
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <DisableSpecificWarnings>4267;4251;4244;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <ForcedIncludeFiles>Cocos2dx2Compat.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
     </ClCompile>
     <Link>
       <AdditionalDependencies>libcurl.lib;%(AdditionalDependencies);$(_COCOS_LIB_WIN32_BEGIN);$(_COCOS_LIB_WIN32_END)</AdditionalDependencies>
@@ -174,10 +172,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)\Resources\" /D /E /I /F /Y
     <ClCompile Include="..\Classes\MyUtils\CCStrokeLabel.cpp" />
     <ClCompile Include="..\Classes\MyUtils\KTools.cpp" />
     <ClCompile Include="..\Classes\MyUtils\MD5ChecksumDefines.cpp" />
-    <ClCompile Include="..\Classes\MyUtils\sqlite3.c">
-      <ForcedIncludeFiles>
-      </ForcedIncludeFiles>
-    </ClCompile>
+    <ClCompile Include="..\Classes\MyUtils\sqlite3.c" />
     <ClCompile Include="..\Classes\NetworkLayer.cpp" />
     <ClCompile Include="..\Classes\PauseLayer.cpp" />
     <ClCompile Include="..\Classes\RankingLayer.cpp" />
@@ -193,7 +188,6 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)\Resources\" /D /E /I /F /Y
     <ClInclude Include="..\Classes\AppMacros.h" />
     <ClInclude Include="..\Classes\BGLayer.h" />
     <ClInclude Include="..\Classes\Characters.h" />
-    <ClInclude Include="..\Classes\Cocos2dx2Compat.h" />
     <ClInclude Include="..\Classes\CreditsLayer.h" />
     <ClInclude Include="..\Classes\Defines.h" />
     <ClInclude Include="..\Classes\Effect.h" />
@@ -206,6 +200,8 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)\Resources\" /D /E /I /F /Y
     <ClInclude Include="..\Classes\HudLayer.h" />
     <ClInclude Include="..\Classes\JoyStick.h" />
     <ClInclude Include="..\Classes\LoadLayer.h" />
+    <ClInclude Include="..\Classes\HeroPayload.h" />
+    <ClInclude Include="..\Classes\LegacyData.h" />
     <ClInclude Include="..\Classes\MyUtils\CCScrewLayer.h" />
     <ClInclude Include="..\Classes\MyUtils\CCShake.h" />
     <ClInclude Include="..\Classes\MyUtils\CCStrokeLabel.h" />

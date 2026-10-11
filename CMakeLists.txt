@@ -70,7 +70,6 @@ list(APPEND GAME_SOURCE
 
 list(APPEND GAME_HEADER
     Classes/AppDelegate.h
-    Classes/Cocos2dx2Compat.h
     Classes/ActionButton.h
     Classes/ActionManager.h
     Classes/AppMacros.h
@@ -85,6 +84,8 @@ list(APPEND GAME_HEADER
     Classes/GameScene.h
     Classes/GearLayer.h
     Classes/HPBar.h
+    Classes/HeroPayload.h
+    Classes/LegacyData.h
     Classes/HudLayer.h
     Classes/JoyStick.h
     Classes/LoadLayer.h
@@ -184,12 +185,6 @@ target_include_directories(${APP_NAME}
 target_compile_definitions(${APP_NAME}
     PRIVATE _CRT_SECURE_NO_WARNINGS
 )
-
-if(MSVC)
-    target_compile_options(${APP_NAME} PRIVATE $<$<COMPILE_LANGUAGE:CXX>:/FI"Cocos2dx2Compat.h">)
-else()
-    target_compile_options(${APP_NAME} PRIVATE $<$<COMPILE_LANGUAGE:CXX>:-include> $<$<COMPILE_LANGUAGE:CXX>:Cocos2dx2Compat.h>)
-endif()
 
 # mark app resources
 setup_cocos_app_config(${APP_NAME})

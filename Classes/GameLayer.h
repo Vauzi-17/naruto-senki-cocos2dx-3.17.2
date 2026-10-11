@@ -1,5 +1,6 @@
 #pragma once
 #include "cocos2d.h"
+#include "LegacyData.h"
 #include "SimpleAudioEngine.h"
 #include "Defines.h"
 #include "cocos-ext.h"
@@ -24,14 +25,16 @@ namespace NarutoSenki { class ActionManager; }
 class BGLayer;
 class HudLayer;
 
-class GameLayer :public CCLayer{
+using GameLayerLegacyArray = NarutoSenkiLegacy::Array;
+
+class GameLayer :public Layer{
 public:
 	GameLayer(void);
 	~GameLayer(void);
 
-	CCTMXTiledMap*		currentMap;
+	TMXTiledMap*		currentMap;
 	Hero*				currentPlayer;
-	CCPoint				spawnPoint;
+	Vec2				spawnPoint;
 	
 	unsigned int _second;
 	unsigned int _minute;
@@ -43,13 +46,13 @@ public:
     int kEXPBound;
 	int aEXPBound;
 
-	CCArray* Heros;
+	GameLayerLegacyArray* Heros;
 	bool	_isAttackButtonRelease;
 	bool	_isGuardian;
-	CCArray* _KonohaFlogArray;
-	CCArray* _AkatsukiFlogArray;
-	CCArray* _TowerArray;
-	CCArray* _CharacterArray;
+	GameLayerLegacyArray* _KonohaFlogArray;
+	GameLayerLegacyArray* _AkatsukiFlogArray;
+	GameLayerLegacyArray* _TowerArray;
+	GameLayerLegacyArray* _CharacterArray;
 
 	
 	bool _isShacking;
@@ -60,13 +63,13 @@ public:
 
 	CC_SYNTHESIZE(HudLayer*,_hudLayer,HudLayer);
 
-	CC_SYNTHESIZE_RETAIN(CCString*,totalKills,TotalKills);
-	CC_SYNTHESIZE_RETAIN(CCString*,totalTM,TotalTM);
+	CC_SYNTHESIZE(int,totalKills,TotalKills);
+	CC_SYNTHESIZE(int,totalTM,TotalTM);
 
-	CCSpriteBatchNode* skillEffectBatch;
-	CCSpriteBatchNode* damageEffectBatch;
-	CCSpriteBatchNode* bulletBatch;
-	CCSpriteBatchNode* shadowBatch;
+	SpriteBatchNode* skillEffectBatch;
+	SpriteBatchNode* damageEffectBatch;
+	SpriteBatchNode* bulletBatch;
+	SpriteBatchNode* shadowBatch;
 
 	bool isPosting;
 	int postTime;
@@ -94,7 +97,7 @@ public:
 	
 
 	void JoyStickRelease();
-	void JoyStickUpdate(CCPoint direction);
+	void JoyStickUpdate(Vec2 direction);
 
 	CC_SYNTHESIZE(bool,_isSkillFinish,SkillFinish);
 	void checkPost(float dt);
@@ -110,18 +113,23 @@ public:
 	void setHPLose(float percent);
 	void setCKRLose(bool isCRK2);
 
-	void setReport(const char* name1, const char* name2,CCString* killNum);
+	void setReport(const char* name1, const char* name2,const char* killNum);
 	void clearDoubleClick();
 	void resetStatusBar();
 	void setCoin(const char* value);
 	void removeOugisMark(int type);
-	void setOugis(CCNode* sender);
+	bool shouldUnlockAllOugis() const;
+	void refreshOugisSkillLocks();
+	void applyDuelTrainStartSetup();
+	void fillCKRToMax(NarutoSenki::ActionManager* hero);
+	bool _isUnlimitedCKR;
+	void setOugis(Node* sender);
 	void removeOugis();
-	CCNode* ougisChar;
+	Node* ougisChar;
 
-	CCNode* controlChar;
+	Node* controlChar;
 	
-	CCLayer* blend;
+	Layer* blend;
 
 	void onLeft();
 	void onRematch();
@@ -136,7 +144,7 @@ public:
 	bool _isDuelMode;
 	bool _isDuelFinished;
 	bool _isRematching;
-	CCArray* _rematchHerosOverride;
+	GameLayerLegacyArray* _rematchHerosOverride;
 	int _duelKillLimit;
 	int _duelPlayerScore;
 	int _duelEnemyScore;
@@ -149,7 +157,7 @@ public:
 	CREATE_FUNC(GameLayer);
 	std::vector<char*> KeyList;
 protected:
-	void onHttpRequestCompleted(CCNode *sender ,void *data);
+	void onHttpRequestCompleted(Node *sender ,void *data);
 	virtual void	onEnter();
 	virtual void	onExit();
 

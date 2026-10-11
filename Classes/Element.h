@@ -17,13 +17,14 @@ public:
 	void	setHPbar();
 	void	setShadows();
 	void    changeHPbar();
+	void	applyStartLevel6();
 	void	neicun(float dt);
-	void	setID(CCString* character,CCString* role,CCString* group);
+	void	setID(NarutoSenki::LegacyString* character,NarutoSenki::LegacyString* role,NarutoSenki::LegacyString* group);
 	virtual void setAI(float dt);
 	
 
-	CCSprite* rebornSprite;
-	CCLabelBMFont* rebornLabel;
+	Sprite* rebornSprite;
+	LabelBMFont* rebornLabel;
 	void	reborn(float dt);
 	void	dealloc();
 
@@ -48,7 +49,7 @@ public:
 	float	_randomPosX;
 	float	_randomPosY;
 
-	void	setID(CCString* character,CCString* role,CCString* group);
+	void	setID(NarutoSenki::LegacyString* character,NarutoSenki::LegacyString* role,NarutoSenki::LegacyString* group);
 	
 
 protected: 
@@ -68,7 +69,7 @@ public:
 	void	initAction();
 	void	setHPbar();
 	void	dealloc();    
-	void	setID(CCString* character,CCString* role,CCString* group);
+	void	setID(NarutoSenki::LegacyString* character,NarutoSenki::LegacyString* role,NarutoSenki::LegacyString* group);
 
 };
 
@@ -81,7 +82,7 @@ public:
 	CREATE_FUNC(Monster);
 	bool	init();
 	void	initAction(); 
-	void	setID(CCString* character,CCString* role,CCString* group);
+	void	setID(NarutoSenki::LegacyString* character,NarutoSenki::LegacyString* role,NarutoSenki::LegacyString* group);
 	void	setHPbar();
 	void    changeHPbar();
 	void	setDirectMove(unsigned int length,float delay,bool isReverse);
@@ -103,7 +104,7 @@ public:
 	CREATE_FUNC(Bullet);
 	bool	init();
 	void	initAction(); 
-	void	setID(CCString* character,CCString* role,CCString* group);
+	void	setID(NarutoSenki::LegacyString* character,NarutoSenki::LegacyString* role,NarutoSenki::LegacyString* group);
 	
 	void	setMove(unsigned int length,float delay,bool isReverse);
 	void	setEaseIn(unsigned int length,float delay);

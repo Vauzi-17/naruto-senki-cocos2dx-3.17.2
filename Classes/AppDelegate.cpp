@@ -40,7 +40,8 @@ bool AppDelegate::applicationDidFinishLaunching()
 
     if (pEGLView)
     {
-        pEGLView->setDesignResolutionSize(480, 320, ResolutionPolicy::FIXED_HEIGHT);
+        pEGLView->setDesignResolutionSize(480, 320, ResolutionPolicy::FIXED_HEIGHT); 
+        // 480 x 320
     }
 
     // turn off display FPS
@@ -63,7 +64,7 @@ void AppDelegate::applicationDidEnterBackground()
     Director::getInstance()->stopAnimation();
 
     // if you use SimpleAudioEngine, it must be paused
-    SimpleAudioEngine::sharedEngine()->pauseBackgroundMusic();
+    SimpleAudioEngine::getInstance()->pauseBackgroundMusic();
 }
 
 void AppDelegate::applicationWillEnterForeground()
@@ -71,5 +72,5 @@ void AppDelegate::applicationWillEnterForeground()
     Director::getInstance()->startAnimation();
 
     // if you use SimpleAudioEngine, it must resume here
-    SimpleAudioEngine::sharedEngine()->resumeBackgroundMusic();
+    SimpleAudioEngine::getInstance()->resumeBackgroundMusic();
 }

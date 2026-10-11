@@ -5,13 +5,14 @@
 #include "cocos-ext.h"
 #include "MyUtils/CCScrewLayer.h"
 #include "MyUtils/CCStrokeLabel.h"
+#include <string>
 
 USING_NS_CC;
 
 class NetworkLayer;
 using namespace rapidjson; 
 
-class RakingLayer : public CCLayer{
+class RakingLayer : public Layer{
 
 public:
 	RakingLayer(void);
@@ -22,63 +23,58 @@ public:
 
 	CREATE_FUNC(RakingLayer);
 
-	CCMenuItem* day_btn;
-	CCMenuItem* week_btn;
-	CCMenuItem* month_btn;
+	MenuItem* day_btn;
+	MenuItem* week_btn;
+	MenuItem* month_btn;
 
 
-	CCMenuItem* battlePoint_btn;
-	CCMenuItem* JifenPoint_btn;
+	MenuItem* battlePoint_btn;
+	MenuItem* JifenPoint_btn;
 
-	CCMenuItem* side0_btn;
-	CCMenuItem* side1_btn;
-	CCMenuItem* side2_btn;
-	CCMenuItem* side3_btn;
+	MenuItem* side0_btn;
+	MenuItem* side1_btn;
+	MenuItem* side2_btn;
+	MenuItem* side3_btn;
 
-	CCMenu* order_menu;
-	CCSprite* ranking_title;
-	CCLabelTTF* rankingDetail;
+	Menu* order_menu;
+	Sprite* ranking_title;
+	Label* rankingDetail;
 
-	CCLayer* ranking_layer;
-	CCSprite* ranking_bg;
+	Layer* ranking_layer;
+	Sprite* ranking_bg;
 	CCScrewLayer* _screwLayer1;
 
 
-	CCSpriteBatchNode* rankingBatch;
+	SpriteBatchNode* rankingBatch;
 
 	bool isPosting;
 	
 
-	CCSprite* refreshBtn;
+	Sprite* refreshBtn;
 	CC_SYNTHESIZE(NetworkLayer*,_delegate,Delegate);
 
-	void postRequest(int code,CCString* useChar=NULL);
+	void postRequest(int code,const char* useChar=NULL);
 
 	bool				isMemberSelect;
 	bool				isGroupSelect;
 	int postingCode;
 
 private:
-	void onHttpRequestCompleted(CCNode *sender ,void *data);
-	void onHttpRequestCompleted2(CCNode *sender ,void *data);
-	void onHttpRequestCompleted3(CCNode *sender ,void *data);
-
-	
 	void produceRanking(int type);
 
-	void				onDayBtn(CCObject* sender);
-	void				onWeekBtn(CCObject* sender);
-	void				onMonthBtn(CCObject* sender);
+	void				onDayBtn(Ref* sender);
+	void				onWeekBtn(Ref* sender);
+	void				onMonthBtn(Ref* sender);
 
-	void				onBattleBtn(CCObject* sender);
-	void				onJifenBtn(CCObject* sender);
-	void				onSelectGroupBtn(CCObject* sender);
+	void				onBattleBtn(Ref* sender);
+	void				onJifenBtn(Ref* sender);
+	void				onSelectGroupBtn(Ref* sender);
 
-	void				onSideBar1(CCObject* sender);
-	void				onSideBar2(CCObject* sender);
-	void				onSideBar3(CCObject* sender);
-	void				onSideBar0(CCObject* sender);
-	void				onCancel(CCObject* sender);
+	void				onSideBar1(Ref* sender);
+	void				onSideBar2(Ref* sender);
+	void				onSideBar3(Ref* sender);
+	void				onSideBar0(Ref* sender);
+	void				onCancel(Ref* sender);
 
 	
 	void				makeCharList();
@@ -87,7 +83,7 @@ private:
 
 
 
-class RankCharButton : public CCSprite, public CCTouchDelegate{
+class RankCharButton : public Sprite{
 
 public:
 	RankCharButton(void);
@@ -97,10 +93,10 @@ public:
 	virtual bool		init(const char *szImage);
 	static RankCharButton*	create(const char *szImage);
 
-	CCRect				getRect();
-	void				setBtnType(CCString* buttonChar);
+	Rect				getRect();
+	void				setBtnType(const char* buttonChar);
 
-	CC_SYNTHESIZE(CCString*,_btnType,btnType);
+	CC_SYNTHESIZE(std::string,_btnType,btnType);
 
 	CC_SYNTHESIZE(RakingLayer*,_delegate,Delegate);
 
@@ -109,11 +105,11 @@ protected:
 
 	virtual void	onEnter();
 	virtual void	onExit();
-	virtual bool	ccTouchBegan(CCTouch* touch,CCEvent* event);
-	virtual void    ccTouchMoved(CCTouch* touch, CCEvent* event);
-	virtual void	ccTouchEnded(CCTouch* touch,CCEvent* event);
+	virtual bool	onTouchBegan(Touch* touch, Event* event);
+	virtual void    onTouchMoved(Touch* touch, Event* event);
+	virtual void	onTouchEnded(Touch* touch, Event* event);
 
-	bool			containsTouchLocation(CCTouch* touch);
+	bool			containsTouchLocation(Touch* touch);
 
 
 };

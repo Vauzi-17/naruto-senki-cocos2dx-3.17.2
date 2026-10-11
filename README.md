@@ -21,7 +21,7 @@ cd proj.android
 
 APKs can also be built on GitHub: **Actions → Android Build → Run workflow**, then pick the branch and `debug`/`release`.
 
-See [docs/BUILD.md](docs/BUILD.md) for requirements, signing, CI, and troubleshooting.
+See [docs/BUILD.md](docs/BUILD.md) for requirements, signing, CI, and troubleshooting. The 2.x → 3.x code migration log is in [docs/MIGRATION.md](docs/MIGRATION.md) (Indonesian).
 
 ## Disclaimer
 
