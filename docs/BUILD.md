@@ -57,7 +57,7 @@ On Windows use `gradlew.bat`. If `java` on your PATH is older than 17, point `JA
 | debug | `assembleDebug` | `proj.android/app/build/outputs/apk/debug/` | Debuggable, no minification |
 | release | `assembleRelease` | `proj.android/app/build/outputs/apk/release/` | R8 minify + resource shrinking, native built as RelWithDebInfo |
 
-The first build compiles the whole engine and takes a while (a local release build took about 15 minutes). Later builds reuse `app/.cxx`.
+The first build compiles the whole engine and takes a while (a local release build took about 15 minutes). Later builds only recompile what changed.
 
 ---
 
@@ -113,8 +113,22 @@ The run title shows what was built, e.g. `Android release @ exp`.
 - Checks out the chosen `ref` on `ubuntu-latest`.
 - Sets up JDK 17 and Gradle 8.5. It runs the installed `gradle` instead of `./gradlew`, so branches that still carry the old wrapper jar can be built too.
 - Installs CMake 3.22.1 and the NDK from the branch's `ndkVersion` (or 25.1.8937393, AGP 8.1's default, when the branch does not pin one).
-- Caches `app/.cxx` per variant to speed up later runs.
-- Builds and uploads the APK(s).
+- Restores the ccache compiler cache, so unchanged C++ files (the whole engine, usually) are not recompiled.
+- Builds and uploads the APK(s), then prints ccache hit stats in the **ccache stats** step.
+
+### Build time
+
+| Cache state | Debug build, whole run |
+|-------------|------------------------|
+| Empty (first run, or after the cache expires) | ~6 min |
+| Warm, no C++ changes | ~2 min |
+
+Only changed files in `Classes/` are recompiled on a warm cache. `both` builds native code twice, so pick a single variant when you can.
+
+How the cache is shared:
+
+- A cache saved on a branch is only visible to that branch; caches saved on `main` are visible to every branch. Run one build on `main` after merging so other branches start warm.
+- GitHub evicts caches not used for 7 days, and the repo-wide limit is 10 GB. The ccache size is capped at 2 GB.
 
 ### Building other branches
 
