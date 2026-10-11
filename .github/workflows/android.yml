@@ -1,31 +1,36 @@
 name: Android Build
 
+# Manual only for now: Actions → Android Build → Run workflow.
 on:
-  push:
-    branches: [main]
-    tags: ['v*']
-  pull_request:
-    branches: [main]
   workflow_dispatch:
     inputs:
+      ref:
+        description: Branch, tag, or commit SHA to build
+        type: string
+        default: main
+        required: true
       build_type:
         description: Build variant
         type: choice
         options: [debug, release, both]
         default: debug
 
+run-name: Android ${{ inputs.build_type }} @ ${{ inputs.ref }}
+
 concurrency:
-  group: android-${{ github.ref }}
+  group: android-${{ inputs.ref }}-${{ inputs.build_type }}
   cancel-in-progress: true
 
 permissions:
-  contents: write
+  contents: read
 
 env:
-  NDK_VERSION: 24.0.8215888
+  BUILD_TYPE: ${{ inputs.build_type }}
+  BUILD_REF: ${{ inputs.ref }}
+  GRADLE_VERSION: '8.5'
   CMAKE_VERSION: 3.22.1
-  # Manual runs use the chosen variant, version tags build release, everything else builds debug.
-  BUILD_TYPE: ${{ inputs.build_type || (startsWith(github.ref, 'refs/tags/v') && 'release') || 'debug' }}
+  # NDK that AGP 8.1 picks when a branch does not set ndkVersion.
+  AGP_DEFAULT_NDK: 25.1.8937393
 
 jobs:
   build:
@@ -38,8 +43,16 @@ jobs:
         working-directory: proj.android
 
     steps:
-      - name: Checkout
+      - name: Checkout ${{ inputs.ref }}
         uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref }}
+
+      - name: Show build target
+        run: |
+          echo "Ref:     $BUILD_REF"
+          echo "Commit:  $(git rev-parse --short HEAD) - $(git log -1 --format=%s)"
+          echo "Variant: $BUILD_TYPE"
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
@@ -47,14 +60,20 @@ jobs:
           distribution: temurin
           java-version: '17'
 
+      # Uses an installed Gradle instead of the repo's gradlew, whose old wrapper jar
+      # fails checksum validation on some branches.
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: ${{ env.GRADLE_VERSION }}
+          validate-wrappers: false
 
       - name: Install NDK and CMake
         run: |
+          ndk=$(grep -oP 'ndkVersion\s+"\K[^"]+' app/build.gradle || echo "$AGP_DEFAULT_NDK")
+          echo "NDK: $ndk"
           yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses > /dev/null || true
-          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" \
-            "ndk;${NDK_VERSION}" "cmake;${CMAKE_VERSION}"
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "ndk;$ndk" "cmake;${CMAKE_VERSION}"
           echo "sdk.dir=$ANDROID_HOME" > local.properties
 
       - name: Cache native build
@@ -82,17 +101,21 @@ jobs:
 
       - name: Build debug APK
         if: env.BUILD_TYPE == 'debug' || env.BUILD_TYPE == 'both'
-        run: ./gradlew assembleDebug --stacktrace
+        run: gradle assembleDebug --stacktrace
 
       - name: Build release APK
         if: env.BUILD_TYPE == 'release' || env.BUILD_TYPE == 'both'
-        run: ./gradlew assembleRelease --stacktrace
+        run: gradle assembleRelease --stacktrace
+
+      - name: Artifact name
+        id: name
+        run: echo "ref=${BUILD_REF//[^A-Za-z0-9._-]/-}-$(git rev-parse --short HEAD)" >> "$GITHUB_OUTPUT"
 
       - name: Upload debug APK
         if: env.BUILD_TYPE == 'debug' || env.BUILD_TYPE == 'both'
         uses: actions/upload-artifact@v4
         with:
-          name: NarutoSenki-debug-${{ github.sha }}
+          name: NarutoSenki-debug-${{ steps.name.outputs.ref }}
           path: proj.android/app/build/outputs/apk/debug/*.apk
           if-no-files-found: error
 
@@ -100,12 +123,6 @@ jobs:
         if: env.BUILD_TYPE == 'release' || env.BUILD_TYPE == 'both'
         uses: actions/upload-artifact@v4
         with:
-          name: NarutoSenki-release-${{ github.sha }}
+          name: NarutoSenki-release-${{ steps.name.outputs.ref }}
           path: proj.android/app/build/outputs/apk/release/*.apk
           if-no-files-found: error
-
-      - name: Publish GitHub Release
-        if: startsWith(github.ref, 'refs/tags/v')
-        uses: softprops/action-gh-release@v2
-        with:
-          files: proj.android/app/build/outputs/apk/*/*.apk
