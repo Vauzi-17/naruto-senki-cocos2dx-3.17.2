@@ -70,6 +70,15 @@ android {
 
     signingConfigs {
 
+        // Temporary shared key: debug and release APKs can be installed over each other.
+        // Not a secret; replace with a real keystore before publishing.
+        dummy {
+            storeFile rootProject.file("keystore/dummy.keystore")
+            storePassword "android"
+            keyAlias "dummy"
+            keyPassword "android"
+        }
+
        release {
             if (project.hasProperty("RELEASE_STORE_FILE")) {
                 storeFile file(RELEASE_STORE_FILE)
@@ -90,6 +99,8 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             if (project.hasProperty("RELEASE_STORE_FILE")) {
                 signingConfig signingConfigs.release
+            } else {
+                signingConfig signingConfigs.dummy
             }
 
             externalNativeBuild {
@@ -103,6 +114,7 @@ android {
             debuggable true
             jniDebuggable true
             renderscriptDebuggable true
+            signingConfig signingConfigs.dummy
             externalNativeBuild {
                 ndkBuild {
                     arguments 'NDK_DEBUG=1'

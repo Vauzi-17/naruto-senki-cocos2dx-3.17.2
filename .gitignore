@@ -87,3 +87,9 @@ Win32/
 *.log
 tmp/
 temp/
+# ============================================================
+# Signing keys (only the shared dummy key is committed)
+# ============================================================
+*.keystore
+*.jks
+!proj.android/keystore/dummy.keystore
