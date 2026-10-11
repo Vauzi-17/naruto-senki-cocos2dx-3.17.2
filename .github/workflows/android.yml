@@ -38,6 +38,11 @@ jobs:
     timeout-minutes: 90
     env:
       KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+      # Read by CMake (3.17+) when AGP configures the native build.
+      CMAKE_C_COMPILER_LAUNCHER: ccache
+      CMAKE_CXX_COMPILER_LAUNCHER: ccache
+      CCACHE_BASEDIR: ${{ github.workspace }}
+      CCACHE_NOHASHDIR: 'true'
     defaults:
       run:
         working-directory: proj.android
@@ -76,12 +81,13 @@ jobs:
           "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "ndk;$ndk" "cmake;${CMAKE_VERSION}"
           echo "sdk.dir=$ANDROID_HOME" > local.properties
 
-      - name: Cache native build
-        uses: actions/cache@v4
+      # ccache keys on file contents, so unchanged engine sources are reused across runs
+      # even though checkout gives every file a fresh mtime.
+      - name: Set up ccache
+        uses: hendrikmuhs/ccache-action@v1.2
         with:
-          path: proj.android/app/.cxx
-          key: cxx-${{ env.BUILD_TYPE }}-${{ hashFiles('CMakeLists.txt', 'Classes/**', 'proj.android/app/build.gradle') }}
-          restore-keys: cxx-${{ env.BUILD_TYPE }}-
+          key: android-armeabi-v7a
+          max-size: 2G
 
       # Without these secrets, release is signed with the dummy key in proj.android/keystore.
       - name: Use real release keystore
@@ -106,6 +112,9 @@ jobs:
       - name: Build release APK
         if: env.BUILD_TYPE == 'release' || env.BUILD_TYPE == 'both'
         run: gradle assembleRelease --stacktrace
+
+      - name: ccache stats
+        run: ccache --show-stats
 
       - name: Artifact name
         id: name
