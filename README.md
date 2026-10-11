@@ -49,6 +49,24 @@ Select your target device or emulator in Android Studio and click **Run**.
 
 ---
 
+## CI Build (GitHub Actions)
+
+The workflow in `.github/workflows/android.yml` builds the APK on GitHub and uploads it as a run artifact (Actions tab → run → **Artifacts**).
+
+| Trigger | Variant |
+|---------|---------|
+| Push / pull request to `main` | debug |
+| Tag `v*` (e.g. `v1.0`) | release, attached to a GitHub Release |
+| Actions → **Android Build** → **Run workflow** | choose `debug`, `release`, or `both` |
+
+### Signing
+
+Debug and release are both signed with a shared **dummy key** (`proj.android/keystore/dummy.keystore`, password `android`), so any APK from CI or a local build can be installed over the previous one. This key is public and only meant for testing.
+
+To sign release with a real key, add these repository secrets: `KEYSTORE_BASE64` (the keystore file as base64), `KEYSTORE_PASSWORD`, `KEY_ALIAS`, `KEY_PASSWORD`. Switching keys requires uninstalling the dummy-signed app first.
+
+---
+
 ## Migration Notes (cocos2d-x 2.2.6 to 3.17.2)
 
 The following changes were made to resolve build errors after the engine upgrade:
