@@ -43,6 +43,8 @@ jobs:
       CMAKE_CXX_COMPILER_LAUNCHER: ccache
       CCACHE_BASEDIR: ${{ github.workspace }}
       CCACHE_NOHASHDIR: 'true'
+      # The NDK is reinstalled every run, so its mtime changes; identify the compiler by version instead.
+      CCACHE_COMPILERCHECK: '%compiler% --version'
     defaults:
       run:
         working-directory: proj.android
@@ -114,7 +116,7 @@ jobs:
         run: gradle assembleRelease --stacktrace
 
       - name: ccache stats
-        run: ccache --show-stats
+        run: ccache --show-stats --verbose
 
       - name: Artifact name
         id: name
