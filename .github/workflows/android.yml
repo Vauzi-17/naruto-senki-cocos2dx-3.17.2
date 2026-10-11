@@ -1,0 +1,139 @@
+name: Android Build
+
+# Manual only for now: Actions → Android Build → Run workflow.
+on:
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: Branch, tag, or commit SHA to build
+        type: string
+        default: main
+        required: true
+      build_type:
+        description: Build variant
+        type: choice
+        options: [debug, release, both]
+        default: debug
+
+run-name: Android ${{ inputs.build_type }} @ ${{ inputs.ref }}
+
+concurrency:
+  group: android-${{ inputs.ref }}-${{ inputs.build_type }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  BUILD_TYPE: ${{ inputs.build_type }}
+  BUILD_REF: ${{ inputs.ref }}
+  GRADLE_VERSION: '8.5'
+  CMAKE_VERSION: 3.22.1
+  # NDK that AGP 8.1 picks when a branch does not set ndkVersion.
+  AGP_DEFAULT_NDK: 25.1.8937393
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+      # Read by CMake (3.17+) when AGP configures the native build.
+      CMAKE_C_COMPILER_LAUNCHER: ccache
+      CMAKE_CXX_COMPILER_LAUNCHER: ccache
+      CCACHE_BASEDIR: ${{ github.workspace }}
+      CCACHE_NOHASHDIR: 'true'
+      # The NDK is reinstalled every run, so its mtime changes; identify the compiler by version instead.
+      CCACHE_COMPILERCHECK: '%compiler% --version'
+    defaults:
+      run:
+        working-directory: proj.android
+
+    steps:
+      - name: Checkout ${{ inputs.ref }}
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref }}
+
+      - name: Show build target
+        run: |
+          echo "Ref:     $BUILD_REF"
+          echo "Commit:  $(git rev-parse --short HEAD) - $(git log -1 --format=%s)"
+          echo "Variant: $BUILD_TYPE"
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      # Uses an installed Gradle instead of the repo's gradlew, whose old wrapper jar
+      # fails checksum validation on some branches.
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: ${{ env.GRADLE_VERSION }}
+          validate-wrappers: false
+
+      - name: Install NDK and CMake
+        run: |
+          ndk=$(grep -oP 'ndkVersion\s+"\K[^"]+' app/build.gradle || echo "$AGP_DEFAULT_NDK")
+          echo "NDK: $ndk"
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses > /dev/null || true
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "ndk;$ndk" "cmake;${CMAKE_VERSION}"
+          echo "sdk.dir=$ANDROID_HOME" > local.properties
+
+      # ccache keys on file contents, so unchanged engine sources are reused across runs
+      # even though checkout gives every file a fresh mtime.
+      - name: Set up ccache
+        uses: hendrikmuhs/ccache-action@v1.2
+        with:
+          key: android-armeabi-v7a
+          max-size: 2G
+
+      # Without these secrets, release is signed with the dummy key in proj.android/keystore.
+      - name: Use real release keystore
+        if: env.KEYSTORE_BASE64 != '' && env.BUILD_TYPE != 'debug'
+        env:
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        run: |
+          echo "$KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/release.keystore"
+          {
+            echo "ORG_GRADLE_PROJECT_RELEASE_STORE_FILE=$RUNNER_TEMP/release.keystore"
+            echo "ORG_GRADLE_PROJECT_RELEASE_STORE_PASSWORD=$KEYSTORE_PASSWORD"
+            echo "ORG_GRADLE_PROJECT_RELEASE_KEY_ALIAS=$KEY_ALIAS"
+            echo "ORG_GRADLE_PROJECT_RELEASE_KEY_PASSWORD=$KEY_PASSWORD"
+          } >> "$GITHUB_ENV"
+
+      - name: Build debug APK
+        if: env.BUILD_TYPE == 'debug' || env.BUILD_TYPE == 'both'
+        run: gradle assembleDebug --stacktrace
+
+      - name: Build release APK
+        if: env.BUILD_TYPE == 'release' || env.BUILD_TYPE == 'both'
+        run: gradle assembleRelease --stacktrace
+
+      - name: ccache stats
+        run: ccache --show-stats --verbose
+
+      - name: Artifact name
+        id: name
+        run: echo "ref=${BUILD_REF//[^A-Za-z0-9._-]/-}-$(git rev-parse --short HEAD)" >> "$GITHUB_OUTPUT"
+
+      - name: Upload debug APK
+        if: env.BUILD_TYPE == 'debug' || env.BUILD_TYPE == 'both'
+        uses: actions/upload-artifact@v4
+        with:
+          name: NarutoSenki-debug-${{ steps.name.outputs.ref }}
+          path: proj.android/app/build/outputs/apk/debug/*.apk
+          if-no-files-found: error
+
+      - name: Upload release APK
+        if: env.BUILD_TYPE == 'release' || env.BUILD_TYPE == 'both'
+        uses: actions/upload-artifact@v4
+        with:
+          name: NarutoSenki-release-${{ steps.name.outputs.ref }}
+          path: proj.android/app/build/outputs/apk/release/*.apk
+          if-no-files-found: error
