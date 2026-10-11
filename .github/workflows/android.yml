@@ -55,6 +55,16 @@ jobs:
         with:
           ref: ${{ inputs.ref }}
 
+      # The dummy key comes from the workflow's own commit, so branches that predate it
+      # (or never had it) still get signed.
+      - name: Checkout signing key
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          path: .ci-signing
+          sparse-checkout: proj.android/keystore
+          sparse-checkout-cone-mode: false
+
       - name: Show build target
         run: |
           echo "Ref:     $BUILD_REF"
@@ -91,22 +101,6 @@ jobs:
           key: android-armeabi-v7a
           max-size: 2G
 
-      # Without these secrets, release is signed with the dummy key in proj.android/keystore.
-      - name: Use real release keystore
-        if: env.KEYSTORE_BASE64 != '' && env.BUILD_TYPE != 'debug'
-        env:
-          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
-          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
-          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
-        run: |
-          echo "$KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/release.keystore"
-          {
-            echo "ORG_GRADLE_PROJECT_RELEASE_STORE_FILE=$RUNNER_TEMP/release.keystore"
-            echo "ORG_GRADLE_PROJECT_RELEASE_STORE_PASSWORD=$KEYSTORE_PASSWORD"
-            echo "ORG_GRADLE_PROJECT_RELEASE_KEY_ALIAS=$KEY_ALIAS"
-            echo "ORG_GRADLE_PROJECT_RELEASE_KEY_PASSWORD=$KEY_PASSWORD"
-          } >> "$GITHUB_ENV"
-
       - name: Build debug APK
         if: env.BUILD_TYPE == 'debug' || env.BUILD_TYPE == 'both'
         run: gradle assembleDebug --stacktrace
@@ -117,6 +111,35 @@ jobs:
 
       - name: ccache stats
         run: ccache --show-stats --verbose
+
+      # Re-sign every APK so all CI builds share one key, whatever the branch's build.gradle does.
+      # Release uses the real key when the KEYSTORE_* secrets are set; everything else uses the dummy key.
+      - name: Sign APKs
+        env:
+          DUMMY_PASSWORD: android
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        run: |
+          apksigner="$(ls -d "$ANDROID_HOME"/build-tools/*/ | sort -V | tail -1)apksigner"
+          if [ -n "$KEYSTORE_BASE64" ]; then
+            echo "$KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/release.keystore"
+          fi
+          for apk in app/build/outputs/apk/*/*.apk; do
+            variant=$(basename "$(dirname "$apk")")
+            if [ "$variant" = release ] && [ -n "$KEYSTORE_BASE64" ]; then
+              set -- --ks "$RUNNER_TEMP/release.keystore" --ks-key-alias "$KEY_ALIAS" \
+                --ks-pass env:KEYSTORE_PASSWORD --key-pass env:KEY_PASSWORD
+            else
+              set -- --ks "$GITHUB_WORKSPACE/.ci-signing/proj.android/keystore/dummy.keystore" \
+                --ks-key-alias dummy --ks-pass env:DUMMY_PASSWORD --key-pass env:DUMMY_PASSWORD
+            fi
+            out="${apk%-unsigned.apk}"; out="${out%.apk}.apk"
+            "$apksigner" sign "$@" --out "$out.signing" "$apk"
+            rm -f "$apk" "$out.signing.idsig"
+            mv "$out.signing" "$out"
+            echo "$out: $("$apksigner" verify --print-certs "$out" | grep -m1 'certificate DN')"
+          done
 
       - name: Artifact name
         id: name

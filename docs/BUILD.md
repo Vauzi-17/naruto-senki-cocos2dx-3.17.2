@@ -114,7 +114,8 @@ The run title shows what was built, e.g. `Android release @ exp`.
 - Sets up JDK 17 and Gradle 8.5. It runs the installed `gradle` instead of `./gradlew`, so branches that still carry the old wrapper jar can be built too.
 - Installs CMake 3.22.1 and the NDK from the branch's `ndkVersion` (or 25.1.8937393, AGP 8.1's default, when the branch does not pin one).
 - Restores the ccache compiler cache, so unchanged C++ files (the whole engine, usually) are not recompiled.
-- Builds and uploads the APK(s), then prints ccache hit stats in the **ccache stats** step.
+- Builds the APK(s) and prints ccache hit stats in the **ccache stats** step.
+- Re-signs every APK in the **Sign APKs** step (see below), then uploads them.
 
 ### Build time
 
@@ -132,12 +133,9 @@ How the cache is shared:
 
 ### Building other branches
 
-A branch builds with whatever its own files contain. Branches created before the CI work (`exp`, `migrate`, `optimize-cocos317`) do not have the dummy keystore, so:
+A branch builds with whatever its own source and Gradle files contain, but signing does not depend on the branch. After the build, the **Sign APKs** step re-signs every APK with the dummy key taken from the workflow's own commit (normally `main`). Branches that never had the dummy keystore, or whose `build.gradle` leaves release unsigned, still produce installable APKs that update each other.
 
-- **debug** is signed with the runner's throwaway debug key and will not install over other builds;
-- **release** comes out unsigned (`*-release-unsigned.apk`) and cannot be installed.
-
-Merge or rebase onto `main` (after this setup is merged) to get the shared signing.
+The step log prints each APK's signer, e.g. `CN=NarutoSenki Dummy, OU=Dev, O=Vauzi, C=ID`.
 
 ### Real release key on CI
 
@@ -156,7 +154,7 @@ Encode the keystore on Windows with:
 [Convert]::ToBase64String([IO.File]::ReadAllBytes("release.keystore")) | Set-Clipboard
 ```
 
-When `KEYSTORE_BASE64` is set, release builds use it; debug keeps the dummy key.
+When `KEYSTORE_BASE64` is set, the **Sign APKs** step signs release with it; debug keeps the dummy key.
 
 ---
 
