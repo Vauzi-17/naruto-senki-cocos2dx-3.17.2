@@ -2,6 +2,9 @@ import org.gradle.internal.os.OperatingSystem
 
 apply plugin: 'com.android.application'
 
+// `-Pasan` builds with AddressSanitizer to locate memory corruption. Debug builds only.
+def asanEnabled = project.hasProperty("asan")
+
 android {
     namespace 'com.vauzi.narutosenki'
     compileSdkVersion PROP_COMPILE_SDK_VERSION.toInteger()
@@ -37,6 +40,9 @@ android {
                 cmake {
                     targets 'MyGame'
                     arguments "-DCMAKE_FIND_ROOT_PATH=", "-DANDROID_STL=c++_static", "-DANDROID_TOOLCHAIN=clang", "-DANDROID_ARM_NEON=TRUE"
+                    if (asanEnabled) {
+                        arguments "-DNARUTO_ASAN=ON"
+                    }
                     cppFlags "-frtti -fexceptions -fsigned-char"
                 }
             }
@@ -53,6 +59,19 @@ android {
         res.srcDir "res"
         manifest.srcFile "AndroidManifest.xml"
         assets.srcDir "../../Resources"
+        if (asanEnabled) {
+            resources.srcDir "asan/resources"
+            jniLibs.srcDir "$buildDir/asan/jniLibs"
+        }
+    }
+
+    if (asanEnabled) {
+        // wrap.sh is only honored when native libs are extracted on install.
+        packagingOptions {
+            jniLibs {
+                useLegacyPackaging = true
+            }
+        }
     }
 
     externalNativeBuild {
@@ -135,6 +154,18 @@ android.applicationVariants.all { variant ->
             exclude "**/*.gz"
         }
     }
+}
+
+if (asanEnabled) {
+    // Ship the NDK's ASan runtime next to libMyGame.so; wrap.sh preloads it.
+    def copyAsanRuntime = tasks.register("copyAsanRuntime", Copy) {
+        from {
+            fileTree(dir: android.ndkDirectory,
+                     include: "toolchains/llvm/prebuilt/*/lib64/clang/*/lib/linux/libclang_rt.asan-arm-android.so").files
+        }
+        into "$buildDir/asan/jniLibs/armeabi-v7a"
+    }
+    tasks.named("preBuild").configure { dependsOn copyAsanRuntime }
 }
 
 dependencies {

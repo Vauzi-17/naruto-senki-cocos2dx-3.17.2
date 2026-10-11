@@ -15,6 +15,15 @@ if(ANDROID)
     add_definitions(-DANDROID)
 endif()
 
+# AddressSanitizer for tracking down memory corruption. Off by default; enable with
+# `gradlew assembleDebug -Pasan` (see docs/BUILD.md). Must be set before the engine
+# is added so cocos2d is instrumented too.
+option(NARUTO_ASAN "Build with AddressSanitizer" OFF)
+if(NARUTO_ASAN)
+    add_compile_options(-fsanitize=address -fno-omit-frame-pointer)
+    add_link_options(-fsanitize=address)
+endif()
+
 set(COCOS2DX_ROOT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cocos2d)
 set(CMAKE_MODULE_PATH ${COCOS2DX_ROOT_PATH}/cmake/Modules/)
 

@@ -5,6 +5,7 @@
 - [Signing](#signing)
 - [GitHub Actions](#github-actions)
 - [Troubleshooting](#troubleshooting)
+- [Debugging crashes](#debugging-crashes)
 - [Porting notes](#porting-notes)
 
 ---
@@ -166,6 +167,43 @@ When `KEYSTORE_BASE64` is set, the **Sign APKs** step signs release with it; deb
 | `INSTALL_FAILED_UPDATE_INCOMPATIBLE` / "App not installed" | Installed app was signed with another key. Uninstall it once. |
 | `Gradle Wrapper Jar failed validation` on CI | Old wrapper jar. The workflow no longer runs the wrapper; locally, regenerate with `./gradlew wrapper --gradle-version 8.5 --distribution-type all`. |
 | `NDK not configured` / wrong NDK | Install NDK 24.0.8215888 from the SDK Manager. |
+
+---
+
+## Debugging crashes
+
+### Reading crash reports over adb
+
+Some ROMs (vivo/iQOO, for example) silence app logs in logcat with `log.tag=...,S`. Native crash reports are still kept by the system and can be read without changing any setting:
+
+```bash
+adb shell dumpsys dropbox --print data_app_native_crash
+```
+
+Each entry has the signal, the crashing thread, and a symbolized backtrace for `libMyGame.so`. Debug APKs keep exported function names, so frames show names even without line numbers.
+
+### AddressSanitizer (ASan) build
+
+Crashes that land on garbage pointers usually come from earlier heap corruption (use-after-free, buffer overflow). An ASan build stops at the first bad memory access and reports where the memory was allocated and freed.
+
+```bash
+cd proj.android
+./gradlew assembleDebug -Pasan
+adb install -r app/build/outputs/apk/debug/NarutoSenki317-debug.apk
+```
+
+`-Pasan` compiles the game and engine with `-fsanitize=address`, packages the NDK's ASan runtime, and adds `app/asan/resources/lib/armeabi-v7a/wrap.sh`, which preloads it at launch. Expect the game to run slower and use 2–3× more memory.
+
+When ASan catches an error, the app aborts and the report is written to:
+
+```bash
+adb shell run-as com.vauzi.narutosenki ls          # asan.<pid>
+adb shell run-as com.vauzi.narutosenki cat asan.<pid>
+```
+
+The report also appears as the abort message of the crash in `dumpsys dropbox --print data_app_native_crash`.
+
+Build a normal debug APK again (without `-Pasan`) when you are done; it installs over the ASan one.
 
 ---
 
