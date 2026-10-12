@@ -1267,7 +1267,7 @@ Action* NarutoSenki::ActionManager::createAnimation(NarutoSenkiLegacy::Array* at
 					seqArray->addObject(delay);
 				}else if(strcmp(key,"setMove")==0){
 					int moveLength=dic->valueForKey(key)->intValue();
-					FiniteTimeAction *call = createPayloadCall(this, &NarutoSenki::ActionManager::setMove, (void*)moveLength);
+					FiniteTimeAction *call = createPayloadCall(this, &NarutoSenki::ActionManager::setMove, (void*)(intptr_t)moveLength);
 					seqArray->addObject(call);
 				}else if(strcmp(key,"setSkillEffect")==0){
 					callValue = NarutoSenkiLegacy::Dictionary::create();
@@ -1277,22 +1277,22 @@ Action* NarutoSenki::ActionManager::createAnimation(NarutoSenkiLegacy::Array* at
 					seqArray->addObject(call);
 				}else if(strcmp(key,"setJump")==0){
 					bool jumpDirection=dic->valueForKey(key)->boolValue();
-					FiniteTimeAction *call = createPayloadCall(this, &NarutoSenki::ActionManager::setJump, (void*)jumpDirection);
+					FiniteTimeAction *call = createPayloadCall(this, &NarutoSenki::ActionManager::setJump, (void*)(intptr_t)jumpDirection);
 					seqArray->addObject(call);
 				}
 				else if(strcmp(key,"setCharge")==0){
 					FiniteTimeAction *call = CallFunc::create(CC_CALLBACK_0(NarutoSenki::ActionManager::getCollider, this));
 					seqArray->addObject(call);
 					int moveLength=dic->valueForKey(key)->intValue();
-					call = createPayloadCall(this, &NarutoSenki::ActionManager::setCharge, (void*)moveLength);
+					call = createPayloadCall(this, &NarutoSenki::ActionManager::setCharge, (void*)(intptr_t)moveLength);
 					seqArray->addObject(call);
 				}else if(strcmp(key,"setChargeB")==0){
 					int moveLength=dic->valueForKey(key)->intValue();
-					FiniteTimeAction* call = createPayloadCall(this, &NarutoSenki::ActionManager::setChargeB, (void*)moveLength);
+					FiniteTimeAction* call = createPayloadCall(this, &NarutoSenki::ActionManager::setChargeB, (void*)(intptr_t)moveLength);
 					seqArray->addObject(call);
 				}else if(strcmp(key,"setClone")==0){
 					int cloneTime=dic->valueForKey(key)->intValue();
-					FiniteTimeAction *call = createPayloadCall(this, &NarutoSenki::ActionManager::setClone, (void*)cloneTime);
+					FiniteTimeAction *call = createPayloadCall(this, &NarutoSenki::ActionManager::setClone, (void*)(intptr_t)cloneTime);
 					seqArray->addObject(call);
 				}else if(strcmp(key,"setMon")==0){
 					callValue = NarutoSenkiLegacy::Dictionary::create();
@@ -1318,7 +1318,7 @@ Action* NarutoSenki::ActionManager::createAnimation(NarutoSenkiLegacy::Array* at
 
 				}else if(strcmp(key,"setBuff")==0){
 					int buffValue=dic->valueForKey(key)->intValue();
-					FiniteTimeAction *call = createPayloadCall(this, &NarutoSenki::ActionManager::setBuff, (void*)buffValue);
+					FiniteTimeAction *call = createPayloadCall(this, &NarutoSenki::ActionManager::setBuff, (void*)(intptr_t)buffValue);
 					seqArray->addObject(call);
 				}else if(strcmp(key,"setCommand")==0){
 					callValue = NarutoSenkiLegacy::Dictionary::create();
@@ -1339,7 +1339,7 @@ Action* NarutoSenki::ActionManager::createAnimation(NarutoSenkiLegacy::Array* at
 					seqArray->addObject(call);
 				}else if(strcmp(key,"setMonAttack")==0){
 					int skillNum=dic->valueForKey(key)->intValue();
-					FiniteTimeAction *call = createPayloadCall(this, &NarutoSenki::ActionManager::setMonAttack, (void*)skillNum);
+					FiniteTimeAction *call = createPayloadCall(this, &NarutoSenki::ActionManager::setMonAttack, (void*)(intptr_t)skillNum);
 					seqArray->addObject(call);
 				}else if(strcmp(key,"setTrap")==0){
 					callValue = NarutoSenkiLegacy::Dictionary::create();
@@ -1370,7 +1370,7 @@ Action* NarutoSenki::ActionManager::createAnimation(NarutoSenkiLegacy::Array* at
 					seqArray->addObject(call);
 				}else if (strcmp(key,"stopJump")==0){
 					int stopTime=dic->valueForKey(key)->intValue();
-					FiniteTimeAction *call = createPayloadCall(this, &NarutoSenki::ActionManager::stopJump, (void*)stopTime);
+					FiniteTimeAction *call = createPayloadCall(this, &NarutoSenki::ActionManager::stopJump, (void*)(intptr_t)stopTime);
 					seqArray->addObject(call);
 				}else if (strcmp(key,"setFlipped")==0){
 					FiniteTimeAction *call = CallFunc::create(CC_CALLBACK_0(NarutoSenki::ActionManager::setCharFlip, this));
@@ -2593,7 +2593,7 @@ void NarutoSenki::ActionManager::setMove(Node* sender,void* date){
 		} 
 		moveLength=this->getKnockLength();
 	}else{
-		moveLength=(int) date;
+		moveLength=(int)(intptr_t) date;
 	}
 
 	if( this->getPositionX()>_delegate->currentMap->getTileSize().width &&
@@ -2628,7 +2628,7 @@ void NarutoSenki::ActionManager::setJump(Node* sender,void* date){
 		
 			_actionState=ACTION_STATE_JUMP;
 
-			bool jumpDirection=(bool) date;
+			bool jumpDirection=(intptr_t) date != 0;
 			float posX=this->getPositionX();
 			float posY=this->getPositionY();
 			_originY=posY;
@@ -2648,7 +2648,7 @@ void NarutoSenki::ActionManager::setJump(Node* sender,void* date){
 
 
 void NarutoSenki::ActionManager::setCharge(Node* sender,void* date){
-	int moveLength=(int) date;
+	int moveLength=(int)(intptr_t) date;
 	if( (this->getPositionX()<_delegate->currentMap->getTileSize().width && _isFlipped) ||
 		(this->getPositionX()>(_delegate->currentMap->getMapSize().width-1)*_delegate->currentMap->getTileSize().width && !_isFlipped)
 		){
@@ -2663,7 +2663,7 @@ void NarutoSenki::ActionManager::setCharge(Node* sender,void* date){
 
 // with out getCollider
 void NarutoSenki::ActionManager::setChargeB(Node* sender,void* date){
-	int moveLength=(int) date;
+	int moveLength=(int)(intptr_t) date;
 	float delay;
 	if(_actionState==ACTION_STATE_OATTACK || _actionState==ACTION_STATE_O2ATTACK){
 		delay=0.4f;
@@ -3051,7 +3051,7 @@ void NarutoSenki::ActionManager::setCommand(Node* sender,void* date){
 
 
 void NarutoSenki::ActionManager::setBuff(Node* sender,void* date){
-	int buffValue=(int) date;
+	int buffValue=(int)(intptr_t) date;
 	float buffStayTime=_attackRangeY;
 
 	if(strcmp(_attackType->getCString(),"hBuff")==0){
@@ -5600,7 +5600,7 @@ void NarutoSenki::ActionManager::stopMove(float dt){
 }
 
 void NarutoSenki::ActionManager::stopJump(Node* sender,void* date){
-	int stopTime=(int) date;
+	int stopTime=(int)(intptr_t) date;
 
 	if(_actionState==ACTION_STATE_JUMP){
 		this->getActionManager()->pauseTarget(this);
@@ -5745,7 +5745,7 @@ void NarutoSenki::ActionManager::setBulletGroup(float dt){
 
 
 void NarutoSenki::ActionManager::setClone(Node* sender,void* date){
-	int cloneTime=(int) date;
+	int cloneTime=(int)(intptr_t) date;
 	Hero* clone=Hero::create();
 	
 	if(this->_master){
@@ -6611,7 +6611,7 @@ void NarutoSenki::ActionManager::removeSelf(float dt){
 }
 
 void NarutoSenki::ActionManager::setMonAttack(Node* sender,void* date){
-	int skillNum=(int) date;
+	int skillNum=(int)(intptr_t) date;
 	if(this->getMonsterArray()){
 		Ref* pObject;
 		for (unsigned int ccIndex = 0; this->getMonsterArray() && ccIndex < this->getMonsterArray()->count(); ++ccIndex){
