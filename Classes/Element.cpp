@@ -35,7 +35,7 @@ HeroElement::~HeroElement(void)
 	CC_SAFE_RELEASE(_spcattackType1);
 	CC_SAFE_RELEASE(_spcattackType2);
 	CC_SAFE_RELEASE(_spcattackType3);
-	CC_SAFE_RELEASE(_damageArray);
+	this->clearDamageDisplay();
 	CC_SAFE_RELEASE(_monsterArray);
 	CC_SAFE_DELETE(skillSPC1Array);
 	CC_SAFE_RELEASE(skillSPC2Array);
@@ -959,7 +959,7 @@ Flog::~Flog(void)
 {
 	CC_SAFE_RELEASE(callValue);
 	CC_SAFE_RELEASE(_nattackType);
-	CC_SAFE_RELEASE(_damageArray);
+	this->clearDamageDisplay();
 }
 
 
@@ -1376,7 +1376,7 @@ Monster::~Monster(void)
 {
 	CC_SAFE_RELEASE(callValue);
 	CC_SAFE_RELEASE(_nattackType);
-	CC_SAFE_RELEASE(_damageArray);
+	this->clearDamageDisplay();
 
 }
 

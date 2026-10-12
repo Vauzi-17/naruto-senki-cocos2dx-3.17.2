@@ -494,6 +494,7 @@ using LegacyString = NarutoSenkiLegacy::String;
 
 
 		void				removeDamageDisplay();
+		void				clearDamageDisplay();
 
 		void				onEnter();
 		void				onExit();

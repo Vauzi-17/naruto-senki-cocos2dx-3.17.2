@@ -1942,7 +1942,22 @@ void NarutoSenki::ActionManager::removeDamageDisplay(){
 		_damageArray->removeObjectAtIndex(0);
 		damageFont=NULL;
 	}
-	
+
+}
+
+// Damage labels live on the game layer and call back into this character when their
+// animation ends, so they must be stopped before the character is destroyed.
+void NarutoSenki::ActionManager::clearDamageDisplay(){
+	if(!_damageArray){
+		return;
+	}
+	for (unsigned int i = 0; i < _damageArray->count(); ++i){
+		Node* damageFont=(Node*)_damageArray->objectAtIndex(i);
+		damageFont->stopAllActions();
+		damageFont->removeFromParent();
+	}
+	_damageArray->removeAllObjects();
+	CC_SAFE_RELEASE_NULL(_damageArray);
 }
 
 void NarutoSenki::ActionManager::setDamgeEffect(NarutoSenkiLegacy::String* type){
