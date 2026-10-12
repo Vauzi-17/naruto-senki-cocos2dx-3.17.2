@@ -277,6 +277,9 @@ NarutoSenki::ActionManager::ActionManager(void)
 NarutoSenki::ActionManager::~ActionManager(void)
 {
 	this->unregisterAcceptAttackListener();
+	CC_SAFE_RELEASE_NULL(_moveAction);
+	CC_SAFE_RELEASE_NULL(_jumpUPAction);
+	CC_SAFE_RELEASE_NULL(_floatUPAction);
 }
 
 
@@ -2634,9 +2637,9 @@ void NarutoSenki::ActionManager::setJump(Node* sender,void* date){
 			_originY=posY;
 			
 			if(!jumpDirection){
-				_jumpUPAction=JumpTo::create(0.8f, Vec2(posX+(_isFlipped?64:-64),posY),64,1);
+				this->setJumpUPAction(JumpTo::create(0.8f, Vec2(posX+(_isFlipped?64:-64),posY),64,1));
 			}else{
-				_jumpUPAction=JumpTo::create(0.8f, Vec2(posX+(_isFlipped?-64:64),posY),64,1);
+				this->setJumpUPAction(JumpTo::create(0.8f, Vec2(posX+(_isFlipped?-64:64),posY),64,1));
 			}
 			
 			this->runAction(_jumpUPAction);
@@ -2654,7 +2657,7 @@ void NarutoSenki::ActionManager::setCharge(Node* sender,void* date){
 		){
 			return;
 	}else{
-		_moveAction=MoveBy::create(0.1f,Vec2(_isFlipped?-moveLength*winSize.width/1280:moveLength*winSize.width/1280,0));
+		this->setMoveAction(MoveBy::create(0.1f,Vec2(_isFlipped?-moveLength*winSize.width/1280:moveLength*winSize.width/1280,0)));
 		this->runAction(_moveAction);
 		
 	}
@@ -2677,7 +2680,7 @@ void NarutoSenki::ActionManager::setChargeB(Node* sender,void* date){
 		){
 		return;
 	}else{
-			_moveAction=MoveBy::create(delay,Vec2(_isFlipped?-moveLength*winSize.width/1280:moveLength*winSize.width/1280,0));
+			this->setMoveAction(MoveBy::create(delay,Vec2(_isFlipped?-moveLength*winSize.width/1280:moveLength*winSize.width/1280,0)));
 			this->runAction(_moveAction);
 	}
 
@@ -7479,7 +7482,7 @@ void NarutoSenki::ActionManager::floatUP(float floatHeight, bool isCancelSkill){
 
 		
 		FiniteTimeAction* call = CallFunc::create(CC_CALLBACK_0(NarutoSenki::ActionManager::knockDown, this));
-		_floatUPAction=Sequence::create(_floatAwayAction,call,nullptr);
+		this->setFloatUPAction(Sequence::create(_floatAwayAction,call,nullptr));
 
 		this->runAction(_floatUPAction);
 		this->runAction(_floatAction);
