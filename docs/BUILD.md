@@ -20,7 +20,7 @@
 | Android SDK | compileSdk / targetSdk 33, minSdk 21 |
 | NDK | 24.0.8215888 (pinned in `proj.android/app/build.gradle`) |
 | CMake | 3.22.1 (installed from the SDK Manager) |
-| Target ABI | `armeabi-v7a` |
+| Target ABI | `arm64-v8a` (64-bit only) |
 
 The cocos2d-x 3.17.2 engine is already included in `cocos2d/`, so there is nothing else to download.
 
@@ -192,7 +192,9 @@ cd proj.android
 adb install -r app/build/outputs/apk/debug/NarutoSenki317-debug.apk
 ```
 
-`-Pasan` compiles the game and engine with `-fsanitize=address`, packages the NDK's ASan runtime, and adds `app/asan/resources/lib/armeabi-v7a/wrap.sh`, which preloads it at launch. Expect the game to run slower and use 2–3× more memory.
+`-Pasan` compiles the game and engine with `-fsanitize=address`, packages the NDK's ASan runtime, and adds `app/asan/resources/lib/arm64-v8a/wrap.sh`, which preloads it at launch. Expect the game to run slower and use 2–3× more memory.
+
+ASan needs a 64-bit build. In a 32-bit (`armeabi-v7a`) process the shadow memory plus game assets exhaust the address space a few seconds into a match, and the process dies without a crash report.
 
 When ASan catches an error, the app aborts and the report is written to:
 

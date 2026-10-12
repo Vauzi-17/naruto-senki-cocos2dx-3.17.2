@@ -158,12 +158,17 @@ android.applicationVariants.all { variant ->
 
 if (asanEnabled) {
     // Ship the NDK's ASan runtime next to libMyGame.so; wrap.sh preloads it.
+    def asanRuntimeArch = ["armeabi-v7a": "arm", "arm64-v8a": "aarch64"]
     def copyAsanRuntime = tasks.register("copyAsanRuntime", Copy) {
-        from {
-            fileTree(dir: android.ndkDirectory,
-                     include: "toolchains/llvm/prebuilt/*/lib64/clang/*/lib/linux/libclang_rt.asan-arm-android.so").files
+        PROP_APP_ABI.split(':').each { abi ->
+            from({
+                fileTree(dir: android.ndkDirectory,
+                         include: "toolchains/llvm/prebuilt/*/lib64/clang/*/lib/linux/libclang_rt.asan-${asanRuntimeArch[abi]}-android.so").files
+            }) {
+                into abi
+            }
         }
-        into "$buildDir/asan/jniLibs/armeabi-v7a"
+        into "$buildDir/asan/jniLibs"
     }
     tasks.named("preBuild").configure { dependsOn copyAsanRuntime }
 }
